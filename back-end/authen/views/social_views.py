@@ -1,12 +1,15 @@
-
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
 from rest_framework.utils import json
 from rest_framework.views import APIView
+from rest_framework import status
 import requests
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from authen.models import CustomUser
+from allauth.account.views import SignupView
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from dj_rest_auth.registration.views import SocialLoginView
 
 
 class GoogleView(APIView):
@@ -19,8 +22,7 @@ class GoogleView(APIView):
 
         if "error" in data:
             content = {
-                "message":
-                "wrong google token / this google token is already expired."
+                "message": "wrong google token / this google token is already expired."
             }
             return Response(content)
 
@@ -31,8 +33,7 @@ class GoogleView(APIView):
             user = CustomUser()
             user.username = data["email"]
             # provider random default password
-            user.password = make_password(
-                BaseUserManager().make_random_password())
+            user.password = make_password(BaseUserManager().make_random_password())
             user.email = data["email"]
             user.save()
 
@@ -44,3 +45,11 @@ class GoogleView(APIView):
         response["access_token"] = str(token.access_token)
         response["refresh_token"] = str(token)
         return Response(response)
+
+
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
+
+
+class FacebookSignup(SignupView):
+    adapter_class = FacebookOAuth2Adapter
