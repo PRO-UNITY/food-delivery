@@ -203,7 +203,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "gender_id",
             "phone",
             "groups",
-            "is_active",
+            "active_profile",
         ]
 
 
