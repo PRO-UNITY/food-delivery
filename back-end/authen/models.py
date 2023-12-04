@@ -20,3 +20,4 @@ class CustomUser(AbstractUser):
         Gender,
         on_delete=models.CASCADE, null=True, blank=True)
     avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
+    is_active = models.BooleanField(default=True)
