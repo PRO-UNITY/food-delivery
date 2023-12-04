@@ -20,13 +20,33 @@ class NewMyUser(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         (
             None,
-            {"fields": ("email_code", "birth_date", "gender_id", "avatar", "phone",)},
+            {
+                "fields": (
+                    "email_code",
+                    "birth_date",
+                    "gender_id",
+                    "avatar",
+                    "phone",
+                    "active_profile",
+                    "kitchen_name",
+                )
+            },
         ),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
         (
             None,
-            {"fields": ("email_code", "birth_date", "gender_id", "avatar", "phone",)},
+            {
+                "fields": (
+                    "email_code",
+                    "birth_date",
+                    "gender_id",
+                    "avatar",
+                    "phone",
+                    "active_profile",
+                    "kitchen_name",
+                )
+            },
         ),
     )
 
