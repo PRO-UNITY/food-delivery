@@ -39,8 +39,6 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             "last_name",
             "password",
             "password2",
-            "birth_date",
-            "gender_id",
             "groups",
         ]
         extra_kwargs = {
