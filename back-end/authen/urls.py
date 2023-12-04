@@ -24,7 +24,7 @@ urlpatterns = [
     path('user_profiles_views/', UserProfilesViews.as_view()),
     path('user_update_view/', UserUpdateView.as_view()),
     path('change_password/', change_password),
-    path('user_deteilse_views/', UserDeteilseViews.as_view()),
+    path('user_deteilse_views/<int:pk>/', UserDeteilseViews.as_view()),
     # social views
     path('google/login/', GoogleView.as_view()),
     path('facebook/login/', FacebookLogin.as_view()),
