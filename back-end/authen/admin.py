@@ -3,9 +3,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from authen.models import CustomUser, Gender
 from authen.forms import ChangeUser, CreasteUser
+from import_export.admin import ImportExportActionModelAdmin, ImportExportModelAdmin
 
 
-class NewMyUser(UserAdmin):
+class NewMyUser(ImportExportModelAdmin, UserAdmin):
     """New User"""
 
     add_form = CreasteUser

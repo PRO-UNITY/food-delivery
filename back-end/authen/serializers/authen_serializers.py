@@ -120,8 +120,7 @@ class UserUpdateSerializers(serializers.ModelSerializer):
             "gender_id",
             "avatar",
             "phone",
-            "kitchen_name"
-            "active_profile",
+            "kitchen_name" "active_profile",
         ]
 
     def update(self, instance, validated_data):
@@ -131,7 +130,40 @@ class UserUpdateSerializers(serializers.ModelSerializer):
         instance.birth_date = validated_data.get("birth_date", instance.birth_date)
         instance.gender_id = validated_data.get("gender_id", instance.gender_id)
         instance.phone = validated_data.get("phone", instance.phone)
-        instance.active_profile = validated_data.get("active_profile", instance.active_profile)
+        instance.active_profile = validated_data.get(
+            "active_profile", instance.active_profile
+        )
+        if self.context.get("avatar") == None:
+            instance.avatar = instance.avatar
+        else:
+            instance.avatar = self.context.get("avatar")
+        instance.save()
+        return instance
+
+
+class UserCheckProfilesSerializers(serializers.ModelSerializer):
+    """Serializers"""
+
+    avatar = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=False,
+        allow_null=False,
+        use_url=False,
+        required=False,
+    )
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "avatar",
+            "active_profile",
+        ]
+
+    def update(self, instance, validated_data):
+        instance.active_profile = validated_data.get(
+            "active_profile", instance.active_profile
+        )
         if self.context.get("avatar") == None:
             instance.avatar = instance.avatar
         else:

@@ -21,6 +21,7 @@ from authen.serializers.authen_serializers import (
     UserUpdateSerializers,
     UserInformationSerializers,
     ChangePasswordSerializer,
+    UserCheckProfilesSerializers,
 )
 
 
@@ -189,6 +190,31 @@ class UserProfilesViews(APIView):
         """User information views"""
         serializer = UserInformationSerializers(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserDeteilseViews(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    def get(self, request, pk):
+        queryset = CustomUser.objects.filter(id=pk)
+        serializers = UserProfilesViews(queryset, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    def put(self, request, pk):
+        """User Update views"""
+        queryset = get_object_or_404(CustomUser, id=pk)
+        serializer = UserCheckProfilesSerializers(
+            instance=queryset,
+            data=request.data,
+            partial=True,
+        )
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(
+            {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class UserUpdateView(APIView):
