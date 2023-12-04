@@ -3,9 +3,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from authen.models import CustomUser, Gender
 from authen.forms import ChangeUser, CreasteUser
+from import_export.admin import ImportExportActionModelAdmin, ImportExportModelAdmin
 
 
-class NewMyUser(UserAdmin):
+class NewMyUser(ImportExportModelAdmin, UserAdmin):
     """New User"""
 
     add_form = CreasteUser
@@ -20,13 +21,33 @@ class NewMyUser(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         (
             None,
-            {"fields": ("email_code", "birth_date", "gender_id", "avatar", "phone",)},
+            {
+                "fields": (
+                    "email_code",
+                    "birth_date",
+                    "gender_id",
+                    "avatar",
+                    "phone",
+                    "active_profile",
+                    "kitchen_name",
+                )
+            },
         ),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
         (
             None,
-            {"fields": ("email_code", "birth_date", "gender_id", "avatar", "phone",)},
+            {
+                "fields": (
+                    "email_code",
+                    "birth_date",
+                    "gender_id",
+                    "avatar",
+                    "phone",
+                    "active_profile",
+                    "kitchen_name",
+                )
+            },
         ),
     )
 
