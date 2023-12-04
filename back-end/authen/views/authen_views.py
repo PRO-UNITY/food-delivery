@@ -21,7 +21,6 @@ from authen.serializers.authen_serializers import (
     ChangePasswordSerializer,
 )
 
-
 # JWT token refresh
 def get_token_for_user(user):
     """Django Authe token"""

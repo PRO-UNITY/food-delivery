@@ -1,5 +1,5 @@
 from django.urls import path
-from authen.views.social_views import GoogleView
+from authen.views.social_views import GoogleView, FacebookLogin
 from authen.views.authen_views import (
     UserGenderViews,
     UserRegisterViews,
@@ -20,5 +20,6 @@ urlpatterns = [
     path('user_update_view/', UserUpdateView.as_view()),
     path('change_password/', change_password),
     # social views
-    path('google/login/', GoogleView.as_view())
+    path('google/login/', GoogleView.as_view()),
+    path('facebook/login/', FacebookLogin.as_view()),
 ]

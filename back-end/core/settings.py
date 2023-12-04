@@ -36,17 +36,33 @@ INSTALLED_APPS = [
     "authen",
     'recipe',
 
+    # other apps
+    'django.contrib.sites', 
+    'dj_rest_auth',
+    'social_django',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.facebook',
+    'rest_framework.authtoken',
+    'dj_rest_auth.registration',
+
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-     "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -134,11 +150,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+AUTHENTICATION_CLASSES = (
+    'dj_rest_auth.authentication.AllAuthJWTAuthentication',
+)
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "NON_FIELD_ERRORS_KEY": "errors",
@@ -167,8 +187,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 # cors
 CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "http://localhost:3000",
+    "https://food-delivery.prounity.uz"
+    "http://localhost:5500",
     "http://localhost:5174",
     "http://localhost:5173",
 ]
@@ -183,6 +203,9 @@ SWAGGER_SETTINGS = {
             "in": "header",
         }
     },
+    'TITLE': 'Food delivery',
+    'DESCRIPTION': 'Food Delivery back-end',
+    'VERSION': '0.1.0',
     "USE_SESSION_AUTH": False,
 }
 
@@ -200,5 +223,35 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_TIMEOUT = 300  # in seconds
 DEFAULT_FROM_EMAIL = "unipointsoftwaredevelopment@gmail.com"
+
+SOCIALACCOUNT_PROVIDERS = {
+    'facebook': {
+        'APP': {
+            'client_id': '863244545502688',
+            'secret': '8d9a789122fc5f51ab48d03831412c45',
+        }
+    },
+}
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.facebook.FacebookOAuth2',
+    'allauth.account.auth_backends.AuthenticationBackend',
+    # ...
+]
+
+REST_USE_JWT = True
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER':
+    'authentification.utils.jwt_response_payload_handler',
+}
+
+SIMPLE_JWT = {
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+}
+
+SOCIAL_AUTH_FACEBOOK_KEY = '863244545502688'
+SOCIAL_AUTH_FACEBOOK_SECRET = '8d9a789122fc5f51ab48d03831412c45'
+SOCIAL_AUTH_FACEBOOK_APP_NAME = 'facebook'
 
 FORCE_SCRIPT_NAME = '/food-delivery'
