@@ -76,6 +76,16 @@ class MyPostFoodAllViews(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
+class UserFoodAllViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request, pk):
+        objects_list = Foods.objects.filter(user_id=pk)
+        serializers = FoodAllSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+
 class FoodAllViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]

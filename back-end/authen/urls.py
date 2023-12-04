@@ -3,6 +3,8 @@ from authen.views.social_views import GoogleView, FacebookLogin
 from authen.views.authen_views import (
     UserGenderViews,
     UserRegisterViews,
+    KitchenRegisterViews,
+    AllKitchenViews,
     UserSigInViews,
     SendEmailCode,
     UserProfilesViews,
@@ -14,6 +16,8 @@ from authen.views.authen_views import (
 urlpatterns = [
     path('user_gender_views/', UserGenderViews.as_view()),
     path('user_signup_views/', UserRegisterViews.as_view()),
+    path('kitchen_register_views/', KitchenRegisterViews.as_view()),
+    path('all_kitchen_views/', AllKitchenViews.as_view()),
     path('user_sigin_views/', UserSigInViews.as_view()),
     path('send_email_code/', SendEmailCode.as_view()),
     path('user_profiles_views/', UserProfilesViews.as_view()),

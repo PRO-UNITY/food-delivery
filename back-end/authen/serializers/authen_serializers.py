@@ -1,8 +1,15 @@
 """ DJango DRF Serializers """
 from rest_framework import serializers
+from django.contrib.auth.models import Group
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from authen.models import CustomUser, Gender
+
+
+class UserGroupSerizliers(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ["id", "name"]
 
 
 class AllGenderListSerializers(serializers.ModelSerializer):
@@ -34,6 +41,7 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             "password2",
             "birth_date",
             "gender_id",
+            "groups",
         ]
         extra_kwargs = {
             "first_name": {"required": True},
@@ -49,12 +57,45 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             avatar=validated_data["avatar"],
         )
         user.set_password(validated_data["password"])
+        for i in validated_data["users"]:
+            user.groups.add(i.id)
+        user.save()
         user.save()
         return user
 
 
+class KitchenSignUpSerializers(serializers.ModelSerializer):
+    username = serializers.CharField(
+        max_length=255,
+        min_length=5,
+        required=True,
+        validators=[UniqueValidator(queryset=CustomUser.objects.all())],
+    )
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password]
+    )
+    password2 = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "password",
+            "password2",
+            "groups",
+        ]
+        extra_kwargs = {
+            "first_name": {"required": True},
+            "last_name": {"required": True},
+        }
+
+
 class UserUpdateSerializers(serializers.ModelSerializer):
     """Serializers"""
+
     avatar = serializers.ImageField(
         max_length=None,
         allow_empty_file=False,
@@ -83,15 +124,11 @@ class UserUpdateSerializers(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
-        instance.first_name = validated_data.get(
-            "first_name", instance.first_name)
-        instance.last_name = validated_data.get(
-            "last_name", instance.last_name)
+        instance.first_name = validated_data.get("first_name", instance.first_name)
+        instance.last_name = validated_data.get("last_name", instance.last_name)
         instance.username = validated_data.get("username", instance.username)
-        instance.birth_date = validated_data.get(
-            "birth_date", instance.birth_date)
-        instance.gender_id = validated_data.get(
-            "gender_id", instance.gender_id)
+        instance.birth_date = validated_data.get("birth_date", instance.birth_date)
+        instance.gender_id = validated_data.get("gender_id", instance.gender_id)
         instance.phone = validated_data.get("phone", instance.phone)
         if self.context.get("avatar") == None:
             instance.avatar = instance.avatar
@@ -116,6 +153,8 @@ class UserSigInInSerializers(serializers.ModelSerializer):
 class UserInformationSerializers(serializers.ModelSerializer):
     """User Profiles Serializers"""
 
+    groups = UserGroupSerizliers(many=True, read_only=True)
+
     class Meta:
         """User Model Fileds"""
 
@@ -129,6 +168,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "birth_date",
             "gender_id",
             "phone",
+            "groups",
         ]
 
 

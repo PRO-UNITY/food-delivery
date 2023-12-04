@@ -15,11 +15,13 @@ from authen.models import CustomUser, Gender
 from authen.serializers.authen_serializers import (
     AllGenderListSerializers,
     UserSignUpSerializers,
+    KitchenSignUpSerializers,
     UserSigInInSerializers,
     UserUpdateSerializers,
     UserInformationSerializers,
     ChangePasswordSerializer,
 )
+
 
 # JWT token refresh
 def get_token_for_user(user):
@@ -50,6 +52,32 @@ class UserRegisterViews(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class KitchenRegisterViews(APIView):
+    """UserRegister Views"""
+
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = KitchenSignUpSerializers(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AllKitchenViews(APIView):
+    """UserRegister Views"""
+
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request):
+        kitchen_list = CustomUser.objects.filter(groups__name__in=["kitchen"])
+        serializers = UserInformationSerializers(kitchen_list, many=True)
+        return Response(serializers.data, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserSigInViews(APIView):
@@ -94,9 +122,9 @@ class SendEmailCode(APIView):
         data = request.user
         verification_code = str(random.randint(100000, 999999))
         send_mail(
-            'Verification Code',
-            f'Your verification code is: {verification_code}',
-            'istamovibrohim8@gmail.com',
+            "Verification Code",
+            f"Your verification code is: {verification_code}",
+            "istamovibrohim8@gmail.com",
             [data.username],
             fail_silently=False,
         )
@@ -107,16 +135,16 @@ class SendEmailCode(APIView):
         return Response({"message": "Send code email"})
 
     def post(self, request):
-        email_code = request.data['email_code']
-        if email_code == '':
+        email_code = request.data["email_code"]
+        if email_code == "":
             context = {"Enter the email code !"}
             return Response(context, status=status.HTTP_401_UNAUTHORIZED)
         user_get = CustomUser.objects.filter(id=request.user.id)[0]
         if email_code == user_get.email_code:
-            context = {'Welcome to the system !'}
+            context = {"Welcome to the system !"}
             return Response(context, status=status.HTTP_200_OK)
         else:
-            return Response({'error': 'The email code is incorrect !'})
+            return Response({"error": "The email code is incorrect !"})
 
 
 class UserProfilesViews(APIView):
@@ -169,6 +197,6 @@ def change_password(request):
                     status=status.HTTP_200_OK,
                 )
             return Response(
-                {"error": "Incorrect old password."},
-                status=status.HTTP_400_BAD_REQUEST)
+                {"error": "Incorrect old password."}, status=status.HTTP_400_BAD_REQUEST
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
