@@ -7,13 +7,14 @@ from rest_framework_simplejwt import views as jwt_views
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
 
+admin.site.site_url = None
+
 urlpatterns = [
-    path('accounts/', include('allauth.urls')),
-    path('accounts/', include('allauth.socialaccount.urls')),
-    path('auth/', include('dj_rest_auth.urls')),
-    path('auth/registration/', include('dj_rest_auth.registration.urls')),
-    
-    path('admin/', admin.site.urls),
+    path("accounts/", include("allauth.urls")),
+    path("accounts/", include("allauth.socialaccount.urls")),
+    path("auth/", include("dj_rest_auth.urls")),
+    path("auth/registration/", include("dj_rest_auth.registration.urls")),
+    path("admin/", admin.site.urls),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "token/",
@@ -36,8 +37,8 @@ urlpatterns = [
         "password_reset/",
         include("django_rest_passwordreset.urls", namespace="password_reset"),
     ),
-    path('authen/', include('authen.urls')),
-    path('resipe/', include('recipe.urls')),
+    path("authen/", include("authen.urls")),
+    path("resipe/", include("recipe.urls")),
 ]
 
 
