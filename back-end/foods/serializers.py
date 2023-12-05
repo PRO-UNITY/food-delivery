@@ -54,7 +54,7 @@ class AllFoodsSerializer(serializers.ModelSerializer):
     categories_id = AllCategoriesFoodsSerializer(read_only=True)
 
     class Meta:
-        model = FoodsCategories
+        model = Foods
         fileds = [
             'id',
             'name',
@@ -70,7 +70,7 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
     categories_id = AllCategoriesFoodsSerializer(read_only=True)
 
     class Meta:
-        model = FoodsCategories
+        model = Foods
         fileds = [
             'id',
             'name',
@@ -81,3 +81,19 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
             'categories_id',
             'date'
             ]
+
+    def create(self, validated_data):
+        create_foods = FoodsCategories.objects.create(**validated_data)
+        create_foods.save()
+        return create_foods
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get("name", instance.name)
+        instance.content = validated_data.get("content", instance.content)
+        instance.price = validated_data.get("price", instance.price)
+        instance.kitchen_id = validated_data.get(
+            "kitchen_id", instance.kitchen_id)
+        instance.categories_id = validated_data.get(
+            "categories_id", instance.categories_id)
+        instance.save()
+        return instance
