@@ -39,18 +39,18 @@ class KitchenCrudViews(APIView):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request, pk):
-        objects_list = KitchenUser.objects.filter(id=pk, user_id=request.user.id)
+        objects_list = KitchenUser.objects.filter(id=pk)
         serializers = AllKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
         serializers = KitchenCrudSerializers(
             instance=KitchenUser.objects.filter(
-                id=pk, user_id=request.user.id)[0],
+                id=pk)[0],
             data=request.data,
             partial=True,
         )
-        if serializers.is_valid(raise_exception=True, user_id=request.user.id):
+        if serializers.is_valid(raise_exception=True):
             serializers.save(logo=request.data.get("logo"))
             return Response(serializers.data, status=status.HTTP_200_OK)
         return Response(
