@@ -15,13 +15,13 @@ from authen.views.authen_views import (
 )
 
 urlpatterns = [
-    path('user_gender_views/', UserGenderViews.as_view()),
-    path('user_signup_views/', UserRegisterViews.as_view()),
-    path('kitchen_register_views/', KitchenRegisterViews.as_view()),
-    path('all_kitchen_views/', AllKitchenViews.as_view()),
-    path('user_sigin_views/', UserSigInViews.as_view()),
+    path('user_gender/', UserGenderViews.as_view()),
+    path('user_signup/', UserRegisterViews.as_view()),
+    path('kitchen_register/', KitchenRegisterViews.as_view()),
+    path('all_kitchen/', AllKitchenViews.as_view()),
+    path('user_sigin/', UserSigInViews.as_view()),
     path('send_email_code/', SendEmailCode.as_view()),
-    path('user_profiles_views/', UserProfilesViews.as_view()),
+    path('user_profiles/', UserProfilesViews.as_view()),
     path('user_update_view/', UserUpdateView.as_view()),
     path('change_password/', change_password),
     path('user_deteilse_views/<int:pk>/', UserDeteilseViews.as_view()),

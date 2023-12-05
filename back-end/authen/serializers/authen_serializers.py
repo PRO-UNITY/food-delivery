@@ -83,6 +83,7 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
             "last_name",
             "password",
             "password2",
+            'email',
             "kitchen_name",
             "groups",
         ]
@@ -118,6 +119,7 @@ class UserUpdateSerializers(serializers.ModelSerializer):
             "last_name",
             "birth_date",
             "gender_id",
+            'email',
             "avatar",
             "phone",
             "kitchen_name" "active_profile",
