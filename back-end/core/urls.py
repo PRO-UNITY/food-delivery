@@ -55,6 +55,7 @@ urlpatterns = [
     ),
     path("authen/", include("authen.urls")),
     path("kitchen/", include("kitchen.urls")),
+    path('foods/', include('foods.urls')),
 ]
 
 
