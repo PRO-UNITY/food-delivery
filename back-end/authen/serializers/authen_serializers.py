@@ -101,7 +101,8 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
             kitchen_name=validated_data["kitchen_name"],
         )
         user.set_password(validated_data["password"])
-        for i in validated_data["kitchen"]:
+        filtr_gr = Group.objects.filter(groups__name__in=["kitchen"])
+        for i in filtr_gr:
             user.groups.add(i.id)
         user.save()
         user.save()
