@@ -28,7 +28,7 @@ class UserSignUpSerializers(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password]
     )
-    password2 = serializers.CharField(write_only=True, required=True)
+    confirm_password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = CustomUser
@@ -39,7 +39,7 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             "last_name",
             "email",
             "password",
-            "password2",
+            "confirm_password",
         ]
         extra_kwargs = {
             "first_name": {"required": True},
@@ -71,7 +71,7 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password]
     )
-    password2 = serializers.CharField(write_only=True, required=True)
+    confirm_password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = CustomUser
@@ -81,7 +81,7 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "password",
-            "password2",
+            "confirm_password",
             "email",
             "kitchen_name",
         ]
@@ -135,7 +135,8 @@ class UserUpdateSerializers(serializers.ModelSerializer):
             "email",
             "avatar",
             "phone",
-            "kitchen_name" "active_profile",
+            "kitchen_name",
+            "active_profile",
         ]
 
     def update(self, instance, validated_data):

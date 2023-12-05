@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     # my_app
     "authen",
-    'recipe',
+    # 'recipe',
+    'kitchen',
 
     # other apps
     'django.contrib.sites', 
