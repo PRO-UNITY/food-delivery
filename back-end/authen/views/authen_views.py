@@ -111,7 +111,7 @@ class SendEmailCode(APIView):
             "Verification Code",
             f"Your verification code is: {verification_code}",
             "istamovibrohim8@gmail.com",
-            [data.username],
+            [data.email],
             fail_silently=False,
         )
 

@@ -61,7 +61,7 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
 
 
 class AllFoodKitchenSerializers(serializers.ModelSerializer):
-    user_id = UserInformationSerializers(read_only=True)
+    kitchen_id = AllKitchenSerializers(read_only=True)
 
     class Meta:
         model = KitchenFoods
@@ -70,10 +70,9 @@ class AllFoodKitchenSerializers(serializers.ModelSerializer):
             "name",
             "description",
             "image_food",
-            "user_id",
             "kitchen_id",
             "date"
-            ]
+        ]
 
 
 class FoodKitchenCrudSerializers(serializers.ModelSerializer):
