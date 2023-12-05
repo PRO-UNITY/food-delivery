@@ -31,7 +31,7 @@ urlpatterns = [
     path("auth/", include("dj_rest_auth.urls")),
     path("auth/registration/", include("dj_rest_auth.registration.urls")),
     path("admin/", admin.site.urls),
-    # path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "token/",
         jwt_views.TokenObtainPairView.as_view(),
@@ -42,13 +42,13 @@ urlpatterns = [
         jwt_views.TokenRefreshView.as_view(),
         name="token_refresh",
     ),
-    # path(
-    #     "docs/",
-    #     TemplateView.as_view(
-    #         template_name="doc.html", extra_context={"schema_url": "api_schema"}
-    #     ),
-    #     name="swagger-ui",
-    # ),
+    path(
+        "docs/",
+        TemplateView.as_view(
+            template_name="doc.html", extra_context={"schema_url": "api_schema"}
+        ),
+        name="swagger-ui",
+    ),
     path(
         "password_reset/",
         include("django_rest_passwordreset.urls", namespace="password_reset"),
