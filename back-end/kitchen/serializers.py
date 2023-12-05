@@ -3,7 +3,18 @@ from authen.models import CustomUser
 from kitchen.models import KitchenFoods
 
 
+class UserInformationSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "kitchen_name",
+        ]
+
+
 class AllFoodKitchenSerializers(serializers.ModelSerializer):
+    user_id = UserInformationSerializers(read_only=True)
+
     class Meta:
         model = KitchenFoods
         fields = ["id", "name", "description", "image_food", "user_id", "date"]

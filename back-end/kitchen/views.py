@@ -60,7 +60,7 @@ class KitchenFoodsCrudViews(APIView):
 
 
 class AllKitchenFood(APIView):
-    def get(self, request, pk):
+    def get(self, request):
         objects_list = KitchenFoods.objects.all()
         serializers = AllFoodKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
