@@ -83,7 +83,7 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
             "last_name",
             "password",
             "password2",
-            'email',
+            "email",
             "kitchen_name",
             "groups",
         ]
@@ -91,6 +91,21 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
             "first_name": {"required": True},
             "last_name": {"required": True},
         }
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create(
+            username=validated_data["username"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+            email=validated_data["email"],
+            kitchen_name=validated_data["kitchen_name"],
+        )
+        user.set_password(validated_data["password"])
+        for i in validated_data["kitchen"]:
+            user.groups.add(i.id)
+        user.save()
+        user.save()
+        return user
 
 
 class UserUpdateSerializers(serializers.ModelSerializer):
@@ -119,7 +134,7 @@ class UserUpdateSerializers(serializers.ModelSerializer):
             "last_name",
             "birth_date",
             "gender_id",
-            'email',
+            "email",
             "avatar",
             "phone",
             "kitchen_name" "active_profile",

@@ -58,10 +58,6 @@ class UserRegisterViews(APIView):
 
 class KitchenRegisterViews(APIView):
     """UserRegister Views"""
-
-    render_classes = [UserRenderers]
-    perrmisson_class = [IsAuthenticated]
-
     def post(self, request):
         serializer = KitchenSignUpSerializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
