@@ -37,9 +37,9 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
+            "email",
             "password",
             "password2",
-            "groups",
         ]
         extra_kwargs = {
             "first_name": {"required": True},
@@ -51,8 +51,7 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             username=validated_data["username"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
-            birth_date=validated_data["birth_date"],
-            avatar=validated_data["avatar"],
+            email=validated_data["email"],
         )
         user.set_password(validated_data["password"])
         filtr_gr = Group.objects.filter(id=2)
