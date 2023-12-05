@@ -19,7 +19,7 @@ class AllKitchenSerializers(serializers.ModelSerializer):
     class Meta:
         model = KitchenUser
         fields = [
-            "id", "name", "description", "logo", "user_id", "is_active", "date"
+            "id", "name", "description", "logo", "user_id", "is_active", "create_at", "updated_at"
         ]
 
 
@@ -35,7 +35,7 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
     class Meta:
         model = KitchenUser
         fields = [
-            "id", "name", "description", "logo", "user_id", "is_active", "date"
+            "id", "name", "description", "logo", "user_id", "is_active", "create_at", "updated_at"
             ]
 
     def create(self, validated_data):
@@ -69,7 +69,7 @@ class AllFoodKitchenSerializers(serializers.ModelSerializer):
             "description",
             "image_food",
             "kitchen_id",
-            "date"
+            "create_at", "updated_at"
         ]
 
 
@@ -91,7 +91,7 @@ class FoodKitchenCrudSerializers(serializers.ModelSerializer):
             "image_food",
             "user_id",
             "kitchen_id",
-            "date"
+            "create_at", "updated_at"
             ]
 
     def create(self, validated_data):

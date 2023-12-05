@@ -20,7 +20,7 @@ class AllKitchenSerializers(serializers.ModelSerializer):
     class Meta:
         model = KitchenUser
         fields = [
-            "id", "name", "description", "logo", "user_id", "is_active", "date"
+            "id", "name", "description", "logo", "user_id", "is_active", "create_at", "updated_at"
         ]
 
 
@@ -29,13 +29,13 @@ class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FoodsCategories
-        fields = ['id', 'name', 'kitchen_id', 'date']
+        fields = ['id', 'name', 'kitchen_id', "create_at", "updated_at"]
 
 
 class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodsCategories
-        fields = ['id', 'name', 'kitchen_id', 'date']
+        fields = ['id', 'name', 'kitchen_id', "create_at", "updated_at"]
 
     def create(self, validated_data):
         create_categoires = FoodsCategories.objects.create(**validated_data)
@@ -62,7 +62,7 @@ class AllFoodsSerializer(serializers.ModelSerializer):
             'content',
             'price',
             'categories_id',
-            'date'
+            "create_at", "updated_at"
             ]
 
 
@@ -86,7 +86,7 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
             'price',
             'kitchen_id',
             'categories_id',
-            'date'
+            "create_at", "updated_at"
             ]
 
     def create(self, validated_data):
