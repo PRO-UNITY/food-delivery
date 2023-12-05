@@ -219,6 +219,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "gender_id",
             "phone",
             "groups",
+            "kitchen_name",
             "active_profile",
         ]
 
