@@ -50,8 +50,9 @@ class UserRegisterViews(APIView):
     def post(self, request):
         serializer = UserSignUpSerializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            instanse = serializer.save()
+            tokens = get_token_for_user(instanse)
+            return Response({'token': tokens}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -61,8 +62,9 @@ class KitchenRegisterViews(APIView):
     def post(self, request):
         serializer = KitchenSignUpSerializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            instanse = serializer.save()
+            tokens = get_token_for_user(instanse)
+            return Response({'token': tokens}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
