@@ -55,10 +55,10 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             avatar=validated_data["avatar"],
         )
         user.set_password(validated_data["password"])
-        for i in validated_data["users"]:
+        filtr_gr = Group.objects.filter(id=2)
+        for i in filtr_gr:
             user.groups.add(i.id)
-        user.save()
-        user.save()
+            user.save()
         return user
 
 
@@ -100,11 +100,10 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
             kitchen_name=validated_data["kitchen_name"],
         )
         user.set_password(validated_data["password"])
-        filtr_gr = Group.objects.filter(groups__name__in=["kitchen"])
+        filtr_gr = Group.objects.filter(id=1)
         for i in filtr_gr:
             user.groups.add(i.id)
-        user.save()
-        user.save()
+            user.save()
         return user
 
 
