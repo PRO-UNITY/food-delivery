@@ -16,8 +16,6 @@ class UserInformationSerializers(serializers.ModelSerializer):
 
 
 class AllKitchenSerializers(serializers.ModelSerializer):
-    user_id = UserInformationSerializers(read_only=True)
-
     class Meta:
         model = KitchenUser
         fields = [
