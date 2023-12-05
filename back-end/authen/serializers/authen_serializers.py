@@ -85,7 +85,6 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
             "password2",
             "email",
             "kitchen_name",
-            "groups",
         ]
         extra_kwargs = {
             "first_name": {"required": True},
