@@ -29,13 +29,13 @@ class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FoodsCategories
-        fileds = ['id', 'name', 'kitchen_id', 'date']
+        fields = ['id', 'name', 'kitchen_id', 'date']
 
 
 class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodsCategories
-        fileds = ['id', 'name', 'kitchen_id', 'date']
+        fields = ['id', 'name', 'kitchen_id', 'date']
 
     def create(self, validated_data):
         create_categoires = FoodsCategories.objects.create(**validated_data)
@@ -55,11 +55,11 @@ class AllFoodsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Foods
-        fileds = [
+        fields = [
             'id',
             'name',
             'food_img',
-            'content'
+            'content',
             'price',
             'categories_id',
             'date'
@@ -68,14 +68,21 @@ class AllFoodsSerializer(serializers.ModelSerializer):
 
 class FoodsCrudSerializer(serializers.ModelSerializer):
     categories_id = AllCategoriesFoodsSerializer(read_only=True)
+    food_img = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=False,
+        allow_null=False,
+        use_url=False,
+        required=False,
+    )
 
     class Meta:
         model = Foods
-        fileds = [
+        fields = [
             'id',
             'name',
             'food_img',
-            'content'
+            'content',
             'price',
             'kitchen_id',
             'categories_id',
@@ -95,5 +102,9 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
             "kitchen_id", instance.kitchen_id)
         instance.categories_id = validated_data.get(
             "categories_id", instance.categories_id)
+        if instance.food_img == None:
+            instance.food_img = self.context.get("food_img")
+        else:
+            instance.food_img = validated_data.get("food_img", instance.food_img)
         instance.save()
         return instance
