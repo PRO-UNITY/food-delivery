@@ -138,12 +138,8 @@ class UserUpdateSerializers(serializers.ModelSerializer):
         instance.first_name = validated_data.get("first_name", instance.first_name)
         instance.last_name = validated_data.get("last_name", instance.last_name)
         instance.username = validated_data.get("username", instance.username)
-        instance.birth_date = validated_data.get("birth_date", instance.birth_date)
-        instance.gender_id = validated_data.get("gender_id", instance.gender_id)
         instance.phone = validated_data.get("phone", instance.phone)
-        instance.active_profile = validated_data.get(
-            "active_profile", instance.active_profile
-        )
+        instance.email = validated_data.get("email", instance.email)
         if self.context.get("avatar") == None:
             instance.avatar = instance.avatar
         else:
