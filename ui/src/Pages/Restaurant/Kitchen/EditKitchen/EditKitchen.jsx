@@ -7,7 +7,7 @@ import { getDataWithToken } from "../../../../functions";
 const EditFood = () => {
     const nameRef = useRef();
     const descriptionRef = useRef();
-    const imgRef = useRef();
+    const imgRef = useRef(null);
     const timeref = useRef();
     const latituderef = useRef();
     const longitudref = useRef();
@@ -29,10 +29,16 @@ const EditFood = () => {
         const formData = new FormData();
         formData.append('name', nameRef.current.value);
         formData.append('description', descriptionRef.current.value);
-        formData.append('logo', imgRef.current.files[0]);
         formData.append('working_time', timeref.current.value)
         formData.append('latitude', latituderef.current.value)
         formData.append('longitude', longitudref.current.value)
+        if(imgRef.current?.files[0]){
+            formData.append('logo', imgRef.current.files[0]);
+        }
+
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
 
         try {
             const response = await axios.put(`https://api.prounity.uz/food-delivery/kitchen/kitchen_crud/${id}`, formData, {

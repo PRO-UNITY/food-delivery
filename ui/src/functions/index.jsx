@@ -23,11 +23,11 @@ export const postData = async (item,url) => {
     return data;
 };
 
-export const postDataWithToken = async (item,url,config) => {
+export const postDataWithToken = async (item,url) => {
     const response = await fetch(BASE_URL + url, {
         method: 'POST',
-        headers: getHeaderWithToken(localStorage.getItem('token'),config),
-        body: item
+        headers: getHeaderWithToken(localStorage.getItem('token')),
+        body: JSON.stringify(item)
     });
     const data = await response.json();
     return data;
@@ -74,7 +74,7 @@ export const getRoleUser = async () => {
         }
     );
     const data = await response.json();
-    const role = data.groups[0].name;
+    const role = data?.groups && data?.groups[0]?.name  ;
     localStorage.setItem('role', role);
     return role;
 }

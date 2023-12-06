@@ -11,7 +11,7 @@ const EditFoodRestaurant = () => {
     const categoryref = useRef();
     const kitchenref = useRef();
     const priceRef = useRef();
-    const imgRef = useRef();
+    const imgRef = useRef(null);
     const navigate = useNavigate();
     const [category, setCategory] = useState([])
     const [kitchen, setKitchen] = useState([])
@@ -52,7 +52,13 @@ const EditFoodRestaurant = () => {
         formData.append('categories_id', selectcategory);
         formData.append('kitchen_id', selectkitchen);
         formData.append('price', priceRef.current.value);
-        formData.append('food_img', imgRef.current.files[0]);
+        if (imgRef.current.files[0]) {
+            formData.append('food_img', imgRef.current.files[0]);
+        }
+
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
 
         try {
             const response = await axios.put(`https://api.prounity.uz/food-delivery/foods/foods_crud/${id}`, formData, {

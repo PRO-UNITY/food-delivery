@@ -1,9 +1,14 @@
 import { Link, useNavigate } from "react-router-dom"
 import { postData } from "../../functions";
 import { useRef } from "react";
-
+import GoogleLogin from 'react-google-login';
 
 const Login = () => {
+
+    const responseGoogle = (response) => {
+        console.log(response);
+    }
+
     const usernameRef = useRef(null);
     const passwordRef = useRef(null);
     const navigate = useNavigate();
@@ -46,8 +51,15 @@ const Login = () => {
             <div className="d-flex gap-2 justify-content-center">
                     <button className="round"><img src={'https://png.pngtree.com/png-vector/20221018/ourmid/pngtree-facebook-social-media-icon-png-image_6315968.png'} alt="" /></button>
                     <button className="round"><img src={'https://www.freepnglogos.com/uploads/google-logo-png/google-logo-vector-graphic-pixabay-15.png'} alt="" /></button>
+                    <GoogleLogin
+                      clientId="779292070672-l8i5b70gc8s2sor3gt4udk0igrrfvifa.apps.googleusercontent.com"
+                      buttonText="Login"
+                      onSuccess={responseGoogle}
+                      onFailure={responseGoogle}
+                      cookiePolicy={'single_host_origin'}
+                    />,
             </div>
-            <a className="float-end" href="">forget password ?</a>
+            <Link to={'/forget-password'} className="float-end" href="">forget password ?</Link>
         </div>
     </div>
 </div>

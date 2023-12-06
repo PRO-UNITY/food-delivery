@@ -22,6 +22,8 @@ import AddFoodRestaurant from './Pages/Restaurant/Food/foodadd/AddFood';
 import EditFoodRestaurant from './Pages/Restaurant/Food/foodedit/Foodedit';
 import UserProfile from './Pages/Userprofile/Userprofile';
 import UpdateProfile from './Pages/Userprofile/UpdateUser';
+import Forgetpassword from './Pages/Userprofile/Forgetpassword';
+import Changepassword from './Pages/Userprofile/Changepassword';
 
 function App() {
 
@@ -57,6 +59,7 @@ function App() {
         <Routes>
         <Route path={'/user-profile'} element={<UserProfile/>}/>
         <Route path={'/edit-profile'} element={<UpdateProfile/>}/>
+        <Route path={'/change-password'} element={<Changepassword/>}/>
             <Route path={'/home'} element={<Sidebar/>}>
               <Route path={'/home/main'} element={<RestaurantHome/>}/>
               <Route path={'/home/add-kitchen'} element={<AddKitchen/>}/>
@@ -85,6 +88,7 @@ function App() {
        </> :
        <Routes>
         <Route path={'/'} element={<Login/>}/>
+        <Route path={'/forget-password'} element={<Forgetpassword/>}/>
         <Route path={'/sign-up-user'} element={<RegisterUser/>}/>
         <Route path={'/sign-up-restaurant'} element={<RegisterRestaurant/>}/>
       </Routes> 
