@@ -28,7 +28,7 @@ class UserSignUpSerializers(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password]
     )
-    password2 = serializers.CharField(write_only=True, required=True)
+    confirm_password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = CustomUser
@@ -37,9 +37,9 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
+            "email",
             "password",
-            "password2",
-            "groups",
+            "confirm_password",
         ]
         extra_kwargs = {
             "first_name": {"required": True},
@@ -51,14 +51,13 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             username=validated_data["username"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
-            birth_date=validated_data["birth_date"],
-            avatar=validated_data["avatar"],
+            email=validated_data["email"],
         )
         user.set_password(validated_data["password"])
-        for i in validated_data["users"]:
+        filtr_gr = Group.objects.filter(id=2)
+        for i in filtr_gr:
             user.groups.add(i.id)
-        user.save()
-        user.save()
+            user.save()
         return user
 
 
@@ -72,7 +71,7 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password]
     )
-    password2 = serializers.CharField(write_only=True, required=True)
+    confirm_password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = CustomUser
@@ -82,14 +81,27 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "password",
-            "password2",
-            "kitchen_name",
-            "groups",
+            "confirm_password",
+            "email",
         ]
         extra_kwargs = {
             "first_name": {"required": True},
             "last_name": {"required": True},
         }
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create(
+            username=validated_data["username"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+            email=validated_data["email"],
+        )
+        user.set_password(validated_data["password"])
+        filtr_gr = Group.objects.filter(id=1)
+        for i in filtr_gr:
+            user.groups.add(i.id)
+            user.save()
+        return user
 
 
 class UserUpdateSerializers(serializers.ModelSerializer):
@@ -118,9 +130,10 @@ class UserUpdateSerializers(serializers.ModelSerializer):
             "last_name",
             "birth_date",
             "gender_id",
+            "email",
             "avatar",
             "phone",
-            "kitchen_name" "active_profile",
+            "active_profile",
         ]
 
     def update(self, instance, validated_data):
@@ -130,37 +143,6 @@ class UserUpdateSerializers(serializers.ModelSerializer):
         instance.birth_date = validated_data.get("birth_date", instance.birth_date)
         instance.gender_id = validated_data.get("gender_id", instance.gender_id)
         instance.phone = validated_data.get("phone", instance.phone)
-        instance.active_profile = validated_data.get(
-            "active_profile", instance.active_profile
-        )
-        if self.context.get("avatar") == None:
-            instance.avatar = instance.avatar
-        else:
-            instance.avatar = self.context.get("avatar")
-        instance.save()
-        return instance
-
-
-class UserCheckProfilesSerializers(serializers.ModelSerializer):
-    """Serializers"""
-
-    avatar = serializers.ImageField(
-        max_length=None,
-        allow_empty_file=False,
-        allow_null=False,
-        use_url=False,
-        required=False,
-    )
-
-    class Meta:
-        model = CustomUser
-        fields = [
-            "id",
-            "avatar",
-            "active_profile",
-        ]
-
-    def update(self, instance, validated_data):
         instance.active_profile = validated_data.get(
             "active_profile", instance.active_profile
         )
@@ -202,8 +184,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "birth_date",
             "gender_id",
             "phone",
-            "groups",
-            "active_profile",
+            "groups"
         ]
 
 
