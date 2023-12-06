@@ -124,6 +124,16 @@ class AllKitchenViews(APIView):
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
 
+class KitchenIsActiveViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request):
+        objects_list = KitchenUser.objects.filter(is_active=True)
+        serializers = AllKitchenSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+
 class KitchenCategoriesViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]

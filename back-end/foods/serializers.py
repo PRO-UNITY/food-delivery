@@ -90,7 +90,7 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
             ]
 
     def create(self, validated_data):
-        create_foods = FoodsCategories.objects.create(**validated_data)
+        create_foods = Foods.objects.create(**validated_data)
         create_foods.save()
         return create_foods
 
