@@ -129,7 +129,7 @@ class KitchenIsActiveViews(APIView):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request):
-        objects_list = KitchenUser.objects.filter(is_active=True)
+        objects_list = KitchenUser.objects.filter(is_active=True, user_id=request.user)
         serializers = AllKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
