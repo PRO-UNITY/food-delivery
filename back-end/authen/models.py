@@ -23,13 +23,13 @@ class CustomUser(AbstractUser):
 
 
 class KitchenUser(models.Model):
-    name = models.CharField(max_length=250, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    logo = models.ImageField(upload_to='logo_kitchen', null=True, blank=True)
+    name = models.CharField(max_length=250)
+    description = models.TextField()
+    logo = models.ImageField(upload_to='logo_kitchen')
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     is_active = models.BooleanField(default=False)
-    working_time = models.CharField(max_length=100, null=True, blank=True)
-    latitude = models.CharField(max_length=100, null=True, blank=True)
-    longitude = models.CharField(max_length=100, null=True, blank=True)
+    working_time = models.CharField(max_length=100)
+    latitude = models.CharField(max_length=100)
+    longitude = models.CharField(max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
