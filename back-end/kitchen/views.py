@@ -5,9 +5,9 @@ from rest_framework.permissions import IsAuthenticated
 from kitchen.pagination import StandardResultsSetPagination
 from authen.renderers import UserRenderers
 from authen.models import KitchenUser, KitchenLike
-from django.db.models import Count
 from kitchen.models import KitchenFoods
-from foods.models import Foods
+from foods.models import Foods, FoodsCategories
+from foods.serializers import AllCategoriesFoodsSerializer
 from kitchen.serializers import (
     AllKitchenSerializers,
     KitchenCrudSerializers,
@@ -122,6 +122,16 @@ class AllKitchenViews(APIView):
         else:
             serializer = self.serializer_class(instance, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+
+
+class KitchenCategoriesViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request, pk):
+        objects_list = FoodsCategories.objects.filter(kitchen_id=pk)
+        serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
 
 
 class KitchenFoodsViews(APIView):
