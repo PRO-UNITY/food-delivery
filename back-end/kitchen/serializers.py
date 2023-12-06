@@ -19,7 +19,17 @@ class AllKitchenSerializers(serializers.ModelSerializer):
     class Meta:
         model = KitchenUser
         fields = [
-            "id", "name", "description", "logo", "user_id", "is_active", "create_at", "updated_at"
+            "id",
+            "name",
+            "description",
+            "logo",
+            "user_id",
+            "is_active",
+            "working_time",
+            "latitude",
+            "longitude",
+            "create_at",
+            "updated_at",
         ]
 
 
@@ -34,9 +44,20 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = KitchenUser
-        fields = [
-            "id", "name", "description", "logo", "user_id", "is_active", "create_at", "updated_at"
-            ]
+        fields = fields = [
+            "id",
+            "name",
+            "description",
+            "logo",
+            "user_id",
+            "is_active",
+            "working_time",
+            "latitude",
+            "longitude",
+            "create_at",
+            "updated_at",
+        ]
+
 
     def create(self, validated_data):
         create_foods = KitchenUser.objects.create(**validated_data)
@@ -50,6 +71,12 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
             "description", instance.description)
         instance.is_active = validated_data.get(
             "is_active", instance.is_active)
+        instance.working_time = validated_data.get(
+            "working_time", instance.working_time)
+        instance.latitude = validated_data.get(
+            "latitude", instance.latitude)
+        instance.longitude = validated_data.get(
+            "longitude", instance.longitude)
         if instance.logo == None:
             instance.logo = self.context.get("logo")
         else:
