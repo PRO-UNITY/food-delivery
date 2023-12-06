@@ -62,12 +62,12 @@ class AllFoodsSerializer(serializers.ModelSerializer):
             'content',
             'price',
             'categories_id',
-            "create_at", "updated_at"
+            "create_at",
+            "updated_at"
             ]
 
 
 class FoodsCrudSerializer(serializers.ModelSerializer):
-    categories_id = AllCategoriesFoodsSerializer(read_only=True)
     food_img = serializers.ImageField(
         max_length=None,
         allow_empty_file=False,
@@ -86,7 +86,8 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
             'price',
             'kitchen_id',
             'categories_id',
-            "create_at", "updated_at"
+            "create_at",
+            "updated_at"
             ]
 
     def create(self, validated_data):
