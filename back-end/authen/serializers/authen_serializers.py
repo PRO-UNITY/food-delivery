@@ -128,12 +128,9 @@ class UserUpdateSerializers(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
-            "birth_date",
-            "gender_id",
             "email",
             "avatar",
             "phone",
-            "active_profile",
         ]
 
     def update(self, instance, validated_data):
@@ -181,10 +178,8 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "avatar",
-            "birth_date",
-            "gender_id",
+            'email'
             "phone",
-            "groups"
         ]
 
 

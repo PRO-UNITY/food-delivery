@@ -214,7 +214,11 @@ AUTH_USER_MODEL = "authen.CustomUser"
 
 
 # Email Backend Configuration
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = (
+    # Replace with your preferred backend
+    "django.core.mail.backends.smtp.EmailBackend"
+)
+
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_HOST_USER = "istamovibrohim8@gmail.com"
 EMAIL_HOST_PASSWORD = "xuaokkmfmsaxbdyu"
@@ -252,4 +256,4 @@ SOCIAL_AUTH_FACEBOOK_KEY = "863244545502688"
 SOCIAL_AUTH_FACEBOOK_SECRET = "8d9a789122fc5f51ab48d03831412c45"
 SOCIAL_AUTH_FACEBOOK_APP_NAME = "facebook"
 
-FORCE_SCRIPT_NAME = '/food-delivery'
+# FORCE_SCRIPT_NAME = '/food-delivery'
