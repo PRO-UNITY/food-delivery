@@ -1,28 +1,29 @@
 import { useEffect, useState } from "react"
-import { getDataWithToken } from "../../functions"
-import { putData } from "../../functions"
+import { getDataWithToken } from "../../../functions"
+import { putData } from "../../../functions"
+import { Link } from "react-router-dom"
 
 const AdminHome = () => {
     const [restaurant, setRestaurant] = useState([])
     const [isactive, setIsActive] = useState(false)
 
     useEffect(()=>{
-        getDataWithToken('/authen/all_kitchen_views/').
+        getDataWithToken('/kitchen/all_kitchen').
         then((res)=>setRestaurant(res.data.results))
     },[isactive])
 
     const applyUser = async (id) => {
         const user = {
-            active_profile : false
+            is_active : false
         };
-        await putData(user,`/authen/user_deteilse_views/${id}`)
+        await putData(user,`/kitchen/kitchen_crud/${id}`)
         setIsActive(p=>!p)
     };
     const disableUser = async (id) => {
         const user = {
-            active_profile : true
+            is_active : true
         };
-        await putData(user,`/authen/user_deteilse_views/${id}`)
+        await putData(user,`/kitchen/kitchen_crud/${id}`)
         setIsActive(p=>!p)
     };
     
@@ -33,9 +34,7 @@ const AdminHome = () => {
             <thead>
               <tr>
                 <th scope="col">N</th>
-                <th scope="col">First Name</th>
-                <th scope="col">Last Name</th>
-                <th scope="col">Username</th>
+                <th scope="col">Name</th>
                 <th scope="col">Status</th>
                 <th scope="col">Action</th>
               </tr>
@@ -44,18 +43,16 @@ const AdminHome = () => {
                 {restaurant.map((item, index)=>
                     <tr key={index}>
                         <th scope="row">{index+1}</th>
-                        <td>{item.first_name}</td>
-                        <td>{item.last_name}</td>
-                        <td>{item.username}</td>
-                        <td className={`${item.active_profile?"text-success": "text-danger"}`}>{`${item.active_profile?"true": "false"}`}</td>
+                        <td>{item.name}</td>
+                        <td className={`${item.is_active?"text-success": "text-danger"}`}>{`${item.is_active?"true": "false"}`}</td>
                         <td>
                         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                             {
-                                item.active_profile ? <button onClick={()=>applyUser(item.id)} className={"btn btn-outline-success"} type="button">Active</button> 
+                                item.is_active ? <button onClick={()=>applyUser(item.id)} className={"btn btn-outline-danger"} type="button">NoActive</button> 
                                 :
-                                <button onClick={()=>disableUser(item.id)} className={"btn btn-outline-danger"} type="button">NoActiv</button>
+                                <button onClick={()=>disableUser(item.id)} className={"btn btn-outline-success"} type="button">Active</button>
                             }
-                            <button type="button" class="btn btn-primary">Foods</button>
+                            <Link class="btn btn-primary" to={`/home/food-details/${item.id}`}>Foods</Link>
                         </div>
                         </td>
                     </tr>

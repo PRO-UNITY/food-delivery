@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.round{
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: none;
+  background: none;
+}
+
+.round img{
+  width: 100%;
+}
