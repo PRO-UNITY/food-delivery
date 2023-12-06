@@ -1,21 +1,30 @@
 from rest_framework import serializers
-from authen.models import CustomUser, KitchenUser
+from authen.models import CustomUser, KitchenUser, KitchenLike
 from kitchen.models import KitchenFoods
 
 
 class UserInformationSerializers(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
+        fields = ["id", "username", "first_name", "last_name", "email"]
+
+
+class KitchenLikeSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = KitchenLike
         fields = [
             "id",
-            "username",
-            "first_name",
-            "last_name",
-            "email"
+            "like",
+            "id_kitchen",
+            "user_id",
+            "is_active",
+            "create_at",
+            "updated_at"
         ]
 
 
 class AllKitchenSerializers(serializers.ModelSerializer):
+
     class Meta:
         model = KitchenUser
         fields = [
@@ -31,6 +40,21 @@ class AllKitchenSerializers(serializers.ModelSerializer):
             "create_at",
             "updated_at",
         ]
+
+
+class KitchenUserWithCounterSerializer(serializers.ModelSerializer):
+    foods_count = serializers.SerializerMethodField()
+    like_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = KitchenUser
+        fields = '__all__'
+
+    def get_foods_count(self, obj):
+        return obj.foods_set.count()
+
+    def get_like_count(self, obj):
+        return obj.kitchenlike_set.count()
 
 
 class KitchenCrudSerializers(serializers.ModelSerializer):
@@ -58,7 +82,6 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
             "updated_at",
         ]
 
-
     def create(self, validated_data):
         create_foods = KitchenUser.objects.create(**validated_data)
         create_foods.user_id = self.context.get("user_id")
@@ -72,9 +95,9 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
         instance.is_active = validated_data.get(
             "is_active", instance.is_active)
         instance.working_time = validated_data.get(
-            "working_time", instance.working_time)
-        instance.latitude = validated_data.get(
-            "latitude", instance.latitude)
+            "working_time", instance.working_time
+        )
+        instance.latitude = validated_data.get("latitude", instance.latitude)
         instance.longitude = validated_data.get(
             "longitude", instance.longitude)
         if instance.logo == None:
@@ -96,7 +119,8 @@ class AllFoodKitchenSerializers(serializers.ModelSerializer):
             "description",
             "image_food",
             "kitchen_id",
-            "create_at", "updated_at"
+            "create_at",
+            "updated_at",
         ]
 
 
@@ -118,8 +142,9 @@ class FoodKitchenCrudSerializers(serializers.ModelSerializer):
             "image_food",
             "user_id",
             "kitchen_id",
-            "create_at", "updated_at"
-            ]
+            "create_at",
+            "updated_at",
+        ]
 
     def create(self, validated_data):
         create_foods = KitchenFoods.objects.create(**validated_data)

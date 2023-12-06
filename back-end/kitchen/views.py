@@ -4,11 +4,15 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from kitchen.pagination import StandardResultsSetPagination
 from authen.renderers import UserRenderers
-from kitchen.models import KitchenFoods, KitchenUser
+from authen.models import KitchenUser, KitchenLike
+from django.db.models import Count
+from kitchen.models import KitchenFoods
+from foods.models import Foods
 from kitchen.serializers import (
     AllKitchenSerializers,
     KitchenCrudSerializers,
     AllFoodKitchenSerializers,
+    KitchenUserWithCounterSerializer,
     FoodKitchenCrudSerializers,
 )
 
@@ -34,14 +38,34 @@ class KitchenCreateViews(APIView):
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class KitchenLikeViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request, pk):
+        objects_list = KitchenUser.objects.filter(id=pk)[0]
+        like_litchen = KitchenLike.objects.filter(id_kitchen=objects_list)[0]
+        like_litchen.lik = like_litchen.lik+1
+        like_litchen.user_id = request.user
+        like_litchen.is_active = True
+        like_litchen.id_kitchen = objects_list
+        like_litchen.save()
+        return Response({'like'}, status=status.HTTP_200_OK)
+
+
 class KitchenCrudViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request, pk):
         objects_list = KitchenUser.objects.filter(id=pk)
+        kitchen = KitchenUser.objects.get(id=pk)
+        like = KitchenLike.objects.filter(id_kitchen=kitchen).count()
         serializers = AllKitchenSerializers(objects_list, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+        return Response(
+            {
+                'kitchen': serializers.data,
+                "like": like}, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
         serializers = KitchenCrudSerializers(
@@ -66,7 +90,7 @@ class KitchenCrudViews(APIView):
 
 class AllKitchenViews(APIView):
     pagination_class = StandardResultsSetPagination
-    serializer_class = AllKitchenSerializers
+    serializer_class = KitchenUserWithCounterSerializer
 
     @property
     def paginator(self):

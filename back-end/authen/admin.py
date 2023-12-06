@@ -1,7 +1,7 @@
 """ Django Libraries """
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from authen.models import CustomUser, Gender, KitchenUser
+from authen.models import CustomUser, Gender, KitchenUser, KitchenLike
 from authen.forms import ChangeUser, CreasteUser
 from import_export.admin import ImportExportActionModelAdmin, ImportExportModelAdmin
 
@@ -52,3 +52,4 @@ admin.site.register(CustomUser, NewMyUser)
 
 admin.site.register(Gender)
 admin.site.register(KitchenUser)
+admin.site.register(KitchenLike)

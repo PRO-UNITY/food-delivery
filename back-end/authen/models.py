@@ -45,6 +45,3 @@ class KitchenLike(models.Model):
     is_active = models.BooleanField(default=False)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.user_id.username
