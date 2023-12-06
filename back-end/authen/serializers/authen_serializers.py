@@ -178,7 +178,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "avatar",
-            'email'
+            'email',
             "phone",
             "groups"
         ]
