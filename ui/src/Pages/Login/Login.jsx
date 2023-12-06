@@ -16,6 +16,7 @@ const Login = () => {
         };
         await postData(user,"/token/").then((res)=>{
           localStorage.setItem('token',res.access)
+          console.log(res.access);
         })
         navigate('/home')
         window.location.reload()

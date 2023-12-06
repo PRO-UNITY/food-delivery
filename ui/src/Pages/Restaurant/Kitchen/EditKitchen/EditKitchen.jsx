@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
+import { getDataWithToken } from "../../../../functions";
 
 const EditFood = () => {
     const nameRef = useRef();
@@ -12,6 +13,15 @@ const EditFood = () => {
     const longitudref = useRef();
     const navigate = useNavigate();
     const {id} = useParams()
+    const [data,setData] = useState()
+
+    useEffect(()=>{
+        getDataWithToken(`/kitchen/kitchen_crud/${id}`).
+        then((res)=>
+         {setData(res.kitchen[0])
+         console.log(res.kitchen[0])}
+         )
+    },[])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,18 +47,20 @@ const EditFood = () => {
         }
     };
 
+    
+
     return (
         <div className="d-flex justify-content-center align-items-center">
             <div className="card w-50">
                 <div className="card-header bg-primary text-light"><h3>Edit Restaurant</h3></div>
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>
-                        <input ref={nameRef} type="text" placeholder="name" className="form-control mb-2" />
-                        <input ref={descriptionRef} type="text" placeholder="description" className="form-control mb-2" />
-                        <input ref={imgRef} type="file" className="form-control mb-2" />
-                        <input ref={timeref} type="text" placeholder="working_time" className="form-control mb-2" />
-                        <input ref={latituderef} type="text" placeholder="latitude" className="form-control mb-2" />
-                        <input ref={longitudref} type="text" placeholder="longitude" className="form-control mb-2" />
+                        <input defaultValue={data?.name} ref={nameRef} type="text" placeholder="name" className="form-control mb-2" />
+                        <input defaultValue={data?.description} ref={descriptionRef} type="text" placeholder="description" className="form-control mb-2" />
+                        <input  ref={imgRef} type="file" className="form-control mb-2" />
+                        <input defaultValue={data?.working_time} ref={timeref} type="text" placeholder="working_time" className="form-control mb-2" />
+                        <input defaultValue={data?.latitude} ref={latituderef} type="text" placeholder="latitude" className="form-control mb-2" />
+                        <input defaultValue={data?.longitude} ref={longitudref} type="text" placeholder="longitude" className="form-control mb-2" />
                         <button type="submit" className="btn btn-primary">update</button>
                     </form>
                 </div>

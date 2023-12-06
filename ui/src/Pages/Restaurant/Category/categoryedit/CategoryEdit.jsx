@@ -11,11 +11,17 @@ const EditCategory = () => {
     const navigate = useNavigate();
     const {id} = useParams()
     const [food, setFood] = useState([])
+    const [data, setData] = useState([])
     const [selectcategory, setSelectcategory] = useState([])
 
     useEffect(()=>{
         getDataWithToken('/kitchen/kitchen_create').
         then((res)=> setFood(res))
+    },[])
+
+    useEffect(()=>{
+        getDataWithToken(`/foods/categories_crud/${id}`).
+        then((res)=> setData(res[0]))
     },[])
 
     const handleEdit = async (e) => {
@@ -47,13 +53,14 @@ const EditCategory = () => {
     return (
         <div className="d-flex justify-content-center align-items-center">
             <div className="card w-50">
-                <div className="card-header bg-primary text-light"><h3>Add Restaurant</h3></div>
+                <div className="card-header bg-primary text-light"><h3>Update Category</h3></div>
                 <div className="card-body">
                     <form onSubmit={handleEdit}>
-                        <input ref={nameRef} type="text" placeholder="name" className="form-control mb-2" />
+                        <input defaultValue={data.name} ref={nameRef} type="text" placeholder="name" className="form-control mb-2" />
                         <select onChange={(e)=>setSelectcategory(e.target.value)} value={selectcategory} ref={categoryref} name="" id="" className="form-control mb-2">
+                            <option hidden value="">Select Restaurant</option>
                             {food.map((item,index)=>
-                            <option value={item.id} className="form-control">{item.name}</option>
+                            <option key={item.id} value={item.id} className="form-control">{item.name}</option>
                             )}
                             
                         </select>

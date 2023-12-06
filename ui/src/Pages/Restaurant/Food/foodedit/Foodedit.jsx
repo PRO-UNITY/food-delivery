@@ -17,6 +17,7 @@ const EditFoodRestaurant = () => {
     const [kitchen, setKitchen] = useState([])
     const [selectcategory, setSelectcategory] = useState(0)
     const [selectkitchen, setSelectkitchen] = useState(0)
+    const [data, setData] = useState()
     const {id} = useParams()
     
 
@@ -32,6 +33,14 @@ const EditFoodRestaurant = () => {
     useEffect(()=>{
         getDataWithToken('/kitchen/kitchen_is_active').
         then((res)=> setKitchen(res))
+    },[])
+    
+    useEffect(()=>{
+        getDataWithToken(`/foods/foods_crud/${id}`).
+        then((res)=> {
+            setData(res[0])
+            console.log(res[0])
+        })
     },[])
 
     const handleSubmit = async (e) => {
@@ -66,9 +75,9 @@ const EditFoodRestaurant = () => {
                 <div className="card-header bg-primary text-light"><h3>Update Food</h3></div>
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>
-                        <input ref={nameRef} type="text" placeholder="name" className="form-control mb-2" />
-                        <input ref={contentRef} type="text" placeholder="content" className="form-control mb-2" />
-                        <input ref={priceRef} type="text" placeholder="price" className="form-control mb-2" />
+                        <input defaultValue={data?.name} ref={nameRef} type="text" placeholder="name" className="form-control mb-2" />
+                        <input defaultValue={data?.content} ref={contentRef} type="text" placeholder="content" className="form-control mb-2" />
+                        <input defaultValue={data?.price} ref={priceRef} type="text" placeholder="price" className="form-control mb-2" />
                         <input ref={imgRef} type="file" placeholder="name" className="form-control mb-2" />
                         <select onChange={(e)=>handleCategory(e.target.value)} value={selectkitchen} ref={kitchenref} name="" id="" className="form-control mb-2">
                             <option hidden>select restaurant</option>

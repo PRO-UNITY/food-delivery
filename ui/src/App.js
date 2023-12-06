@@ -20,6 +20,8 @@ import EditCategory from './Pages/Restaurant/Category/categoryedit/CategoryEdit'
 import AddKitchen from './Pages/Restaurant/Kitchen/AddKitchen/AddKitchen';
 import AddFoodRestaurant from './Pages/Restaurant/Food/foodadd/AddFood';
 import EditFoodRestaurant from './Pages/Restaurant/Food/foodedit/Foodedit';
+import UserProfile from './Pages/Userprofile/Userprofile';
+import UpdateProfile from './Pages/Userprofile/UpdateUser';
 
 function App() {
 
@@ -53,6 +55,8 @@ function App() {
        <>
         <Navbar/>
         <Routes>
+        <Route path={'/user-profile'} element={<UserProfile/>}/>
+        <Route path={'/edit-profile'} element={<UpdateProfile/>}/>
             <Route path={'/home'} element={<Sidebar/>}>
               <Route path={'/home/main'} element={<RestaurantHome/>}/>
               <Route path={'/home/add-kitchen'} element={<AddKitchen/>}/>
