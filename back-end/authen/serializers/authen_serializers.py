@@ -140,10 +140,10 @@ class UserUpdateSerializers(serializers.ModelSerializer):
         instance.username = validated_data.get("username", instance.username)
         instance.phone = validated_data.get("phone", instance.phone)
         instance.email = validated_data.get("email", instance.email)
-        if self.context.get("avatar") == None:
-            instance.avatar = instance.avatar
-        else:
+        if instance.avatar == None:
             instance.avatar = self.context.get("avatar")
+        else:
+            instance.avatar = validated_data.get("avatar", instance.avatar)
         instance.save()
         return instance
 
