@@ -33,3 +33,18 @@ class KitchenUser(models.Model):
     longitude = models.CharField(max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+class KitchenLike(models.Model):
+    like = models.IntegerField(default=0)
+    id_kitchen = models.ForeignKey(KitchenUser, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=False)
+    create_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.user_id.username
