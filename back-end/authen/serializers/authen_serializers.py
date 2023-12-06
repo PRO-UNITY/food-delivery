@@ -180,6 +180,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "avatar",
             'email'
             "phone",
+            "groups"
         ]
 
 
