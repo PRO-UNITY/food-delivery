@@ -172,7 +172,7 @@ class UserUpdateView(APIView):
             partial=True,
         )
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
+            serializer.save(avatar=request.data.get("avatar"))
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(
             {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
