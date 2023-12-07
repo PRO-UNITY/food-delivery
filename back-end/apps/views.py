@@ -72,6 +72,15 @@ class FoodsKitchenViews(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
+class FoodsCategoriesViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request, pk):
+        objects_list = Foods.objects.filter(categories_id=pk).order_by('id')
+        serializers = AllFoodsSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
 # class LikeKitchenViews(APIView):
 #     render_classes = [UserRenderers]
 #     perrmisson_class = [IsAuthenticated]

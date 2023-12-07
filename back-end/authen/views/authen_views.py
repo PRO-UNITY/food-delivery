@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from authen.renderers import UserRenderers
-from authen.models import CustomUser, Gender
+from authen.models import CustomUser, Gender, KitchenUser
 from authen.pagination import StandardResultsSetPagination
 from authen.serializers.authen_serializers import (
     AllGenderListSerializers,
@@ -213,3 +213,20 @@ class LogoutAPIView(APIView):
         serializer.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class RegisterDeliveryViews(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    def post(self, request):
+        kit = KitchenUser.objects.filter(user_id=request.user)[0]
+        serializer = KitchenSignUpSerializers(
+            data=request.data,
+            context={'delivery': kit}
+        )
+        if serializer.is_valid(raise_exception=True):
+            instanse = serializer.save()
+            tokens = get_token_for_user(instanse)
+            return Response({"token": tokens}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

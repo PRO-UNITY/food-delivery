@@ -106,6 +106,52 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
         return user
 
 
+class DeliverySignUpSerializers(serializers.ModelSerializer):
+    username = serializers.CharField(
+        max_length=255,
+        min_length=5,
+        required=True,
+        validators=[UniqueValidator(queryset=CustomUser.objects.all())],
+    )
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password]
+    )
+    confirm_password = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "password",
+            "confirm_password",
+            "email",
+            "groups",
+        ]
+        extra_kwargs = {
+            "first_name": {"required": True},
+            "last_name": {"required": True},
+        }
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create(
+            username=validated_data["username"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+            email=validated_data["email"],
+        )
+        # create_foods.delivery =
+        print(self.context.get("delivery"))
+        user.set_password(validated_data["password"])
+        filtr_gr = Group.objects.filter(id=4)
+        for i in filtr_gr:
+            user.groups.add(i.id)
+            # user.save()
+        return user
+
+
 class UserUpdateSerializers(serializers.ModelSerializer):
     """Serializers"""
 
