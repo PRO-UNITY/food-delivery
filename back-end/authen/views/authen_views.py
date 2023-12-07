@@ -146,8 +146,8 @@ class UserProfilesViews(APIView):
 
     def get(self, request):
         """User information views"""
-        # kit = KitchenUser.objects.filter(user_id=request.user.id)[0]
-        # print(kit)
+        kit = KitchenUser.objects.filter(user_id=request.user.id)[0]
+        print(kit)
         serializer = UserInformationSerializers(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
