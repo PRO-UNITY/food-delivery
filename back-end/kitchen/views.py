@@ -22,7 +22,7 @@ class KitchenCreateViews(APIView):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request):
-        objects_list = KitchenUser.objects.filter(user_id=request.user.id)
+        objects_list = KitchenUser.objects.filter(user_id=request.user.id, groups__name__in=['delivery'])
         serializers = AllKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 

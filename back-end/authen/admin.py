@@ -27,6 +27,7 @@ class NewMyUser(ImportExportModelAdmin, UserAdmin):
                     "birth_date",
                     "gender_id",
                     "avatar",
+                    "user_id",
                     "phone",
                 )
             },
@@ -41,6 +42,7 @@ class NewMyUser(ImportExportModelAdmin, UserAdmin):
                     "birth_date",
                     "gender_id",
                     "avatar",
+                    "user_id",
                     "phone",
                 )
             },

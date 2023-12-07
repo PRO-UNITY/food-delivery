@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
-from authen.models import CustomUser, Gender
+from authen.models import CustomUser, Gender, KitchenUser
 
 
 class UserGroupSerizliers(serializers.ModelSerializer):
@@ -128,7 +128,6 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
             "password",
             "confirm_password",
             "email",
-            'kit_id'
         ]
         extra_kwargs = {
             "first_name": {"required": True},
@@ -136,22 +135,19 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        kit_id = validated_data['kit_id']
-        print(kit_id)
-        # user = CustomUser.objects.create(
-        #     username=validated_data["username"],
-        #     first_name=validated_data["first_name"],
-        #     last_name=validated_data["last_name"],
-        #     email=validated_data["email"],
-        # )
-        # create_foods.delivery =
-        # print(self.context.get("user_id"))
-        # user.set_password(validated_data["password"])
-        # filtr_gr = Group.objects.filter(id=4)
-        # for i in filtr_gr:
-        #     user.groups.add(i.id)
-            # user.save()
-        return []
+        user = CustomUser.objects.create(
+            username=validated_data["username"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+            email=validated_data["email"],
+        )
+        user.user_id = self.context.get("user_id")
+        user.set_password(validated_data["password"])
+        filtr_gr = Group.objects.filter(id=4)
+        for i in filtr_gr:
+            user.groups.add(i.id)
+            user.save()
+        return user
 
 
 class UserUpdateSerializers(serializers.ModelSerializer):
@@ -226,6 +222,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "avatar",
             "email",
             "phone",
+            "user_id",
             "groups",
         ]
 
@@ -248,3 +245,4 @@ class LogoutSerializer(serializers.Serializer):
             RefreshToken(self.token).blacklist()
         except TokenError:
             self.fail("bad_token")
+

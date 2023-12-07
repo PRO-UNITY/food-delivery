@@ -221,14 +221,25 @@ class RegisterDeliveryViews(APIView):
     permission = [IsAuthenticated]
 
     def post(self, request):
-        # kit = KitchenUser.objects.filter(user_id=request.user.id)
-        # print(kit)
         serializer = DeliverySignUpSerializers(
             data=request.data,
-            # context={'user_id': kit}
+            context={
+                'user_id': request.user.id
+            }
         )
         if serializer.is_valid(raise_exception=True):
-            instanse = serializer.save()
-            tokens = get_token_for_user(instanse)
-            return Response({"token": tokens}, status=status.HTTP_201_CREATED)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeliveryUser(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    def get(self, request):
+        queryset = CustomUser.objects.filter(
+            groups__name__in=['delivery'], user_id=request.user.id)
+        serializers = UserInformationSerializers(queryset, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+

@@ -20,6 +20,8 @@ class CustomUser(AbstractUser):
         Gender,
         on_delete=models.CASCADE, null=True, blank=True)
     avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
+    user_id = models.IntegerField(null=True, blank=True)
+    active_profile = models.BooleanField(default=False)
 
 
 class KitchenUser(models.Model):
