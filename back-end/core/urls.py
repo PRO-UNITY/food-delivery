@@ -6,6 +6,7 @@ from django.conf import settings
 from rest_framework_simplejwt import views as jwt_views
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
+from rest_framework_simplejwt.views import TokenBlacklistView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -42,6 +43,7 @@ urlpatterns = [
         jwt_views.TokenRefreshView.as_view(),
         name="token_refresh",
     ),
+    path('logout/', TokenBlacklistView.as_view(), name='token_blacklist'),
     path(
         "docs/",
         TemplateView.as_view(
@@ -56,6 +58,7 @@ urlpatterns = [
     path("authen/", include("authen.urls")),
     path("kitchen/", include("kitchen.urls")),
     path('foods/', include('foods.urls')),
+    path('apps/', include('apps.urls')),
 ]
 
 

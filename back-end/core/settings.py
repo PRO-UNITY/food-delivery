@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "authen",
     "kitchen",
     "foods",
+    "apps",
     # socaill apps
     "django.contrib.sites",
     "dj_rest_auth",

@@ -10,6 +10,7 @@ from authen.views.authen_views import (
     UserUpdateView,
     change_password,
     UserDeteilseViews,
+    LogoutAPIView,
 
 )
 
@@ -26,4 +27,5 @@ urlpatterns = [
     # social views
     path('google/login', GoogleView.as_view()),
     path('facebook/login', FacebookLogin.as_view()),
+    path('LogoutAPIView', LogoutAPIView.as_view()),
 ]

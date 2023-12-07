@@ -1,11 +1,12 @@
 """ Django DRF Packaging """
 import random
+from drf_spectacular.utils import extend_schema
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import get_object_or_404
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -21,6 +22,7 @@ from authen.serializers.authen_serializers import (
     UserUpdateSerializers,
     UserInformationSerializers,
     ChangePasswordSerializer,
+    LogoutSerializer,
 )
 
 
@@ -52,7 +54,7 @@ class UserRegisterViews(APIView):
         if serializer.is_valid(raise_exception=True):
             instanse = serializer.save()
             tokens = get_token_for_user(instanse)
-            return Response({'token': tokens}, status=status.HTTP_201_CREATED)
+            return Response({"token": tokens}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -64,7 +66,7 @@ class KitchenRegisterViews(APIView):
         if serializer.is_valid(raise_exception=True):
             instanse = serializer.save()
             tokens = get_token_for_user(instanse)
-            return Response({'token': tokens}, status=status.HTTP_201_CREATED)
+            return Response({"token": tokens}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -198,3 +200,16 @@ def change_password(request):
                 {"error": "Incorrect old password."}, status=status.HTTP_400_BAD_REQUEST
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LogoutAPIView(APIView):
+    serializer_class = LogoutSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    @extend_schema(request=None, responses=LogoutSerializer)
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
