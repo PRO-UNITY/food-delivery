@@ -13,6 +13,9 @@ from authen.views.authen_views import (
     LogoutAPIView,
     RegisterDeliveryViews,
     DeliveryUser,
+    ManagerKitchenViews,
+    ManagerUser,
+    ManagerKitchenCreateViews,
 
 )
 
@@ -28,6 +31,9 @@ urlpatterns = [
     path('user_deteilse_views/<int:pk>', UserDeteilseViews.as_view()),
     path('register_delivery', RegisterDeliveryViews.as_view()),
     path('delivery_user', DeliveryUser.as_view()),
+    path('create_manager', ManagerKitchenViews.as_view()),
+    path('manager_user', ManagerUser.as_view()),
+    path('manager_kitchen_create', ManagerKitchenCreateViews.as_view()),
     # social views
     path('google/login', GoogleView.as_view()),
     path('facebook/login', FacebookLogin.as_view()),

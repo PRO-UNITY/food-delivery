@@ -150,6 +150,50 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
         return user
 
 
+class ManagerSignUpSerializers(serializers.ModelSerializer):
+    username = serializers.CharField(
+        max_length=255,
+        min_length=5,
+        required=True,
+        validators=[UniqueValidator(queryset=CustomUser.objects.all())],
+    )
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password]
+    )
+    confirm_password = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "password",
+            "confirm_password",
+            "email",
+        ]
+        extra_kwargs = {
+            "first_name": {"required": True},
+            "last_name": {"required": True},
+        }
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create(
+            username=validated_data["username"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+            email=validated_data["email"],
+        )
+        user.user_id = self.context.get("user_id")
+        user.set_password(validated_data["password"])
+        filtr_gr = Group.objects.filter(id=5)
+        for i in filtr_gr:
+            user.groups.add(i.id)
+            user.save()
+        return user
+
+
 class UserUpdateSerializers(serializers.ModelSerializer):
     """Serializers"""
 
@@ -246,3 +290,19 @@ class LogoutSerializer(serializers.Serializer):
         except TokenError:
             self.fail("bad_token")
 
+
+class DeliveryChickenSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = KitchenUser
+        fields = [
+            "id",
+            "delivery",
+        ]
+
+    def update(self, instance, validated_data):
+        deliveries_data = validated_data.pop('delivery')
+        instance.delivery.clear()
+        for delivery_data in deliveries_data:
+            instance.delivery.add(delivery_data)
+        instance.save()
+        return instance
