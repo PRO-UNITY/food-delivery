@@ -128,6 +128,7 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
             "password",
             "confirm_password",
             "email",
+            'kit_id'
         ]
         extra_kwargs = {
             "first_name": {"required": True},
@@ -135,6 +136,8 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        kit_id = validated_data['kit_id']
+        print(kit_id)
         # user = CustomUser.objects.create(
         #     username=validated_data["username"],
         #     first_name=validated_data["first_name"],
