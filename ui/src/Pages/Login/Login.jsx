@@ -6,7 +6,6 @@ import GoogleLogin from 'react-google-login';
 const Login = () => {
 
     const responseGoogle = (response) => {
-        console.log(response);
     }
 
     const usernameRef = useRef(null);

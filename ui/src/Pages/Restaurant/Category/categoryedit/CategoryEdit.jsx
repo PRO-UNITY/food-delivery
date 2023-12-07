@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import axios from 'axios';
-import { getDataWithToken } from "../../../../functions";
+import { getDataWithToken, EditWithFormData } from "../../../../functions";
 import { useParams } from "react-router-dom";
 
 const EditCategory = () => {
@@ -30,22 +30,8 @@ const EditCategory = () => {
         const formData = new FormData();
         formData.append('name', nameRef.current.value);
         formData.append('kitchen_id', selectcategory);
-
-        try {
-            const response = await axios.put(
-                `https://api.prounity.uz/food-delivery/foods/categories_crud/${id}`,
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/formData',
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            navigate('/home/category');
-        } catch (error) {
-            console.error('Error updating category', error);
-        }
+        EditWithFormData(`/foods/categories_crud/${id}`, formData).
+        then((res)=>navigate('/home/category'))
     };
 
 

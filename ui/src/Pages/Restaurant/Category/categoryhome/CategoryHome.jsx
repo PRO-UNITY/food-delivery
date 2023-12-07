@@ -15,7 +15,7 @@ const CategoryHome = () => {
     }
     
     return(
-        <div class="d-flex justify-content-center container align-items-start gap-2 w-100 vh-100 p-1">
+        <div class="d-flex justify-content-center align-items-start gap-2 w-100 vh-100 p-1">
         <div class="border p-3 rounded-2 w-100">
             <Link to={'/home/add-category'} className="btn btn-outline-primary float-end mb-3">+add</Link>
           <table class="table">

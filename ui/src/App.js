@@ -24,6 +24,12 @@ import UserProfile from './Pages/Userprofile/Userprofile';
 import UpdateProfile from './Pages/Userprofile/UpdateUser';
 import Forgetpassword from './Pages/Userprofile/Forgetpassword';
 import Changepassword from './Pages/Userprofile/Changepassword';
+import RestaurantCategories from './Pages/User/RestaurantCategories/Restaurantcategories';
+import CategoryFoods from './Pages/User/Categoryfood/CategoryFoods';
+import Delivery from './Pages/Restaurant/Delivery/Delivery';
+import OrderFood from './Pages/User/Order/OrderFood';
+import NewOrder from './Pages/Deliver/Neworder/NewOrder';
+import DeliveryHistory from './Pages/Deliver/DeliverHistory/DeliveryHistory';
 
 function App() {
 
@@ -45,6 +51,9 @@ function App() {
        <>
         <Navbar/>
         <Routes>
+        <Route path={'/user-profile'} element={<UserProfile/>}/>
+        <Route path={'/edit-profile'} element={<UpdateProfile/>}/>
+        <Route path={'/change-password'} element={<Changepassword/>}/>
             <Route path={'/home'} element={<Sidebar/>}>
               <Route path={'/home/main'} element={<AdminHome/>}/>
               <Route path={'/home/food-details/:id'} element={<FoodDetails/>}/>
@@ -70,6 +79,7 @@ function App() {
               <Route path={'/home/edit-category/:id'} element={<EditCategory/>}/>
               <Route path={'/home/add-food'} element={<AddFoodRestaurant/>}/>
               <Route path={'/home/edit-foodrestaurant/:id'} element={<EditFoodRestaurant/>}/>
+              <Route path={'/home/delivery'} element={<Delivery/>}/>
             </Route> 
           <Route path={'/sign-up-user'} element={<RegisterUser/>}/>
           <Route path={'/sign-up-restaurant'} element={<RegisterRestaurant/>}/>
@@ -79,13 +89,36 @@ function App() {
        <>
         <Navbar/>
         <Routes>
+        <Route path={'/user-profile'} element={<UserProfile/>}/>
+        <Route path={'/edit-profile'} element={<UpdateProfile/>}/>
+        <Route path={'/change-password'} element={<Changepassword/>}/>
             <Route path={'/home'} element={<Sidebar/>}>
-              <Route path={'home/main'} element={<UserHome/>}/>
+              <Route path={'/home/main'} element={<UserHome/>}/>
+              <Route path={'/home/kitchen-categories/:id'} element={<RestaurantCategories/>}/>
+              <Route path={'/home/category-foods/:id'} element={<CategoryFoods/>}/>
+              <Route path={'/home/order'} element={<OrderFood/>}/>
+
             </Route> 
           <Route path={'/sign-up-user'} element={<RegisterUser/>}/>
           <Route path={'/sign-up-restaurant'} element={<RegisterRestaurant/>}/>
         </Routes> 
        </> :
+        role === "supplier" ?
+        <>
+          <Navbar/>
+        <Routes>
+        <Route path={'/user-profile'} element={<UserProfile/>}/>
+        <Route path={'/edit-profile'} element={<UpdateProfile/>}/>
+        <Route path={'/change-password'} element={<Changepassword/>}/>
+            <Route path={'/home'} element={<Sidebar/>}>
+              <Route path={'/home/main'} element={<NewOrder/>}/>
+              <Route path={'/home/delivery-history'} element={<DeliveryHistory/>}/>
+
+            </Route> 
+          <Route path={'/sign-up-user'} element={<RegisterUser/>}/>
+          <Route path={'/sign-up-restaurant'} element={<RegisterRestaurant/>}/>
+        </Routes> 
+        </> :
        <Routes>
         <Route path={'/'} element={<Login/>}/>
         <Route path={'/forget-password'} element={<Forgetpassword/>}/>

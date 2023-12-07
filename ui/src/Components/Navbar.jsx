@@ -28,7 +28,7 @@ const Navbar = () => {
           </a>
           <div class="dropdown">
             <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src={user?.avatar ? `https://api.prounity.uz/food-delivery${user?.avatar}`: "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"} alt="" width="32" height="32" class="rounded-circle me-2" />
+              <img src={user?.avatar ? `https://api.prounity.uz/food-delivery${user?.avatar}`: "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"} alt="" width="40" height="40" class="rounded-circle me-2" />
               <strong>{user?.first_name}</strong>
             </a>
             <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">

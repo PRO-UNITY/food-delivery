@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import axios from 'axios';
-import { getDataWithToken } from "../../../../functions";
+import { EditWithFormData, getDataWithToken } from "../../../../functions";
 import { useParams } from "react-router-dom";
 
 const EditFoodRestaurant = () => {
@@ -55,22 +55,8 @@ const EditFoodRestaurant = () => {
         if (imgRef.current.files[0]) {
             formData.append('food_img', imgRef.current.files[0]);
         }
-
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
-
-        try {
-            const response = await axios.put(`https://api.prounity.uz/food-delivery/foods/foods_crud/${id}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/formData',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            navigate('/home/foods'); 
-        } catch (error) {
-            console.error('Error creating category', error);
-        }
+        EditWithFormData(`/foods/foods_crud/${id}`, formData).
+        then(()=>navigate('/home/foods'))
     };
 
 

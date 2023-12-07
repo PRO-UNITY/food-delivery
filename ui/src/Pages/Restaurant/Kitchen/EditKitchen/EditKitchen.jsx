@@ -3,6 +3,7 @@ import { useRef, useEffect, useState } from "react";
 import axios from 'axios';
 import { useParams } from "react-router-dom";
 import { getDataWithToken } from "../../../../functions";
+import { EditWithFormData } from "../../../../functions";
 
 const EditFood = () => {
     const nameRef = useRef();
@@ -35,22 +36,8 @@ const EditFood = () => {
         if(imgRef.current?.files[0]){
             formData.append('logo', imgRef.current.files[0]);
         }
-
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
-
-        try {
-            const response = await axios.put(`https://api.prounity.uz/food-delivery/kitchen/kitchen_crud/${id}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            navigate('/home/main'); 
-        } catch (error) {
-            console.error('Error updating food', error);
-        }
+        EditWithFormData(`/kitchen/kitchen_crud/${id}`, formData).
+        then((res)=>navigate('/home/main'))
     };
 
     

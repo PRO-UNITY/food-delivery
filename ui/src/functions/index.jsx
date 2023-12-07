@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const getHeader = () => {
     return {
         'Content-Type': 'application/json',
@@ -75,6 +77,7 @@ export const getRoleUser = async () => {
     );
     const data = await response.json();
     const role = data?.groups && data?.groups[0]?.name  ;
+    const fakerole = "supplier"
     localStorage.setItem('role', role);
     return role;
 }
@@ -87,4 +90,30 @@ export const deleteData = async (url) => {
     const data = await response.json();
     return data;
 }
+
+export const AddWithFormData = async (url, item) => {
+    const token = localStorage.getItem('token')
+    const response = await axios.post(BASE_URL+url, item, {
+        headers: {
+            'Content-Type': 'multipart/formData',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const data = response
+    return data
+}
+
+export const EditWithFormData = async (url, item) => {
+    const token = localStorage.getItem('token')
+    const response = await axios.put(BASE_URL+url, item, {
+        headers: {
+            'Content-Type': 'multipart/formData',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const data = response
+    return data
+}
+    
+
 

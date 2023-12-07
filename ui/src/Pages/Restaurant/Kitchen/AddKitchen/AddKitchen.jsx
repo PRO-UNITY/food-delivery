@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import axios from 'axios';
+import { AddWithFormData } from "../../../../functions";
 
 const AddKitchen = () => {
     const nameRef = useRef();
@@ -23,17 +24,8 @@ const AddKitchen = () => {
         formData.append('latitude', latituderef.current.value)
         formData.append('longitude', longitudref.current.value)
 
-        try {
-            const response = await axios.post('https://api.prounity.uz/food-delivery/kitchen/kitchen_create', formData, {
-                headers: {
-                    'Content-Type': 'multipart/formData',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            navigate('/home/main'); 
-        } catch (error) {
-            console.error('Error creating food', error);
-        }
+        AddWithFormData("/kitchen/kitchen_create", formData).
+        then((res)=>navigate('/home/main'))
     };
 
     return (

@@ -26,11 +26,17 @@ const Sidebar = () => {
   <div className="d-flex flex-column flex-shrink-0 p-3 bg-light vh-100" style={{ width: "280px" }}>
     <ul className="nav nav-pills flex-column mb-auto">
       
-        <NavLink to="/home/main" className="nav-link text-start" isActive={() => checkActive("/home/main")}>
+        <NavLink to="/home/main" className="nav-link text-start d-flex justify-content-between" isActive={() => checkActive("/home/main")}>
+          <p className="p-0 m-0">
           {
             role === "admins" ? "Restaurants" :
               role === "kitchen" ? "Restaurants" :
-                role === "users" ? "Restaurants" : ""
+                role === "users" ? "Restaurants" : 
+                  role === "supplier" ? "New order": ""
+          }
+          </p>
+          {
+            role === "supplier" ? <p className="p-0 m-0">1</p>: ""
           }
         </NavLink>
       
@@ -45,6 +51,20 @@ const Sidebar = () => {
         role === "kitchen" ?<li className="nav-item">
         <NavLink to="/home/foods" className="nav-link text-start" isActive={() => checkActive("/home/foods")}>
           Foods
+        </NavLink>
+      </li>:""
+      }
+      {
+        role === "kitchen" ?<li className="nav-item">
+        <NavLink to="/home/delivery" className="nav-link text-start" isActive={() => checkActive("/home/delivery")}>
+          Delivery
+        </NavLink>
+      </li>:""
+      }
+      {
+        role === "supplier" ?<li className="nav-item">
+        <NavLink to="/home/delivery-history" className="nav-link text-start" isActive={() => checkActive("/home/delivery")}>
+          Delivery History
         </NavLink>
       </li>:""
       }

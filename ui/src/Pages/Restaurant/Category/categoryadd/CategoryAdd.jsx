@@ -2,7 +2,8 @@
 import { useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 import axios from 'axios';
-import { getDataWithToken } from "../../../../functions";
+import { getDataWithToken, AddWithFormData } from "../../../../functions";
+
 
 const AddCategory = () => {
     const nameRef = useRef();
@@ -23,17 +24,8 @@ const AddCategory = () => {
         formData.append('name', nameRef.current.value);
         formData.append('kitchen_id', selectcategory);
 
-        try {
-            const response = await axios.post('https://api.prounity.uz/food-delivery/foods/all_categories', formData, {
-                headers: {
-                    'Content-Type': 'multipart/formData',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            navigate('/home/category'); 
-        } catch (error) {
-            console.error('Error creating category', error);
-        }
+        AddWithFormData("/foods/all_categories", formData).
+        then((res)=>navigate('/home/category'))
     };
 
 
@@ -48,8 +40,7 @@ const AddCategory = () => {
                         <select onChange={(e)=>setSelectcategory(e.target.value)} value={selectcategory} ref={categoryref} name="" id="" className="form-control mb-2">
                             {food.map((item,index)=>
                             <option value={item.id} className="form-control">{item.name}</option>
-                            )}
-                            
+                            )} 
                         </select>
                         <button type="submit" className="btn btn-primary">create</button>
                     </form>

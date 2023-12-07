@@ -28,7 +28,7 @@ const AdminHome = () => {
     };
     
     return(
-        <div class="d-flex justify-content-start container align-items-start gap-2 w-100 vh-100 p-1">
+        <div class="d-flex justify-content-start align-items-start gap-2 w-100 vh-100 p-1">
         <div class="border p-3 rounded-2 w-100">
           <table class="table">
             <thead>
