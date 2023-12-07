@@ -128,7 +128,6 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
             "password",
             "confirm_password",
             "email",
-            "groups",
         ]
         extra_kwargs = {
             "first_name": {"required": True},
@@ -136,20 +135,20 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        user = CustomUser.objects.create(
-            username=validated_data["username"],
-            first_name=validated_data["first_name"],
-            last_name=validated_data["last_name"],
-            email=validated_data["email"],
-        )
+        # user = CustomUser.objects.create(
+        #     username=validated_data["username"],
+        #     first_name=validated_data["first_name"],
+        #     last_name=validated_data["last_name"],
+        #     email=validated_data["email"],
+        # )
         # create_foods.delivery =
-        print(self.context.get("delivery"))
-        user.set_password(validated_data["password"])
-        filtr_gr = Group.objects.filter(id=4)
-        for i in filtr_gr:
-            user.groups.add(i.id)
+        # print(self.context.get("user_id"))
+        # user.set_password(validated_data["password"])
+        # filtr_gr = Group.objects.filter(id=4)
+        # for i in filtr_gr:
+        #     user.groups.add(i.id)
             # user.save()
-        return user
+        return []
 
 
 class UserUpdateSerializers(serializers.ModelSerializer):

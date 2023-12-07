@@ -23,6 +23,7 @@ from authen.serializers.authen_serializers import (
     UserInformationSerializers,
     ChangePasswordSerializer,
     LogoutSerializer,
+    DeliverySignUpSerializers,
 )
 
 
@@ -145,6 +146,8 @@ class UserProfilesViews(APIView):
 
     def get(self, request):
         """User information views"""
+        # kit = KitchenUser.objects.filter(user_id=request.user.id)[0]
+        # print(kit)
         serializer = UserInformationSerializers(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -220,10 +223,11 @@ class RegisterDeliveryViews(APIView):
     permission = [IsAuthenticated]
 
     def post(self, request):
-        kit = KitchenUser.objects.filter(user_id=request.user)[0]
-        serializer = KitchenSignUpSerializers(
+        kit = KitchenUser.objects.filter(user_id=request.user.id)
+        print(kit)
+        serializer = DeliverySignUpSerializers(
             data=request.data,
-            context={'delivery': kit}
+            # context={'user_id': kit}
         )
         if serializer.is_valid(raise_exception=True):
             instanse = serializer.save()
