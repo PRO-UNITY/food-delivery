@@ -46,6 +46,7 @@ class UserGenderViews(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
+@extend_schema(request=None, responses=UserSignUpSerializers)
 class UserRegisterViews(APIView):
     """UserRegister Views"""
 
@@ -61,6 +62,7 @@ class UserRegisterViews(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(request=None, responses=KitchenSignUpSerializers)
 class KitchenRegisterViews(APIView):
     """UserRegister Views"""
 
@@ -73,6 +75,7 @@ class KitchenRegisterViews(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(request=None, responses=UserSigInInSerializers)
 class UserSigInViews(APIView):
     """UserSigIn Views"""
 
@@ -140,6 +143,7 @@ class SendEmailCode(APIView):
             return Response({"error": "The email code is incorrect !"})
 
 
+@extend_schema(request=None, responses=UserInformationSerializers)
 class UserProfilesViews(APIView):
     """User Pofiles classs"""
 
@@ -162,6 +166,7 @@ class UserDeteilseViews(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
+@extend_schema(request=None, responses=UserUpdateSerializers)
 class UserUpdateView(APIView):
     """User PUT Class"""
 
@@ -184,6 +189,7 @@ class UserUpdateView(APIView):
         )
 
 
+@extend_schema(request=None, responses=ChangePasswordSerializer)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def change_password(request):
@@ -218,6 +224,7 @@ class LogoutAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@extend_schema(request=None, responses=DeliverySignUpSerializers)
 class RegisterDeliveryViews(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
@@ -235,6 +242,7 @@ class RegisterDeliveryViews(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(request=None, responses=UserInformationSerializers)
 class DeliveryUser(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
@@ -246,6 +254,7 @@ class DeliveryUser(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
+@extend_schema(request=None, responses=DeliverySignUpSerializers)
 class ManagerKitchenViews(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
@@ -263,6 +272,7 @@ class ManagerKitchenViews(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@extend_schema(request=None, responses=UserInformationSerializers)
 class ManagerUser(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
@@ -274,6 +284,7 @@ class ManagerUser(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
+@extend_schema(request=None, responses=DeliveryChickenSerializers)
 class ManagerKitchenCreateViews(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
