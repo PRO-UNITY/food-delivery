@@ -64,7 +64,7 @@ class DeliveryKirchenCreateViews(APIView):
     permission = [IsAuthenticated]
 
     def get(self, request, pk):
-        objects_list = KitchenUser.objects.all()
+        objects_list = KitchenUser.objects.filter(id=pk)
         serializers = DeliveryChickenAllSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
