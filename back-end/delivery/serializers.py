@@ -58,10 +58,6 @@ class DeliveryChickenSerializers(serializers.ModelSerializer):
         instance.delivery.clear()
         for delivery_data in deliveries_data:
             instance.delivery.add(delivery_data)
-        # if instance.logo == None:
-        #     instance.logo = self.context.get("logo")
-        # else:
-        #     instance.logo = validated_data.get("logo", instance.logo)
         instance.save()
         return instance
 
