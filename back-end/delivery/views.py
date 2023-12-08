@@ -15,6 +15,7 @@ from delivery.serializers import (
     OrderComentSerializers,
     OrderComentCrudSerializers,
     DeliveryChickenAllSerializers,
+    UserInformationSerializers,
 )
 
 
@@ -64,13 +65,13 @@ class DeliveryKirchenCreateViews(APIView):
     permission = [IsAuthenticated]
 
     def get(self, request, pk):
-        objects_list = KitchenUser.objects.filter(id=pk)
-        use = CustomUser.objects.all()
-        for item in objects_list:
-            for i in item.delivery:
-                print(i)
-        # serializers = DeliveryChickenAllSerializers(objects_list, many=True)
-        return Response(status=status.HTTP_200_OK)
+        object_list = KitchenUser.objects.filter(id=pk)
+        queryset = CustomUser.objects.filter(delivery__isnull=False, groups__name__in=['delivery'])
+        queryset1 = CustomUser.objects.filter(delivery__isnull=True, groups__name__in=['delivery'])
+        serializer = DeliveryChickenAllSerializers(object_list, many=True)
+        usr = UserInformationSerializers(queryset, many=True)
+        usr2 = UserInformationSerializers(queryset1, many=True)
+        return Response({'delivery': serializer.data, 'active': usr.data, 'no_active': usr2.data}, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
         serializers = DeliveryChickenSerializers(
