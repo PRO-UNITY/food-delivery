@@ -260,7 +260,7 @@ class ManagerKitchenViews(APIView):
     permission = [IsAuthenticated]
 
     def post(self, request):
-        serializer = DeliverySignUpSerializers(
+        serializer = ManagerSignUpSerializers(
             data=request.data,
             context={
                 'user_id': request.user.id

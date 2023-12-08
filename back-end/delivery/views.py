@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from authen.renderers import UserRenderers
 from django.shortcuts import get_object_or_404
-from authen.models import KitchenUser
+from authen.models import KitchenUser, CustomUser
 from delivery.models import Delivery, StatusDelivery, Grade, OrderComent
 from delivery.serializers import (
     StatusSerializers,
@@ -65,8 +65,12 @@ class DeliveryKirchenCreateViews(APIView):
 
     def get(self, request, pk):
         objects_list = KitchenUser.objects.filter(id=pk)
-        serializers = DeliveryChickenAllSerializers(objects_list, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+        use = CustomUser.objects.all()
+        for item in objects_list:
+            for i in item.delivery:
+                print(i)
+        # serializers = DeliveryChickenAllSerializers(objects_list, many=True)
+        return Response(status=status.HTTP_200_OK)
 
     def put(self, request, pk):
         serializers = DeliveryChickenSerializers(
