@@ -107,13 +107,6 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
 
 
 class DeliverySignUpSerializers(serializers.ModelSerializer):
-    avatar = serializers.ImageField(
-        max_length=None,
-        allow_empty_file=False,
-        allow_null=False,
-        use_url=False,
-        required=False,
-    )
     username = serializers.CharField(
         max_length=255,
         min_length=5,
@@ -129,7 +122,6 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
         model = CustomUser
         fields = [
             "id",
-            "avatar"
             "username",
             "first_name",
             "last_name",
@@ -161,10 +153,6 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.active_profile = validated_data.get(
             "active_profile", instance.active_profile)
-        if instance.avatar == None:
-            instance.avatar = self.context.get("avatar")
-        else:
-            instance.avatar = validated_data.get("avatar", instance.avatar)
         instance.save()
         return instance
 

@@ -101,6 +101,7 @@ class OrderComentCrudSerializers(serializers.ModelSerializer):
         order.save()
         return order
 
+
 class DeliveryListSerializers(serializers.ModelSerializer):
     status = StatusDeliveryListSerializers(read_only=True)
     klient = UserInformationSerializers(read_only=True)
@@ -158,5 +159,3 @@ class SendOrderSerializers(serializers.ModelSerializer):
         instance.is_active = validated_data.get('is_active', instance.is_active)
         instance.save()
         return instance
-
-
