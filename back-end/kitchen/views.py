@@ -1,4 +1,5 @@
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -6,7 +7,7 @@ from kitchen.pagination import StandardResultsSetPagination
 from authen.renderers import UserRenderers
 from authen.models import KitchenUser, KitchenLike
 from kitchen.models import KitchenFoods
-from foods.models import Foods, FoodsCategories
+from foods.models import FoodsCategories
 from foods.serializers import AllCategoriesFoodsSerializer
 from kitchen.serializers import (
     AllKitchenSerializers,
@@ -26,6 +27,7 @@ class KitchenCreateViews(APIView):
         serializers = AllKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
+    @extend_schema(request=None, responses=KitchenCrudSerializers)
     def post(self, request):
         serializers = KitchenCrudSerializers(
             data=request.data,
@@ -67,6 +69,7 @@ class KitchenCrudViews(APIView):
                 'kitchen': serializers.data,
                 "like": like}, status=status.HTTP_200_OK)
 
+    @extend_schema(request=None, responses=KitchenCrudSerializers)
     def put(self, request, pk):
         serializers = KitchenCrudSerializers(
             instance=KitchenUser.objects.filter(
@@ -106,7 +109,8 @@ class AllKitchenViews(APIView):
     def paginate_queryset(self, queryset):
         if self.paginator is None:
             return None
-        return self.paginator.paginate_queryset(queryset, self.request, view=self)
+        return self.paginator.paginate_queryset(
+            queryset, self.request, view=self)
 
     def get_paginated_response(self, data):
         assert self.paginator is not None
@@ -129,7 +133,8 @@ class KitchenIsActiveViews(APIView):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request):
-        objects_list = KitchenUser.objects.filter(is_active=True, user_id=request.user)
+        objects_list = KitchenUser.objects.filter(
+            is_active=True, user_id=request.user)
         serializers = AllKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
@@ -153,6 +158,7 @@ class KitchenFoodsViews(APIView):
         serializers = AllFoodKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
+    @extend_schema(request=None, responses=FoodKitchenCrudSerializers)
     def post(self, request):
         serializers = FoodKitchenCrudSerializers(
             data=request.data,
@@ -174,6 +180,7 @@ class KitchenFoodsCrudViews(APIView):
         serializers = AllFoodKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
+    @extend_schema(request=None, responses=FoodKitchenCrudSerializers)
     def put(self, request, pk):
         serializers = FoodKitchenCrudSerializers(
             instance=KitchenFoods.objects.filter(id=pk)[0],
@@ -212,7 +219,8 @@ class AllKitchenFood(APIView):
     def paginate_queryset(self, queryset):
         if self.paginator is None:
             return None
-        return self.paginator.paginate_queryset(queryset, self.request, view=self)
+        return self.paginator.paginate_queryset(
+            queryset, self.request, view=self)
 
     def get_paginated_response(self, data):
         assert self.paginator is not None

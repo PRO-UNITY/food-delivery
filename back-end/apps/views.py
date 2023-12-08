@@ -34,14 +34,16 @@ class AllKtchenViews(APIView):
     def paginate_queryset(self, queryset):
         if self.paginator is None:
             return None
-        return self.paginator.paginate_queryset(queryset, self.request, view=self)
+        return self.paginator.paginate_queryset(
+            queryset, self.request, view=self)
 
     def get_paginated_response(self, data):
         assert self.paginator is not None
         return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
-        instance = KitchenUser.objects.annotate(like_count=Count('kitchenlike')).order_by('-like_count')
+        instance = KitchenUser.objects.annotate(
+            like_count=Count('kitchenlike')).order_by('-like_count')
         page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(
@@ -57,7 +59,8 @@ class AllKitchenCategoriesiews(APIView):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request, pk):
-        objects_list = FoodsCategories.objects.filter(kitchen_id=pk).order_by('id')
+        objects_list = FoodsCategories.objects.filter(
+            kitchen_id=pk).order_by('id')
         serializers = AllKitchenKetegories(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 

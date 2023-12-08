@@ -13,7 +13,6 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from authen.renderers import UserRenderers
 from authen.models import CustomUser, Gender, KitchenUser
-from authen.pagination import StandardResultsSetPagination
 from authen.serializers.authen_serializers import (
     AllGenderListSerializers,
     UserSignUpSerializers,
@@ -206,7 +205,8 @@ def change_password(request):
                     status=status.HTTP_200_OK,
                 )
             return Response(
-                {"error": "Incorrect old password."}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "Incorrect old password."},
+                status=status.HTTP_400_BAD_REQUEST
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
