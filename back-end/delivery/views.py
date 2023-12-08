@@ -66,8 +66,8 @@ class DeliveryKirchenCreateViews(APIView):
 
     def get(self, request, pk):
         object_list = KitchenUser.objects.filter(id=pk)
-        queryset = CustomUser.objects.filter(delivery__isnull=False, groups__name__in=['delivery'])
-        queryset1 = CustomUser.objects.filter(delivery__isnull=True, groups__name__in=['delivery'])
+        queryset = CustomUser.objects.filter(delivery__isnull=False, groups__name__in=['delivery'], user_id=request.user.id)
+        queryset1 = CustomUser.objects.filter(delivery__isnull=True, groups__name__in=['delivery'], user_id=request.user.id)
         serializer = DeliveryChickenAllSerializers(object_list, many=True)
         usr = UserInformationSerializers(queryset, many=True)
         usr2 = UserInformationSerializers(queryset1, many=True)
