@@ -34,12 +34,13 @@ class UserInformationSerializers(serializers.ModelSerializer):
 
 
 class DeliveryChickenAllSerializers(serializers.ModelSerializer):
+    delivery = UserInformationSerializers(many=True, read_only=True)
+
     class Meta:
         model = KitchenUser
         fields = [
             "id",
             "delivery",
-            "logo",
         ]
 
 
