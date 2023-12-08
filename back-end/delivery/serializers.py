@@ -30,6 +30,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "last_name",
             "email",
             "phone",
+            "active_profile"
         ]
 
 
@@ -45,20 +46,11 @@ class DeliveryChickenAllSerializers(serializers.ModelSerializer):
 
 
 class DeliveryChickenSerializers(serializers.ModelSerializer):
-    logo = serializers.ImageField(
-        max_length=None,
-        allow_empty_file=False,
-        allow_null=False,
-        use_url=False,
-        required=False,
-    )
-
     class Meta:
         model = KitchenUser
         fields = [
             "id",
             "delivery",
-            "logo",
         ]
 
     def update(self, instance, validated_data):
@@ -66,10 +58,10 @@ class DeliveryChickenSerializers(serializers.ModelSerializer):
         instance.delivery.clear()
         for delivery_data in deliveries_data:
             instance.delivery.add(delivery_data)
-        if instance.logo == None:
-            instance.logo = self.context.get("logo")
-        else:
-            instance.logo = validated_data.get("logo", instance.logo)
+        # if instance.logo == None:
+        #     instance.logo = self.context.get("logo")
+        # else:
+        #     instance.logo = validated_data.get("logo", instance.logo)
         instance.save()
         return instance
 

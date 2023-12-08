@@ -107,6 +107,13 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
 
 
 class DeliverySignUpSerializers(serializers.ModelSerializer):
+    avatar = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=False,
+        allow_null=False,
+        use_url=False,
+        required=False,
+    )
     username = serializers.CharField(
         max_length=255,
         min_length=5,
@@ -122,11 +129,13 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
         model = CustomUser
         fields = [
             "id",
+            "avatar"
             "username",
             "first_name",
             "last_name",
             "password",
             "confirm_password",
+            "active_profile",
             "email",
         ]
         extra_kwargs = {
@@ -149,8 +158,25 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
             user.save()
         return user
 
+    def update(self, instance, validated_data):
+        instance.active_profile = validated_data.get(
+            "active_profile", instance.active_profile)
+        if instance.avatar == None:
+            instance.avatar = self.context.get("avatar")
+        else:
+            instance.avatar = validated_data.get("avatar", instance.avatar)
+        instance.save()
+        return instance
+
 
 class ManagerSignUpSerializers(serializers.ModelSerializer):
+    avatar = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=False,
+        allow_null=False,
+        use_url=False,
+        required=False,
+    )
     username = serializers.CharField(
         max_length=255,
         min_length=5,
@@ -172,6 +198,7 @@ class ManagerSignUpSerializers(serializers.ModelSerializer):
             "password",
             "confirm_password",
             "email",
+            "active_profile"
         ]
         extra_kwargs = {
             "first_name": {"required": True},
@@ -193,6 +220,15 @@ class ManagerSignUpSerializers(serializers.ModelSerializer):
             user.save()
         return user
 
+    def update(self, instance, validated_data):
+        instance.active_profile = validated_data.get(
+            "active_profile", instance.active_profile)
+        if instance.avatar == None:
+            instance.avatar = self.context.get("avatar")
+        else:
+            instance.avatar = validated_data.get("avatar", instance.avatar)
+        instance.save()
+        return instance
 
 class UserUpdateSerializers(serializers.ModelSerializer):
     """Serializers"""
@@ -268,6 +304,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "phone",
             "user_id",
             "groups",
+            "active_profile",
         ]
 
 
