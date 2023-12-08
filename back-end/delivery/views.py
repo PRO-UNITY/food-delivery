@@ -70,7 +70,6 @@ class DeliveryKirchenCreateViews(APIView):
             delivery__isnull=True,
             groups__name__in=['delivery'],
             user_id=request.user.id,
-            active_profile=True
         )
         serializer = DeliveryChickenAllSerializers(object_list, many=True)
         no_active_delivery = UserInformationSerializers(queryset, many=True)
