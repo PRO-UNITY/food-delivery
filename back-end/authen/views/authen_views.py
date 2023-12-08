@@ -284,7 +284,9 @@ class ManagerUser(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
-@extend_schema(request=None, responses=DeliveryChickenSerializers)
+@extend_schema(
+    responses={200: DeliveryChickenSerializers},
+)
 class ManagerKitchenCreateViews(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]

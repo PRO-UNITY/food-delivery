@@ -33,6 +33,16 @@ class UserInformationSerializers(serializers.ModelSerializer):
         ]
 
 
+class DeliveryChickenAllSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = KitchenUser
+        fields = [
+            "id",
+            "delivery",
+            "logo",
+        ]
+
+
 class DeliveryChickenSerializers(serializers.ModelSerializer):
     logo = serializers.ImageField(
         max_length=None,

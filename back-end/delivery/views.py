@@ -14,6 +14,7 @@ from delivery.serializers import (
     SendOrderSerializers,
     OrderComentSerializers,
     OrderComentCrudSerializers,
+    DeliveryChickenAllSerializers,
 )
 
 
@@ -61,6 +62,11 @@ class OrderCommnetViews(APIView):
 class DeliveryKirchenCreateViews(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
+
+    def get(self, request, pk):
+        objects_list = KitchenUser.objects.all()
+        serializers = DeliveryChickenAllSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
         serializers = DeliveryChickenSerializers(
