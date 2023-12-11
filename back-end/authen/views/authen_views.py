@@ -1,5 +1,6 @@
 """ Django DRF Packaging """
 import random
+from drf_yasg.utils import swagger_auto_schema
 from drf_spectacular.utils import extend_schema
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
@@ -165,13 +166,13 @@ class UserDeteilseViews(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
-@extend_schema(request=None, responses=UserUpdateSerializers)
 class UserUpdateView(APIView):
     """User PUT Class"""
 
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
+    @swagger_auto_schema(request_body=UserUpdateSerializers)
     def put(self, request):
         """User Update views"""
         queryset = get_object_or_404(CustomUser, id=request.user.id)

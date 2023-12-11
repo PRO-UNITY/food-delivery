@@ -1,4 +1,6 @@
 from rest_framework.response import Response
+from rest_framework.decorators import action
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from django.db.models import Count
 from rest_framework import status
 from rest_framework.views import APIView
@@ -58,6 +60,7 @@ class AllKitchenCategoriesiews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
+    @extend_schema(responses=AllKitchenKetegories)
     def get(self, request, pk):
         objects_list = FoodsCategories.objects.filter(
             kitchen_id=pk).order_by('id')
