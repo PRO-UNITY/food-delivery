@@ -1,6 +1,6 @@
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from authen.renderers import UserRenderers
@@ -49,7 +49,10 @@ class OrderCommnetViews(APIView):
         serializers = OrderComentSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
-    @extend_schema(request=None, responses=OrderComentCrudSerializers)
+    @extend_schema(
+        request=OrderComentCrudSerializers,
+        responses={201: OrderComentCrudSerializers},
+    )
     def post(self, request):
         serializers = OrderComentCrudSerializers(
             data=request.data,
@@ -83,7 +86,10 @@ class DeliveryKirchenCreateViews(APIView):
             status=status.HTTP_200_OK
         )
 
-    @extend_schema(request=None, responses=DeliveryChickenSerializers)
+    @extend_schema(
+        request=DeliveryChickenSerializers,
+        responses={201: DeliveryChickenSerializers},
+    )
     def put(self, request, pk):
         serializers = DeliveryChickenSerializers(
             instance=KitchenUser.objects.filter(
@@ -103,7 +109,10 @@ class SendOrderViews(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
-    @extend_schema(request=None, responses=SendOrderSerializers)
+    @extend_schema(
+        request=SendOrderSerializers,
+        responses={201: SendOrderSerializers},
+    )
     def post(self, request):
         serializers = SendOrderSerializers(
             data=request.data,
@@ -141,7 +150,10 @@ class DeteileOrderViews(APIView):
         serializers = DeliveryListSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
-    @extend_schema(request=None, responses=SendOrderSerializers)
+    @extend_schema(
+        request=SendOrderSerializers,
+        responses={201: SendOrderSerializers},
+    )
     def put(self, request, pk):
         serializers = SendOrderSerializers(
             instance=Delivery.objects.filter(

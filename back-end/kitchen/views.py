@@ -27,7 +27,10 @@ class KitchenCreateViews(APIView):
         serializers = AllKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
-    @extend_schema(request=None, responses=KitchenCrudSerializers)
+    @extend_schema(
+        request=KitchenCrudSerializers,
+        responses={201: KitchenCrudSerializers},
+    )
     def post(self, request):
         serializers = KitchenCrudSerializers(
             data=request.data,
@@ -69,7 +72,10 @@ class KitchenCrudViews(APIView):
                 'kitchen': serializers.data,
                 "like": like}, status=status.HTTP_200_OK)
 
-    @extend_schema(request=None, responses=KitchenCrudSerializers)
+    @extend_schema(
+        request=KitchenCrudSerializers,
+        responses={201: KitchenCrudSerializers},
+    )
     def put(self, request, pk):
         serializers = KitchenCrudSerializers(
             instance=KitchenUser.objects.filter(
@@ -158,7 +164,10 @@ class KitchenFoodsViews(APIView):
         serializers = AllFoodKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
-    @extend_schema(request=None, responses=FoodKitchenCrudSerializers)
+    @extend_schema(
+        request=FoodKitchenCrudSerializers,
+        responses={201: FoodKitchenCrudSerializers},
+    )
     def post(self, request):
         serializers = FoodKitchenCrudSerializers(
             data=request.data,
@@ -180,7 +189,10 @@ class KitchenFoodsCrudViews(APIView):
         serializers = AllFoodKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
-    @extend_schema(request=None, responses=FoodKitchenCrudSerializers)
+    @extend_schema(
+        request=FoodKitchenCrudSerializers,
+        responses={201: FoodKitchenCrudSerializers},
+    )
     def put(self, request, pk):
         serializers = FoodKitchenCrudSerializers(
             instance=KitchenFoods.objects.filter(id=pk)[0],

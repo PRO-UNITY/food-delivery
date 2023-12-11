@@ -1,7 +1,6 @@
 """ Django DRF Packaging """
 import random
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
-from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from rest_framework.decorators import api_view, permission_classes
@@ -13,9 +12,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from authen.renderers import UserRenderers
-from authen.models import CustomUser, Gender, KitchenUser
+from authen.models import CustomUser, KitchenUser
 from authen.serializers.authen_serializers import (
-    AllGenderListSerializers,
     UserSignUpSerializers,
     KitchenSignUpSerializers,
     UserSigInInSerializers,
@@ -34,16 +32,6 @@ def get_token_for_user(user):
     """Django Authe token"""
     refresh = RefreshToken.for_user(user)
     return {"refresh": str(refresh), "access": str(refresh.access_token)}
-
-
-class UserGenderViews(APIView):
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    def get(self, request):
-        queryset = Gender.objects.filter()
-        serializers = AllGenderListSerializers(queryset, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
 
 
 class UserRegisterViews(APIView):

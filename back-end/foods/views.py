@@ -53,7 +53,10 @@ class AllCategoriesViews(APIView):
             serializer = self.serializer_class(instance, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
-    @extend_schema(request=None, responses=CategoriesFoodsCrudSerializer)
+    @extend_schema(
+        request=CategoriesFoodsCrudSerializer,
+        responses={201: CategoriesFoodsCrudSerializer},
+    )
     def post(self, request):
         serializers = CategoriesFoodsCrudSerializer(
             data=request.data)
@@ -77,13 +80,19 @@ class CategoriesCrudViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
-    @extend_schema(request=None, responses=AllCategoriesFoodsSerializer)
+    @extend_schema(
+        request=AllCategoriesFoodsSerializer,
+        responses={201: AllCategoriesFoodsSerializer},
+    )
     def get(self, request, pk):
         objects_list = FoodsCategories.objects.filter(id=pk)
         serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
-    @extend_schema(request=None, responses=CategoriesFoodsCrudSerializer)
+    @extend_schema(
+        request=CategoriesFoodsCrudSerializer,
+        responses={201: CategoriesFoodsCrudSerializer},
+    )
     def put(self, request, pk):
         serializers = CategoriesFoodsCrudSerializer(
             instance=FoodsCategories.objects.filter(
@@ -143,7 +152,10 @@ class AllFoodsViews(APIView):
             serializer = self.serializer_class(instance, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
-    @extend_schema(request=None, responses=FoodsCrudSerializer)
+    @extend_schema(
+        request=FoodsCrudSerializer,
+        responses={201: FoodsCrudSerializer},
+    )
     def post(self, request):
         serializers = FoodsCrudSerializer(
             data=request.data)
@@ -182,7 +194,10 @@ class FoodsCrudViews(APIView):
         serializers = AllFoodsSerializer(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
-    @extend_schema(request=None, responses=FoodsCrudSerializer)
+    @extend_schema(
+        request=FoodsCrudSerializer,
+        responses={201: FoodsCrudSerializer},
+    )
     def put(self, request, pk):
         serializers = FoodsCrudSerializer(
             instance=Foods.objects.filter(

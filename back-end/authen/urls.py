@@ -1,7 +1,6 @@
 from django.urls import path
 from authen.views.social_views import GoogleView, FacebookLogin
 from authen.views.authen_views import (
-    UserGenderViews,
     UserRegisterViews,
     KitchenRegisterViews,
     UserSigInViews,
@@ -22,7 +21,6 @@ from authen.views.authen_views import (
 )
 
 urlpatterns = [
-    path('user_gender', UserGenderViews.as_view()),
     path('user_signup', UserRegisterViews.as_view()),
     path('kitchen_register', KitchenRegisterViews.as_view()),
     path('user_sigin', UserSigInViews.as_view()),

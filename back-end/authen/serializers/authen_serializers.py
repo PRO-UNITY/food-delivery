@@ -13,12 +13,6 @@ class UserGroupSerizliers(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
-class AllGenderListSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = Gender
-        fields = "__all__"
-
-
 class UserSignUpSerializers(serializers.ModelSerializer):
     username = serializers.CharField(
         max_length=255,
