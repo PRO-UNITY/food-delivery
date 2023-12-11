@@ -173,6 +173,13 @@ class UserUpdateView(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
+    # @extend_schema_view(
+    # get=extend_schema(
+    #     parameters=[
+    #         OpenApiParameter(name='category', description='Category Id', type=int),
+    #     ]
+    # )
+    # )
     def put(self, request, *args, **kwarg):
         """User Update views"""
         queryset = get_object_or_404(CustomUser, id=request.user.id)

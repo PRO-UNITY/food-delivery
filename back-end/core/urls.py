@@ -5,7 +5,6 @@ from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework_simplejwt import views as jwt_views
 from django.views.generic import TemplateView
-from drf_spectacular.views import SpectacularAPIView
 from rest_framework_simplejwt.views import TokenBlacklistView
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 

@@ -307,6 +307,8 @@ class LogoutSerializer(serializers.Serializer):
 
 
 class DeliveryChickenSerializers(serializers.ModelSerializer):
+    delivery = UserInformationSerializers(many=True, read_only=True)
+
     class Meta:
         model = KitchenUser
         fields = [
