@@ -355,6 +355,7 @@ class ManagerKitchenCreateViews(APIView):
             delivery__isnull=True,
             groups__name__in=["manager"],
             user_id=request.user.id,
+            active_profile=True
         )
         serializer = DeliveryChickenSerializers(object_list, many=True)
         no_active_delivery = UserInformationSerializers(queryset, many=True)
