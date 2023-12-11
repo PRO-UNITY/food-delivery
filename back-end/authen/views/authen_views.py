@@ -338,6 +338,20 @@ class ManagerKitchenCreateViews(APIView):
             status=status.HTTP_200_OK
         )
 
+    def put(self, request, pk):
+        serializers = DeliveryChickenSerializers(
+            instance=KitchenUser.objects.filter(
+                id=pk)[0],
+            data=request.data,
+            partial=True,
+        )
+        if serializers.is_valid(raise_exception=True):
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_200_OK)
+        return Response(
+            {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
 
 @extend_schema(request=None, responses=ManagerSignUpSerializers)
 class ManagerKitchenCrudViews(APIView):
