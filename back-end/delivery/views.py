@@ -201,6 +201,20 @@ class ActiveDeliveryView(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
+class ActiveDeliveryDeteileView(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    def get(self, request, pk):
+        active_delivery = Delivery.objects.filter(
+            id=pk,
+            kitchen__delivery=request.user,
+            is_delivery=True
+        )
+        serializers = DeliveryListSerializers(active_delivery, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+
 class DeliveryAcceptView(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
@@ -248,6 +262,19 @@ class UserAcceptOrderView(APIView):
         active_delivery = Delivery.objects.filter(
             klient_id=request.user,
             is_active=True
+        )
+        serializers = DeliveryListSerializers(active_delivery, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+
+class ManagerActiveView(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    def get(self, request):
+        active_delivery = Delivery.objects.filter(
+            kitchen__delivery=request.user,
+            is_active=False
         )
         serializers = DeliveryListSerializers(active_delivery, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
