@@ -309,7 +309,7 @@ class ManagerUser(APIView):
     def get(self, request):
         queryset = CustomUser.objects.filter(
             groups__name__in=['manager'],
-            user_id=request.user.id, active_profile=True)
+            user_id=request.user.id)
         serializers = UserInformationSerializers(queryset, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
@@ -327,6 +327,7 @@ class ManagerKitchenCreateViews(APIView):
             delivery__isnull=True,
             groups__name__in=['manager'],
             user_id=request.user.id,
+
         )
         serializer = DeliveryChickenSerializers(object_list, many=True)
         no_active_delivery = UserInformationSerializers(queryset, many=True)
