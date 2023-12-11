@@ -7,9 +7,14 @@ from rest_framework_simplejwt import views as jwt_views
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView
 from rest_framework_simplejwt.views import TokenBlacklistView
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 admin.site.site_url = None
 urlpatterns = [
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Optional UI:
+    path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path("accounts/", include("allauth.urls")),
     path("accounts/", include("allauth.socialaccount.urls")),
     path("auth/", include("dj_rest_auth.urls")),

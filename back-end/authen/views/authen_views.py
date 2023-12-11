@@ -174,7 +174,7 @@ class UserUpdateView(APIView):
     permission = [IsAuthenticated]
 
     @swagger_auto_schema(request_body=UserUpdateSerializers)
-    def put(self, request):
+    def put(self, request, *args, **kwarg):
         """User Update views"""
         queryset = get_object_or_404(CustomUser, id=request.user.id)
         serializer = UserUpdateSerializers(
@@ -315,7 +315,7 @@ class ManagerUser(APIView):
 
 
 @extend_schema(
-    responses={200: DeliveryChickenSerializers},
+    request={200: DeliveryChickenSerializers},
 )
 class ManagerKitchenCreateViews(APIView):
     render_classes = [UserRenderers]
