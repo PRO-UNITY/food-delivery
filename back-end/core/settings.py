@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "kitchen",
     "foods",
     "apps",
-    'delivery',
+    "delivery",
     # socaill apps
     "django.contrib.sites",
     "dj_rest_auth",
@@ -140,14 +140,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-if DEBUG:
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 
 MEDIA_URL = "/media/"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
@@ -258,4 +257,4 @@ SOCIAL_AUTH_FACEBOOK_KEY = "863244545502688"
 SOCIAL_AUTH_FACEBOOK_SECRET = "8d9a789122fc5f51ab48d03831412c45"
 SOCIAL_AUTH_FACEBOOK_APP_NAME = "facebook"
 
-FORCE_SCRIPT_NAME = '/food-delivery'
+FORCE_SCRIPT_NAME = "/food-delivery"
