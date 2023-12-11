@@ -34,7 +34,6 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "django_rest_passwordreset",
-    "drf_yasg",
     # my_app
     "authen",
     "kitchen",
@@ -257,4 +256,4 @@ SOCIAL_AUTH_FACEBOOK_KEY = "863244545502688"
 SOCIAL_AUTH_FACEBOOK_SECRET = "8d9a789122fc5f51ab48d03831412c45"
 SOCIAL_AUTH_FACEBOOK_APP_NAME = "facebook"
 
-FORCE_SCRIPT_NAME = "/food-delivery"
+# FORCE_SCRIPT_NAME = "/food-delivery"

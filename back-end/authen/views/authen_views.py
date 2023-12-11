@@ -53,6 +53,7 @@ class UserRegisterViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
+    @extend_schema(description='Your description')
     def post(self, request):
         serializer = UserSignUpSerializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -326,7 +327,6 @@ class ManagerKitchenCreateViews(APIView):
             delivery__isnull=True,
             groups__name__in=['manager'],
             user_id=request.user.id,
-            active_profile=True
         )
         serializer = DeliveryChickenSerializers(object_list, many=True)
         no_active_delivery = UserInformationSerializers(queryset, many=True)
