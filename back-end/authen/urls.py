@@ -35,7 +35,7 @@ urlpatterns = [
     path('delivery_user_crud/<int:pk>', DeliveryUserCrud.as_view()),
     path('create_manager', ManagerKitchenViews.as_view()),
     path('manager_user', ManagerUser.as_view()),
-    path('manager_kitchen_create', ManagerKitchenCreateViews.as_view()),
+    path('manager_kitchen_create/<int:pk>', ManagerKitchenCreateViews.as_view()),
     # social views
     path('google/login', GoogleView.as_view()),
     path('facebook/login', FacebookLogin.as_view()),

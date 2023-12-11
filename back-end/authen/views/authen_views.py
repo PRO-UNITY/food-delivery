@@ -53,7 +53,7 @@ class UserRegisterViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
-    @extend_schema(description='Your description')
+    @extend_schema(description="Your description")
     def post(self, request):
         serializer = UserSignUpSerializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -173,7 +173,6 @@ class UserUpdateView(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
-    @swagger_auto_schema(request_body=UserUpdateSerializers)
     def put(self, request, *args, **kwarg):
         """User Update views"""
         queryset = get_object_or_404(CustomUser, id=request.user.id)
@@ -207,8 +206,7 @@ def change_password(request):
                     status=status.HTTP_200_OK,
                 )
             return Response(
-                {"error": "Incorrect old password."},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "Incorrect old password."}, status=status.HTTP_400_BAD_REQUEST
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -233,10 +231,7 @@ class RegisterDeliveryViews(APIView):
 
     def post(self, request):
         serializer = DeliverySignUpSerializers(
-            data=request.data,
-            context={
-                'user_id': request.user.id
-            }
+            data=request.data, context={"user_id": request.user.id}
         )
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -251,7 +246,8 @@ class DeliveryUser(APIView):
 
     def get(self, request):
         queryset = CustomUser.objects.filter(
-            groups__name__in=['delivery'], user_id=request.user.id)
+            groups__name__in=["delivery"], user_id=request.user.id
+        )
         serializers = UserInformationSerializers(queryset, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
@@ -263,8 +259,8 @@ class DeliveryUserCrud(APIView):
 
     def get(self, request, pk):
         queryset = CustomUser.objects.filter(
-            id=pk,
-            groups__name__in=['delivery'], user_id=request.user.id)
+            id=pk, groups__name__in=["delivery"], user_id=request.user.id
+        )
         serializers = UserInformationSerializers(queryset, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
@@ -290,10 +286,7 @@ class ManagerKitchenViews(APIView):
 
     def post(self, request):
         serializer = ManagerSignUpSerializers(
-            data=request.data,
-            context={
-                'user_id': request.user.id
-            }
+            data=request.data, context={"user_id": request.user.id}
         )
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -308,8 +301,8 @@ class ManagerUser(APIView):
 
     def get(self, request):
         queryset = CustomUser.objects.filter(
-            groups__name__in=['manager'],
-            user_id=request.user.id)
+            groups__name__in=["manager"], user_id=request.user.id
+        )
         serializers = UserInformationSerializers(queryset, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
@@ -325,23 +318,19 @@ class ManagerKitchenCreateViews(APIView):
         object_list = KitchenUser.objects.filter(id=pk)
         queryset = CustomUser.objects.filter(
             delivery__isnull=True,
-            groups__name__in=['manager'],
+            groups__name__in=["manager"],
             user_id=request.user.id,
-
         )
         serializer = DeliveryChickenSerializers(object_list, many=True)
         no_active_delivery = UserInformationSerializers(queryset, many=True)
         return Response(
-            {
-                'delivery': serializer.data,
-                'no_active': no_active_delivery.data},
-            status=status.HTTP_200_OK
+            {"delivery": serializer.data, "no_active": no_active_delivery.data},
+            status=status.HTTP_200_OK,
         )
 
     def put(self, request, pk):
         serializers = DeliveryChickenSerializers(
-            instance=KitchenUser.objects.filter(
-                id=pk)[0],
+            instance=KitchenUser.objects.filter(id=pk)[0],
             data=request.data,
             partial=True,
         )
@@ -360,8 +349,8 @@ class ManagerKitchenCrudViews(APIView):
 
     def get(self, request, pk):
         queryset = CustomUser.objects.filter(
-            id=pk,
-            groups__name__in=['manager'], user_id=request.user.id)
+            id=pk, groups__name__in=["manager"], user_id=request.user.id
+        )
         serializers = UserInformationSerializers(queryset, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
