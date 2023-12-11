@@ -235,6 +235,7 @@ class UserUpdateSerializers(serializers.ModelSerializer):
             "email",
             "avatar",
             "phone",
+            "active_profile"
         ]
 
     def update(self, instance, validated_data):
@@ -243,6 +244,7 @@ class UserUpdateSerializers(serializers.ModelSerializer):
         instance.username = validated_data.get("username", instance.username)
         instance.phone = validated_data.get("phone", instance.phone)
         instance.email = validated_data.get("email", instance.email)
+        instance.active_profile = validated_data.get("active_profile", instance.active_profile)
         if instance.avatar == None:
             instance.avatar = self.context.get("avatar")
         else:

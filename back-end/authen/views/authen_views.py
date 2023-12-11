@@ -1,7 +1,7 @@
 """ Django DRF Packaging """
 import random
-from drf_yasg.utils import swagger_auto_schema
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from rest_framework.decorators import api_view, permission_classes
@@ -173,13 +173,10 @@ class UserUpdateView(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
-    # @extend_schema_view(
-    # get=extend_schema(
-    #     parameters=[
-    #         OpenApiParameter(name='category', description='Category Id', type=int),
-    #     ]
-    # )
-    # )
+    @extend_schema(
+        request=UserUpdateSerializers,
+        responses={201: UserUpdateSerializers},
+    )
     def put(self, request, *args, **kwarg):
         """User Update views"""
         queryset = get_object_or_404(CustomUser, id=request.user.id)

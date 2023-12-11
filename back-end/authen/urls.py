@@ -17,6 +17,7 @@ from authen.views.authen_views import (
     ManagerKitchenViews,
     ManagerUser,
     ManagerKitchenCreateViews,
+    ManagerKitchenCrudViews,
 
 )
 
@@ -36,6 +37,7 @@ urlpatterns = [
     path('create_manager', ManagerKitchenViews.as_view()),
     path('manager_user', ManagerUser.as_view()),
     path('manager_kitchen_create/<int:pk>', ManagerKitchenCreateViews.as_view()),
+    path('manager_kitchen_crud/<int:pk>', ManagerKitchenCrudViews.as_view()),
     # social views
     path('google/login', GoogleView.as_view()),
     path('facebook/login', FacebookLogin.as_view()),
