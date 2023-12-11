@@ -46,14 +46,16 @@ class UserGenderViews(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
-@extend_schema(request=None, responses=UserSignUpSerializers)
 class UserRegisterViews(APIView):
     """UserRegister Views"""
 
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
-    @extend_schema(description="Your description")
+    @extend_schema(
+        request=UserSignUpSerializers,
+        responses={201: UserSignUpSerializers},
+    )
     def post(self, request):
         serializer = UserSignUpSerializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -63,10 +65,13 @@ class UserRegisterViews(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@extend_schema(request=None, responses=KitchenSignUpSerializers)
 class KitchenRegisterViews(APIView):
     """UserRegister Views"""
 
+    @extend_schema(
+        request=KitchenSignUpSerializers,
+        responses={201: KitchenSignUpSerializers},
+    )
     def post(self, request):
         serializer = KitchenSignUpSerializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -76,12 +81,13 @@ class KitchenRegisterViews(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@extend_schema(request=None, responses=UserSigInInSerializers)
 class UserSigInViews(APIView):
-    """UserSigIn Views"""
-
     render_classes = [UserRenderers]
 
+    @extend_schema(
+        request=UserSigInInSerializers,
+        responses={201: UserSigInInSerializers},
+    )
     def post(self, request):
         serializer = UserSigInInSerializers(data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -109,8 +115,6 @@ class UserSigInViews(APIView):
 
 
 class SendEmailCode(APIView):
-    """Chack SMS class"""
-
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
@@ -144,13 +148,14 @@ class SendEmailCode(APIView):
             return Response({"error": "The email code is incorrect !"})
 
 
-@extend_schema(request=None, responses=UserInformationSerializers)
 class UserProfilesViews(APIView):
-    """User Pofiles classs"""
-
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
+    @extend_schema(
+        request=UserInformationSerializers,
+        responses={201: UserInformationSerializers},
+    )
     def get(self, request):
         """User information views"""
         serializer = UserInformationSerializers(request.user)
@@ -161,6 +166,10 @@ class UserDeteilseViews(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
+    @extend_schema(
+        request=UserProfilesViews,
+        responses={201: UserProfilesViews},
+    )
     def get(self, request, pk):
         queryset = CustomUser.objects.filter(id=pk)
         serializers = UserProfilesViews(queryset, many=True)
@@ -193,7 +202,10 @@ class UserUpdateView(APIView):
         )
 
 
-@extend_schema(request=None, responses=ChangePasswordSerializer)
+@extend_schema(
+        request=ChangePasswordSerializer,
+        responses={201: ChangePasswordSerializer},
+    )
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def change_password(request):
@@ -219,7 +231,10 @@ class LogoutAPIView(APIView):
     serializer_class = LogoutSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    @extend_schema(request=None, responses=LogoutSerializer)
+    @extend_schema(
+        request=LogoutSerializer,
+        responses={201: LogoutSerializer},
+    )
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -228,11 +243,14 @@ class LogoutAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@extend_schema(request=None, responses=DeliverySignUpSerializers)
 class RegisterDeliveryViews(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
+    @extend_schema(
+        request=DeliverySignUpSerializers,
+        responses={201: DeliverySignUpSerializers},
+    )
     def post(self, request):
         serializer = DeliverySignUpSerializers(
             data=request.data, context={"user_id": request.user.id}
@@ -243,11 +261,14 @@ class RegisterDeliveryViews(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@extend_schema(request=None, responses=UserInformationSerializers)
 class DeliveryUser(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
+    @extend_schema(
+        request=UserInformationSerializers,
+        responses={201: UserInformationSerializers},
+    )
     def get(self, request):
         queryset = CustomUser.objects.filter(
             groups__name__in=["delivery"], user_id=request.user.id
@@ -256,11 +277,14 @@ class DeliveryUser(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
-@extend_schema(request=None, responses=DeliverySignUpSerializers)
 class DeliveryUserCrud(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
+    @extend_schema(
+        request=UserInformationSerializers,
+        responses={201: UserInformationSerializers},
+    )
     def get(self, request, pk):
         queryset = CustomUser.objects.filter(
             id=pk, groups__name__in=["delivery"], user_id=request.user.id
@@ -268,6 +292,10 @@ class DeliveryUserCrud(APIView):
         serializers = UserInformationSerializers(queryset, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        request=DeliverySignUpSerializers,
+        responses={201: DeliverySignUpSerializers},
+    )
     def put(self, request, pk):
         queryset = get_object_or_404(CustomUser, id=pk)
         serializer = DeliverySignUpSerializers(
@@ -283,11 +311,14 @@ class DeliveryUserCrud(APIView):
         )
 
 
-@extend_schema(request=None, responses=ManagerSignUpSerializers)
 class ManagerKitchenViews(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
+    @extend_schema(
+        request=ManagerSignUpSerializers,
+        responses={201: ManagerSignUpSerializers},
+    )
     def post(self, request):
         serializer = ManagerSignUpSerializers(
             data=request.data, context={"user_id": request.user.id}
@@ -298,11 +329,14 @@ class ManagerKitchenViews(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@extend_schema(request=None, responses=UserInformationSerializers)
 class ManagerUser(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
+    @extend_schema(
+        request=UserInformationSerializers,
+        responses={201: UserInformationSerializers},
+    )
     def get(self, request):
         queryset = CustomUser.objects.filter(
             groups__name__in=["manager"], user_id=request.user.id
@@ -311,9 +345,6 @@ class ManagerUser(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
-@extend_schema(
-    request={200: DeliveryChickenSerializers},
-)
 class ManagerKitchenCreateViews(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
@@ -332,6 +363,10 @@ class ManagerKitchenCreateViews(APIView):
             status=status.HTTP_200_OK,
         )
 
+    @extend_schema(
+        request=DeliveryChickenSerializers,
+        responses={201: DeliveryChickenSerializers},
+    )
     def put(self, request, pk):
         serializers = DeliveryChickenSerializers(
             instance=KitchenUser.objects.filter(id=pk)[0],
@@ -346,11 +381,14 @@ class ManagerKitchenCreateViews(APIView):
         )
 
 
-@extend_schema(request=None, responses=ManagerSignUpSerializers)
 class ManagerKitchenCrudViews(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
+    @extend_schema(
+        request=UserInformationSerializers,
+        responses={201: UserInformationSerializers},
+    )
     def get(self, request, pk):
         queryset = CustomUser.objects.filter(
             id=pk, groups__name__in=["manager"], user_id=request.user.id
@@ -358,6 +396,10 @@ class ManagerKitchenCrudViews(APIView):
         serializers = UserInformationSerializers(queryset, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        request=ManagerSignUpSerializers,
+        responses={201: ManagerSignUpSerializers},
+    )
     def put(self, request, pk):
         queryset = get_object_or_404(CustomUser, id=pk)
         serializer = ManagerSignUpSerializers(
