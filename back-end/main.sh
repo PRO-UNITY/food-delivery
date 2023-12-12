@@ -5,7 +5,7 @@ DB_USER="postgres"
 DB_PASSWORD="1"
 DB_NAME="resipe"
 
-# Set the PGPASSWORD environment variable for this session
+
 export PGPASSWORD=$DB_PASSWORD
 
 # Drop the existing database
