@@ -247,7 +247,7 @@ class UserActiveOrderView(APIView):
 
     def get(self, request):
         active_delivery = Delivery.objects.filter(
-            klient_id=request.user,
+            klient=request.user,
             is_active=False
         )
         serializers = DeliveryListSerializers(active_delivery, many=True)
@@ -260,7 +260,7 @@ class UserAcceptOrderView(APIView):
 
     def get(self, request):
         active_delivery = Delivery.objects.filter(
-            klient_id=request.user,
+            klient=request.user,
             is_active=True
         )
         serializers = DeliveryListSerializers(active_delivery, many=True)
