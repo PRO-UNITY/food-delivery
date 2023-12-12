@@ -33,6 +33,7 @@ class Delivery(models.Model):
     )
     status = models.ForeignKey(StatusDelivery, on_delete=models.CASCADE)
     foods = models.JSONField(null=True, blank=True)
+    total_price = models.CharField(max_length=250, null=True, blank=True)
     is_delivery = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     address = models.CharField(max_length=250)

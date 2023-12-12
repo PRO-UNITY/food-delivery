@@ -119,6 +119,7 @@ class DeliveryListSerializers(serializers.ModelSerializer):
             "latitude",
             "longitude",
             "order",
+            "total_price",
             "create_at",
             "updated_at"
         ]
@@ -140,6 +141,7 @@ class SendOrderSerializers(serializers.ModelSerializer):
             "address",
             "latitude",
             "longitude",
+            "total_price",
             "create_at",
             "updated_at"
         ]
