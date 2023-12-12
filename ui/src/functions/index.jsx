@@ -13,7 +13,7 @@ const getHeaderWithToken = (token) => {
     };
 };
 
-const BASE_URL = "https://api.prounity.uz/food-delivery"
+export const BASE_URL = "https://api.prounity.uz/food-delivery"
 
 export const postData = async (item,url) => {
     const response = await fetch(BASE_URL + url, {
@@ -35,6 +35,16 @@ export const postDataWithToken = async (item,url) => {
     return data;
 };
 
+// export const putDataWithToken = async (item,url) => {
+//     const response = await fetch(BASE_URL + url, {
+//         method: 'PUT',
+//         headers: getHeaderWithToken(localStorage.getItem('token')),
+//         body: JSON.stringify(item)
+//     });
+//     const data = await response.json();
+//     return data;
+// };
+
 export const putData = async (item,url) => {
     const response = await fetch(BASE_URL + url, {
         method: 'PUT',
@@ -43,6 +53,15 @@ export const putData = async (item,url) => {
     });
     const data = await response.json();
     return data;
+};
+
+export const putDataWithounAny = async (url) => {
+    const response = await fetch(BASE_URL + url, {
+        method: 'PUT',
+        headers: getHeaderWithToken(localStorage.getItem('token')),
+    });
+    
+    return response;
 };
 
 export const getDataWithToken = async (url) => {
@@ -107,12 +126,10 @@ export const EditWithFormData = async (url, item) => {
     const token = localStorage.getItem('token')
     const response = await axios.put(BASE_URL+url, item, {
         headers: {
-            'Content-Type': 'multipart/formData',
             Authorization: `Bearer ${token}`,
         },
     });
-    const data = response
-    return data
+    return response.data
 }
     
 

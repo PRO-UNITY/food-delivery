@@ -48,3 +48,21 @@
 .round img{
   width: 100%;
 }
+
+.rating{
+  border: none !important;
+  background: none !important;
+}
+
+
+/* @media screen and (max-width:576px){
+  .home{
+    display: flex;
+    flex-direction: column !important;
+  }
+
+  .sidebar{
+    background-color: black !important;
+  }
+
+} */

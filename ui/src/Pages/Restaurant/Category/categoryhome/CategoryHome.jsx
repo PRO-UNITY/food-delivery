@@ -40,15 +40,6 @@ const CategoryHome = () => {
                     </td>
                 </tr>
                 )}
-                {/* <tr>
-                    <th>1</th>
-                    <td>Salat</td>
-                    <td>Lacafe</td>
-                    <td class="btn-group" role="group" aria-label="Basic mixed styles example">
-                    <Link class="btn btn-outline-warning"><i class="fa-solid fa-pen-to-square"></i></Link>
-                    <button  class="btn btn-outline-danger"><i class="fa-solid fa-trash-can"></i></button>
-                    </td>
-                </tr> */}
             </tbody>
           </table>
         </div>

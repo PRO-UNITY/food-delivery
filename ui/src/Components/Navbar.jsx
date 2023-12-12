@@ -10,13 +10,13 @@ const Navbar = () => {
         getDataWithToken('/authen/user_profiles').
         then((res)=>
          {setUser(res)
-        console.log(res);
         })
     },[])
 
     const signOut = () => {
         localStorage.removeItem('token')
         localStorage.removeItem('role')
+        localStorage.removeItem('card')
         navigate('/')
         window.location.reload()
     }

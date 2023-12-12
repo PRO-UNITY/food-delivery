@@ -48,9 +48,9 @@ const AdminHome = () => {
                         <td>
                         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                             {
-                                item.is_active ? <button onClick={()=>applyUser(item.id)} className={"btn btn-outline-danger"} type="button">NoActive</button> 
+                                item.is_active ? <button onClick={()=>applyUser(item.id)} className={"btn btn-outline-danger"} type="button"><i class="fa-regular fa-circle-xmark fs-7"></i></button> 
                                 :
-                                <button onClick={()=>disableUser(item.id)} className={"btn btn-outline-success"} type="button">Active</button>
+                                <button onClick={()=>disableUser(item.id)} className={"btn btn-outline-success"} type="button"><i class="fa-solid fa-check fs-7"></i></button>
                             }
                             <Link class="btn btn-primary" to={`/home/food-details/${item.id}`}>Foods</Link>
                         </div>

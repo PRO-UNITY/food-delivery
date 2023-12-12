@@ -2,12 +2,13 @@ import { useEffect, useState } from "react"
 import { getDataWithToken } from "../../../functions"
 import { Link, useParams } from "react-router-dom"
 
-const Delivery = () => {
-    const [delivery, setDelivery] = useState([])
+const HistoryOrder = () => {
+    const [order, setOrder] = useState([])
+    const {id} = useParams()
 
     useEffect(()=>{
-        getDataWithToken(`/foods/categories_foods`).
-        then((res)=>setDelivery(res))
+        getDataWithToken(`/delivery/user_accept_order`).
+        then((res)=>console.log(res))
     },[])
     
     return(
@@ -22,11 +23,12 @@ const Delivery = () => {
                 <th scope="col">Price</th>
                 <th scope="col">Category</th>
                 <th scope="col">Image</th>
+                <th scope="col">Order</th>
               </tr>
             </thead>
             <tbody>
             {
-              delivery.map((item,index)=>
+              order?.map((item,index)=>
               <tr className="align-middle">
                 <th>{index+1}</th>
                 <td>{item.name}</td>
@@ -34,6 +36,7 @@ const Delivery = () => {
                 <td>{item.price}</td> 
                 <td>{item.categories_id.name}</td> 
                 <td><img style={{width:"50px", height:"50px"}} src={`https://api.prounity.uz/food-delivery${item.food_img}`} alt="" /></td>
+                <Link to={`/home/order`}><td><button className="btn btn-outline-primary">order</button></td></Link>
               </tr>
             )}
             </tbody>
@@ -45,4 +48,4 @@ const Delivery = () => {
     )
 }
 
-export default Delivery
+export default HistoryOrder

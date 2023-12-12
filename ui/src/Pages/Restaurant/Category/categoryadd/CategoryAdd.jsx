@@ -13,7 +13,7 @@ const AddCategory = () => {
     const [selectcategory, setSelectcategory] = useState()
 
     useEffect(()=>{
-        getDataWithToken('/kitchen/kitchen_create').
+        getDataWithToken('/kitchen/kitchen_is_active').
         then((res)=> setFood(res))
     },[])
 
@@ -38,7 +38,9 @@ const AddCategory = () => {
                     <form onSubmit={handleSubmit}>
                         <input ref={nameRef} type="text" placeholder="name" className="form-control mb-2" />
                         <select onChange={(e)=>setSelectcategory(e.target.value)} value={selectcategory} ref={categoryref} name="" id="" className="form-control mb-2">
+                        <option hidden value="">Select Restaurant</option>
                             {food.map((item,index)=>
+                            
                             <option value={item.id} className="form-control">{item.name}</option>
                             )} 
                         </select>

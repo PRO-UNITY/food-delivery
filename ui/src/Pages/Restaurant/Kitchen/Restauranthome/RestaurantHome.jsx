@@ -25,7 +25,7 @@ const RestaurantHome = () => {
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
                 <th scope="col">Image</th>
-                <th scope="col">Action</th>
+                <th scope="col">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -39,6 +39,14 @@ const RestaurantHome = () => {
                     <td class="btn-group" role="group" aria-label="Basic mixed styles example">
                     <Link class="btn btn-outline-warning" to={`/home/edit-food/${item.id}`}><i class="fa-solid fa-pen-to-square"></i></Link>
                     <button onClick={(e)=>handleDelete(item.id)} class="btn btn-outline-danger"><i class="fa-solid fa-trash-can"></i></button>
+                    {
+                      item.is_active?
+                      <>
+                        <Link class="btn btn-outline-primary" to={`/home/add-deliver/${item.id}`}><i class="fa-solid fa-truck"></i></Link>
+                        <Link class="btn btn-outline-info" to={`/home/add-manager/${item.id}`}><i class="fa-solid fa-user"></i></Link>
+                      </>:
+                      ""
+                    }
                     </td>
                 </tr>
                 )}

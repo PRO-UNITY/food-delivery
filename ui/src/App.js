@@ -19,6 +19,7 @@ import AddCategory from './Pages/Restaurant/Category/categoryadd/CategoryAdd';
 import EditCategory from './Pages/Restaurant/Category/categoryedit/CategoryEdit';
 import AddKitchen from './Pages/Restaurant/Kitchen/AddKitchen/AddKitchen';
 import AddFoodRestaurant from './Pages/Restaurant/Food/foodadd/AddFood';
+import AddDeliverToKitchen from './Pages/Restaurant/Kitchen/AddDeliver/AddDeliver';
 import EditFoodRestaurant from './Pages/Restaurant/Food/foodedit/Foodedit';
 import UserProfile from './Pages/Userprofile/Userprofile';
 import UpdateProfile from './Pages/Userprofile/UpdateUser';
@@ -26,10 +27,20 @@ import Forgetpassword from './Pages/Userprofile/Forgetpassword';
 import Changepassword from './Pages/Userprofile/Changepassword';
 import RestaurantCategories from './Pages/User/RestaurantCategories/Restaurantcategories';
 import CategoryFoods from './Pages/User/Categoryfood/CategoryFoods';
-import Delivery from './Pages/Restaurant/Delivery/Delivery';
+import Delivery from './Pages/Restaurant/Delivery/Deliverhome/Delivery';
 import OrderFood from './Pages/User/Order/OrderFood';
 import NewOrder from './Pages/Deliver/Neworder/NewOrder';
 import DeliveryHistory from './Pages/Deliver/DeliverHistory/DeliveryHistory';
+import AddDeliver from './Pages/Restaurant/Delivery/Deliveradd/DeliverAdd';
+import ManagerHome from './Pages/Restaurant/Manager/ManagerHome/ManagerHome';
+import AddManager from './Pages/Restaurant/Manager/ManagerAdd/ManagerAdd';
+import AddManagerToKitchen from './Pages/Restaurant/Kitchen/AddManager/AddManager';
+import Card from './Pages/User/Card/Card';
+import ManagerMain from './Pages/Manager/ManagerHome/ManagerHome';
+import DeliverDetails from './Pages/Manager/DeliverDetails/DeliverDetails';
+import UserOrder from './Pages/User/UserOrder/UserOrder';
+import HistoryOrder from './Pages/User/HistoryOrder/HistoryOrder';
+import Rate from './Pages/User/UserRate/UserRate';
 
 function App() {
 
@@ -80,6 +91,12 @@ function App() {
               <Route path={'/home/add-food'} element={<AddFoodRestaurant/>}/>
               <Route path={'/home/edit-foodrestaurant/:id'} element={<EditFoodRestaurant/>}/>
               <Route path={'/home/delivery'} element={<Delivery/>}/>
+              <Route path={'/home/create-deliver'} element={<AddDeliver/>}/>
+              <Route path={'/home/add-deliver/:id'} element={<AddDeliverToKitchen/>}/>
+              <Route path={'/home/manager'} element={<ManagerHome/>}/>
+              <Route path={'/home/create-manager'} element={<AddManager/>}/>
+              <Route path={'/home/add-manager/:id'} element={<AddManagerToKitchen/>}/>
+
             </Route> 
           <Route path={'/sign-up-user'} element={<RegisterUser/>}/>
           <Route path={'/sign-up-restaurant'} element={<RegisterRestaurant/>}/>
@@ -94,16 +111,19 @@ function App() {
         <Route path={'/change-password'} element={<Changepassword/>}/>
             <Route path={'/home'} element={<Sidebar/>}>
               <Route path={'/home/main'} element={<UserHome/>}/>
+              <Route path={'/home/card'} element={<Card/>}/>
               <Route path={'/home/kitchen-categories/:id'} element={<RestaurantCategories/>}/>
               <Route path={'/home/category-foods/:id'} element={<CategoryFoods/>}/>
               <Route path={'/home/order'} element={<OrderFood/>}/>
-
+              <Route path={'/home/history-order'} element={<HistoryOrder/>}/>
+              <Route path={'/home/my-order'} element={<UserOrder/>}/>
+              <Route path={'/home/rating/:id'} element={<Rate/>}/>
             </Route> 
           <Route path={'/sign-up-user'} element={<RegisterUser/>}/>
           <Route path={'/sign-up-restaurant'} element={<RegisterRestaurant/>}/>
         </Routes> 
        </> :
-        role === "supplier" ?
+        role === "delivery" ?
         <>
           <Navbar/>
         <Routes>
@@ -113,6 +133,23 @@ function App() {
             <Route path={'/home'} element={<Sidebar/>}>
               <Route path={'/home/main'} element={<NewOrder/>}/>
               <Route path={'/home/delivery-history'} element={<DeliveryHistory/>}/>
+
+            </Route> 
+          <Route path={'/sign-up-user'} element={<RegisterUser/>}/>
+          <Route path={'/sign-up-restaurant'} element={<RegisterRestaurant/>}/>
+        </Routes> 
+        </> :
+        role === "manager" ?
+        <>
+          <Navbar/>
+        <Routes>
+        <Route path={'/user-profile'} element={<UserProfile/>}/>
+        <Route path={'/edit-profile'} element={<UpdateProfile/>}/>
+        <Route path={'/change-password'} element={<Changepassword/>}/>
+            <Route path={'/home'} element={<Sidebar/>}>
+              <Route path={'/home/main'} element={<ManagerMain/>}/>
+              <Route path={'/home/delivery-history'} element={<DeliveryHistory/>}/>
+              <Route path={'/home/deliver-details/:id'} element={<DeliverDetails/>}/>
 
             </Route> 
           <Route path={'/sign-up-user'} element={<RegisterUser/>}/>
