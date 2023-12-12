@@ -53,11 +53,13 @@ class Grade(models.Model):
 class OrderComent(models.Model):
     decription = models.CharField(max_length=250, null=True, blank=True)
     grade = models.ForeignKey(Grade, on_delete=models.CASCADE)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     delivery = models.ForeignKey(
         Delivery,
         on_delete=models.CASCADE,
-        related_name='order'
+        related_name='order',
+        null=True,
+        blank=True
     )
     create_at = models.DateTimeField(auto_now_add=True)
 

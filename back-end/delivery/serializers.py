@@ -94,6 +94,7 @@ class OrderComentCrudSerializers(serializers.ModelSerializer):
     def create(self, validated_data):
         order = OrderComent.objects.create(**validated_data)
         order.user = self.context.get("user")
+        print(self.context.get("user"))
         order.save()
         return order
 
