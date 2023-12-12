@@ -15,7 +15,7 @@ dropdb -U $DB_USER -h localhost $DB_NAME
 createdb -U $DB_USER -h localhost $DB_NAME
 
 # Restore from backup
-psql -U $DB_USER -h localhost -d $DB_NAME < /var/www/food-delivery/back-end/base.sql
+psql -U $DB_USER -h localhost -d $DB_NAME < /var/www/base.sql
 
 # Unset the PGPASSWORD environment variable
 unset PGPASSWORD
