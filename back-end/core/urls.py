@@ -40,8 +40,8 @@ urlpatterns = [
     # Socaill urls:
     path("accounts/", include("allauth.urls")),
     path("accounts/", include("allauth.socialaccount.urls")),
-    path("auth_social/", include("dj_rest_auth.urls")),
-    path("auth_social/registration/", include("dj_rest_auth.registration.urls")),
+    path("auth/social/", include("dj_rest_auth.urls")),
+    path("auth/social/registration/", include("dj_rest_auth.registration.urls")),
     path("auth/", include("authen.urls")),
     path("admin/", admin.site.urls),
     path(
