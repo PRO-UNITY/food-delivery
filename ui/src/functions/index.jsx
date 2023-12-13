@@ -14,6 +14,7 @@ const getHeaderWithToken = (token) => {
 };
 
 export const BASE_URL = "https://api.prounity.uz/food-delivery"
+// export const BASE_URL = "http://192.168.0.181:8000"
 
 export const postData = async (item,url) => {
     const response = await fetch(BASE_URL + url, {
@@ -85,7 +86,6 @@ export const getRoleUser = async () => {
         }
     );
     const data = await response.json();
-    console.log(data);
     const role = data?.groups && data?.groups[0]?.name;
     localStorage.setItem('role', role);
     return role;
@@ -121,6 +121,16 @@ export const EditWithFormData = async (url, item) => {
     });
     return response.data
 }
+
+
+
+export const newPasswordComplete = async (password) => {
+    const response = await fetch(BASE_URL+`/auth/set_new_password`, {
+        method: 'PATCH',
+        body: JSON.stringify(password),
+        headers: getHeader()
+    });
+    const data = await response.json();
+    return data;
+}
     
-
-

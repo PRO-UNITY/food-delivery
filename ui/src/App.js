@@ -41,6 +41,7 @@ import DeliverDetails from './Pages/Manager/DeliverDetails/DeliverDetails';
 import UserOrder from './Pages/User/UserOrder/UserOrder';
 import HistoryOrder from './Pages/User/HistoryOrder/HistoryOrder';
 import Rate from './Pages/User/UserRate/UserRate';
+import ResetPassword from './Pages/Userprofile/ResetPassword';
 
 function App() {
 
@@ -159,6 +160,7 @@ function App() {
        <Routes>
         <Route path={'/'} element={<Login/>}/>
         <Route path={'/forget-password'} element={<Forgetpassword/>}/>
+        <Route path={'/reset-password/:uidb64/:token'} element={<ResetPassword/>}/>
         <Route path={'/sign-up-user'} element={<RegisterUser/>}/>
         <Route path={'/sign-up-restaurant'} element={<RegisterRestaurant/>}/>
       </Routes> 

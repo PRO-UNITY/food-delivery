@@ -15,7 +15,7 @@ const UpdateProfile = () => {
 
 
     useEffect(()=>{
-        getDataWithToken('/authen/user_profiles').
+        getDataWithToken('/auth/user_profiles').
         then((res)=>
          {setUser(res)
         console.log(res);
@@ -40,7 +40,7 @@ const UpdateProfile = () => {
         }
 
         try {
-            const response = await axios.put('https://api.prounity.uz/food-delivery/authen/user_update_view', formData, {
+            const response = await axios.put('https://api.prounity.uz/food-delivery/auth/user_update', formData, {
                 headers: {
                     'Content-Type': 'multipart/formData',
                     Authorization: `Bearer ${token}`,

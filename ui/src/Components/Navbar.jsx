@@ -29,12 +29,12 @@ const Navbar = () => {
           <div class="dropdown">
             <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
               <img src={user?.avatar ? `https://api.prounity.uz/food-delivery${user?.avatar}`: "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"} alt="" width="40" height="40" class="rounded-circle me-2" />
-              <strong>{user?.first_name}</strong>
+              <strong>{user?.username}</strong>
             </a>
             <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
               <Link style={{textDecoration:"none"}} to={'/user-profile'}><li><a class="dropdown-item" href="#">Profile</a></li></Link>
               <Link style={{textDecoration:"none"}} to={'/change-password'}><li><a class="dropdown-item" href="#">Change password</a></li></Link>
-              <li><hr class="dropdown-divider" /></li>
+              <li><hr class="dropdown-divider"/></li>
               <li><button onClick={signOut} style={{border:"none", background:"none"}}>Sign out</button></li>
             </ul>
           </div>

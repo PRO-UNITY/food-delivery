@@ -6,7 +6,7 @@ const UserProfile = () => {
     const [user, setUser] = useState()
 
     useEffect(()=>{
-        getDataWithToken('/authen/user_profiles').
+        getDataWithToken('/auth/user_profiles').
         then((res)=>
          {setUser(res)
         console.log(res);
