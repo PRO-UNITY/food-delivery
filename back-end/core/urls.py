@@ -55,10 +55,6 @@ urlpatterns = [
         name="token_refresh",
     ),
     path('logout/', TokenBlacklistView.as_view(), name='token_blacklist'),
-    path(
-        "password_reset/",
-        include("django_rest_passwordreset.urls", namespace="password_reset"),
-    ),
     path("kitchen/", include("kitchen.urls")),
     path('foods/', include('foods.urls')),
     path('apps/', include('apps.urls')),

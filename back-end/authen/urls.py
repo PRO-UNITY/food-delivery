@@ -17,6 +17,9 @@ from authen.views.authen_views import (
     ManagerUser,
     ManagerKitchenCreateViews,
     ManagerKitchenCrudViews,
+    RequestPasswordRestEmail,
+    PasswordTokenCheckView,
+    SetNewPasswordView
 
 )
 
@@ -41,5 +44,7 @@ urlpatterns = [
     path('facebook/login', FacebookLogin.as_view()),
     path('FacebookTokenView/', FacebookTokenView.as_view()),
     path('logout', LogoutAPIView.as_view()),
+    path('request_password_rest_email', RequestPasswordRestEmail.as_view()),
+    path('password_token_check', PasswordTokenCheckView.as_view()),
+    path('set_new_password', SetNewPasswordView.as_view()),
 ]
-    

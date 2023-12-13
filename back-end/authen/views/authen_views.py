@@ -1,12 +1,19 @@
 """ Django DRF Packaging """
 import random
 from drf_spectacular.utils import extend_schema
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import (
+    smart_str,
+    smart_bytes,
+    DjangoUnicodeDecodeError,
+)
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import get_object_or_404
-from rest_framework import status, permissions
+from rest_framework import status, permissions, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -24,6 +31,12 @@ from authen.serializers.authen_serializers import (
     DeliverySignUpSerializers,
     ManagerSignUpSerializers,
     DeliveryChickenSerializers,
+    PasswordResetSerializer,
+    PasswordResetCompleteSerializer,
+)
+from authen.utils import (
+    Util,
+    PasswordReset,
 )
 
 
@@ -46,6 +59,7 @@ class UserRegisterViews(APIView):
     )
     def post(self, request):
         serializer = UserSignUpSerializers(data=request.data)
+
         if serializer.is_valid(raise_exception=True):
             instanse = serializer.save()
             tokens = get_token_for_user(instanse)
@@ -70,7 +84,8 @@ class KitchenRegisterViews(APIView):
 
 
 class UserSigInViews(APIView):
-    """ Signin users """
+    """Signin users"""
+
     render_classes = [UserRenderers]
 
     @extend_schema(
@@ -108,7 +123,7 @@ class SendEmailCode(APIView):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request):
-        """ Sending a code to the e-mail of the logged-in user """
+        """Sending a code to the e-mail of the logged-in user"""
         data = request.user
         verification_code = str(random.randint(100000, 999999))
         send_mail(
@@ -125,7 +140,7 @@ class SendEmailCode(APIView):
         return Response({"message": "Send code email"})
 
     def post(self, request):
-        """ Check the code """
+        """Check the code"""
         email_code = request.data["email_code"]
         if email_code == "":
             context = {"Enter the email code !"}
@@ -139,7 +154,8 @@ class SendEmailCode(APIView):
 
 
 class UserProfilesViews(APIView):
-    """ User profiles """
+    """User profiles"""
+
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -153,7 +169,8 @@ class UserProfilesViews(APIView):
 
 
 class UserDeteilseViews(APIView):
-    """ Detailed information about the user """
+    """Detailed information about the user"""
+
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -168,7 +185,7 @@ class UserDeteilseViews(APIView):
 
 
 class UserUpdateView(APIView):
-    """ User change information """
+    """User change information"""
 
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
@@ -193,13 +210,13 @@ class UserUpdateView(APIView):
 
 
 @extend_schema(
-        request=ChangePasswordSerializer,
-        responses={201: ChangePasswordSerializer},
-    )
+    request=ChangePasswordSerializer,
+    responses={201: ChangePasswordSerializer},
+)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def change_password(request):
-    """ Change password """
+    """Change password"""
     if request.method == "POST":
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
@@ -219,7 +236,8 @@ def change_password(request):
 
 
 class LogoutAPIView(APIView):
-    """ Logout users """
+    """Logout users"""
+
     serializer_class = LogoutSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -236,7 +254,8 @@ class LogoutAPIView(APIView):
 
 
 class RegisterDeliveryViews(APIView):
-    """ The owner of the kitchen registers the delivery """
+    """The owner of the kitchen registers the delivery"""
+
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -255,7 +274,8 @@ class RegisterDeliveryViews(APIView):
 
 
 class DeliveryUser(APIView):
-    """ Kitchen all delivery """
+    """Kitchen all delivery"""
+
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -272,7 +292,8 @@ class DeliveryUser(APIView):
 
 
 class DeliveryUserCrud(APIView):
-    """ Change delivery information and status """
+    """Change delivery information and status"""
+
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -307,7 +328,8 @@ class DeliveryUserCrud(APIView):
 
 
 class ManagerKitchenViews(APIView):
-    """ The owner of the kitchen registers the manager """
+    """The owner of the kitchen registers the manager"""
+
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -326,7 +348,8 @@ class ManagerKitchenViews(APIView):
 
 
 class ManagerUser(APIView):
-    """ Kitchen all manager """
+    """Kitchen all manager"""
+
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -343,7 +366,8 @@ class ManagerUser(APIView):
 
 
 class ManagerKitchenCreateViews(APIView):
-    """ Change manager information and status """
+    """Change manager information and status"""
+
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -353,7 +377,7 @@ class ManagerKitchenCreateViews(APIView):
             delivery__isnull=True,
             groups__name__in=["manager"],
             user_id=request.user.id,
-            active_profile=True
+            active_profile=True,
         )
         serializer = DeliveryChickenSerializers(object_list, many=True)
         no_active_delivery = UserInformationSerializers(queryset, many=True)
@@ -381,7 +405,8 @@ class ManagerKitchenCreateViews(APIView):
 
 
 class ManagerKitchenCrudViews(APIView):
-    """ Adds a manager for the kitchen """
+    """Adds a manager for the kitchen"""
+
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -413,3 +438,86 @@ class ManagerKitchenCrudViews(APIView):
         return Response(
             {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
         )
+
+
+class RequestPasswordRestEmail(generics.GenericAPIView):
+    # render_classes = [UserRenderers]
+    # perrmisson_class = [IsAuthenticated]
+    serializer_class = PasswordResetSerializer
+
+    @extend_schema(
+        request=PasswordResetSerializer,
+        responses={201: PasswordResetSerializer},
+    )
+    def post(self, request):
+        serializers = self.serializer_class(data=request.data)
+
+        email = request.data.get("email")
+        print(email)
+        if CustomUser.objects.filter(email=email).exists():
+            user = CustomUser.objects.get(email=email)
+            print(user)
+            uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
+            token = PasswordResetTokenGenerator().make_token(user)
+            absurl = f"http://localhost:3000/reset-password/{uidb64}/{token}"
+            email_body = f"Hi \n Use link below to reset password \n link: {absurl}"
+            data = {
+                "email_body": email_body,
+                "to_email": user.email,
+                "email_subject": "Reset your password",
+            }
+
+            Util.send(data)
+
+            return Response(
+                {"success": "We have sent you to rest your password"},
+                status=status.HTTP_200_OK,
+            )
+        return Response({"error": "This email is not found.."})
+
+
+class PasswordTokenCheckView(generics.GenericAPIView):
+    serializer_class = UserInformationSerializers
+
+    @extend_schema(
+        request=UserInformationSerializers,
+        responses={201: UserInformationSerializers},
+    )
+    def get(self, request, uidb64, token):
+        try:
+            id = smart_str(urlsafe_base64_decode(uidb64))
+            user = CustomUser.objects.get(id=id)
+            if not PasswordResetTokenGenerator().check_token(user, token):
+                return Response(
+                    {"error": "Token is not valid, Please request a new one"},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+            return Response(
+                {
+                    "success": True,
+                    "msg": "Credential Valid",
+                    "uidb64": uidb64,
+                    "token": token,
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        except DjangoUnicodeDecodeError:
+            if not PasswordResetTokenGenerator().check_token(user, token):
+                return Response(
+                    {"error": "Token is not valid, Please request a new one"},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+
+
+class SetNewPasswordView(generics.GenericAPIView):
+    serializer_class = PasswordResetCompleteSerializer
+
+    @extend_schema(
+        request=PasswordResetCompleteSerializer,
+        responses={201: PasswordResetCompleteSerializer},
+    )
+    def patch(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response({"message": "success"}, status=status.HTTP_200_OK)
