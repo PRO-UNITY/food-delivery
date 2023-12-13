@@ -96,7 +96,6 @@ export const getRoleUser = async () => {
     );
     const data = await response.json();
     const role = data?.groups && data?.groups[0]?.name  ;
-    const fakerole = "supplier"
     localStorage.setItem('role', role);
     return role;
 }

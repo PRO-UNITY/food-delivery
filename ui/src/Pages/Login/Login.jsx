@@ -20,10 +20,11 @@ const Login = () => {
         };
         await postData(user,"/token/").then((res)=>{
           localStorage.setItem('token',res.access)
-          console.log(res.access);
+          if(localStorage.getItem("token") !== "undefined" ){
+            navigate('/home')
+            window.location.reload()
+        }
         })
-        navigate('/home')
-        window.location.reload()
     };
 
     return(
@@ -34,7 +35,6 @@ const Login = () => {
         </div>
         <div className="card-body">
             <form onSubmit={handleSignInUser} className="text-align-start">
-
                 <input required ref={usernameRef} placeholder="username" className="form-control mb-2" type="text" />
                 <input required ref={passwordRef} placeholder="password" className="form-control mb-2" type="text" />
                 <div className="">
@@ -44,7 +44,6 @@ const Login = () => {
                     <Link to={'/sign-up-restaurant'}>Restaurant Register</Link>
                 </div>
                 <p className="text-secondary">Or continue with :</p>
-                
                 </div>
             </form>
             <div className="d-flex gap-2 justify-content-center">
