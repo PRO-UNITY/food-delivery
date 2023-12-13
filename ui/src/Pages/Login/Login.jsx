@@ -35,7 +35,9 @@ const Login = () => {
         </div>
         <div className="card-body">
             <form onSubmit={handleSignInUser} className="text-align-start">
+                <div className="text-start"><label className="">Type your Uersname</label></div>
                 <input required ref={usernameRef} placeholder="username" className="form-control mb-2" type="text" />
+                <div className="text-start"><label className="">Type your Password</label></div>
                 <input required ref={passwordRef} placeholder="password" className="form-control mb-2" type="text" />
                 <div className="">
                 <button className="btn btn-primary mb-3">Sign-in</button>

@@ -54,6 +54,10 @@
   background: none !important;
 }
 
+.label{
+  text-align: start !important;
+}
+
 
 /* @media screen and (max-width:576px){
   .home{

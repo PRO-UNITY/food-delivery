@@ -20,7 +20,7 @@ export const postData = async (item,url) => {
         method: 'POST',
         headers: getHeader(),
         body: JSON.stringify(item)
-    });
+    })
     const data = await response.json();
     return data;
 };
@@ -34,16 +34,6 @@ export const postDataWithToken = async (item,url) => {
     const data = await response.json();
     return data;
 };
-
-// export const putDataWithToken = async (item,url) => {
-//     const response = await fetch(BASE_URL + url, {
-//         method: 'PUT',
-//         headers: getHeaderWithToken(localStorage.getItem('token')),
-//         body: JSON.stringify(item)
-//     });
-//     const data = await response.json();
-//     return data;
-// };
 
 export const putData = async (item,url) => {
     const response = await fetch(BASE_URL + url, {
@@ -85,7 +75,7 @@ export const getRole = async () => {
 export const getRoleUser = async () => {
     const token = localStorage.getItem('token');
     const response = await fetch(
-        `${BASE_URL}/authen/user_profiles`,
+        `${BASE_URL}/auth/user_profiles`,
         {
             method: 'GET',
             headers: {
@@ -95,7 +85,8 @@ export const getRoleUser = async () => {
         }
     );
     const data = await response.json();
-    const role = data?.groups && data?.groups[0]?.name  ;
+    console.log(data);
+    const role = data?.groups && data?.groups[0]?.name;
     localStorage.setItem('role', role);
     return role;
 }

@@ -1,8 +1,8 @@
+import { useState } from "react"
 import { Link } from "react-router-dom"
 
 const FoodDetails = () => {
-
-    
+  const [food, setFood] = useState([])    
 
     return (
         <div class="d-flex justify-content-start align-items-start gap-2 w-100 vh-100 p-1">

@@ -17,6 +17,7 @@ const RestaurantHome = () => {
     return(
         <div class="d-flex justify-content-center align-items-start gap-2 w-100 vh-100 p-1">
         <div class="border p-3 rounded-2 w-100">
+          <h3 className="text-start">Restaurants</h3>
             <Link to={'/home/add-kitchen'} className="btn btn-outline-primary float-end mb-3">+add</Link>
           <table class="table">
             <thead>
