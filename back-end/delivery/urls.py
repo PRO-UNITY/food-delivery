@@ -2,7 +2,7 @@ from django.urls import path
 from delivery.views import (
     StatusDeliveryViews,
     GradeDeliveryViews,
-    DeliveryKirchenCreateViews,
+    DeliveryKitchenCreateViews,
     SendOrderViews,
     ActiveOrderView,
     AcceptanceOrderDeliveryViews,
@@ -21,12 +21,12 @@ urlpatterns = [
     path('grade_delivery', GradeDeliveryViews.as_view()),
     path(
         'create_kitchen_delivery/<int:pk>',
-        DeliveryKirchenCreateViews.as_view()),
+        DeliveryKitchenCreateViews.as_view()),
     path('send_order', SendOrderViews.as_view()),
     path('acceptance_order/<int:pk>', AcceptanceOrderDeliveryViews.as_view()),
     path('active_order', ActiveOrderView.as_view()),
     path('active_delivery', ActiveDeliveryView.as_view()),
-    path('active_delivery_detaile/<int:pk>', ActiveDeliveryDeteileView.as_view()),
+    path('active_delivery_details/<int:pk>', ActiveDeliveryDeteileView.as_view()),
     path('accepted_delivery', DeliveryAcceptView.as_view()),
     path('no_accept_delivery', DeliveryNoAcceptView.as_view()),
     path('user_active_order', UserActiveOrderView.as_view()),

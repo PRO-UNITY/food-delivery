@@ -28,7 +28,7 @@ class KitchenUser(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
     logo = models.ImageField(upload_to='logo_kitchen')
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
         null=True,
@@ -54,8 +54,8 @@ class KitchenUser(models.Model):
 
 class KitchenLike(models.Model):
     like = models.IntegerField(default=0)
-    id_kitchen = models.ForeignKey(KitchenUser, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    kitchen = models.ForeignKey(KitchenUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=False)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

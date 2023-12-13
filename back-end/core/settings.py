@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-p+$#(-kv%f*8b7q^9^)hp7h*jo#1k+q2hcetyws12d1u_hbdfi"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "django_rest_passwordreset",
     'drf_spectacular',
+    'drf_yasg',
     # my_app
     "authen",
     "kitchen",
@@ -210,7 +211,11 @@ SWAGGER_SETTINGS = {
     "VERSION": "0.1.0",
     "USE_SESSION_AUTH": False,
 }
-
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Food-delivery API",
+    "DESCRIPTION": "Food-delivery back-end",
+    "VERSION": "0.1.0",
+}
 AUTH_USER_MODEL = "authen.CustomUser"
 
 

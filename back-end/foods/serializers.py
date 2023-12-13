@@ -59,7 +59,7 @@ class AllFoodsSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'food_img',
-            'content',
+            'description',
             'price',
             'categories_id',
             "create_at",
@@ -82,7 +82,7 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'food_img',
-            'content',
+            'description',
             'price',
             'kitchen_id',
             'categories_id',
@@ -97,7 +97,7 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get("name", instance.name)
-        instance.content = validated_data.get("content", instance.content)
+        instance.description = validated_data.get("description", instance.description)
         instance.price = validated_data.get("price", instance.price)
         instance.kitchen_id = validated_data.get(
             "kitchen_id", instance.kitchen_id)

@@ -17,5 +17,5 @@ createdb -U $DB_USER -h localhost $DB_NAME
 # Restore from backup
 psql -U $DB_USER -h localhost -d $DB_NAME < /var/www/base.sql
 
-# Unset the PGPASSWORD environment variable
+# Unset the PGPASSWORD environment variable 
 unset PGPASSWORD

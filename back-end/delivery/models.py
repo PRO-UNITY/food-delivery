@@ -62,4 +62,3 @@ class OrderComent(models.Model):
         blank=True
     )
     create_at = models.DateTimeField(auto_now_add=True)
-

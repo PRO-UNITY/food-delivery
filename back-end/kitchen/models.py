@@ -6,9 +6,9 @@ class KitchenFoods(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
     image_food = models.ImageField(upload_to='foods')
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE)
-    kitchen_id = models.ForeignKey(
+    kitchen = models.ForeignKey(
         KitchenUser, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

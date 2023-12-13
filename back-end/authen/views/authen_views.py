@@ -35,7 +35,7 @@ def get_token_for_user(user):
 
 
 class UserRegisterViews(APIView):
-    """UserRegister Views"""
+    """UserRegister view"""
 
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
@@ -54,7 +54,7 @@ class UserRegisterViews(APIView):
 
 
 class KitchenRegisterViews(APIView):
-    """UserRegister Views"""
+    """Kitchen register view"""
 
     @extend_schema(
         request=KitchenSignUpSerializers,
@@ -70,6 +70,7 @@ class KitchenRegisterViews(APIView):
 
 
 class UserSigInViews(APIView):
+    """ Signin users """
     render_classes = [UserRenderers]
 
     @extend_schema(
@@ -107,7 +108,7 @@ class SendEmailCode(APIView):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request):
-        """Random sms code"""
+        """ Sending a code to the e-mail of the logged-in user """
         data = request.user
         verification_code = str(random.randint(100000, 999999))
         send_mail(
@@ -124,6 +125,7 @@ class SendEmailCode(APIView):
         return Response({"message": "Send code email"})
 
     def post(self, request):
+        """ Check the code """
         email_code = request.data["email_code"]
         if email_code == "":
             context = {"Enter the email code !"}
@@ -137,6 +139,7 @@ class SendEmailCode(APIView):
 
 
 class UserProfilesViews(APIView):
+    """ User profiles """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -145,12 +148,12 @@ class UserProfilesViews(APIView):
         responses={201: UserInformationSerializers},
     )
     def get(self, request):
-        """User information views"""
         serializer = UserInformationSerializers(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class UserDeteilseViews(APIView):
+    """ Detailed information about the user """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -165,7 +168,7 @@ class UserDeteilseViews(APIView):
 
 
 class UserUpdateView(APIView):
-    """User PUT Class"""
+    """ User change information """
 
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
@@ -175,7 +178,6 @@ class UserUpdateView(APIView):
         responses={201: UserUpdateSerializers},
     )
     def put(self, request, *args, **kwarg):
-        """User Update views"""
         queryset = get_object_or_404(CustomUser, id=request.user.id)
         serializer = UserUpdateSerializers(
             instance=queryset,
@@ -197,6 +199,7 @@ class UserUpdateView(APIView):
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def change_password(request):
+    """ Change password """
     if request.method == "POST":
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
@@ -216,6 +219,7 @@ def change_password(request):
 
 
 class LogoutAPIView(APIView):
+    """ Logout users """
     serializer_class = LogoutSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -232,6 +236,7 @@ class LogoutAPIView(APIView):
 
 
 class RegisterDeliveryViews(APIView):
+    """ The owner of the kitchen registers the delivery """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -250,6 +255,7 @@ class RegisterDeliveryViews(APIView):
 
 
 class DeliveryUser(APIView):
+    """ Kitchen all delivery """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -266,6 +272,7 @@ class DeliveryUser(APIView):
 
 
 class DeliveryUserCrud(APIView):
+    """ Change delivery information and status """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -300,6 +307,7 @@ class DeliveryUserCrud(APIView):
 
 
 class ManagerKitchenViews(APIView):
+    """ The owner of the kitchen registers the manager """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -318,6 +326,7 @@ class ManagerKitchenViews(APIView):
 
 
 class ManagerUser(APIView):
+    """ Kitchen all manager """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -334,6 +343,7 @@ class ManagerUser(APIView):
 
 
 class ManagerKitchenCreateViews(APIView):
+    """ Change manager information and status """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -371,6 +381,7 @@ class ManagerKitchenCreateViews(APIView):
 
 
 class ManagerKitchenCrudViews(APIView):
+    """ Adds a manager for the kitchen """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 

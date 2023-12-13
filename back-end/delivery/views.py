@@ -21,6 +21,7 @@ from delivery.serializers import (
 
 
 class StatusDeliveryViews(APIView):
+    """ Status orders """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -31,6 +32,7 @@ class StatusDeliveryViews(APIView):
 
 
 class GradeDeliveryViews(APIView):
+    """ Order graden """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -41,6 +43,7 @@ class GradeDeliveryViews(APIView):
 
 
 class OrderCommnetViews(APIView):
+    """" Send comment order """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -65,11 +68,13 @@ class OrderCommnetViews(APIView):
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class DeliveryKirchenCreateViews(APIView):
+class DeliveryKitchenCreateViews(APIView):
+    """ Kitchen Delivery """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
     def get(self, request, pk):
+        """ Kitchen Delivery GET """
         object_list = KitchenUser.objects.filter(id=pk)
         queryset = CustomUser.objects.filter(
             delivery__isnull=True,
@@ -91,6 +96,7 @@ class DeliveryKirchenCreateViews(APIView):
         responses={201: DeliveryChickenSerializers},
     )
     def put(self, request, pk):
+        """ Kitchen Delivery Create PUT """
         serializers = DeliveryChickenSerializers(
             instance=KitchenUser.objects.filter(
                 id=pk)[0],
@@ -106,6 +112,7 @@ class DeliveryKirchenCreateViews(APIView):
 
 
 class SendOrderViews(APIView):
+    """ The user orders the kitchen """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -126,6 +133,7 @@ class SendOrderViews(APIView):
 
 
 class AcceptanceOrderDeliveryViews(APIView):
+    """ The delivery accepts the order """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -142,6 +150,7 @@ class AcceptanceOrderDeliveryViews(APIView):
 
 
 class DeteileOrderViews(APIView):
+    """ Order deteils """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -155,6 +164,7 @@ class DeteileOrderViews(APIView):
         responses={201: SendOrderSerializers},
     )
     def put(self, request, pk):
+        """ Changing the status of the order is for all groups """
         serializers = SendOrderSerializers(
             instance=Delivery.objects.filter(
                 id=pk)[0],
@@ -176,6 +186,7 @@ class DeteileOrderViews(APIView):
 
 
 class ActiveOrderView(APIView):
+    """ Active orders for the delivery """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -189,6 +200,7 @@ class ActiveOrderView(APIView):
 
 
 class ActiveDeliveryView(APIView):
+    """ Accepted orders, for the delivery """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -202,6 +214,7 @@ class ActiveDeliveryView(APIView):
 
 
 class ActiveDeliveryDeteileView(APIView):
+    """ Order deteils for the delivery """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -216,6 +229,7 @@ class ActiveDeliveryDeteileView(APIView):
 
 
 class DeliveryAcceptView(APIView):
+    """ Orders have been delivered """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -229,6 +243,7 @@ class DeliveryAcceptView(APIView):
 
 
 class DeliveryNoAcceptView(APIView):
+    """ Undelivered orders are for the delivery """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -242,6 +257,7 @@ class DeliveryNoAcceptView(APIView):
 
 
 class UserActiveOrderView(APIView):
+    """ Undelivered orders are for the users """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -255,6 +271,7 @@ class UserActiveOrderView(APIView):
 
 
 class UserAcceptOrderView(APIView):
+    """ Accepted orders for the users """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
@@ -268,6 +285,7 @@ class UserAcceptOrderView(APIView):
 
 
 class ManagerActiveView(APIView):
+    """ Undelivered orders are for the managers """
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 

@@ -14,7 +14,8 @@ from foods.serializers import (
 )
 
 
-class AllCategoriesViews(APIView):
+class AllCategoryViews(APIView):
+    """ All categories of kitchen """
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination

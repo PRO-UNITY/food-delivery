@@ -4,7 +4,7 @@ from authen.models import KitchenUser
 
 class FoodsCategories(models.Model):
     name = models.CharField(max_length=250)
-    kitchen_id = models.ForeignKey(KitchenUser, on_delete=models.CASCADE)
+    kitchen = models.ForeignKey(KitchenUser, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -15,11 +15,11 @@ class FoodsCategories(models.Model):
 class Foods(models.Model):
     name = models.CharField(max_length=250)
     food_img = models.ImageField(upload_to="foods")
-    content = models.TextField()
+    description = models.TextField()
     price = models.CharField(max_length=100)
-    kitchen_id = models.ForeignKey(
+    kitchen = models.ForeignKey(
         KitchenUser, on_delete=models.CASCADE)
-    categories_id = models.ForeignKey(
+    categories = models.ForeignKey(
         FoodsCategories, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

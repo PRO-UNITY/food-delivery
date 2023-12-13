@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
-from authen.models import CustomUser, Gender, KitchenUser
+from authen.models import CustomUser, KitchenUser
 
 
 class UserGroupSerizliers(serializers.ModelSerializer):
@@ -42,6 +42,8 @@ class UserSignUpSerializers(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        if validated_data["password"] != validated_data["confirm_password"]:
+            raise serializers.ValidationError("Passwords do not match.")
         user = CustomUser.objects.create(
             username=validated_data["username"],
             first_name=validated_data["first_name"],
@@ -86,6 +88,8 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        if validated_data["password"] != validated_data["confirm_password"]:
+            raise serializers.ValidationError("Passwords do not match.")
         user = CustomUser.objects.create(
             username=validated_data["username"],
             first_name=validated_data["first_name"],
@@ -130,6 +134,8 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        if validated_data["password"] != validated_data["confirm_password"]:
+            raise serializers.ValidationError("Passwords do not match.")
         user = CustomUser.objects.create(
             username=validated_data["username"],
             first_name=validated_data["first_name"],
@@ -181,6 +187,8 @@ class ManagerSignUpSerializers(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        if validated_data["password"] != validated_data["confirm_password"]:
+            raise serializers.ValidationError("Passwords do not match.")
         user = CustomUser.objects.create(
             username=validated_data["username"],
             first_name=validated_data["first_name"],
@@ -233,12 +241,15 @@ class UserUpdateSerializers(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
-        instance.first_name = validated_data.get("first_name", instance.first_name)
-        instance.last_name = validated_data.get("last_name", instance.last_name)
+        instance.first_name = validated_data.get(
+            "first_name", instance.first_name)
+        instance.last_name = validated_data.get(
+            "last_name", instance.last_name)
         instance.username = validated_data.get("username", instance.username)
         instance.phone = validated_data.get("phone", instance.phone)
         instance.email = validated_data.get("email", instance.email)
-        instance.active_profile = validated_data.get("active_profile", instance.active_profile)
+        instance.active_profile = validated_data.get(
+            "active_profile", instance.active_profile)
         if instance.avatar == None:
             instance.avatar = self.context.get("avatar")
         else:
