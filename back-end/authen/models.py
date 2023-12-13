@@ -12,6 +12,7 @@ class Gender(models.Model):
 class CustomUser(AbstractUser):
     """Custom Users Table"""
     email_code = models.IntegerField(default=0, null=True, blank=True)
+
     birth_date = models.DateField(null=True, blank=True)
     phone = models.CharField(
         max_length=250,

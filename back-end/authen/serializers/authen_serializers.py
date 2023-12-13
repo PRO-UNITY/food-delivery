@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
+from django.core.validators import MinLengthValidator, MaxLengthValidator
 from authen.models import CustomUser, KitchenUser
 
 
@@ -14,6 +15,20 @@ class UserGroupSerizliers(serializers.ModelSerializer):
 
 
 class UserSignUpSerializers(serializers.ModelSerializer):
+    first_name = serializers.CharField(
+        max_length=50,
+        validators=[
+            MinLengthValidator(limit_value=5, message='First name must be at least 5 characters.'),
+            MaxLengthValidator(limit_value=50, message='First name cannot exceed 50 characters.'),
+        ]
+    )
+    last_name = serializers.CharField(
+        max_length=50,
+        validators=[
+            MinLengthValidator(limit_value=5, message='Last name must be at least 5 characters.'),
+            MaxLengthValidator(limit_value=50, message='Last name cannot exceed 50 characters.'),
+        ]
+    )
     username = serializers.CharField(
         max_length=255,
         min_length=5,
@@ -24,6 +39,10 @@ class UserSignUpSerializers(serializers.ModelSerializer):
         write_only=True, required=True, validators=[validate_password]
     )
     confirm_password = serializers.CharField(write_only=True, required=True)
+
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
+    )
 
     class Meta:
         model = CustomUser
@@ -59,6 +78,20 @@ class UserSignUpSerializers(serializers.ModelSerializer):
 
 
 class KitchenSignUpSerializers(serializers.ModelSerializer):
+    first_name = serializers.CharField(
+        max_length=50,
+        validators=[
+            MinLengthValidator(limit_value=5, message='First name must be at least 5 characters.'),
+            MaxLengthValidator(limit_value=50, message='First name cannot exceed 50 characters.'),
+        ]
+    )
+    last_name = serializers.CharField(
+        max_length=50,
+        validators=[
+            MinLengthValidator(limit_value=5, message='Last name must be at least 5 characters.'),
+            MaxLengthValidator(limit_value=50, message='Last name cannot exceed 50 characters.'),
+        ]
+    )
     username = serializers.CharField(
         max_length=255,
         min_length=5,
@@ -69,6 +102,9 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
         write_only=True, required=True, validators=[validate_password]
     )
     confirm_password = serializers.CharField(write_only=True, required=True)
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
+    )
 
     class Meta:
         model = CustomUser
@@ -105,6 +141,20 @@ class KitchenSignUpSerializers(serializers.ModelSerializer):
 
 
 class DeliverySignUpSerializers(serializers.ModelSerializer):
+    first_name = serializers.CharField(
+        max_length=50,
+        validators=[
+            MinLengthValidator(limit_value=5, message='First name must be at least 5 characters.'),
+            MaxLengthValidator(limit_value=50, message='First name cannot exceed 50 characters.'),
+        ]
+    )
+    last_name = serializers.CharField(
+        max_length=50,
+        validators=[
+            MinLengthValidator(limit_value=5, message='Last name must be at least 5 characters.'),
+            MaxLengthValidator(limit_value=50, message='Last name cannot exceed 50 characters.'),
+        ]
+    )
     username = serializers.CharField(
         max_length=255,
         min_length=5,
@@ -115,6 +165,9 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
         write_only=True, required=True, validators=[validate_password]
     )
     confirm_password = serializers.CharField(write_only=True, required=True)
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
+    )
 
     class Meta:
         model = CustomUser
@@ -158,6 +211,20 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
 
 
 class ManagerSignUpSerializers(serializers.ModelSerializer):
+    first_name = serializers.CharField(
+        max_length=50,
+        validators=[
+            MinLengthValidator(limit_value=5, message='First name must be at least 5 characters.'),
+            MaxLengthValidator(limit_value=50, message='First name cannot exceed 50 characters.'),
+        ]
+    )
+    last_name = serializers.CharField(
+        max_length=50,
+        validators=[
+            MinLengthValidator(limit_value=5, message='Last name must be at least 5 characters.'),
+            MaxLengthValidator(limit_value=50, message='Last name cannot exceed 50 characters.'),
+        ]
+    )
     username = serializers.CharField(
         max_length=255,
         min_length=5,
@@ -168,6 +235,9 @@ class ManagerSignUpSerializers(serializers.ModelSerializer):
         write_only=True, required=True, validators=[validate_password]
     )
     confirm_password = serializers.CharField(write_only=True, required=True)
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
+    )
 
     class Meta:
         model = CustomUser
@@ -212,6 +282,20 @@ class ManagerSignUpSerializers(serializers.ModelSerializer):
 
 class UserUpdateSerializers(serializers.ModelSerializer):
     """Serializers"""
+    first_name = serializers.CharField(
+        max_length=50,
+        validators=[
+            MinLengthValidator(limit_value=5, message='First name must be at least 5 characters.'),
+            MaxLengthValidator(limit_value=50, message='First name cannot exceed 50 characters.'),
+        ]
+    )
+    last_name = serializers.CharField(
+        max_length=50,
+        validators=[
+            MinLengthValidator(limit_value=5, message='Last name must be at least 5 characters.'),
+            MaxLengthValidator(limit_value=50, message='Last name cannot exceed 50 characters.'),
+        ]
+    )
 
     avatar = serializers.ImageField(
         max_length=None,
@@ -225,6 +309,9 @@ class UserUpdateSerializers(serializers.ModelSerializer):
         min_length=5,
         required=True,
         validators=[UniqueValidator(queryset=CustomUser.objects.all())],
+    )
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
     )
 
     class Meta:

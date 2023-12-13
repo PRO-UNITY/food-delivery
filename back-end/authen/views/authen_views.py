@@ -86,7 +86,7 @@ class UserSigInViews(APIView):
             if user is not None:
                 tokens = get_token_for_user(user)
                 return Response(
-                    {"token": tokens, "message": "Welcome to the system"},
+                    {"token": tokens},
                     status=status.HTTP_200_OK,
                 )
             else:
