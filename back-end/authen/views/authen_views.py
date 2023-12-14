@@ -177,29 +177,6 @@ class UserProfilesViews(APIView):
         serializer = UserInformationSerializers(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-class UserDeteilseViews(APIView):
-    """Detailed information about the user"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(
-        request=UserProfilesViews,
-        responses={201: UserProfilesViews},
-    )
-    def get(self, request, pk):
-        queryset = CustomUser.objects.filter(id=pk)
-        serializers = UserProfilesViews(queryset, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-
-class UserUpdateView(APIView):
-    """User change information"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
     @extend_schema(
         request=UserUpdateSerializers,
         responses={201: UserUpdateSerializers},
@@ -217,6 +194,22 @@ class UserUpdateView(APIView):
         return Response(
             {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
         )
+
+
+class UserDeteilseViews(APIView):
+    """Detailed information about the user"""
+
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    @extend_schema(
+        request=UserProfilesViews,
+        responses={201: UserProfilesViews},
+    )
+    def get(self, request, pk):
+        queryset = CustomUser.objects.filter(id=pk)
+        serializers = UserProfilesViews(queryset, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
 
 
 @extend_schema(
