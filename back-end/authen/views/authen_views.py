@@ -31,7 +31,7 @@ from authen.serializers.authen_serializers import (
     DeliverySignUpSerializers,
     ManagerSignUpSerializers,
     DeliveryChickenSerializers,
-    PasswordResetSerializer,
+    ResetPasswordSerializer,
     PasswordResetCompleteSerializer,
 )
 from authen.utils import (
@@ -443,11 +443,11 @@ class ManagerKitchenCrudViews(APIView):
 class RequestPasswordRestEmail(generics.GenericAPIView):
     # render_classes = [UserRenderers]
     # perrmisson_class = [IsAuthenticated]
-    serializer_class = PasswordResetSerializer
+    serializer_class = ResetPasswordSerializer
 
     @extend_schema(
-        request=PasswordResetSerializer,
-        responses={201: PasswordResetSerializer},
+        request=ResetPasswordSerializer,
+        responses={201: ResetPasswordSerializer},
     )
     def post(self, request):
         serializers = self.serializer_class(data=request.data)

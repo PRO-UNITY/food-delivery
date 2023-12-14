@@ -489,7 +489,7 @@ class DeliveryChickenSerializers(serializers.ModelSerializer):
         return instance
 
 
-class PasswordResetSerializer(serializers.Serializer):
+class ResetPasswordSerializer(serializers.Serializer):
     email = serializers.EmailField(min_length=2)
 
     class Meta:
