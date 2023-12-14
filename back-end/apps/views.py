@@ -45,7 +45,7 @@ class AllKtchenViews(APIView):
 
     def get(self, request, format=None, *args, **kwargs):
         instance = KitchenUser.objects.annotate(
-            like_count=Count('kitchenlike')).order_by('-like_count')
+            like_count=Count('kitchenlike')).filter(is_active=True).order_by('-like_count')
         page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(
