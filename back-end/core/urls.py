@@ -10,6 +10,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from authen.views.authen_views import UserProfilesViews, UserUpdateView
 
 admin.site.site_url = None
 
@@ -37,11 +38,6 @@ urlpatterns = [
     ),
     path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
-    # Socaill urls:
-    # path("accounts/", include("allauth.urls")),
-    # path("accounts/", include("allauth.socialaccount.urls")),
-    # path("auth/social/", include("dj_rest_auth.urls")),
-    # path("auth/social/registration/", include("dj_rest_auth.registration.urls")),
     path("auth/", include("authen.urls")),
     path("admin/", admin.site.urls),
     path(
@@ -54,13 +50,15 @@ urlpatterns = [
         jwt_views.TokenRefreshView.as_view(),
         name="token_refresh",
     ),
+    path('user', UserProfilesViews.as_view()),
+    path('user', UserUpdateView.as_view()),
     path('logout/', TokenBlacklistView.as_view(), name='token_blacklist'),
     path("kitchen/", include("kitchen.urls")),
     path('foods/', include('foods.urls')),
     path('apps/', include('apps.urls')),
     path('delivery/', include('delivery.urls')),
     path('manager/', include('managers.urls')),
-    path('order/', include('order.urls')),
+    path('orders/', include('order.urls')),
     path('deliveryman/', include('deliveryman.urls')),
 ]
 
