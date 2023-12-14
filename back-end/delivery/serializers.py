@@ -223,6 +223,12 @@ class DeliveryListSerializers(serializers.ModelSerializer):
             "updated_at"
         ]
 
+    def update(self, instance, validated_data):
+        instance.status = validated_data.get("status", instance.status)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
+        instance.save()
+        return instance
+
 
 class SendOrderSerializers(serializers.ModelSerializer):
 
@@ -250,9 +256,3 @@ class SendOrderSerializers(serializers.ModelSerializer):
         send_order.klient = self.context.get("klient")
         send_order.save()
         return send_order
-
-    def update(self, instance, validated_data):
-        instance.status = validated_data.get("status", instance.status)
-        instance.is_active = validated_data.get('is_active', instance.is_active)
-        instance.save()
-        return instance

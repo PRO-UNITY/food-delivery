@@ -24,5 +24,5 @@ urlpatterns = [
     path("kitchen_like/<int:pk>", KitchenLikeViews.as_view()),
     path("kitchen_category/<int:pk>", KitchenCategoriesViews.as_view()),
     path("kitchen_is_active", KitchenIsActiveViews.as_view()),
-    path('add_manager', ManagerKitchenCreateViews.as_view()),
+    path('add_manager/<int:pk>', ManagerKitchenCreateViews.as_view()),
 ]

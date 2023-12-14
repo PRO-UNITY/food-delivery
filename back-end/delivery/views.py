@@ -111,27 +111,6 @@ class DeliveryKitchenCreateViews(APIView):
         )
 
 
-class SendOrderViews(APIView):
-    """ The user orders the kitchen """
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(
-        request=SendOrderSerializers,
-        responses={201: SendOrderSerializers},
-    )
-    def post(self, request):
-        serializers = SendOrderSerializers(
-            data=request.data,
-            context={
-                "klient": request.user,
-            },)
-        if serializers.is_valid(raise_exception=True):
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_CREATED)
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class AcceptanceOrderDeliveryViews(APIView):
     """ The delivery accepts the order """
     render_classes = [UserRenderers]
