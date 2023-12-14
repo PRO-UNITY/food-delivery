@@ -473,7 +473,7 @@ class RequestPasswordRestEmail(generics.GenericAPIView):
                 {"success": "We have sent you to rest your password"},
                 status=status.HTTP_200_OK,
             )
-        return Response({"error": "This email is not found.."})
+        return Response({"error": "This email is not found.."}, status=status.HTTP_404_NOT_FOUND)
 
 
 class PasswordTokenCheckView(generics.GenericAPIView):
