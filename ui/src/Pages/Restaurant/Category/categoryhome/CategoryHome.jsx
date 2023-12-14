@@ -6,8 +6,11 @@ const CategoryHome = () => {
     const [food, setFood] = useState([])
 
     useEffect(()=>{
-        getDataWithToken('/foods/all_categories').
-        then((res)=> setFood(res.data.results))
+        getDataWithToken('/foods/all_category').
+        then((res)=> {
+          setFood(res.data.results)
+          console.log(res.data.results);
+        })
     },[])
 
     const handleDelete = (id) => {

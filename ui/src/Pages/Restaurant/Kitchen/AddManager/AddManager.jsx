@@ -11,12 +11,14 @@ const AddManagerToKitchen = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getDataWithToken(`/authen/manager_kitchen_create/${id}`)
-            .then((res) => setManager(res.no_active));
+        getDataWithToken(`/auth/user/manager_kitchen_create/${id}`)
+            .then((res) => {
+                setManager(res.no_active)
+            });
     }, []);
 
     useEffect(() => {
-        getDataWithToken(`/authen/manager_kitchen_create/${id}`)
+        getDataWithToken(`/auth/user/manager_kitchen_create/${id}`)
             .then((res) => {
                 setBusyManager(res.delivery[0].delivery);
             });
@@ -49,10 +51,6 @@ const AddManagerToKitchen = () => {
             formData.append("delivery", item.id);
         });
     
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0] + ": " + pair[1]);
-        // }
-    
         EditWithFormData(`/delivery/create_kitchen_delivery/${id}`, formData)
             .then((res) => navigate('/home/main'));
     };
@@ -65,10 +63,6 @@ const AddManagerToKitchen = () => {
                 formData.append("delivery", item.id);
             }
         });
-    
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0] + ": " + pair[1]);
-        // }
     
         EditWithFormData(`/delivery/create_kitchen_delivery/${id}`, formData)
             .then((res) => navigate('/home/main'));

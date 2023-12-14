@@ -17,10 +17,7 @@ const ResetPassword = () => {
         newPasswordComplete(data)
         navigate('/')
     }
-
     
-
-
     return(
         <div className="container d-flex justify-content-center align-items-center py-5">
             <div className="card w-50">
