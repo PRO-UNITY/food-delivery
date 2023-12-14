@@ -35,7 +35,7 @@ class KitchenCreateViews(APIView):
         serializers = KitchenCrudSerializers(
             data=request.data,
             context={
-                "user_id": request.user,
+                "user_id": request.user.id,
             },)
         if serializers.is_valid(raise_exception=True):
             serializers.save(logo=request.data.get("logo"))
