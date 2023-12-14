@@ -13,28 +13,6 @@ from order.serializers import (
 )
 
 
-class StatusOrderViews(APIView):
-    """ Status orders """
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    def get(self, request):
-        objects_list = StatusDelivery.objects.all()
-        serializers = StatusSerializers(objects_list, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-
-class RatingOrderViews(APIView):
-    """ Order graden """
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    def get(self, request):
-        objects_list = Grade.objects.all()
-        serializers = RaitingSerializers(objects_list, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-
 class SendViews(APIView):
     """ The user orders the kitchen """
     render_classes = [UserRenderers]
@@ -46,8 +24,8 @@ class SendViews(APIView):
     )
     def get(self, request):
         objects_list = Delivery.objects.filter(
-            klient=request.user,
-            delivery=request.user
+            klient=request.user.id,
+            delivery=request.user.id
         )
         serializers = OrderSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
@@ -77,9 +55,18 @@ class OrderCrudViews(APIView):
         responses={201: OrderSerializers},
     )
     def get(self, request, pk):
+        status_list = StatusDelivery.objects.all()
         objects_list = Delivery.objects.filter(id=pk)
+        rating_list = Grade.objects.all()
+
+        raiting_serializers = RaitingSerializers(rating_list, many=True)
         serializers = OrderSerializers(objects_list, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+        serializers_status = StatusSerializers(status_list, many=True)
+        return Response(
+            {'order': serializers,
+             'status': serializers_status,
+             'rating': raiting_serializers},
+             status=status.HTTP_200_OK)
 
     @extend_schema(
         request=SendOrderSerializers,
