@@ -5,16 +5,18 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from kitchen.pagination import StandardResultsSetPagination
 from authen.renderers import UserRenderers
-from authen.models import KitchenUser, KitchenLike
+from authen.models import KitchenUser, KitchenLike, CustomUser
 from kitchen.models import KitchenFoods
 from foods.models import FoodsCategories
 from foods.serializers import AllCategoriesFoodsSerializer
 from kitchen.serializers import (
+    UserInformationSerializers,
     AllKitchenSerializers,
     KitchenCrudSerializers,
     AllFoodKitchenSerializers,
     KitchenUserWithCounterSerializer,
     FoodKitchenCrudSerializers,
+    DeliveryChickenSerializers,
 )
 
 
@@ -254,3 +256,44 @@ class DeteileKitchenFood(APIView):
         objects_list = KitchenFoods.objects.filter(user_id=pk)
         serializers = AllFoodKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
+
+
+class ManagerKitchenCreateViews(APIView):
+    """Change manager information and status"""
+
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    def get(self, request, pk):
+        object_list = KitchenUser.objects.filter(id=pk)
+        queryset = CustomUser.objects.filter(
+            delivery__isnull=True,
+            groups__name__in=["manager"],
+            user_id=request.user.id,
+            active_profile=True,
+        )
+        serializer = DeliveryChickenSerializers(object_list, many=True)
+        no_active_delivery = UserInformationSerializers(queryset, many=True)
+        return Response(
+            {
+                "delivery": serializer.data,
+                "no_active": no_active_delivery.data},
+            status=status.HTTP_200_OK,
+        )
+
+    @extend_schema(
+        request=DeliveryChickenSerializers,
+        responses={201: DeliveryChickenSerializers},
+    )
+    def put(self, request, pk):
+        serializers = DeliveryChickenSerializers(
+            instance=KitchenUser.objects.filter(id=pk)[0],
+            data=request.data,
+            partial=True,
+        )
+        if serializers.is_valid(raise_exception=True):
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_200_OK)
+        return Response(
+            {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
+        )

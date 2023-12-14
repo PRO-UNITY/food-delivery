@@ -28,15 +28,11 @@ from authen.serializers.authen_serializers import (
     UserInformationSerializers,
     ChangePasswordSerializer,
     LogoutSerializer,
-    DeliverySignUpSerializers,
-    ManagerSignUpSerializers,
-    DeliveryChickenSerializers,
     ResetPasswordSerializer,
     PasswordResetCompleteSerializer,
 )
 from authen.utils import (
-    Util,
-    PasswordReset,
+    Util
 )
 
 
@@ -58,6 +54,13 @@ class UserRegisterViews(APIView):
         responses={201: UserSignUpSerializers},
     )
     def post(self, request):
+        expected_fields = set(['username', 'password'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializer = UserSignUpSerializers(data=request.data)
 
         if serializer.is_valid(raise_exception=True):
@@ -93,6 +96,13 @@ class UserSigInViews(APIView):
         responses={201: UserSigInInSerializers},
     )
     def post(self, request):
+        expected_fields = set(['username', 'password'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializer = UserSigInInSerializers(data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             username = request.data["username"]
@@ -253,196 +263,7 @@ class LogoutAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class RegisterDeliveryViews(APIView):
-    """The owner of the kitchen registers the delivery"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(
-        request=DeliverySignUpSerializers,
-        responses={201: DeliverySignUpSerializers},
-    )
-    def post(self, request):
-        serializer = DeliverySignUpSerializers(
-            data=request.data, context={"user_id": request.user.id}
-        )
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class DeliveryUser(APIView):
-    """Kitchen all delivery"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
-    )
-    def get(self, request):
-        queryset = CustomUser.objects.filter(
-            groups__name__in=["delivery"], user_id=request.user.id
-        )
-        serializers = UserInformationSerializers(queryset, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-
-class DeliveryUserCrud(APIView):
-    """Change delivery information and status"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
-    )
-    def get(self, request, pk):
-        queryset = CustomUser.objects.filter(
-            id=pk, groups__name__in=["delivery"], user_id=request.user.id
-        )
-        serializers = UserInformationSerializers(queryset, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-    @extend_schema(
-        request=DeliverySignUpSerializers,
-        responses={201: DeliverySignUpSerializers},
-    )
-    def put(self, request, pk):
-        queryset = get_object_or_404(CustomUser, id=pk)
-        serializer = DeliverySignUpSerializers(
-            instance=queryset,
-            data=request.data,
-            partial=True,
-        )
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(avatar=request.data.get("avatar"))
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(
-            {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
-        )
-
-
-class ManagerKitchenViews(APIView):
-    """The owner of the kitchen registers the manager"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(
-        request=ManagerSignUpSerializers,
-        responses={201: ManagerSignUpSerializers},
-    )
-    def post(self, request):
-        serializer = ManagerSignUpSerializers(
-            data=request.data, context={"user_id": request.user.id}
-        )
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ManagerUser(APIView):
-    """Kitchen all manager"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
-    )
-    def get(self, request):
-        queryset = CustomUser.objects.filter(
-            groups__name__in=["manager"], user_id=request.user.id
-        )
-        serializers = UserInformationSerializers(queryset, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-
-class ManagerKitchenCreateViews(APIView):
-    """Change manager information and status"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    def get(self, request, pk):
-        object_list = KitchenUser.objects.filter(id=pk)
-        queryset = CustomUser.objects.filter(
-            delivery__isnull=True,
-            groups__name__in=["manager"],
-            user_id=request.user.id,
-            active_profile=True,
-        )
-        serializer = DeliveryChickenSerializers(object_list, many=True)
-        no_active_delivery = UserInformationSerializers(queryset, many=True)
-        return Response(
-            {"delivery": serializer.data, "no_active": no_active_delivery.data},
-            status=status.HTTP_200_OK,
-        )
-
-    @extend_schema(
-        request=DeliveryChickenSerializers,
-        responses={201: DeliveryChickenSerializers},
-    )
-    def put(self, request, pk):
-        serializers = DeliveryChickenSerializers(
-            instance=KitchenUser.objects.filter(id=pk)[0],
-            data=request.data,
-            partial=True,
-        )
-        if serializers.is_valid(raise_exception=True):
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_200_OK)
-        return Response(
-            {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
-        )
-
-
-class ManagerKitchenCrudViews(APIView):
-    """Adds a manager for the kitchen"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
-    )
-    def get(self, request, pk):
-        queryset = CustomUser.objects.filter(
-            id=pk, groups__name__in=["manager"], user_id=request.user.id
-        )
-        serializers = UserInformationSerializers(queryset, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-    @extend_schema(
-        request=ManagerSignUpSerializers,
-        responses={201: ManagerSignUpSerializers},
-    )
-    def put(self, request, pk):
-        queryset = get_object_or_404(CustomUser, id=pk)
-        serializer = ManagerSignUpSerializers(
-            instance=queryset,
-            data=request.data,
-            partial=True,
-        )
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(avatar=request.data.get("avatar"))
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(
-            {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
-        )
-
-
 class RequestPasswordRestEmail(generics.GenericAPIView):
-    # render_classes = [UserRenderers]
-    # perrmisson_class = [IsAuthenticated]
     serializer_class = ResetPasswordSerializer
 
     @extend_schema(

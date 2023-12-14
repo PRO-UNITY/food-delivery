@@ -59,6 +59,7 @@ urlpatterns = [
     path('foods/', include('foods.urls')),
     path('apps/', include('apps.urls')),
     path('delivery/', include('delivery.urls')),
+    path('manager/', include('managers.urls')),
 ]
 
 

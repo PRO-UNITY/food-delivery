@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "foods",
     "apps",
     "delivery",
+    'managers',
     # socaill apps
     "django.contrib.sites",
     "dj_rest_auth",

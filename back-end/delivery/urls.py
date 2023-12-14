@@ -1,4 +1,9 @@
 from django.urls import path
+from delivery.delivery_user import (
+    RegisterDeliveryViews,
+    DeliveryUser,
+    DeliveryUserCrud
+)
 from delivery.views import (
     StatusDeliveryViews,
     GradeDeliveryViews,
@@ -17,6 +22,9 @@ from delivery.views import (
 )
 
 urlpatterns = [
+    path('users_post', RegisterDeliveryViews.as_view()),
+    path('users', DeliveryUser.as_view()),
+    path('users_crud', DeliveryUserCrud.as_view()),
     path('status_delivery', StatusDeliveryViews.as_view()),
     path('grade_delivery', GradeDeliveryViews.as_view()),
     path(

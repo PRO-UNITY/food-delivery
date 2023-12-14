@@ -124,6 +124,25 @@ class AllFoodKitchenSerializers(serializers.ModelSerializer):
         ]
 
 
+class DeliveryChickenSerializers(serializers.ModelSerializer):
+    delivery = UserInformationSerializers(many=True, read_only=True)
+
+    class Meta:
+        model = KitchenUser
+        fields = [
+            "id",
+            "delivery",
+        ]
+
+    def update(self, instance, validated_data):
+        deliveries_data = validated_data.pop("delivery")
+        instance.delivery.clear()
+        for delivery_data in deliveries_data:
+            instance.delivery.add(delivery_data)
+        instance.save()
+        return instance
+
+
 class FoodKitchenCrudSerializers(serializers.ModelSerializer):
     image_food = serializers.ImageField(
         max_length=None,
