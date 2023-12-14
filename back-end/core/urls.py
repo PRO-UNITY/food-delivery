@@ -61,6 +61,7 @@ urlpatterns = [
     path('delivery/', include('delivery.urls')),
     path('manager/', include('managers.urls')),
     path('order/', include('order.urls')),
+    path('deliveryman/', include('deliveryman.urls')),
 ]
 
 

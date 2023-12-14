@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "delivery",
     'managers',
     'order',
+    'deliveryman',
     # socaill apps
     "django.contrib.sites",
     "dj_rest_auth",
@@ -264,4 +265,4 @@ SOCIAL_AUTH_FACEBOOK_KEY = "863244545502688"
 SOCIAL_AUTH_FACEBOOK_SECRET = "8d9a789122fc5f51ab48d03831412c45"
 SOCIAL_AUTH_FACEBOOK_APP_NAME = "facebook"
 
-FORCE_SCRIPT_NAME = "/food-delivery"
+# FORCE_SCRIPT_NAME = "/food-delivery"
