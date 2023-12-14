@@ -27,7 +27,7 @@ urlpatterns = [
     path('user/signup', UserRegisterViews.as_view()),
     path('user/kitchen_register', KitchenRegisterViews.as_view()),
     path('user/sigin', UserSigInViews.as_view()),
-    path('ser/send_email_code', SendEmailCode.as_view()),
+    path('user/send_email_code', SendEmailCode.as_view()),
     path('user/profiles', UserProfilesViews.as_view()),
     path('user/update', UserUpdateView.as_view()),
     path('user/change_password', change_password),

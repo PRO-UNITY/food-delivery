@@ -38,10 +38,10 @@ urlpatterns = [
     path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     # Socaill urls:
-    path("accounts/", include("allauth.urls")),
-    path("accounts/", include("allauth.socialaccount.urls")),
-    path("auth/social/", include("dj_rest_auth.urls")),
-    path("auth/social/registration/", include("dj_rest_auth.registration.urls")),
+    # path("accounts/", include("allauth.urls")),
+    # path("accounts/", include("allauth.socialaccount.urls")),
+    # path("auth/social/", include("dj_rest_auth.urls")),
+    # path("auth/social/registration/", include("dj_rest_auth.registration.urls")),
     path("auth/", include("authen.urls")),
     path("admin/", admin.site.urls),
     path(
