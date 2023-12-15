@@ -19,7 +19,7 @@ schema_view = get_schema_view(
       title="Food-delivery API",
       default_version='v1',
       description="Food-Delivery",
-      terms_of_service="https://www.google.com/policies/terms/",
+      terms_of_service="https://api.prounity.uz/food-delivery/docs/",
       contact=openapi.Contact(email="istamovibrohim8@gmail.com"),
       license=openapi.License(name="BSD License"),
    ),

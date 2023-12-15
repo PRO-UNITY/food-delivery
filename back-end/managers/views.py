@@ -20,10 +20,33 @@ class ManagerKitchenViews(APIView):
     permission = [IsAuthenticated]
 
     @extend_schema(
+        request=UserInformationSerializers,
+        responses={201: UserInformationSerializers},
+    )
+    def get(self, request):
+        queryset = CustomUser.objects.filter(
+            groups__name__in=["manager"], user_id=request.user.id
+        )
+        serializers = UserInformationSerializers(queryset, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    @extend_schema(
         request=ManagerSignUpSerializers,
         responses={201: ManagerSignUpSerializers},
     )
     def post(self, request):
+        expected_fields = set([
+            'username',
+            'password',
+            'confirm_password',
+            'first_name',
+            'last_name', 'email', 'groups', 'active_profile', 'user_id'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializer = ManagerSignUpSerializers(
             data=request.data, context={"user_id": request.user.id}
         )
@@ -62,6 +85,18 @@ class ManagerKitchenCrudViews(APIView):
         responses={201: ManagerSignUpSerializers},
     )
     def put(self, request, pk):
+        expected_fields = set([
+            'username',
+            'password',
+            'confirm_password',
+            'first_name',
+            'last_name', 'email', 'groups', 'active_profile', 'user_id'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         queryset = get_object_or_404(CustomUser, id=pk)
         serializer = ManagerSignUpSerializers(
             instance=queryset,

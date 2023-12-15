@@ -32,6 +32,20 @@ class SendViews(APIView):
         responses={201: SendOrderSerializers},
     )
     def post(self, request):
+        expected_fields = set([
+            'klient',
+            'delivery',
+            'status',
+            'foods',
+            'kitchen',
+            'is_delivery',
+            'is_active', 'address', 'total_price', 'create_at', 'updated_at'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializers = SendOrderSerializers(
             data=request.data,
             context={
@@ -70,6 +84,20 @@ class OrderCrudViews(APIView):
         responses={201: SendOrderSerializers},
     )
     def put(self, request, pk):
+        expected_fields = set([
+            'klient',
+            'delivery',
+            'status',
+            'foods',
+            'kitchen',
+            'is_delivery',
+            'is_active', 'address', 'total_price', 'create_at', 'updated_at'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializers = SendOrderSerializers(
             instance=Delivery.objects.filter(id=pk)[0], data=request.data, partial=True
         )

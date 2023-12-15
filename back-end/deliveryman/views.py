@@ -23,6 +23,18 @@ class RegisterDeliveryViews(APIView):
         responses={201: DeliverySignUpSerializers},
     )
     def post(self, request):
+        expected_fields = set([
+            'username',
+            'password',
+            'confirm_password',
+            'first_name',
+            'last_name', 'email', 'groups', 'active_profile', 'user_id'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializer = DeliverySignUpSerializers(
             data=request.data, context={"user_id": request.user.id}
         )
@@ -61,6 +73,18 @@ class DeliveryUserCrud(APIView):
         responses={201: DeliverySignUpSerializers},
     )
     def put(self, request, pk):
+        expected_fields = set([
+            'username',
+            'password',
+            'confirm_password',
+            'first_name',
+            'last_name', 'email', 'groups', 'active_profile', 'user_id'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         queryset = get_object_or_404(CustomUser, id=pk)
         serializer = DeliverySignUpSerializers(
             instance=queryset,

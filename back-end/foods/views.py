@@ -81,6 +81,18 @@ class AllFoodsViews(APIView):
         responses={201: FoodsCrudSerializer},
     )
     def post(self, request):
+        expected_fields = set([
+            'name',
+            'food_img',
+            'description',
+            'price',
+            'kitchen', 'categories', 'create_at', 'updated_at'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializers = FoodsCrudSerializer(
             data=request.data)
         if serializers.is_valid(raise_exception=True):
@@ -123,6 +135,18 @@ class FoodsCrudViews(APIView):
         responses={201: FoodsCrudSerializer},
     )
     def put(self, request, pk):
+        expected_fields = set([
+            'name',
+            'food_img',
+            'description',
+            'price',
+            'kitchen', 'categories', 'create_at', 'updated_at'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializers = FoodsCrudSerializer(
             instance=Foods.objects.filter(
                 id=pk)[0],

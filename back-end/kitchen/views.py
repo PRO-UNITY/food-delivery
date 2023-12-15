@@ -35,6 +35,18 @@ class KitchenCreateViews(APIView):
         responses={201: KitchenCrudSerializers},
     )
     def post(self, request):
+        expected_fields = set([
+            'name',
+            'logo',
+            'description',
+            'user_id',
+            'is_active', 'working_time', 'latitude', 'longitude'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializers = KitchenCrudSerializers(
             data=request.data,
             context={
@@ -79,6 +91,18 @@ class KitchenCrudViews(APIView):
         responses={201: KitchenCrudSerializers},
     )
     def put(self, request, pk):
+        expected_fields = set([
+            'name',
+            'logo',
+            'description',
+            'user_id',
+            'is_active', 'working_time', 'latitude', 'longitude'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializers = KitchenCrudSerializers(
             instance=KitchenUser.objects.filter(
                 id=pk)[0],
@@ -284,6 +308,17 @@ class CategoriesKitchenViews(APIView):
         responses={201: CategoriesFoodsCrudSerializer},
     )
     def post(self, request):
+        expected_fields = set([
+            'name',
+            'kitchen',
+            'create_at',
+            'updated_at'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializers = CategoriesFoodsCrudSerializer(
             data=request.data,
             context={
@@ -304,6 +339,17 @@ class CategoriesCrudViews(APIView):
         responses={201: CategoriesFoodsCrudSerializer},
     )
     def put(self, request, pk):
+        expected_fields = set([
+            'name',
+            'kitchen',
+            'create_at',
+            'updated_at'])
+        received_fields = set(request.data.keys())
+
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializers = CategoriesFoodsCrudSerializer(
             instance=FoodsCategories.objects.filter(
                 id=pk)[0],
