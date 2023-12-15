@@ -60,9 +60,9 @@ class OrderCrudViews(APIView):
         serializers = OrderSerializers(objects_list, many=True)
         serializers_status = StatusSerializers(status_list, many=True)
         return Response(
-            {'order': serializers,
-             'status': serializers_status,
-             'rating': raiting_serializers},
+            {'order': serializers.data,
+             'status': serializers_status.data,
+             'rating': raiting_serializers.data},
              status=status.HTTP_200_OK)
 
     @extend_schema(

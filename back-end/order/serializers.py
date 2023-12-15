@@ -35,12 +35,6 @@ class OrderSerializers(serializers.ModelSerializer):
             "updated_at"
         ]
 
-    def create(self, validated_data):
-        send_order = Delivery.objects.create(**validated_data)
-        send_order.klient = self.context.get("klient")
-        send_order.save()
-        return send_order
-
 
 class SendOrderSerializers(serializers.ModelSerializer):
 
