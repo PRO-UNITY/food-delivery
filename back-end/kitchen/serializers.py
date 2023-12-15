@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from authen.models import CustomUser, KitchenUser, KitchenLike
 from kitchen.models import KitchenFoods
-from foods.models import FoodsCategories
+from foods.models import FoodsCategories, Foods
 
 
 class UserInformationSerializers(serializers.ModelSerializer):
@@ -113,7 +113,7 @@ class AllFoodKitchenSerializers(serializers.ModelSerializer):
     kitchen = AllKitchenSerializers(read_only=True)
 
     class Meta:
-        model = KitchenFoods
+        model = Foods
         fields = '__all__'
 
 

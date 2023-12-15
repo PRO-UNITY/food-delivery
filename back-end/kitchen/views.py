@@ -7,7 +7,7 @@ from kitchen.pagination import StandardResultsSetPagination
 from authen.renderers import UserRenderers
 from authen.models import KitchenUser, KitchenLike, CustomUser
 from kitchen.models import KitchenFoods
-from foods.models import FoodsCategories
+from foods.models import FoodsCategories, Foods
 from foods.serializers import AllCategoriesFoodsSerializer
 from kitchen.serializers import (
     UserInformationSerializers,
@@ -217,7 +217,7 @@ class KitchenFoodsCrudViews(APIView):
 
 class AllKitchenFood(APIView):
     def get(self, request, pk):
-        objects_list = KitchenFoods.objects.filter(kitchen=pk)
+        objects_list = Foods.objects.filter(kitchen=pk)
         serializers = AllFoodKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
