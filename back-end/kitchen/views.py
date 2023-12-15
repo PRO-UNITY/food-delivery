@@ -320,7 +320,7 @@ class CategoriesKitchenViews(APIView):
                 "user_id": request.user,
             },)
         if serializers.is_valid(raise_exception=True):
-            serializers.save(image_food=request.data.get("image_food"))
+            serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
