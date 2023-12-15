@@ -110,19 +110,11 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
 
 
 class AllFoodKitchenSerializers(serializers.ModelSerializer):
-    kitchen_id = AllKitchenSerializers(read_only=True)
+    kitchen = AllKitchenSerializers(read_only=True)
 
     class Meta:
         model = KitchenFoods
-        fields = [
-            "id",
-            "name",
-            "description",
-            "image_food",
-            "kitchen_id",
-            "create_at",
-            "updated_at",
-        ]
+        fields = '__all__'
 
 
 class DeliveryChickenSerializers(serializers.ModelSerializer):
