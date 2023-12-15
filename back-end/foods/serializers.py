@@ -61,7 +61,8 @@ class AllFoodsSerializer(serializers.ModelSerializer):
             'food_img',
             'description',
             'price',
-            'categories_id',
+            'kitchen',
+            'categories',
             "create_at",
             "updated_at"
             ]
@@ -84,8 +85,8 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
             'food_img',
             'description',
             'price',
-            'kitchen_id',
-            'categories_id',
+            'kitchen',
+            'categories',
             "create_at",
             "updated_at"
             ]
@@ -99,10 +100,10 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get("name", instance.name)
         instance.description = validated_data.get("description", instance.description)
         instance.price = validated_data.get("price", instance.price)
-        instance.kitchen_id = validated_data.get(
-            "kitchen_id", instance.kitchen_id)
-        instance.categories_id = validated_data.get(
-            "categories_id", instance.categories_id)
+        instance.kitchen = validated_data.get(
+            "kitchen", instance.kitchen)
+        instance.categories = validated_data.get(
+            "categories", instance.categories)
         if instance.food_img == None:
             instance.food_img = self.context.get("food_img")
         else:
