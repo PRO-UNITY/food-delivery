@@ -23,10 +23,7 @@ class SendViews(APIView):
         responses={201: OrderSerializers},
     )
     def get(self, request):
-        objects_list = Delivery.objects.filter(
-            klient=request.user.id,
-            delivery=request.user.id
-        )
+        objects_list = Delivery.objects.all()
         serializers = OrderSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
