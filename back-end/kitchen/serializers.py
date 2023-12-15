@@ -190,7 +190,7 @@ class FoodKitchenCrudSerializers(serializers.ModelSerializer):
 class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodsCategories
-        fields = ['id', 'name', 'kitchen_id', "create_at", "updated_at"]
+        fields = ['id', 'name', 'kitchen', "create_at", "updated_at"]
 
     def create(self, validated_data):
         create_categoires = FoodsCategories.objects.create(**validated_data)
@@ -199,7 +199,7 @@ class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get("name", instance.name)
-        instance.kitchen_id = validated_data.get(
-            "kitchen_id", instance.kitchen_id)
+        instance.kitchen = validated_data.get(
+            "kitchen", instance.kitchen)
         instance.save()
         return instance
