@@ -67,54 +67,6 @@ class AllCategoryViews(APIView):
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CategoriesKitchenViews(APIView):
-    render_classes = [UserRenderers]
-    perrmisson_class = [IsAuthenticated]
-
-    def get(self, request, pk):
-        objects_list = FoodsCategories.objects.filter(kitchen_id=pk)
-        serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-
-class CategoriesCrudViews(APIView):
-    render_classes = [UserRenderers]
-    perrmisson_class = [IsAuthenticated]
-
-    @extend_schema(
-        request=AllCategoriesFoodsSerializer,
-        responses={201: AllCategoriesFoodsSerializer},
-    )
-    def get(self, request, pk):
-        objects_list = FoodsCategories.objects.filter(id=pk)
-        serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-    @extend_schema(
-        request=CategoriesFoodsCrudSerializer,
-        responses={201: CategoriesFoodsCrudSerializer},
-    )
-    def put(self, request, pk):
-        serializers = CategoriesFoodsCrudSerializer(
-            instance=FoodsCategories.objects.filter(
-                id=pk)[0],
-            data=request.data,
-            partial=True,
-        )
-        if serializers.is_valid(raise_exception=True):
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_200_OK)
-        return Response(
-            {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
-        )
-
-    def delete(self, request, pk):
-        objects_get = FoodsCategories.objects.get(id=pk)
-        objects_get.delete()
-        return Response(
-            {"message": "Delete success"}, status=status.HTTP_200_OK)
-
-
 class AllFoodsViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
@@ -143,7 +95,7 @@ class AllFoodsViews(APIView):
         return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
-        instance = Foods.objects.filter(kitchen_id__user_id=request.user.id)
+        instance = Foods.objects.all()
         page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from authen.models import CustomUser, KitchenUser, KitchenLike
 from kitchen.models import KitchenFoods
+from foods.models import FoodsCategories
 
 
 class UserInformationSerializers(serializers.ModelSerializer):
@@ -182,5 +183,23 @@ class FoodKitchenCrudSerializers(serializers.ModelSerializer):
         else:
             instance.image_food = validated_data.get(
                 "image_food", instance.image_food)
+        instance.save()
+        return instance
+
+
+class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoodsCategories
+        fields = ['id', 'name', 'kitchen_id', "create_at", "updated_at"]
+
+    def create(self, validated_data):
+        create_categoires = FoodsCategories.objects.create(**validated_data)
+        create_categoires.save()
+        return create_categoires
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get("name", instance.name)
+        instance.kitchen_id = validated_data.get(
+            "kitchen_id", instance.kitchen_id)
         instance.save()
         return instance

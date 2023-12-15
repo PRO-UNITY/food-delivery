@@ -17,6 +17,7 @@ from kitchen.serializers import (
     KitchenUserWithCounterSerializer,
     FoodKitchenCrudSerializers,
     DeliveryChickenSerializers,
+    CategoriesFoodsCrudSerializer
 )
 
 
@@ -25,7 +26,7 @@ class KitchenCreateViews(APIView):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request):
-        objects_list = KitchenUser.objects.filter(user_id=request.user.id)
+        objects_list = KitchenUser.objects.all()
         serializers = AllKitchenSerializers(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
@@ -239,8 +240,8 @@ class AllKitchenFood(APIView):
         assert self.paginator is not None
         return self.paginator.get_paginated_response(data)
 
-    def get(self, request, format=None, *args, **kwargs):
-        instance = KitchenFoods.objects.all()
+    def get(self, request, pk, format=None, *args, **kwargs):
+        instance = KitchenFoods.objects.filter(kitchen=pk)
         page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(
@@ -297,3 +298,57 @@ class ManagerKitchenCreateViews(APIView):
         return Response(
             {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
         )
+
+
+class CategoriesKitchenViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request, pk):
+        objects_list = FoodsCategories.objects.filter()
+        serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    @extend_schema(
+        request=CategoriesFoodsCrudSerializer,
+        responses={201: CategoriesFoodsCrudSerializer},
+    )
+    def post(self, request):
+        serializers = CategoriesFoodsCrudSerializer(
+            data=request.data,
+            context={
+                "user_id": request.user,
+            },)
+        if serializers.is_valid(raise_exception=True):
+            serializers.save(image_food=request.data.get("image_food"))
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CategoriesCrudViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    @extend_schema(
+        request=CategoriesFoodsCrudSerializer,
+        responses={201: CategoriesFoodsCrudSerializer},
+    )
+    def put(self, request, pk):
+        serializers = CategoriesFoodsCrudSerializer(
+            instance=FoodsCategories.objects.filter(
+                id=pk)[0],
+            data=request.data,
+            partial=True,
+        )
+        if serializers.is_valid(raise_exception=True):
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_200_OK)
+        return Response(
+            {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    def delete(self, request, pk):
+        objects_get = FoodsCategories.objects.get(id=pk)
+        objects_get.delete()
+        return Response(
+            {"message": "Delete success"}, status=status.HTTP_200_OK)
