@@ -76,11 +76,6 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             "last_name": {"required": True},
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field_name in self.fields:
-            self.fields[field_name].required = False
-
     def create(self, validated_data):
         if validated_data["password"] != validated_data["confirm_password"]:
             raise serializers.ValidationError("Passwords do not match.")
@@ -202,12 +197,6 @@ class UserUpdateSerializers(serializers.ModelSerializer):
         use_url=False,
         required=False,
     )
-    username = serializers.CharField(
-        max_length=255,
-        min_length=5,
-        required=True,
-        validators=[UniqueValidator(queryset=CustomUser.objects.all())],
-    )
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=CustomUser.objects.all())]
     )
@@ -216,7 +205,6 @@ class UserUpdateSerializers(serializers.ModelSerializer):
         model = CustomUser
         fields = [
             "id",
-            "username",
             "first_name",
             "last_name",
             "email",
@@ -228,7 +216,6 @@ class UserUpdateSerializers(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get("first_name", instance.first_name)
         instance.last_name = validated_data.get("last_name", instance.last_name)
-        instance.username = validated_data.get("username", instance.username)
         instance.phone = validated_data.get("phone", instance.phone)
         instance.email = validated_data.get("email", instance.email)
         instance.active_profile = validated_data.get(
