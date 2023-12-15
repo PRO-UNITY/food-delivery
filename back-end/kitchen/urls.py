@@ -16,7 +16,7 @@ from kitchen.views import (
 urlpatterns = [
     path("", KitchenCreateViews.as_view()),
     path("<int:pk>", KitchenCrudViews.as_view()),
-    path("kitchen", AllKitchenViews.as_view()),
+    path("kitchen_all", AllKitchenViews.as_view()),
     path("kitchen_foods", KitchenFoodsViews.as_view()),
     path("kitchen_foods_crud/<int:pk>", KitchenFoodsCrudViews.as_view()),
     path("all_kitchen_foods", AllKitchenFood.as_view()),

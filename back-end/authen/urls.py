@@ -4,7 +4,6 @@ from authen.views.authen_views import (
     UserRegisterViews,
     UserSigInViews,
     change_password,
-    UserDeteilseViews,
     LogoutAPIView,
     RequestPasswordRestEmail,
     SetNewPasswordView
@@ -15,7 +14,6 @@ urlpatterns = [
     path('signup', UserRegisterViews.as_view()),
     path('sigin', UserSigInViews.as_view()),
     path('password', change_password),
-    path('details/<int:pk>', UserDeteilseViews.as_view()),
     path('logout', LogoutAPIView.as_view()),
     path(
         'password/reset',
