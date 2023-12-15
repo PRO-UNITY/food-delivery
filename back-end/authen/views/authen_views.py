@@ -54,15 +54,14 @@ class UserRegisterViews(APIView):
         responses={201: UserSignUpSerializers},
     )
     def post(self, request):
-        expected_fields = set(['username', 'password'])
-        received_fields = set(request.data.keys())
+        # expected_fields = set(['username', 'password'])
+        # received_fields = set(request.data.keys())
 
-        unexpected_fields = received_fields - expected_fields
-        if unexpected_fields:
-            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
+        # unexpected_fields = received_fields - expected_fields
+        # if unexpected_fields:
+        #     error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+        #     return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializer = UserSignUpSerializers(data=request.data)
-
         if serializer.is_valid(raise_exception=True):
             instanse = serializer.save()
             tokens = get_token_for_user(instanse)
