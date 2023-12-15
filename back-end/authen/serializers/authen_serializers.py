@@ -69,6 +69,7 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             "email",
             "password",
             "confirm_password",
+            "groups"
         ]
         extra_kwargs = {
             "first_name": {"required": True},
@@ -89,10 +90,10 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             last_name=validated_data["last_name"],
             email=validated_data["email"],
         )
+        groups=validated_data.pop('groups', [])
         user.set_password(validated_data["password"])
-        filtr_gr = Group.objects.filter(id=2)
-        for i in filtr_gr:
-            user.groups.add(i.id)
+        for i in groups:
+            user.groups.add(i)
             user.save()
         return user
 
