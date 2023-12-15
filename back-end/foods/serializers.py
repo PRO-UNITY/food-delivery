@@ -51,7 +51,7 @@ class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
 
 
 class AllFoodsSerializer(serializers.ModelSerializer):
-    categories_id = AllCategoriesFoodsSerializer(read_only=True)
+    categories = AllCategoriesFoodsSerializer(read_only=True)
 
     class Meta:
         model = Foods
