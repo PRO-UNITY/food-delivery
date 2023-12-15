@@ -19,6 +19,17 @@ class RegisterDeliveryViews(APIView):
     permission = [IsAuthenticated]
 
     @extend_schema(
+        request=UserInformationSerializers,
+        responses={201: UserInformationSerializers},
+    )
+    def get(self, request):
+        queryset = CustomUser.objects.filter(
+            groups__name__in=["delivery"], user_id=request.user.id
+        )
+        serializers = UserInformationSerializers(queryset, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    @extend_schema(
         request=DeliverySignUpSerializers,
         responses={201: DeliverySignUpSerializers},
     )

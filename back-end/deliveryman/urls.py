@@ -8,7 +8,7 @@ from deliveryman.views import (
 
 urlpatterns = [
     path('', RegisterDeliveryViews.as_view()),
-    path('', DeliveryUser.as_view()),
+    # path('', DeliveryUser.as_view()),
     path('<int:pk>', DeliveryUserCrud.as_view()),
 
 ]
