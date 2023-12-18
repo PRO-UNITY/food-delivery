@@ -57,7 +57,7 @@ class UserRegisterViews(APIView):
         expected_fields = set([
             'username',
             'password',
-            'confirm_password', 'first_name', 'last_name', 'email', 'groups'])
+            'confirm_password', 'first_name', 'last_name', 'email', 'role'])
         received_fields = set(request.data.keys())
 
         unexpected_fields = received_fields - expected_fields
@@ -119,11 +119,10 @@ class UserSigInViews(APIView):
             else:
                 return Response(
                     {
-                        "error": {
-                            "none_filed_error": [
+                        "error": [
                                 "This user is not available to the system"
                             ]
-                        }
+
                     },
                     status=status.HTTP_404_NOT_FOUND,
                 )

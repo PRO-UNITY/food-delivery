@@ -24,7 +24,7 @@ class RegisterDeliveryViews(APIView):
     )
     def get(self, request):
         queryset = CustomUser.objects.filter(
-            groups__name__in=["delivery"], user_id=request.user.id
+            groups__name__in=["delivery"]
         )
         serializers = UserInformationSerializers(queryset, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
@@ -66,9 +66,7 @@ class DeliveryUser(APIView):
         responses={201: UserInformationSerializers},
     )
     def get(self, request):
-        queryset = CustomUser.objects.filter(
-            groups__name__in=["delivery"], user_id=request.user.id
-        )
+        queryset = CustomUser.objects.filter(groups__name__in=["delivery"])
         serializers = UserInformationSerializers(queryset, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
@@ -80,6 +78,15 @@ class DeliveryUserCrud(APIView):
     permission = [IsAuthenticated]
 
     @extend_schema(
+        request=UserInformationSerializers,
+        responses={201: UserInformationSerializers},
+    )
+    def get(self, request, pk):
+        queryset = CustomUser.objects.filter(id=pk)
+        serializers = UserInformationSerializers(queryset, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    @extend_schema(
         request=DeliverySignUpSerializers,
         responses={201: DeliverySignUpSerializers},
     )
@@ -89,7 +96,7 @@ class DeliveryUserCrud(APIView):
             'password',
             'confirm_password',
             'first_name',
-            'last_name', 'email', 'groups', 'active_profile', 'user_id'])
+            'last_name', 'email', 'role', 'active_profile', 'user_id'])
         received_fields = set(request.data.keys())
 
         unexpected_fields = received_fields - expected_fields

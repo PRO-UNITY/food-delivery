@@ -52,7 +52,6 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
             "last_name",
             "password",
             "confirm_password",
-            "active_profile",
             "email",
         ]
         extra_kwargs = {
@@ -93,8 +92,7 @@ class UserGroupSerizliers(serializers.ModelSerializer):
 
 class UserInformationSerializers(serializers.ModelSerializer):
     """User Profiles Serializers"""
-
-    groups = UserGroupSerizliers(many=True, read_only=True)
+    role = serializers.SerializerMethodField()
 
     class Meta:
         """User Model Fileds"""
@@ -107,8 +105,10 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "last_name",
             "avatar",
             "email",
-            "phone",
-            "user_id",
-            "groups",
-            "active_profile",
+            "role"
         ]
+
+    def get_role(self, obj):
+        get_name = [roless.name for roless in obj.groups.all()]
+        for k in get_name:
+            return k

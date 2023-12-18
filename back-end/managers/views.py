@@ -24,9 +24,7 @@ class ManagerKitchenViews(APIView):
         responses={201: UserInformationSerializers},
     )
     def get(self, request):
-        queryset = CustomUser.objects.filter(
-            groups__name__in=["manager"], user_id=request.user.id
-        )
+        queryset = CustomUser.objects.filter(groups__name__in=["manager"])
         serializers = UserInformationSerializers(queryset, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 

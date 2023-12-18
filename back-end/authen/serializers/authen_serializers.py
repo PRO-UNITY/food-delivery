@@ -1,5 +1,6 @@
 """ DJango DRF Serializers """
 from rest_framework import serializers
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.models import Group
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
@@ -58,6 +59,7 @@ class UserSignUpSerializers(serializers.ModelSerializer):
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=CustomUser.objects.all())]
     )
+    role = serializers.CharField(max_length=255, write_only=True)
 
     class Meta:
         model = CustomUser
@@ -69,28 +71,38 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             "email",
             "password",
             "confirm_password",
-            "groups"
+            "role"
         ]
         extra_kwargs = {
             "first_name": {"required": True},
             "last_name": {"required": True},
         }
 
+    def validate_password(self, value):
+        try:
+            validate_password(value)
+        except ValidationError as exc:
+            raise serializers.ValidationError(str(exc))
+        return value
+
     def create(self, validated_data):
-        if validated_data["password"] != validated_data["confirm_password"]:
-            raise serializers.ValidationError("Passwords do not match.")
-        user = CustomUser.objects.create(
-            username=validated_data["username"],
-            first_name=validated_data["first_name"],
-            last_name=validated_data["last_name"],
-            email=validated_data["email"],
-        )
-        groups=validated_data.pop('groups', [])
-        user.set_password(validated_data["password"])
-        for i in groups:
-            user.groups.add(i)
-            user.save()
-        return user
+        if validated_data['password'] != validated_data['confirm_password']:
+            raise serializers.ValidationError({"error":"Those passwords don't match"})
+        validated_data.pop('confirm_password')
+        role_name = validated_data.pop('role', None)
+        if role_name == 'admins':
+            raise serializers.ValidationError({"error": "You cant to submit this Role"})
+
+        if role_name:
+            try:
+                role = Group.objects.get(name=role_name)
+            except ObjectDoesNotExist:
+                raise serializers.ValidationError({'error': "Invalid role"})
+
+        create = get_user_model().objects.create_user(**validated_data)
+        create.groups.add(role)
+
+        return create
 
 
 class KitchenSignUpSerializers(serializers.ModelSerializer):
@@ -209,18 +221,12 @@ class UserUpdateSerializers(serializers.ModelSerializer):
             "last_name",
             "email",
             "avatar",
-            "phone",
-            "active_profile",
         ]
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get("first_name", instance.first_name)
         instance.last_name = validated_data.get("last_name", instance.last_name)
-        instance.phone = validated_data.get("phone", instance.phone)
         instance.email = validated_data.get("email", instance.email)
-        instance.active_profile = validated_data.get(
-            "active_profile", instance.active_profile
-        )
         if instance.avatar == None:
             instance.avatar = self.context.get("avatar")
         else:
@@ -259,8 +265,7 @@ class UserSigInInSerializers(serializers.ModelSerializer):
 
 class UserInformationSerializers(serializers.ModelSerializer):
     """User Profiles Serializers"""
-
-    groups = UserGroupSerizliers(many=True, read_only=True)
+    role = serializers.SerializerMethodField()
 
     class Meta:
         """User Model Fileds"""
@@ -273,11 +278,13 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "last_name",
             "avatar",
             "email",
-            "phone",
-            "user_id",
-            "groups",
-            "active_profile",
+            "role"
         ]
+
+    def get_role(self, obj):
+        get_name = [roless.name for roless in obj.groups.all()]
+        for k in get_name:
+            return k
 
 
 class ChangePasswordSerializer(serializers.Serializer):
