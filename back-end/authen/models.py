@@ -43,7 +43,8 @@ class KitchenUser(models.Model):
         blank=True,
         related_name="delivery"
     )
-    working_time = models.CharField(max_length=100)
+    open_time = models.TimeField(null=True, blank=True)
+    close_time = models.TimeField(null=True, blank=True)
     latitude = models.CharField(max_length=100)
     longitude = models.CharField(max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
