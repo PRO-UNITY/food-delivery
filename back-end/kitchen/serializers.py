@@ -33,7 +33,7 @@ class AllKitchenSerializers(serializers.ModelSerializer):
             "name",
             "description",
             "logo",
-            "user_id",
+            "user",
             "is_active",
             "working_time",
             "latitude",
@@ -74,7 +74,7 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
             "name",
             "description",
             "logo",
-            "user_id",
+            "user",
             "is_active",
             "working_time",
             "latitude",
@@ -85,7 +85,7 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
 
     def create(self, validated_data):
         create_foods = KitchenUser.objects.create(**validated_data)
-        create_foods.user_id = self.context.get("user_id")
+        create_foods.user = self.context.get("user")
         create_foods.save()
         return create_foods
 
