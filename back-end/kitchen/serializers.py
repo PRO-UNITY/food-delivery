@@ -78,7 +78,8 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
             "user",
             "deliveryman_user",
             "is_active",
-            "working_time",
+            "open_time",
+            "close_time",
             "latitude",
             "longitude",
             "create_at",
@@ -97,8 +98,11 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
             "description", instance.description)
         instance.is_active = validated_data.get(
             "is_active", instance.is_active)
-        instance.working_time = validated_data.get(
-            "working_time", instance.working_time
+        instance.open_time = validated_data.get(
+            "open_time", instance.open_time
+        )
+        instance.close_time = validated_data.get(
+            "close_time", instance.close_time
         )
         instance.latitude = validated_data.get("latitude", instance.latitude)
         instance.longitude = validated_data.get(

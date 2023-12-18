@@ -40,7 +40,7 @@ class KitchenCreateViews(APIView):
             'logo',
             'description',
             'user',
-            'is_active', 'working_time', 'latitude', 'longitude'])
+            'is_active', 'close_time', "close_time", 'latitude', 'longitude'])
         received_fields = set(request.data.keys())
 
         unexpected_fields = received_fields - expected_fields
