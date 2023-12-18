@@ -334,6 +334,11 @@ class CategoriesCrudViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
+    def get(self, request, pk):
+        objects_list = FoodsCategories.objects.filter(id=pk)
+        serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
     @extend_schema(
         request=CategoriesFoodsCrudSerializer,
         responses={201: CategoriesFoodsCrudSerializer},
