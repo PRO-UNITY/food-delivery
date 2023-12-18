@@ -66,15 +66,17 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
         use_url=False,
         required=False,
     )
+    deliveryman_user = UserInformationSerializers(many=True, read_only=True)
 
     class Meta:
         model = KitchenUser
-        fields = fields = [
+        fields = [
             "id",
             "name",
             "description",
             "logo",
             "user",
+            "deliveryman_user",
             "is_active",
             "working_time",
             "latitude",

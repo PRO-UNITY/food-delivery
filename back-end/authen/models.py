@@ -37,7 +37,7 @@ class KitchenUser(models.Model):
         related_name='user'
     )
     is_active = models.BooleanField(default=False)
-    delivery = models.ManyToManyField(
+    deliveryman_user = models.ManyToManyField(
         CustomUser,
         null=True,
         blank=True,
