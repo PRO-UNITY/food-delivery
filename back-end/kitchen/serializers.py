@@ -25,6 +25,7 @@ class KitchenLikeSerializers(serializers.ModelSerializer):
 
 
 class AllKitchenSerializers(serializers.ModelSerializer):
+    deliveryman_user = UserInformationSerializers(many=True, read_only=True)
 
     class Meta:
         model = KitchenUser
@@ -35,6 +36,7 @@ class AllKitchenSerializers(serializers.ModelSerializer):
             "logo",
             "user",
             "is_active",
+            "deliveryman_user",
             "open_time",
             "close_time",
             "latitude",
@@ -67,7 +69,6 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
         use_url=False,
         required=False,
     )
-    deliveryman_user = UserInformationSerializers(many=True, read_only=True)
 
     class Meta:
         model = KitchenUser
