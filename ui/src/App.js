@@ -147,7 +147,7 @@ function App() {
         <Route path={'/user-profile'} element={<UserProfile/>}/>
         <Route path={'/edit-profile'} element={<UpdateProfile/>}/>
         <Route path={'/change-password'} element={<Changepassword/>}/>
-            <Route path={'/home'} element={<Sidebar/>}>
+            <Route path={'/home'} element={<Sidebar/>}>=-
               <Route path={'/home/main'} element={<ManagerMain/>}/>
               <Route path={'/home/delivery-history'} element={<DeliveryHistory/>}/>
               <Route path={'/home/deliver-details/:id'} element={<DeliverDetails/>}/>

@@ -6,12 +6,12 @@ const RestaurantHome = () => {
     const [food, setFood] = useState([])
 
     useEffect(()=>{
-        getDataWithToken('/kitchen/kitchen_create').
+        getDataWithToken('/kitchen/').
         then((res)=> setFood(res))
     },[])
 
     const handleDelete = (id) => {
-        deleteData(`/kitchen/kitchen_crud/${id}`)
+        deleteData(`/kitchen/${id}`)
     }
     
     return(

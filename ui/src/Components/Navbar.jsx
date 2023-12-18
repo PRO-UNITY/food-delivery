@@ -7,7 +7,7 @@ const Navbar = () => {
     const navigate = useNavigate()
 
     useEffect(()=>{
-        getDataWithToken('/auth/user_profiles').
+        getDataWithToken('/user').
         then((res)=>
          {setUser(res)
         })

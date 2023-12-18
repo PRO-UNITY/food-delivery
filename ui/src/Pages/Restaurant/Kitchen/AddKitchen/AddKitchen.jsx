@@ -24,7 +24,7 @@ const AddKitchen = () => {
         formData.append('latitude', latituderef.current.value)
         formData.append('longitude', longitudref.current.value)
 
-        AddWithFormData("/kitchen/kitchen_create", formData).
+        AddWithFormData("/kitchen/", formData).
         then((res)=>navigate('/home/main'))
     };
 

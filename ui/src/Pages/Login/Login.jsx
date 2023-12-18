@@ -17,8 +17,9 @@ const Login = () => {
            username : usernameRef.current?.value,
            password : passwordRef.current?.value,
         };
-        await postData(user,"/token/").then((res)=>{
-          localStorage.setItem('token',res.access)
+        await postData(user,"/auth/sigin").then((res)=>{
+          localStorage.setItem('token',res.token.access)
+          console.log(res);
           if(localStorage.getItem("token") !== "undefined" ){
             navigate('/home')
             window.location.reload()
@@ -30,7 +31,7 @@ const Login = () => {
         onSuccess: async (response) => {
             try {
                 const res = await axios.post(
-                    "https://api.prounity.uz/food-delivery/auth/google/login",
+                    "https://api.prounity.uz/food-delivery/auth/socail/google",
                     {
                         token :response.access_token
                     }

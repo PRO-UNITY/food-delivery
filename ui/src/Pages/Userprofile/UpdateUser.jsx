@@ -35,10 +35,6 @@ const UpdateProfile = () => {
             formData.append('avatar', imgRef.current.files[0]);
         }
 
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
-
         try {
             const response = await axios.put('https://api.prounity.uz/food-delivery/auth/user_update', formData, {
                 headers: {
@@ -48,6 +44,9 @@ const UpdateProfile = () => {
             });
             navigate('/user-profile'); 
         } catch (error) {
+
+
+            
             console.error('Error creating category', error);
         }
     };

@@ -17,7 +17,7 @@ const EditFood = () => {
     const [data,setData] = useState()
 
     useEffect(()=>{
-        getDataWithToken(`/kitchen/kitchen_crud/${id}`).
+        getDataWithToken(`/kitchen/${id}`).
         then((res)=>
          {setData(res.kitchen[0])
          console.log(res.kitchen[0])}
@@ -36,7 +36,7 @@ const EditFood = () => {
         if(imgRef.current?.files[0]){
             formData.append('logo', imgRef.current.files[0]);
         }
-        EditWithFormData(`/kitchen/kitchen_crud/${id}`, formData).
+        EditWithFormData(`/kitchen/${id}`, formData).
         then((res)=>navigate('/home/main'))
     };
 

@@ -6,15 +6,15 @@ const CategoryHome = () => {
     const [food, setFood] = useState([])
 
     useEffect(()=>{
-        getDataWithToken('/foods/all_category').
+        getDataWithToken('/kitchen/category').
         then((res)=> {
-          setFood(res.data.results)
-          console.log(res.data.results);
+          setFood(res)
+          console.log(res);
         })
     },[])
 
     const handleDelete = (id) => {
-        deleteData(`/foods/categories_crud/${id}`)
+        deleteData(`/kitchen/catgeory/${id}`)
     }
     
     return(
@@ -31,11 +31,11 @@ const CategoryHome = () => {
               </tr>
             </thead>
             <tbody>
-                {food.map((item,index)=>
+                {food?.map((item,index)=>
                 <tr key={index}>
                     <th>{index+1}</th>
-                    <td>{item.name}</td>
-                    <td>{item.kitchen_id.name}</td>
+                    <td>{item?.name}</td>
+                    <td>{item.kitchen.name}</td>
                     <td class="btn-group" role="group" aria-label="Basic mixed styles example">
                     <Link class="btn btn-warning" to={`/home/edit-category/${item.id}`}><i class="fa-solid fa-pen-to-square"></i></Link>
                     <button onClick={(e)=>handleDelete(item.id)} class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>

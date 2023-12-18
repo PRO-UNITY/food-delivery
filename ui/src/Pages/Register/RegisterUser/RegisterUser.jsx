@@ -26,7 +26,7 @@ const RegisterUser = () => {
            password : password,
            confirm_password : password2,
         };
-            const res = await postData(user,"/auth/user_signup")
+            const res = await postData(user,"/auth/signup")
             if(res && res.token){
                 console.log(res);
                 setAlertMessage({

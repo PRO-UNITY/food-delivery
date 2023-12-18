@@ -76,7 +76,7 @@ export const getRole = async () => {
 export const getRoleUser = async () => {
     const token = localStorage.getItem('token');
     const response = await fetch(
-        `${BASE_URL}/auth/user/profiles`,
+        `${BASE_URL}/user`,
         {
             method: 'GET',
             headers: {

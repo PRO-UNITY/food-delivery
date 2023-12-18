@@ -6,8 +6,11 @@ const FoodHome = () => {
     const [food, setFood] = useState([])
 
     useEffect(()=>{
-        getDataWithToken('/foods/all_foods').
-        then((res)=> setFood(res.data.results))
+        getDataWithToken('/foods/').
+        then((res)=> {
+          setFood(res)
+          console.log(res)
+        })
     },[])
 
     const handleDelete = (id) => {

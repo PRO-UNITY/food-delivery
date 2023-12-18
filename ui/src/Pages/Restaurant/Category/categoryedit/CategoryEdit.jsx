@@ -15,8 +15,11 @@ const EditCategory = () => {
     const [selectcategory, setSelectcategory] = useState([])
 
     useEffect(()=>{
-        getDataWithToken('/kitchen/kitchen_create').
-        then((res)=> setFood(res))
+        getDataWithToken(`/kitchen/catgeory/${id}`).
+        then((res)=> {
+            setFood(res[0])
+            console.log(res[0])
+        })
     },[])
 
     useEffect(()=>{
@@ -42,12 +45,12 @@ const EditCategory = () => {
                 <div className="card-header bg-primary text-light"><h3>Update Category</h3></div>
                 <div className="card-body">
                     <form onSubmit={handleEdit}>
-                        <input defaultValue={data.name} ref={nameRef} type="text" placeholder="name" className="form-control mb-2" />
+                        <input defaultValue={food.name} ref={nameRef} type="text" placeholder="name" className="form-control mb-2" />
                         <select onChange={(e)=>setSelectcategory(e.target.value)} value={selectcategory} ref={categoryref} name="" id="" className="form-control mb-2">
                             <option hidden value="">Select Restaurant</option>
-                            {food.map((item,index)=>
-                            <option key={item.id} value={item.id} className="form-control">{item.name}</option>
-                            )}
+                            
+                            <option key={food.id} value={food.id} className="form-control">{food.name}</option>
+                            
                             
                         </select>
                         <button type="submit" className="btn btn-primary">create</button>
