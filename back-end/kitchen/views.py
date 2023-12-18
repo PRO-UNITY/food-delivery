@@ -96,7 +96,7 @@ class KitchenCrudViews(APIView):
             'logo',
             'description',
             'user_id',
-            'is_active', 'open_time', "close_time", "deliveryman_user", 'latitude', 'longitude'])
+            'is_active', 'open_time', "close_time", 'latitude', 'longitude'])
         received_fields = set(request.data.keys())
 
         unexpected_fields = received_fields - expected_fields

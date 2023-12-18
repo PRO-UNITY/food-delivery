@@ -78,7 +78,6 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
             "description",
             "logo",
             "user",
-            "deliveryman_user",
             "is_active",
             "open_time",
             "close_time",
@@ -113,11 +112,7 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
             instance.logo = self.context.get("logo")
         else:
             instance.logo = validated_data.get("logo", instance.logo)
-        deliveries_data = validated_data.pop('deliveryman_user')
-        instance.deliveryman_user.clear()
-        for delivery_data in deliveries_data:
-            instance.deliveryman_user.add(delivery_data)
-        instance.save()
+
         return instance
 
 
