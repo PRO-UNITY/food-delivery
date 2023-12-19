@@ -18,8 +18,8 @@ from kitchen.views import (
 urlpatterns = [
     path("", KitchenCreateViews.as_view()),
     path("<int:pk>", KitchenCrudViews.as_view()),
-    path('category', CategoriesKitchenViews.as_view()),
-    path('catgeory/<int:pk>', CategoriesCrudViews.as_view()),
+    path('categories', CategoriesKitchenViews.as_view()),
+    path('<int:pk>/catgeories', CategoriesCrudViews.as_view()),
     # path("kitchen_all", AllKitchenViews.as_view()),
     # path("kitchen_foods", KitchenFoodsViews.as_view()),
     # path("kitchen_foods_crud/<int:pk>", KitchenFoodsCrudViews.as_view()),
