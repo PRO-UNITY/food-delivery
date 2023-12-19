@@ -338,10 +338,10 @@ class CategoriesKitchenViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
-    # def get(self, request):
-    #     objects_list = FoodsCategories.objects.all()
-    #     serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
-    #     return Response(serializers.data, status=status.HTTP_200_OK)
+    def get(self, request):
+        objects_list = FoodsCategories.objects.all()
+        serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
         request=CategoriesFoodsCrudSerializer,
