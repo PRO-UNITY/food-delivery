@@ -294,14 +294,24 @@ class ManagerKitchenCreateViews(APIView):
         )
 
 
+class KitchenCategoryViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request, pk):
+        objects_list = FoodsCategories.objects.filter(kitchen=pk)
+        serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+
 class CategoriesKitchenViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
-    def get(self, request):
-        objects_list = FoodsCategories.objects.all()
-        serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+    # def get(self, request):
+    #     objects_list = FoodsCategories.objects.all()
+    #     serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
+    #     return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
         request=CategoriesFoodsCrudSerializer,
@@ -334,8 +344,8 @@ class CategoriesCrudViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
-    def get(self, request, pk):
-        objects_list = FoodsCategories.objects.filter(id=pk)
+    def get(self, request, id_kitchen, pk):
+        objects_list = FoodsCategories.objects.filter(kitchen=id_kitchen, id=pk)
         serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
