@@ -266,11 +266,40 @@ class KitchenFoodsCrudViews(APIView):
 
 
 class AllKitchenFood(APIView):
+    pagination_class = StandardResultsSetPagination
+    serializer_class = AllFoodKitchenSerializers
 
-    def get(self, request, pk):
-        objects_list = Foods.objects.filter(kitchen=pk)
-        serializers = AllFoodKitchenSerializers(objects_list, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+    @property
+    def paginator(self):
+        if not hasattr(self, "_paginator"):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        else:
+            pass
+        return self._paginator
+
+    def paginate_queryset(self, queryset):
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(
+            queryset, self.request, view=self)
+
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
+
+    def get(self, request, pk, format=None, *args, **kwargs):
+        instance = Foods.objects.filter(kitchen=pk)
+        page = self.paginate_queryset(instance)
+        if page is not None:
+            serializer = self.get_paginated_response(
+                self.serializer_class(page, many=True).data
+            )
+        else:
+            serializer = self.serializer_class(instance, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
 
 class DeteileKitchenFood(APIView):
@@ -372,8 +401,8 @@ class CategoriesCrudViews(APIView):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request, id_kitchen, pk):
-        objects_list = FoodsCategories.objects.filter(kitchen=id_kitchen, id=pk)
-        serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
+        objects_list = get_object_or_404(FoodsCategories, kitchen=id_kitchen, id=pk)
+        serializers = AllCategoriesFoodsSerializer(objects_list)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(

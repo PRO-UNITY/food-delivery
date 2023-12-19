@@ -1,4 +1,5 @@
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -155,8 +156,8 @@ class FoodsCrudViews(APIView):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request, pk):
-        objects_list = Foods.objects.filter(id=pk)
-        serializers = AllFoodsSerializer(objects_list, many=True)
+        objects_list = get_object_or_404(Foods, id=pk)
+        serializers = AllFoodsSerializer(objects_list)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
