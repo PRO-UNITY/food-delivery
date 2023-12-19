@@ -20,7 +20,7 @@ const Login = () => {
                             <div className="d-flex gap-2 align-items-center">
                             <p className="p-0 m-0">have you not account</p><Link to={'/register'} className="my-2 " type="button">Register</Link>
                             </div>
-                            <button className="btn btn-warning float-end my-2">Login</button>
+                            <Link to={'/'} className="btn btn-warning float-end my-2">Login</Link>
                         </div>
                     </div>
                 </form>

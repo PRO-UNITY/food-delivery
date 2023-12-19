@@ -24,6 +24,7 @@ const Dashboard = () => {
         then((res)=>{
             const partKitchen = res.data.results.slice(0,7)
             setKitchen(partKitchen)
+            console.log(res.data.results[0].logo);
             setLoading(false);
         })
     },[])
