@@ -17,7 +17,7 @@ const Profile = () => {
                     <img style={{width:"50px", height:"50px", objectFit:"cover", borderRadius:"20%"}} src={`${user?.avatar ? BASE_URL+user.avatar : "https://plus.unsplash.com/premium_photo-1683121366070-5ceb7e007a97?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"}`} alt="" />
                 </button>       
             </div>
-            <h4>Your Balance</h4>
+            {/* <h4>Your Balance</h4>
             <div className="card-balance gap-3 mb-3">
                 <div className="balance-item bg-light w-50 rounded px-2 py-2">
                     <p className="m-0 p-0" style={{fontSize:"14px", fontWeight:400}}>Balance</p>
@@ -90,7 +90,7 @@ const Profile = () => {
                 <p>Total</p>
                 <p style={{fontWeight:"bold"}} className="mx-2"><span className="orange">$</span>202.00</p>
             </div>
-            <button className="btn btn-warning w-100 text-light">Checkout</button>
+            <button className="btn btn-warning w-100 text-light">Checkout</button> */}
         </div>
     )
 }
