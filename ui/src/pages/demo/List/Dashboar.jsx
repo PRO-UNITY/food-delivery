@@ -8,9 +8,10 @@ const Dashboard = () => {
     const [food, setFood] = useState([])
 
     useEffect(()=>{
-        getDataWithToken(`/kitchen/category`).
+        getDataWithToken(`/kitchen/categories`).
         then((res)=>{
             setCategory(res)
+            console.log(res);
         })
     },[])
 
@@ -25,7 +26,6 @@ const Dashboard = () => {
         getDataWithToken(`/foods/`).
         then((res)=>{
             setFood(res)
-            console.log(res)
         })
     },[])
 
@@ -45,7 +45,7 @@ const Dashboard = () => {
                         category.map((item,index)=>
                             <div className="category-item bg-white">
                                 <img style={{width:"50px",height:"50px", borderRadius:"10px"}} src={`${item?.kitchen.logo ? BASE_URL+item.kitchen.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
-                            <p className="name-category">{item.name}</p>
+                                <p className="name-category">{item.name}</p>
                             </div>
                         )
                     }
@@ -58,9 +58,9 @@ const Dashboard = () => {
                     {
                         kitchen.map((item, index)=>
                         <div className="category-item bg-white">
-                                <img style={{width:"50px",height:"50px", borderRadius:"10px"}} src={`${item?.logo? BASE_URL+item.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
-                        <p className="name-category">{item.name}</p>
-                    </div>
+                            <img style={{width:"50px",height:"50px", borderRadius:"10px"}} src={`${item?.logo? BASE_URL+item.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                            <p className="name-category">{item.name}</p>
+                        </div>
                         )
                     }
                 </div>
@@ -73,7 +73,7 @@ const Dashboard = () => {
                         food.map((item, index)=>
                         <div className="food-item bg-white">
                         <div className="w-100 d-flex justify-content-center">
-                        <img style={{width:"160px", height:"160px", objectFit:"contain"}} src={`${item?.food_img? BASE_URL+item.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                        <img style={{width:"160px", height:"160px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                         </div>
                         {/* <div className="mb-2">
                         <i className="fa-solid fa-star orange"></i>
