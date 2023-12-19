@@ -117,7 +117,6 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
 
 
 class AllFoodKitchenSerializers(serializers.ModelSerializer):
-    kitchen = AllKitchenSerializers(read_only=True)
 
     class Meta:
         model = Foods
