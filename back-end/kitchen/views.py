@@ -329,14 +329,18 @@ class CategoryFood(APIView):
 
     def get(self, request, pk, format=None, *args, **kwargs):
         instance = Foods.objects.filter(categories=pk)
-        page = self.paginate_queryset(instance)
+        if instance.exists():
+            category_name = instance.values_list('categories__name', flat=True).first()
+            obj = Foods.objects.filter(categories__name=category_name)
+        page = self.paginate_queryset(obj)
         if page is not None:
             serializer = self.get_paginated_response(
                 self.serializer_class(page, many=True).data
             )
         else:
-            serializer = self.serializer_class(instance, many=True)
+            serializer = self.serializer_class(obj, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+
 
 
 class DeteileKitchenFood(APIView):
