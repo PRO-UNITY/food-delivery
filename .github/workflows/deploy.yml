@@ -7,7 +7,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy React App
+      - name: Deploy back-ui
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
+
+          script: |
+            cd /var/www/food-delivery/ui-back
+            git pull
+            npm i --force
+            rm -r dist
+            npm run build
+            sudo nginx -t
+            sudo systemctl restart nginx
+            echo "Deployed Success"
+      
+      - name: Deploy ui
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}

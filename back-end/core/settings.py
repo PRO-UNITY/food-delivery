@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-p+$#(-kv%f*8b7q^9^)hp7h*jo#1k+q2hcetyws12d1u_hbdfi"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -101,7 +101,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "resipe",
+        "NAME": 'resipe',
         "USER": "postgres",
         "PASSWORD": "1",
         "HOST": "127.0.0.1",
@@ -171,9 +171,12 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
 }
 
+# access_token_lifetime_days = int(os.environ.get('ACCESS_TOKEN_LIFETIME_DAYS'))
+# refresh_token_lifetime_days = int(os.environ.get('REFRESH_TOKEN_LIFETIME_DAYS'))
+
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
-    # 'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer", "Token"),
@@ -233,7 +236,7 @@ EMAIL_HOST_USER = "istamovibrohim8@gmail.com"
 EMAIL_HOST_PASSWORD = "xuaokkmfmsaxbdyu"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_TIMEOUT = 300  # in seconds
+EMAIL_TIMEOUT = 300
 DEFAULT_FROM_EMAIL = "unipointsoftwaredevelopment@gmail.com"
 
 SOCIALACCOUNT_PROVIDERS = {
