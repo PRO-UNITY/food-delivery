@@ -94,7 +94,7 @@ class AllFoodsViews(APIView):
             error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
             return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializers = FoodsCrudSerializer(
-            data=request.data)
+            data=request.data, context = {'user': request.user})
         if serializers.is_valid(raise_exception=True):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
