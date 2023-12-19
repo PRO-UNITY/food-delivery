@@ -54,8 +54,6 @@ const DemoSidebar = ({ showSidebar }) => {
         </div>
         <div className="side-body ">
           <ul style={{listStyle:"none"}} className="px-3">
-          
-            
               <li className="nav-item">
                 <NavLink to={'/dashboard'} className="nav-link text-start px-2" isActive={() => checkActive("/dashboard")}>
                     <p className="text-start py-3"><i className="fa-solid fa-utensils mx-3"></i> Dashboard</p>
