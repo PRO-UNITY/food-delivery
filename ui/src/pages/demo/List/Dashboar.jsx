@@ -7,22 +7,23 @@ import Spinner from 'react-bootstrap/Spinner';
 
 const Dashboard = () => {
     const [loading, setLoading] = useState(true);
-    // const [category, setCategory] = useState([])
+    const [category, setCategory] = useState([])
     const [kitchen, setKitchen] = useState([])
     const [food, setFood] = useState([])
 
-    // useEffect(()=>{
-    //     getDataWithToken(`/kitchen/categories`).
-    //     then((res)=>{
-    //         setCategory(res)
-    //         setLoading(false);
-    //     })
-    // },[])
+    useEffect(()=>{
+        getDataWithToken(`/kitchen/category`).
+        then((res)=>{
+            setCategory(res)
+            setLoading(false);
+        })
+    },[])
 
     useEffect(()=>{
         getDataWithToken(`/kitchen/`).
         then((res)=>{
-            setKitchen(res.data.results)
+            const partKitchen = res.data.results.slice(0,7)
+            setKitchen(partKitchen)
             setLoading(false);
         })
     },[])
@@ -30,8 +31,8 @@ const Dashboard = () => {
     useEffect(()=>{
         getDataWithToken(`/foods/`).
         then((res)=>{
-            setFood(res.data.results)
-            console.log(res.data.results);
+            const partFood = res.data.results.slice(0,3)
+            setFood(partFood)
             setLoading(false);
         })
     },[])
@@ -59,7 +60,7 @@ const Dashboard = () => {
                     <h3 className="text-white">Det Discount Vaucher <br /> Up To 20%</h3>
                     <p className="text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. <br /> Neque reiciendis sit doloremque aliquam </p>
                 </div> */}
-                {/* <div className="d-flex justify-content-between align-items-center mb-3">
+                <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Category</h3>
                 <button className="orange text-center mb-1 btn-none">View All <i className="fa-solid fa-angle-right"></i></button>
                 </div>
@@ -74,7 +75,7 @@ const Dashboard = () => {
                             </Link>
                         )
                     }
-                </div> */}
+                </div>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Restaurants</h3>
                 <button className="orange text-center mb-1 btn-none">View All <i className="fa-solid fa-angle-right"></i></button>
@@ -98,8 +99,8 @@ const Dashboard = () => {
                 <div className="foods">
                     {
                         food.map((item, index)=>
-                        <Link key={index} className="text-dark" style={{textDecoration:"none"}}>
-                        <div className="food-item bg-white">
+                        <Link key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
+                        
                         <div className="w-100 d-flex justify-content-center">
                         <img style={{width:"160px", height:"160px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                         </div>
@@ -121,7 +122,6 @@ const Dashboard = () => {
                             <div className="d-flex justify-content-center align-items-center px-2 text-white sale-percent">15% Off</div>
                             <button style={{color:"rgb(247, 69, 69)"}} className="btn-favourite"><i className="fa-solid fa-heart"></i></button>
                         </div> */}
-                        </div> 
                         </Link>
                         )
                     }   

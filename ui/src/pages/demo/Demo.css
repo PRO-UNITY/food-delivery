@@ -131,6 +131,7 @@
 .hrms-doc-navbar {
   position: sticky;
   top: 0;
+  height: 100px;
 }
 
 .hrms-doc-navbar .searchbar{
@@ -279,7 +280,8 @@
   .hrms-doc-sidebar {
     position: absolute;
     transition: 0.5s;
-    height: 100vh;
+    height: 90vh;
+    margin-top: 85px;
     left: -100%;
     z-index: 9999 !important;
   }
