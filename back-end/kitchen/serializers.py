@@ -194,16 +194,37 @@ class FoodKitchenCrudSerializers(serializers.ModelSerializer):
 class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodsCategories
-        fields = ['id', 'name', 'kitchen', "create_at", "updated_at"]
+        fields = ['id', 'name', "create_at", "updated_at"]
 
     def create(self, validated_data):
-        create_categoires = FoodsCategories.objects.create(**validated_data)
-        create_categoires.save()
-        return create_categoires
+        user_get = self.context.get("user_id")
+        groups = user_get.groups.all()
+        if groups:
+            if str(groups[0]) == "admins":
+                create_categories = FoodsCategories.objects.create(**validated_data)
+                return create_categories
+            else:
+                raise serializers.ValidationError(
+                    {"error": "It is not possible to add information to such a user"}
+                )
+        else:
+            raise serializers.ValidationError(
+                {"error": "User does not belong to any role"}
+            )
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get("name", instance.name)
-        instance.kitchen = validated_data.get(
-            "kitchen", instance.kitchen)
-        instance.save()
-        return instance
+        user_get = self.context.get("user_id")
+        groups = user_get.groups.all()
+        if groups:
+            if str(groups[0]) == "admins":
+                instance.name = validated_data.get("name", instance.name)
+                instance.save()
+                return instance
+            else:
+                raise serializers.ValidationError(
+                    {"error": "It is not possible to add information to such a user"}
+                )
+        else:
+            raise serializers.ValidationError(
+                {"error": "User does not belong to any role"}
+            )
