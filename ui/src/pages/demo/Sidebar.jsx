@@ -78,15 +78,15 @@ const DemoSidebar = ({ showSidebar }) => {
             )
           }
           {
-                    user?.avatar ?
-                    <button className="btn-none sidebar-btns">
-                        <img style={{width:"50px", height:"50px", objectFit:"cover", borderRadius:"20%"}} src={`${user?.avatar ? BASE_URL+user.avatar : "https://plus.unsplash.com/premium_photo-1683121366070-5ceb7e007a97?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"}`} alt="" />
-                    </button> :
-                    <div className="d-flex gap-1 flex-column sidebar-btns">
-                        <Link to={'/register'} className='btn btn-outline-warning'>Sign-up</Link>
-                        <Link to={'/login'} className='btn btn-warning'>Sign-in</Link>
-                    </div>
-                }  
+            user?.avatar ?
+            <button className="btn-none sidebar-btns">
+                <img style={{width:"50px", height:"50px", objectFit:"cover", borderRadius:"20%"}} src={`${user?.avatar ? BASE_URL+user.avatar : "https://plus.unsplash.com/premium_photo-1683121366070-5ceb7e007a97?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"}`} alt="" />
+            </button> :
+            <div className="sidebar-btns">
+                <Link to={'/register'} className='btn btn-outline-warning'>Sign-up</Link>
+                <Link to={'/login'} className='btn btn-warning'>Sign-in</Link>
+            </div>
+            } 
           </ul>
         </div>
       </div>

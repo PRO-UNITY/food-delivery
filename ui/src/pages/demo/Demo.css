@@ -250,7 +250,7 @@
 }
 
 .sidebar-btns{
-  display: flex !important;
+  display: none;
 }
 
 @media only screen and (max-width: 1000px) {
@@ -281,7 +281,9 @@
     width: 100%;
   }
   .sidebar-btns{
-    display: none !important;
+    display: flex !important;
+    gap: 10px;
+    flex-direction: column;
   }
 }
 @media only screen and (max-width: 435px) {
@@ -363,6 +365,8 @@
     width: 100%;
   }
   .sidebar-btns{
-    display: none !important;
+    display: flex !important;
+    gap: 10px;
+    flex-direction: column;
   }
 }
