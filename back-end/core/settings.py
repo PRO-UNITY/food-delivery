@@ -1,9 +1,7 @@
 from pathlib import Path
 from datetime import timedelta
-from dotenv import load_dotenv
 import os
 
-load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -15,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-p+$#(-kv%f*8b7q^9^)hp7h*jo#1k+q2hcetyws12d1u_hbdfi"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -103,11 +101,11 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get('DB_NAME'),
-        "USER": os.environ.get('DB_USER'),
-        "PASSWORD": os.environ.get('DB_PASSWORD'),
-        "HOST": os.environ.get('DB_HOST'),
-        "PORT": os.environ.get('DB_PORT'),
+        "NAME": 'resipe',
+        "USER": "postgres",
+        "PASSWORD": "1",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 }
 
@@ -173,12 +171,12 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
 }
 
-access_token_lifetime_days = int(os.environ.get('ACCESS_TOKEN_LIFETIME_DAYS'))
-refresh_token_lifetime_days = int(os.environ.get('REFRESH_TOKEN_LIFETIME_DAYS'))
+# access_token_lifetime_days = int(os.environ.get('ACCESS_TOKEN_LIFETIME_DAYS'))
+# refresh_token_lifetime_days = int(os.environ.get('REFRESH_TOKEN_LIFETIME_DAYS'))
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=access_token_lifetime_days),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=refresh_token_lifetime_days),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer", "Token"),
@@ -233,18 +231,18 @@ EMAIL_BACKEND = (
     "django.core.mail.backends.smtp.EmailBackend"
 )
 
-EMAIL_HOST = os.environ.get('EMAIL_HOST')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = os.environ.get('EMAIL_PORT')
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
-EMAIL_TIMEOUT = os.environ.get('EMAIL_TIMEOUT')
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "istamovibrohim8@gmail.com"
+EMAIL_HOST_PASSWORD = "xuaokkmfmsaxbdyu"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_TIMEOUT = 300
+DEFAULT_FROM_EMAIL = "unipointsoftwaredevelopment@gmail.com"
 
 SOCIALACCOUNT_PROVIDERS = {
     "facebook": {
         "APP": {
-            "client_id": os.environ.get('SOCIAL_AUTH_FACEBOOK_KEY'),
+            "client_id": "863244545502688",
             "secret": "8d9a789122fc5f51ab48d03831412c45",
         }
     },
@@ -266,8 +264,8 @@ SIMPLE_JWT = {
     "USER_ID_CLAIM": "user_id",
 }
 
-SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get('SOCIAL_AUTH_FACEBOOK_KEY')
-SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get('SOCIAL_AUTH_FACEBOOK_SECRET')
-SOCIAL_AUTH_FACEBOOK_APP_NAME = os.environ.get('SOCIAL_AUTH_FACEBOOK_APP_NAME')
+SOCIAL_AUTH_FACEBOOK_KEY = "863244545502688"
+SOCIAL_AUTH_FACEBOOK_SECRET = "8d9a789122fc5f51ab48d03831412c45"
+SOCIAL_AUTH_FACEBOOK_APP_NAME = "facebook"
 
 FORCE_SCRIPT_NAME = "/food-delivery"
