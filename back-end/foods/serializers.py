@@ -1,26 +1,26 @@
 from rest_framework import serializers
 from authen.models import CustomUser, KitchenUser
-from kitchen.models import KitchenFoods
 from foods.models import FoodsCategories, Foods
 
 
 class UserInformationSerializers(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = [
-            "id",
-            "username",
-            "first_name",
-            "last_name",
-            "email"
-        ]
+        fields = ["id", "username", "first_name", "last_name", "email"]
 
 
 class AllKitchenSerializers(serializers.ModelSerializer):
     class Meta:
         model = KitchenUser
         fields = [
-            "id", "name", "description", "logo", "user_id", "is_active", "create_at", "updated_at"
+            "id",
+            "name",
+            "description",
+            "logo",
+            "user_id",
+            "is_active",
+            "create_at",
+            "updated_at",
         ]
 
 
@@ -29,13 +29,13 @@ class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FoodsCategories
-        fields = ['id', 'name', 'kitchen', "create_at", "updated_at"]
+        fields = ["id", "name", "kitchen", "create_at", "updated_at"]
 
 
 class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodsCategories
-        fields = ['id', 'name', 'kitchen', "create_at", "updated_at"]
+        fields = ["id", "name", "kitchen", "create_at", "updated_at"]
 
     def create(self, validated_data):
         create_categoires = FoodsCategories.objects.create(**validated_data)
@@ -44,8 +44,7 @@ class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get("name", instance.name)
-        instance.kitchen = validated_data.get(
-            "kitchen", instance.kitchen_id)
+        instance.kitchen = validated_data.get("kitchen", instance.kitchen_id)
         instance.save()
         return instance
 
@@ -56,16 +55,16 @@ class AllFoodsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Foods
         fields = [
-            'id',
-            'name',
-            'food_img',
-            'description',
-            'price',
-            'kitchen',
-            'categories',
+            "id",
+            "name",
+            "food_img",
+            "description",
+            "price",
+            "kitchen",
+            "categories",
             "create_at",
-            "updated_at"
-            ]
+            "updated_at",
+        ]
 
 
 class FoodsCrudSerializer(serializers.ModelSerializer):
@@ -80,18 +79,23 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
     class Meta:
         model = Foods
         fields = [
-            'id',
-            'name',
-            'food_img',
-            'description',
-            'price',
-            'kitchen',
-            'categories',
+            "id",
+            "name",
+            "food_img",
+            "description",
+            "price",
+            "kitchen",
+            "categories",
             "create_at",
-            "updated_at"
-            ]
+            "updated_at",
+        ]
 
     def create(self, validated_data):
+        user_get = self.context.get("user")
+        if str(user_get.groups.all()[0]) == "users":
+            raise serializers.ValidationError(
+                {"error": "It is not possible to add information to such a user"}
+            )
         create_foods = Foods.objects.create(**validated_data)
         create_foods.save()
         return create_foods
@@ -100,10 +104,8 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get("name", instance.name)
         instance.description = validated_data.get("description", instance.description)
         instance.price = validated_data.get("price", instance.price)
-        instance.kitchen = validated_data.get(
-            "kitchen", instance.kitchen)
-        instance.categories = validated_data.get(
-            "categories", instance.categories)
+        instance.kitchen = validated_data.get("kitchen", instance.kitchen)
+        instance.categories = validated_data.get("categories", instance.categories)
         if instance.food_img == None:
             instance.food_img = self.context.get("food_img")
         else:

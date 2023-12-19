@@ -1,6 +1,7 @@
 """ Django DRF Packaging """
 import random
 from drf_spectacular.utils import extend_schema
+from django.shortcuts import get_object_or_404
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import (
     smart_str,
@@ -31,9 +32,7 @@ from authen.serializers.authen_serializers import (
     ResetPasswordSerializer,
     PasswordResetCompleteSerializer,
 )
-from authen.utils import (
-    Util
-)
+from authen.utils import Util
 
 
 # JWT token refresh
@@ -54,16 +53,27 @@ class UserRegisterViews(APIView):
         responses={201: UserSignUpSerializers},
     )
     def post(self, request):
-        expected_fields = set([
-            'username',
-            'password',
-            'confirm_password', 'first_name', 'last_name', 'email', 'role'])
+        expected_fields = set(
+            [
+                "username",
+                "password",
+                "confirm_password",
+                "first_name",
+                "last_name",
+                "email",
+                "role",
+            ]
+        )
         received_fields = set(request.data.keys())
 
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:
-            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
+            error_message = (
+                f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            )
+            return Response(
+                {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
+            )
         serializer = UserSignUpSerializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
             instanse = serializer.save()
@@ -98,13 +108,17 @@ class UserSigInViews(APIView):
         responses={201: UserSigInInSerializers},
     )
     def post(self, request):
-        expected_fields = set(['username', 'password'])
+        expected_fields = set(["username", "password"])
         received_fields = set(request.data.keys())
 
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:
-            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
+            error_message = (
+                f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            )
+            return Response(
+                {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
+            )
         serializer = UserSigInInSerializers(data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             username = request.data["username"]
@@ -118,12 +132,7 @@ class UserSigInViews(APIView):
                 )
             else:
                 return Response(
-                    {
-                        "error": [
-                                "This user is not available to the system"
-                            ]
-
-                    },
+                    {"error": ["This user is not available to the system"]},
                     status=status.HTTP_404_NOT_FOUND,
                 )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -250,13 +259,17 @@ class LogoutAPIView(APIView):
         responses={201: LogoutSerializer},
     )
     def post(self, request):
-        expected_fields = set(['refresh'])
+        expected_fields = set(["refresh"])
         received_fields = set(request.data.keys())
 
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:
-            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
+            error_message = (
+                f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+            )
+            return Response(
+                {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
+            )
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -295,7 +308,9 @@ class RequestPasswordRestEmail(generics.GenericAPIView):
                 {"success": "We have sent you to rest your password"},
                 status=status.HTTP_200_OK,
             )
-        return Response({"error": "This email is not found.."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {"error": "This email is not found.."}, status=status.HTTP_404_NOT_FOUND
+        )
 
 
 class PasswordTokenCheckView(generics.GenericAPIView):
