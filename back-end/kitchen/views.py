@@ -24,11 +24,40 @@ from kitchen.serializers import (
 class KitchenCreateViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+    serializer_class = AllKitchenSerializers
 
-    def get(self, request):
-        objects_list = KitchenUser.objects.all()
-        serializers = AllKitchenSerializers(objects_list, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+    @property
+    def paginator(self):
+        if not hasattr(self, "_paginator"):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        else:
+            pass
+        return self._paginator
+
+    def paginate_queryset(self, queryset):
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(
+            queryset, self.request, view=self)
+
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
+
+    def get(self, request, format=None, *args, **kwargs):
+        instance = KitchenUser.objects.all()
+        page = self.paginate_queryset(instance)
+        if page is not None:
+            serializer = self.get_paginated_response(
+                self.serializer_class(page, many=True).data
+            )
+        else:
+            serializer = self.serializer_class(instance, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
         request=KitchenCrudSerializers,
@@ -240,10 +269,40 @@ class KitchenFoodsCrudViews(APIView):
 
 
 class AllKitchenFood(APIView):
-    def get(self, request, pk):
-        objects_list = Foods.objects.filter(kitchen=pk)
-        serializers = AllFoodKitchenSerializers(objects_list, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+    pagination_class = StandardResultsSetPagination
+    serializer_class = AllKitchenSerializers
+
+    @property
+    def paginator(self):
+        if not hasattr(self, "_paginator"):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        else:
+            pass
+        return self._paginator
+
+    def paginate_queryset(self, queryset):
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(
+            queryset, self.request, view=self)
+
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
+
+    def get(self, request, format=None, *args, **kwargs):
+        instance = Foods.objects.all()
+        page = self.paginate_queryset(instance)
+        if page is not None:
+            serializer = self.get_paginated_response(
+                self.serializer_class(page, many=True).data
+            )
+        else:
+            serializer = self.serializer_class(instance, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
 
 class DeteileKitchenFood(APIView):

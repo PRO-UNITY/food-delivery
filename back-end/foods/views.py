@@ -95,8 +95,7 @@ class AllFoodsViews(APIView):
         return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
-        instance = Foods.objects.filter(
-            kitchen_id__user_id=request.user.id)
+        instance = Foods.objects.all()
         page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(
