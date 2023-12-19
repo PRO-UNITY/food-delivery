@@ -20,7 +20,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from authen.renderers import UserRenderers
-from authen.models import CustomUser, KitchenUser
+from authen.models import CustomUser
 from authen.serializers.authen_serializers import (
     UserSignUpSerializers,
     KitchenSignUpSerializers,
