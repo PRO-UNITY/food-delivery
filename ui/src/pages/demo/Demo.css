@@ -29,7 +29,7 @@
 
 .demo-navbar{
   width: 950px !important;
-  height: 100px;
+  max-height: 100px !important;
 }
 .hrms-doc-asaide {
   max-width: 230px;
@@ -287,7 +287,7 @@
   }
   .demo-navbar{
     width: 100% !important;
-    height: 130px;
+    height: 100px !important;
     z-index: 9999;
 
   }
@@ -296,7 +296,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    justify-content: space-between;
+    justify-content: start;
   }
   .category-item{
     width: 80px;
