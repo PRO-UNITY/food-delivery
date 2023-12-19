@@ -25,11 +25,10 @@ class AllKitchenSerializers(serializers.ModelSerializer):
 
 
 class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
-    kitchen = AllKitchenSerializers(read_only=True)
 
     class Meta:
         model = FoodsCategories
-        fields = ["id", "name", "kitchen", "create_at", "updated_at"]
+        fields = ["id", "name", "create_at", "updated_at"]
 
 
 class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
