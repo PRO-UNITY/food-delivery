@@ -25,6 +25,7 @@ const Dashboard = () => {
         getDataWithToken(`/foods/`).
         then((res)=>{
             setFood(res)
+            console.log(res)
         })
     },[])
 

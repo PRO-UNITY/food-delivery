@@ -57,7 +57,6 @@ export const putDataWithounAny = async (url) => {
 export const getDataWithToken = async (url) => {
     const response = await fetch(BASE_URL + url, {
         method: 'GET',
-        headers:getHeaderWithToken(localStorage.getItem('token'))
     });
     const data = await response.json();
     return data;
