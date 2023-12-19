@@ -1,2 +1,5 @@
 export { default as Dashboard } from './demo/List/Dashboar' 
 export { default as FoodOrder } from './demo/List/FoodOrder' 
+export { default as Favourite } from './demo/List/Favourite' 
+export { default as orderHistory } from './demo/List/OrderHistory' 
+export { default as Settings } from './demo/List/Settings' 

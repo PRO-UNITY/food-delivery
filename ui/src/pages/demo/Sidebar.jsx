@@ -40,7 +40,6 @@ const Sidenavs = [
     }
 ];
 
-// eslint-disable-next-line react/prop-types
 const DemoSidebar = ({ showSidebar }) => {
 
   const checkActive = (match, location) => {

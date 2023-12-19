@@ -9,7 +9,7 @@ const DemoLayout = ({ children }) => {
   return (
     <div className="bg-light vh-100 overflow-auto d-flex ">
         <DemoSidebar showSidebar={showSidebar} setshowSidebar={setshowSidebar} />
-        <div className="d-flex flex-column">
+        <div className="d-flex w-100 flex-column">
             <DemoNavbar setshowSidebar={setshowSidebar} />
             <main className="">{children}</main>
         </div>
