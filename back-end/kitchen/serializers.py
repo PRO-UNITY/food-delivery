@@ -120,7 +120,13 @@ class AllFoodKitchenSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Foods
-        fields = '__all__'
+        fields = [
+            'id',
+            'name',
+            'description',
+            'food_img',
+            'price',
+            'kitchen', 'categories', 'create_at', 'updated_at']
 
 
 class DeliveryChickenSerializers(serializers.ModelSerializer):
