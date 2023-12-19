@@ -6,57 +6,20 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
 const Dashboard = () => {
-    const [loading, setLoading] = useState(true);
-    const [category, setCategory] = useState([])
-    const [kitchen, setKitchen] = useState([])
+
     const [food, setFood] = useState([])
-
-    useEffect(()=>{
-        getDataWithToken(`/kitchen/category`).
-        then((res)=>{
-            setCategory(res)
-            setLoading(false);
-        })
-    },[])
-
-    useEffect(()=>{
-        getDataWithToken(`/kitchen/`).
-        then((res)=>{
-            const partKitchen = res.data.results.slice(0,7)
-            setKitchen(partKitchen)
-            setLoading(false);
-        })
-    },[])
 
     useEffect(()=>{
         getDataWithToken(`/foods/`).
         then((res)=>{
             const partFood = res.data.results.slice(0,3)
             setFood(partFood)
-            setLoading(false);
         })
     },[])
 
-    if (loading) {
-        return (
-            <div className="container d-flex justify-content-center align-items-center py-5">
-                <Button variant="warning" disabled>
-                    <Spinner
-                    as="span"
-                    animation="grow"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                    />
-                    Loading...
-                </Button>
-            </div>
-        )
-    }
     return ( 
         <DemoLayout>
             <div className="w-100 body-main  p-5">
-                
                 <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Favourite Foods</h3>
                 </div>
