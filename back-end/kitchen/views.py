@@ -111,9 +111,7 @@ class KitchenCrudViews(APIView):
         # kitchen = KitchenUser.objects.get(id=pk)
         # like = KitchenLike.objects.filter(id_kitchen=kitchen).count()
         serializers = AllKitchenSerializers(objects_list, many=True)
-        return Response(
-            {
-                'kitchen': serializers.data}, status=status.HTTP_200_OK)
+        return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
         request=KitchenCrudSerializers,
