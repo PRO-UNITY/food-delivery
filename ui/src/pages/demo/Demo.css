@@ -245,6 +245,14 @@
   padding: 10px;
 }
 
+.card{
+  width: 50%;
+}
+
+.sidebar-btns{
+  display: flex !important;
+}
+
 @media only screen and (max-width: 1000px) {
   .hrms-doc-navbar .fa-bars {
     display: block;
@@ -268,6 +276,12 @@
   }
   .profile{
     display: none;
+  }
+  .card{
+    width: 100%;
+  }
+  .sidebar-btns{
+    display: none !important;
   }
 }
 @media only screen and (max-width: 435px) {
@@ -344,5 +358,11 @@
     align-items: center;
     padding: 15px;
     color: white;
+  }
+  .card{
+    width: 100%;
+  }
+  .sidebar-btns{
+    display: none !important;
   }
 }
