@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom"
-import { Dashboard } from "./pages"
+import { Dashboard, FoodOrder } from "./pages"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
       <Routes>
         <Route path="/" element={ <Dashboard/> } />
         <Route path="/dashboard" element={ <Dashboard/> } />
-        <Route path="/food-order" element={ <Dashboard/> } />
+        <Route path="/food-order" element={ <FoodOrder/> } />
       </Routes>
     </>
   )
