@@ -1,4 +1,4 @@
-
+import { Link } from "react-router-dom"
 
 const Register = () => {
     return (
@@ -39,8 +39,13 @@ const Register = () => {
                             <input placeholder="********" className="w-100 form-control" type="text" />
                             </div>
                         </div>
-                        <button className="btn btn-warning float-end my-2">register</button>
-                    </div>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <div className="d-flex gap-2 align-items-center">
+                            <p className="p-0 m-0">have you an account</p><Link to={'/login'} className="my-2 " type="button">Login</Link>
+                            </div>
+                            <button className="btn btn-warning float-end my-2">Register</button>
+                        </div>                    
+                        </div>
                 </form>
             </div>
         </div>

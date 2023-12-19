@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 
 
 const Login = () => {
@@ -15,7 +16,12 @@ const Login = () => {
                             <label>Password</label>
                             <input type="password" placeholder="********" className="mb-2 form-control" />
                         </form>
-                        <button className="btn btn-warning float-end my-2">register</button>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <div className="d-flex gap-2 align-items-center">
+                            <p className="p-0 m-0">have you not account</p><Link to={'/register'} className="my-2 " type="button">Register</Link>
+                            </div>
+                            <button className="btn btn-warning float-end my-2">Login</button>
+                        </div>
                     </div>
                 </form>
             </div>

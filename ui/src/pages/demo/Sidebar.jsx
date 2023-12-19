@@ -5,20 +5,6 @@ import { getDataWithToken, BASE_URL } from '../../functions/function';
 
 const Sidenavs = [
     {
-      id: "users",
-      name: "Dashboard",
-      path: "/dashboard",
-      active: "/dashboard",
-      icon : "fa-solid fa-utensils"
-    },
-    {
-      id: "kitchen",
-      name: "Food order",
-      path: "/food-order",
-      active: "/food-order",
-      icon: "fa-solid fa-truck",
-    },
-    {
       id: "foods",
       name: "Favourite",
       path: "/favourite",
@@ -68,15 +54,33 @@ const DemoSidebar = ({ showSidebar }) => {
         </div>
         <div className="side-body ">
           <ul style={{listStyle:"none"}} className="px-3">
-          {
-            Sidenavs.map(item=>
-              <li className="nav-item" key={item.id}>
-                <NavLink to={item.path} className="nav-link text-start px-2" isActive={() => checkActive(item.active)}>
-                    <p className="text-start py-3"><i className={`${item.icon} mx-3 `}></i> {item.name}</p>
+          
+            
+              <li className="nav-item">
+                <NavLink to={'/dashboard'} className="nav-link text-start px-2" isActive={() => checkActive("/dashboard")}>
+                    <p className="text-start py-3"><i className="fa-solid fa-utensils mx-3"></i> Dashboard</p>
                 </NavLink>
               </li>  
-            )
-          }
+              <li className="nav-item">
+                <NavLink to={localStorage.getItem('token')?"/food-order":"/login"} className="nav-link text-start px-2" isActive={() => checkActive("/food-order")}>
+                    <p className="text-start py-3"><i className="fa-solid fa-truck mx-3"></i> Food Order</p>
+                </NavLink>
+              </li>  
+              <li className="nav-item">
+                <NavLink to={localStorage.getItem('token')?"/favourite":"/login"} className="nav-link text-start px-2" isActive={() => checkActive("/favourite")}>
+                    <p className="text-start py-3"><i className="fa-solid fa-heart mx-3"></i> Favourite</p>
+                </NavLink>
+              </li>  
+              <li className="nav-item">
+                <NavLink to={localStorage.getItem('token')?"/favourite":"/login"} className="nav-link text-start px-2" isActive={() => checkActive("/order-history")}>
+                    <p className="text-start py-3"><i className="fa-solid fa-clock-rotate-left mx-3"></i> Order History</p>
+                </NavLink>
+              </li>  
+              <li className="nav-item">
+                <NavLink to={localStorage.getItem('token')?"/favourite":"/login"} className="nav-link text-start px-2" isActive={() => checkActive("/settings")}>
+                    <p className="text-start py-3"><i className="fa-solid fa-gears mx-3"></i> Settings</p>
+                </NavLink>
+              </li>  
           {
             user?.avatar ?
             <button className="btn-none sidebar-btns">
