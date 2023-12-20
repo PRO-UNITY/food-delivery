@@ -24,7 +24,6 @@ const Dashboard = () => {
         then((res)=>{
             const partKitchen = res.data.results.slice(0,7)
             setKitchen(partKitchen)
-            console.log(res.data.results[0].logo);
             setLoading(false);
         })
     },[])
@@ -53,7 +52,7 @@ const Dashboard = () => {
                     />
                     Loading...
                 </Button>
-            </div>:
+                </div>:
             <div className="w-100 body-main  p-5">
             {/* <div className="vaucher d-flex flex-column justify-content-center align-items-start p-4 mb-4">
                 <h3 className="text-white">Det Discount Vaucher <br /> Up To 20%</h3>
@@ -66,7 +65,7 @@ const Dashboard = () => {
             <div className="categories w-100 mb-3">
                 {
                     category.map((item,index)=>
-                        <Link to={'/'} key={index} className="text-dark" style={{textDecoration:"none"}}>
+                        <Link to={`/category-details/${item.id}`} key={index} className="text-dark" style={{textDecoration:"none"}}>
                         <div className="category-item bg-white">
                         <i style={{fontSize:"35px"}} className="fa-solid fa-bowl-food orange"></i>
                             <p className="name-category">{item?.name}</p>
@@ -82,7 +81,7 @@ const Dashboard = () => {
             <div className="categories w-100 mb-3">
                 {
                     kitchen.map((item, index)=>
-                    <Link key={index} to={'/'} className="text-dark" style={{textDecoration:"none"}}>
+                    <Link key={index} to={`/kitchen-details/${item.id}`} className="text-dark" style={{textDecoration:"none"}}>
                     <div className="category-item bg-white">
                         <img style={{width:"50px",height:"50px", borderRadius:"10px"}} src={`${item?.logo? BASE_URL+item?.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                         <p className="name-category">{item?.name}</p>

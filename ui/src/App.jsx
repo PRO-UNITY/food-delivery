@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom"
-import { Dashboard, Favourite, FoodOrder, Login, Register, Settings } from "./pages"
+import { CategoryDetails, Dashboard, Favourite, FoodOrder, KitchenDetails, Login, Register, Settings } from "./pages"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OrderHistory from "./pages/demo/List/OrderHistory";
 
@@ -16,6 +16,8 @@ function App() {
         <Route path="/settings" element={ <Settings/> } />
         <Route path="/register" element={ <Register/> } />
         <Route path="/login" element={ <Login/> } />
+        <Route path="/category-details/:id" element={ <CategoryDetails/> } />
+        <Route path="/kitchen-details/:id" element={ <KitchenDetails/> } />
       </Routes>
     </>
   )
