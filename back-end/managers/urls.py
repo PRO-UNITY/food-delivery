@@ -1,12 +1,12 @@
 from django.urls import path
 from managers.views import (
     ManagerKitchenViews,
-    ManagerUser,
+    # ManagerUser,
     ManagerKitchenCrudViews,
 )
 
 urlpatterns = [
-    # path('', ManagerKitchenViews.as_view()),
+    path('managers', ManagerKitchenViews.as_view()),
+    path('manager/<int:pk>', ManagerKitchenCrudViews.as_view()),
     # path('', ManagerUser.as_view()),
-    path('<int:pk>', ManagerKitchenCrudViews.as_view()),
 ]

@@ -36,6 +36,16 @@ class OrderSerializers(serializers.ModelSerializer):
         ]
 
 
+class OrderFoodsSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = Delivery
+        fields = [
+            "id",
+            "foods",
+        ]
+
+
 class SendOrderSerializers(serializers.ModelSerializer):
 
     class Meta:

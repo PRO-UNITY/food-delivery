@@ -108,24 +108,6 @@ class ManagerKitchenViews(APIView):
             )
 
 
-class ManagerUser(APIView):
-    """Kitchen all manager"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
-    )
-    def get(self, request):
-        queryset = CustomUser.objects.filter(
-            groups__name__in=["manager"], user_id=request.user.id
-        )
-        serializers = UserInformationSerializers(queryset, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-
 class ManagerKitchenCrudViews(APIView):
     """Adds a manager for the kitchen"""
 
@@ -187,3 +169,21 @@ class ManagerKitchenCrudViews(APIView):
                 {"error": "The user is not logged in"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
+
+
+# class ManagerUser(APIView):
+#     """Kitchen all manager"""
+
+#     render_classes = [UserRenderers]
+#     permission = [IsAuthenticated]
+
+#     @extend_schema(
+#         request=UserInformationSerializers,
+#         responses={201: UserInformationSerializers},
+#     )
+#     def get(self, request):
+#         queryset = CustomUser.objects.filter(
+#             groups__name__in=["manager"], user_id=request.user.id
+#         )
+#         serializers = UserInformationSerializers(queryset, many=True)
+#         return Response(serializers.data, status=status.HTTP_200_OK)

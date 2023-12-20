@@ -5,6 +5,6 @@ from order.views import (
 )
 
 urlpatterns = [
-    path('', SendViews.as_view()),
-    path('<int:pk>', OrderCrudViews.as_view()),
+    path('orders', SendViews.as_view()),
+    path('order/<int:pk>/foods', OrderCrudViews.as_view()),
 ]
