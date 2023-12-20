@@ -3,10 +3,12 @@ from managers.views import (
     ManagerKitchenViews,
     # ManagerUser,
     ManagerKitchenCrudViews,
+    ManagerKitchensViews,
 )
 
 urlpatterns = [
     path('managers', ManagerKitchenViews.as_view()),
     path('manager/<int:pk>', ManagerKitchenCrudViews.as_view()),
+    path('manager/restaurants', ManagerKitchensViews.as_view()),
     # path('', ManagerUser.as_view()),
 ]
