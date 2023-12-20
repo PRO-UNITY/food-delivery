@@ -4,7 +4,6 @@ from authen.models import KitchenUser
 
 class FoodsCategories(models.Model):
     name = models.CharField(max_length=250)
-    kitchen = models.ForeignKey(KitchenUser, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

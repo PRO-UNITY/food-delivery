@@ -329,16 +329,13 @@ class CategoryFood(APIView):
 
     def get(self, request, pk, format=None, *args, **kwargs):
         instance = Foods.objects.filter(categories=pk)
-        if instance.exists():
-            category_name = instance.values_list('categories__name', flat=True).first()
-            obj = Foods.objects.filter(categories__name=category_name)
-        page = self.paginate_queryset(obj)
+        page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(
                 self.serializer_class(page, many=True).data
             )
         else:
-            serializer = self.serializer_class(obj, many=True)
+            serializer = self.serializer_class(instance, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
 
@@ -396,7 +393,7 @@ class KitchenCategoryViews(APIView):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request, pk):
-        objects_list = FoodsCategories.objects.filter(kitchen=pk)
+        objects_list = Foods.objects.filter(categories=pk)
         serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
@@ -441,8 +438,8 @@ class CategoriesCrudViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
-    def get(self, request, id_kitchen, pk):
-        objects_list = get_object_or_404(FoodsCategories, kitchen=id_kitchen, id=pk)
+    def get(self, request, pk):
+        objects_list = get_object_or_404(FoodsCategories, id=pk)
         serializers = AllCategoriesFoodsSerializer(objects_list)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
@@ -453,7 +450,6 @@ class CategoriesCrudViews(APIView):
     def put(self, request, pk):
         expected_fields = set([
             'name',
-            'kitchen',
             'create_at',
             'updated_at'])
         received_fields = set(request.data.keys())
@@ -463,6 +459,9 @@ class CategoriesCrudViews(APIView):
             error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
             return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializers = CategoriesFoodsCrudSerializer(
+            context={
+                "user_id": request.user,
+            },
             instance=FoodsCategories.objects.filter(
                 id=pk)[0],
             data=request.data,
@@ -476,7 +475,14 @@ class CategoriesCrudViews(APIView):
         )
 
     def delete(self, request, pk):
-        objects_get = FoodsCategories.objects.get(id=pk)
-        objects_get.delete()
-        return Response(
-            {"message": "Delete success"}, status=status.HTTP_200_OK)
+        user_get = request.user
+        groups = user_get.groups.all()
+        if groups:
+            if str(groups[0]) == "admins":
+                objects_get = FoodsCategories.objects.get(id=pk)
+                objects_get.delete()
+                return Response(
+                    {"message": "Delete success"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "It is not possible to add information to such a user"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "User does not belong to any role"}, status=status.HTTP_401_UNAUTHORIZED)
