@@ -339,7 +339,6 @@ class CategoryFood(APIView):
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
 
-
 class DeteileKitchenFood(APIView):
     def get(self, request, pk):
         objects_list = KitchenFoods.objects.filter(user_id=pk)
