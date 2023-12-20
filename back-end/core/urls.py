@@ -45,9 +45,8 @@ urlpatterns = [
     path('foods/', include('foods.urls')),
     path('apps/', include('apps.urls')),
     path('delivery/', include('delivery.urls')),
-    path('managers', ManagerKitchenViews.as_view()),
-    path('manager/', include('managers.urls')),
-    path('orders/', include('order.urls')),
+    path('', include('managers.urls')),
+    path('', include('order.urls')),
     path('deliveryman/', include('deliveryman.urls')),
 ]
 

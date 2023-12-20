@@ -116,3 +116,22 @@ class ManagerSignUpSerializers(serializers.ModelSerializer):
         )
         instance.save()
         return instance
+
+
+class AllKitchenSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = KitchenUser
+        fields = [
+            "id",
+            "name",
+            "description",
+            "logo",
+            "is_active",
+            "open_time",
+            "close_time",
+            "latitude",
+            "longitude",
+            "create_at",
+            "updated_at",
+        ]

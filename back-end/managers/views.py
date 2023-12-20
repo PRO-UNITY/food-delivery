@@ -8,9 +8,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from authen.renderers import UserRenderers
 from authen.pagination import StandardResultsSetPagination
-
-from authen.models import CustomUser
-from managers.serializers import UserInformationSerializers, ManagerSignUpSerializers
+from authen.models import CustomUser, KitchenUser
+from managers.serializers import (
+    UserInformationSerializers,
+    ManagerSignUpSerializers,
+    AllKitchenSerializers
+    )
 
 
 class ManagerKitchenViews(APIView):
@@ -108,24 +111,6 @@ class ManagerKitchenViews(APIView):
             )
 
 
-class ManagerUser(APIView):
-    """Kitchen all manager"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
-    )
-    def get(self, request):
-        queryset = CustomUser.objects.filter(
-            groups__name__in=["manager"], user_id=request.user.id
-        )
-        serializers = UserInformationSerializers(queryset, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-
 class ManagerKitchenCrudViews(APIView):
     """Adds a manager for the kitchen"""
 
@@ -187,3 +172,54 @@ class ManagerKitchenCrudViews(APIView):
                 {"error": "The user is not logged in"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
+
+
+class ManagerKitchensViews(APIView):
+    """Adds a manager for the kitchen"""
+
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    @extend_schema(
+        request=UserInformationSerializers,
+        responses={201: UserInformationSerializers},
+    )
+    def get(self, request):
+        if request.user.is_authenticated:
+            user_get = request.user
+            groups = user_get.groups.all()
+            if groups:
+                if str(groups[0]) == "manager":
+                    queryset = KitchenUser.objects.filter(deliveryman_user=request.user)
+                    serializers = AllKitchenSerializers(queryset, many=True)
+                    return Response(serializers.data, status=status.HTTP_200_OK)
+                else:
+                    return Response(
+                        {
+                            "error": "This user does not have permission"
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+        else:
+            return Response(
+                {"error": "The user is not logged in"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+
+# class ManagerUser(APIView):
+#     """Kitchen all manager"""
+
+#     render_classes = [UserRenderers]
+#     permission = [IsAuthenticated]
+
+#     @extend_schema(
+#         request=UserInformationSerializers,
+#         responses={201: UserInformationSerializers},
+#     )
+#     def get(self, request):
+#         queryset = CustomUser.objects.filter(
+#             groups__name__in=["manager"], user_id=request.user.id
+#         )
+#         serializers = UserInformationSerializers(queryset, many=True)
+#         return Response(serializers.data, status=status.HTTP_200_OK)
