@@ -5,9 +5,11 @@ import { Link } from "react-router-dom"
 
 
 const OrderHistory = () => {
+    const [search, setSearch] = useState('')
+
 
     return ( 
-        <DemoLayout>
+        <DemoLayout setSearch={setSearch}>
             <div className=" body-main w-100 p-5">
                 <h4>Order History</h4>
                 <table className="table w-100">

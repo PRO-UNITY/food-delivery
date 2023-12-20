@@ -6,6 +6,8 @@ import { Link } from "react-router-dom"
 // import Spinner from 'react-bootstrap/Spinner';
 
 const FoodOrder = () => {
+    const [search, setSearch] = useState('')
+
     // const [loading, setLoading] = useState(true);
 
 
@@ -26,7 +28,7 @@ const FoodOrder = () => {
     //     )
     // }
     return ( 
-        <DemoLayout>
+        <DemoLayout setSearch={setSearch}>
             <div className=" body-main w-100 p-5">
                 <h4>Food Order</h4>
                 <table className="table w-100">

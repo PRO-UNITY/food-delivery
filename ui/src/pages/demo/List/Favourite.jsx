@@ -8,6 +8,8 @@ import Spinner from 'react-bootstrap/Spinner';
 const Dashboard = () => {
 
     const [food, setFood] = useState([])
+    const [search, setSearch] = useState('')
+
 
     useEffect(()=>{
         getDataWithToken(`/foods/`).
@@ -18,7 +20,7 @@ const Dashboard = () => {
     },[])
 
     return ( 
-        <DemoLayout>
+        <DemoLayout setSearch={setSearch}>
             <div className="w-100 body-main  p-5">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Favourite Foods</h3>

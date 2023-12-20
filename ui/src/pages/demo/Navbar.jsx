@@ -1,6 +1,10 @@
 import './Demo.css'
+import { useState } from 'react';
 
-const DemoNavbar = ({ setshowSidebar }) => {
+const DemoNavbar = ({ setshowSidebar, setSearch }) => {
+  const [inputVal, setInputVal] = useState('')
+  setSearch(inputVal)
+
     return (
       <div className="hrms-doc-navbar demo-navbar d-flex flex-column flex-md-row gap-3 align-items-center bg-white  justify-content-between px-md-5 py-3">
         <i
@@ -9,7 +13,7 @@ const DemoNavbar = ({ setshowSidebar }) => {
         ></i>
         <div className="searchbar w-50 bg-light mx-auto py-1 px-2 rounded">
           <i className="fa-solid fa-magnifying-glass orange"></i>
-          <input type="text" placeholder="What do you want eat today" className="px-2 py-1 w-75 bg-light" />
+          <input onChange={(e)=>setInputVal(e.target.value)} type="text" placeholder="What do you want eat today" className="px-2 py-1 w-75 bg-light" />
         </div>
         
       </div>

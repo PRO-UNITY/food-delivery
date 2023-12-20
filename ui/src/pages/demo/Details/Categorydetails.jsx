@@ -3,23 +3,47 @@ import DemoLayout from "../../../Layout/Demoproject"
 import { getDataWithToken, BASE_URL } from "../../../functions/function"
 import { useParams } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
+import Pagination from 'react-bootstrap/Pagination';
 import Spinner from 'react-bootstrap/Spinner';
 
 const CategoryDetails = () => {
     const [foods, setFoods] = useState([])
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [search, setSearch] = useState('')
     const {id} = useParams()
     
     useEffect(()=>{
-        getDataWithToken(`/kitchen/${id}/foods`).
+        getDataWithToken(`/foods/category/${id}?page=${currentPage}`).
         then((res)=>{
-            console.log(res.data.results)
             setFoods(res.data.results)
+            const residual = res.data.count%10
+            const pages = (res.data.count-residual)/10
+            setTotalPages(pages%2==0 && pages ===1?pages:pages+1);
             setLoading(false);
         })
-    },[])
+    },[id, currentPage])
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage <= 1) {
+            setCurrentPage(currentPage + 1);
+        }
+       
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
     return (
-        <DemoLayout>
+        <DemoLayout setSearch={setSearch}>
             {
                 loading?
                 <div className="container body-main d-flex justify-content-center align-items-center py-5">
@@ -35,7 +59,8 @@ const CategoryDetails = () => {
                 </Button>
                 </div>:
                 <div className="body-main w-100 p-5">
-            <div className="foods">
+                
+                <div className="foods">
                 {
                     foods.map((item,index)=>
                     <div key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
@@ -64,8 +89,23 @@ const CategoryDetails = () => {
                     </div>
                     )
                 }
-            </div>
-            </div>
+                </div>
+                <div className="w-100 d-flex justify-content-center">
+                    <Pagination className="mt-4">
+                        <Pagination.Prev onClick={handlePrevPage} disabled={currentPage === 1} />
+                        {[...Array(totalPages).keys()].map((page) => (
+                            <Pagination.Item
+                                key={page + 1}
+                                active={page + 1 === currentPage}
+                                onClick={() => handlePageChange(page + 1)}
+                            >
+                                {page+1}
+                            </Pagination.Item>
+                        ))}
+                        <Pagination.Next onClick={handleNextPage} disabled={currentPage === totalPages} />
+                    </Pagination>
+                    </div>
+                </div>
             }
             
         </DemoLayout>

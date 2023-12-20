@@ -84,7 +84,8 @@ export const getRoleUser = async () => {
         }
     );
     const data = await response.json();
-    const role = data?.groups && data?.groups[0]?.name;
+    console.log(data.role);
+    const role = data?.role;
     localStorage.setItem('role', role);
     return role;
 }
