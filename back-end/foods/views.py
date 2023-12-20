@@ -1,4 +1,6 @@
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.views import APIView
@@ -20,6 +22,8 @@ class AllFoodsViews(APIView):
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
     serializer_class = AllFoodsSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["name", "categories", "kitchen", "price"]
 
     @property
     def paginator(self):
@@ -35,22 +39,46 @@ class AllFoodsViews(APIView):
     def paginate_queryset(self, queryset):
         if self.paginator is None:
             return None
-        return self.paginator.paginate_queryset(
-            queryset, self.request, view=self)
+        return self.paginator.paginate_queryset(queryset, self.request, view=self)
 
     def get_paginated_response(self, data):
         assert self.paginator is not None
         return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
-        instance = Foods.objects.all()
-        page = self.paginate_queryset(instance)
+        search_name = request.query_params.get("q", None)
+        search_category = request.query_params.get("category", None)
+        search_restaurant = request.query_params.get("restaurant", None)
+        price_range = request.query_params.get("price", None)
+        sort_by = request.query_params.get("sort", None)
+        queryset = Foods.objects.all()
+
+        if search_name:
+            queryset = queryset.filter(Q(name__icontains=search_name))
+
+        if search_category:
+            queryset = queryset.filter(Q(categories__name__icontains=search_category))
+
+        if search_restaurant:
+            queryset = queryset.filter(Q(restaurant__name__icontains=search_restaurant))
+
+        if price_range:
+            start_price, end_price = map(int, price_range.split(","))
+            queryset = queryset.filter(
+                Q(price__gte=start_price) | Q(price__lte=end_price)
+            )
+
+        if sort_by == "price_asc":
+            queryset = queryset.order_by("id")
+        elif sort_by == "price_desc":
+            queryset = queryset.order_by("-id")
+        page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_paginated_response(
                 self.serializer_class(page, many=True).data
             )
         else:
-            serializer = self.serializer_class(instance, many=True)
+            serializer = self.serializer_class(queryset, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -58,24 +86,41 @@ class AllFoodsViews(APIView):
         responses={201: FoodsCrudSerializer},
     )
     def post(self, request):
-        expected_fields = set([
-            'name',
-            'food_img',
-            'description',
-            'price',
-            'kitchen', 'categories', 'create_at', 'updated_at'])
-        received_fields = set(request.data.keys())
+        if request.user.is_authenticated:
+            expected_fields = set(
+                [
+                    "name",
+                    "food_img",
+                    "description",
+                    "price",
+                    "kitchen",
+                    "categories",
+                    "create_at",
+                    "updated_at",
+                ]
+            )
+            received_fields = set(request.data.keys())
 
-        unexpected_fields = received_fields - expected_fields
-        if unexpected_fields:
-            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
-        serializers = FoodsCrudSerializer(
-            data=request.data, context = {'user': request.user})
-        if serializers.is_valid(raise_exception=True):
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_CREATED)
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            unexpected_fields = received_fields - expected_fields
+            if unexpected_fields:
+                error_message = (
+                    f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+                )
+                return Response(
+                    {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
+                )
+            serializers = FoodsCrudSerializer(
+                data=request.data, context={"user": request.user}
+            )
+            if serializers.is_valid(raise_exception=True):
+                serializers.save()
+                return Response(serializers.data, status=status.HTTP_201_CREATED)
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(
+                {"error": "The user is not logged in"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
 
 class FoodsCrudViews(APIView):
@@ -92,46 +137,113 @@ class FoodsCrudViews(APIView):
         responses={201: FoodsCrudSerializer},
     )
     def put(self, request, pk):
-        expected_fields = set([
-            'name',
-            'food_img',
-            'description',
-            'price',
-            'kitchen', 'categories', 'create_at', 'updated_at'])
-        received_fields = set(request.data.keys())
+        if request.user.is_authenticated:
+            expected_fields = set(
+                [
+                    "name",
+                    "food_img",
+                    "description",
+                    "price",
+                    "kitchen",
+                    "categories",
+                    "create_at",
+                    "updated_at",
+                ]
+            )
+            received_fields = set(request.data.keys())
 
-        unexpected_fields = received_fields - expected_fields
-        if unexpected_fields:
-            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
-        serializers = FoodsCrudSerializer(
-            instance=Foods.objects.filter(
-                id=pk)[0],
-            data=request.data,
-            partial=True,
-        )
-        if serializers.is_valid(raise_exception=True):
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_200_OK)
-        return Response(
-            {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
-        )
+            unexpected_fields = received_fields - expected_fields
+            if unexpected_fields:
+                error_message = (
+                    f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+                )
+                return Response(
+                    {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
+                )
+            serializers = FoodsCrudSerializer(
+                context={"user": request.user},
+                instance=Foods.objects.filter(id=pk)[0],
+                data=request.data,
+                partial=True,
+            )
+            if serializers.is_valid(raise_exception=True):
+                serializers.save()
+                return Response(serializers.data, status=status.HTTP_200_OK)
+            return Response(
+                {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
+            )
+        else:
+            return Response(
+                {"error": "The user is not logged in"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
     def delete(self, request, pk):
-        objects_get = Foods.objects.get(id=pk)
-        objects_get.delete()
-        return Response(
-            {"message": "Delete success"}, status=status.HTTP_200_OK)
+        if request.user.is_authenticated:
+            user_get = request.user
+            groups = user_get.groups.all()
+            if groups:
+                if str(groups[0]) == "kitchen":
+                    objects_get = Foods.objects.get(id=pk)
+                    objects_get.delete()
+                    return Response(
+                        {"message": "Delete success"}, status=status.HTTP_200_OK
+                    )
+                return Response(
+                        {
+                            "error": "It is not possible to add information to such a user"
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+            return Response(
+                {"error": "User does not belong to any role"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+        else:
+            return Response(
+                {"error": "The user is not logged in"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
 
-class FoodsFilterViews(APIView):
-    render_classes = [UserRenderers]
-    perrmisson_class = [IsAuthenticated]    
+# class FoodsFilterViews(APIView):
+#     render_classes = [UserRenderers]
+#     perrmisson_class = [IsAuthenticated]
+#     filter_backends = [DjangoFilterBackend]
+#     filterset_fields = ["name", "categories", "kitchen", "price"]
 
-    def get(self, request, pk):
-        objects_list = Foods.objects.filter(categories_id=pk)
-        serializers = AllFoodsSerializer(objects_list, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+#     @extend_schema(
+#         request=AllFoodsSerializer,
+#         responses={201: AllFoodsSerializer},
+#     )
+#     def get(self, request):
+#         search_name = request.query_params.get("q", None)
+#         search_category = request.query_params.get("category", None)
+#         search_restaurant = request.query_params.get("restaurant", None)
+#         price_range = request.query_params.get("price", None)
+#         sort_by = request.query_params.get("sort", None)
+#         queryset = Foods.objects.all()
+
+#         if search_name:
+#             queryset = queryset.filter(Q(name__icontains=search_name))
+
+#         if search_category:
+#             queryset = queryset.filter(Q(categories__name__icontains=search_category))
+
+#         if search_restaurant:
+#             queryset = queryset.filter(Q(restaurant__name__icontains=search_restaurant))
+
+#         if price_range:
+#             start_price, end_price = map(int, price_range.split(','))
+#             queryset = queryset.filter(Q(price__gte=start_price) | Q(price__lte=end_price))
+
+#         if sort_by == "price_asc":
+#             queryset = queryset.order_by('id')
+#         elif sort_by == "price_desc":
+#             queryset = queryset.order_by('-id')
+
+#         serializer = AllFoodsSerializer(queryset, many=True)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CategoriesFoodsViews(APIView):
@@ -154,8 +266,7 @@ class CategoriesFoodsViews(APIView):
     def paginate_queryset(self, queryset):
         if self.paginator is None:
             return None
-        return self.paginator.paginate_queryset(
-            queryset, self.request, view=self)
+        return self.paginator.paginate_queryset(queryset, self.request, view=self)
 
     def get_paginated_response(self, data):
         assert self.paginator is not None

@@ -11,6 +11,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from authen.views.authen_views import UserProfilesViews
+from managers.views import ManagerKitchenViews
 
 admin.site.site_url = None
 
@@ -44,6 +45,7 @@ urlpatterns = [
     path('foods/', include('foods.urls')),
     path('apps/', include('apps.urls')),
     path('delivery/', include('delivery.urls')),
+    path('managers', ManagerKitchenViews.as_view()),
     path('manager/', include('managers.urls')),
     path('orders/', include('order.urls')),
     path('deliveryman/', include('deliveryman.urls')),

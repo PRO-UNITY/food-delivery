@@ -6,7 +6,7 @@ from managers.views import (
 )
 
 urlpatterns = [
-    path('', ManagerKitchenViews.as_view()),
+    # path('', ManagerKitchenViews.as_view()),
     # path('', ManagerUser.as_view()),
     path('<int:pk>', ManagerKitchenCrudViews.as_view()),
 ]

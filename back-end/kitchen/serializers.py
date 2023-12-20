@@ -88,32 +88,56 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        create_foods = KitchenUser.objects.create(**validated_data)
-        create_foods.user = self.context.get("user")
-        create_foods.save()
-        return create_foods
+        user_get = self.context.get("user")
+        groups = user_get.groups.all()
+        if groups:
+            if str(groups[0]) == "manager":
+                create_foods = KitchenUser.objects.create(**validated_data)
+                create_foods.user = self.context.get("user")
+                create_foods.save()
+                return create_foods
+            else:
+                raise serializers.ValidationError(
+                    {"error": "It is not possible to add information to such a user"}
+                )
+        else:
+            raise serializers.ValidationError(
+                {"error": "User does not belong to any role"}
+            )
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get("name", instance.name)
-        instance.description = validated_data.get(
-            "description", instance.description)
-        instance.is_active = validated_data.get(
-            "is_active", instance.is_active)
-        instance.open_time = validated_data.get(
-            "open_time", instance.open_time
-        )
-        instance.close_time = validated_data.get(
-            "close_time", instance.close_time
-        )
-        instance.latitude = validated_data.get("latitude", instance.latitude)
-        instance.longitude = validated_data.get(
-            "longitude", instance.longitude)
-        if instance.logo == None:
-            instance.logo = self.context.get("logo")
-        else:
-            instance.logo = validated_data.get("logo", instance.logo)
+        user_get = self.context.get("user")
+        groups = user_get.groups.all()
+        if groups:
+            if str(groups[0]) == "manager":
+                instance.name = validated_data.get("name", instance.name)
+                instance.description = validated_data.get(
+                    "description", instance.description)
+                instance.is_active = validated_data.get(
+                    "is_active", instance.is_active)
+                instance.open_time = validated_data.get(
+                    "open_time", instance.open_time
+                )
+                instance.close_time = validated_data.get(
+                    "close_time", instance.close_time
+                )
+                instance.latitude = validated_data.get("latitude", instance.latitude)
+                instance.longitude = validated_data.get(
+                    "longitude", instance.longitude)
+                if instance.logo == None:
+                    instance.logo = self.context.get("logo")
+                else:
+                    instance.logo = validated_data.get("logo", instance.logo)
 
-        return instance
+                return instance
+            else:
+                raise serializers.ValidationError(
+                    {"error": "It is not possible to add information to such a user"}
+                )
+        else:
+            raise serializers.ValidationError(
+                {"error": "User does not belong to any role"}
+            )
 
 
 class AllFoodKitchenSerializers(serializers.ModelSerializer):
