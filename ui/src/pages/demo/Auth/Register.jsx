@@ -64,7 +64,7 @@ const Register = () => {
     },[password2])
 
     return (
-        <div className="container w-100 d-flex justify-content-center align-items-center py-5">
+        <div className="container w-100 d-flex flex-column justify-content-center align-items-center py-5">
             {alertMessage && (
             <div className={`alert alert-${alertMessage.type} w-50 m-auto my-3`} role="alert">
                 {alertMessage.text}
