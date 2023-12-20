@@ -25,7 +25,6 @@ class AllKitchenSerializers(serializers.ModelSerializer):
 
 
 class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = FoodsCategories
         fields = ["id", "name", "create_at", "updated_at"]
@@ -91,23 +90,48 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_get = self.context.get("user")
-        if str(user_get.groups.all()[0]) == "users":
+        groups = user_get.groups.all()
+        if groups:
+            if str(groups[0]) == "kitchen":
+                create_foods = Foods.objects.create(**validated_data)
+                create_foods.save()
+                return create_foods
+            else:
+                raise serializers.ValidationError(
+                    {"error": "It is not possible to add information to such a user"}
+                )
+        else:
             raise serializers.ValidationError(
-                {"error": "It is not possible to add information to such a user"}
+                {"error": "User does not belong to any role"}
             )
-        create_foods = Foods.objects.create(**validated_data)
-        create_foods.save()
-        return create_foods
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get("name", instance.name)
-        instance.description = validated_data.get("description", instance.description)
-        instance.price = validated_data.get("price", instance.price)
-        instance.kitchen = validated_data.get("kitchen", instance.kitchen)
-        instance.categories = validated_data.get("categories", instance.categories)
-        if instance.food_img == None:
-            instance.food_img = self.context.get("food_img")
+        user_get = self.context.get("user")
+        groups = user_get.groups.all()
+        if groups:
+            if str(groups[0]) == "kitchen":
+                instance.name = validated_data.get("name", instance.name)
+                instance.description = validated_data.get(
+                    "description", instance.description
+                )
+                instance.price = validated_data.get("price", instance.price)
+                instance.kitchen = validated_data.get("kitchen", instance.kitchen)
+                instance.categories = validated_data.get(
+                    "categories", instance.categories
+                )
+                if instance.food_img == None:
+                    instance.food_img = self.context.get("food_img")
+                else:
+                    instance.food_img = validated_data.get(
+                        "food_img", instance.food_img
+                    )
+                instance.save()
+                return instance
+            else:
+                raise serializers.ValidationError(
+                    {"error": "It is not possible to add information to such a user"}
+                )
         else:
-            instance.food_img = validated_data.get("food_img", instance.food_img)
-        instance.save()
-        return instance
+            raise serializers.ValidationError(
+                {"error": "User does not belong to any role"}
+            )

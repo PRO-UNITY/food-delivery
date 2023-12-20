@@ -24,7 +24,7 @@ urlpatterns = [
     path('category', CategoriesKitchenViews.as_view()),
     path('category/<int:pk>', CategoriesCrudViews.as_view()),
     # path("kitchen_all", AllKitchenViews.as_view()),
-    # path("kitchen_foods", KitchenFoodsViews.as_view()),
+    path("foods", KitchenFoodsViews.as_view()),
     # path("kitchen_foods_crud/<int:pk>", KitchenFoodsCrudViews.as_view()),
     path("<int:pk>/foods", AllKitchenFood.as_view()),
     # path('category/<int:pk>', CategoryFood.as_view()),
