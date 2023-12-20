@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
 const Dashboard = () => {
-
+    const [card, setCard] = useState([])
     const [food, setFood] = useState([])
     const [search, setSearch] = useState('')
 
@@ -18,6 +18,20 @@ const Dashboard = () => {
             setFood(partFood)
         })
     },[])
+
+    const addToCard = (item) => {
+        const updatedCard = [...card, { ...item, count: 1 }];
+        const totalPrice = updatedCard.reduce((acc, curr) => acc + curr.price, 0);
+  
+        localStorage.setItem("card", JSON.stringify(updatedCard));
+        setCard(updatedCard);
+    }
+  
+      useEffect(() => {
+        const savedCard = JSON.parse(localStorage.getItem("card")) || [];
+        setCard(savedCard);
+        console.log(savedCard);
+      }, []);
 
     return ( 
         <DemoLayout setSearch={setSearch}>
@@ -38,7 +52,13 @@ const Dashboard = () => {
                             <p className="p-0 m-0">{item.name}</p>
                             <p style={{fontWeight:800}}><span className="orange">$</span>{item.price}</p>
                             </div>
-                            <button className="btn-add bg-orange"><i className="fa-solid fa-plus"></i></button>
+                            {
+                            localStorage.getItem('token')?
+                            <button disabled={card.some(cartItem => cartItem.id === item.id)} onClick={()=>addToCard(item)}
+                            className={`${card.some(cartItem => cartItem.id === item.id)?"btn-add bg-green":"btn-add bg-orange"}`}>
+                            <i className={`${card.some(cartItem => cartItem.id === item.id)?"fa-solid fa-check":"fa-solid fa-plus"}`}></i>
+                            </button>:""
+                        }                         
                         </div>
                         </Link>
                         )

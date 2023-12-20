@@ -21,16 +21,16 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={ <Dashboard/> } />
-        <Route path="/dashboard" element={ <Dashboard/> } />
+        {localStorage.getItem('role')==="kitchen"?<Route path="/dashboard" element={ <Dashboard/> } />:""}
         <Route path="/food-order" element={ <FoodOrder/> } />
         <Route path="/favourite" element={ <Favourite/> } />
         <Route path="/order-history" element={ <OrderHistory/> } />
         <Route path="/settings" element={ <Settings/> } />
         <Route path="/register" element={ <Register/> } />
         <Route path="/login" element={ <Login/> } />
-        <Route path="/category-details/:id" element={ <CategoryDetails/> } />
+        <Route path="/category/:id" element={ <CategoryDetails/> } />
         <Route path="/kitchen-details/:id" element={ <KitchenDetails/> } />
-        <Route path="/admin" element={ localStorage.getItem('role')==="users"?<AdminHome/>:<Login/> } />
+        <Route path="/admin" element={ localStorage.getItem('role')==="admins"?<AdminHome/>:<Login/> } />
       </Routes>
     </>
   )

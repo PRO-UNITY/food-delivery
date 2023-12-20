@@ -12,6 +12,7 @@ const Dashboard = () => {
     const [food, setFood] = useState([])
     const [search, setSearch] = useState("")
     const [searchFoods, setSearchFoods] = useState([])
+    const [card, setCard] = useState([])
 
     useEffect(()=>{
         getDataWithToken(`/kitchen/category`).
@@ -45,6 +46,20 @@ const Dashboard = () => {
             setSearchFoods(res.data.results)           
         })
     },[search])
+
+    const addToCard = (item) => {
+        const updatedCard = [...card, { ...item, count: 1 }];
+        const totalPrice = updatedCard.reduce((acc, curr) => acc + curr.price, 0);
+  
+        localStorage.setItem("card", JSON.stringify(updatedCard));
+        setCard(updatedCard);
+    }
+  
+      useEffect(() => {
+        const savedCard = JSON.parse(localStorage.getItem("card")) || [];
+        setCard(savedCard);
+        console.log(savedCard);
+      }, []);
     
 
     return ( 
@@ -87,8 +102,14 @@ const Dashboard = () => {
                         <p className="p-0 m-0">{item?.name}</p>
                         <p style={{fontWeight:800}}><span className="orange">$</span>{item?.price}</p>
                         </div>
-                        <button className="btn-add bg-orange"><i className="fa-solid fa-plus"></i></button>
-                    </div>
+                        {
+                            localStorage.getItem('token')?
+                            <button disabled={card.some(cartItem => cartItem.id === item.id)} onClick={()=>addToCard(item)}
+                            className={`${card.some(cartItem => cartItem.id === item.id)?"btn-add bg-green":"btn-add bg-orange"}`}>
+                            <i className={`${card.some(cartItem => cartItem.id === item.id)?"fa-solid fa-check":"fa-solid fa-plus"}`}></i>
+                            </button>:""
+                        }                   
+                        </div>
                     {/* <div className="sale">
                         <div className="d-flex justify-content-center align-items-center px-2 text-white sale-percent">15% Off</div>
                         <button style={{color:"rgb(247, 69, 69)"}} className="btn-favourite"><i className="fa-solid fa-heart"></i></button>
@@ -109,7 +130,7 @@ const Dashboard = () => {
                 <div className="categories w-100 mb-3">
                     {
                         category.map((item,index)=>
-                            <Link to={`/category-details/${item.id}`} key={index} className="text-dark" style={{textDecoration:"none"}}>
+                            <Link to={`/category/${item.id}`} key={index} className="text-dark" style={{textDecoration:"none"}}>
                             <div className="category-item bg-white">
                             <i style={{fontSize:"35px"}} className="fa-solid fa-bowl-food orange"></i>
                                 <p className="name-category">{item?.name}</p>
@@ -158,7 +179,13 @@ const Dashboard = () => {
                         <p className="p-0 m-0">{item?.name}</p>
                         <p style={{fontWeight:800}}><span className="orange">$</span>{item?.price}</p>
                         </div>
-                        <button className="btn-add bg-orange"><i className="fa-solid fa-plus"></i></button>
+                        {
+                            localStorage.getItem('role')!=="undefined"?
+                            <button disabled={card.some(cartItem => cartItem.id === item.id)} onClick={()=>addToCard(item)}
+                            className={`${card.some(cartItem => cartItem.id === item.id)?"btn-add bg-green":"btn-add bg-orange"}`}>
+                            <i className={`${card.some(cartItem => cartItem.id === item.id)?"fa-solid fa-check":"fa-solid fa-plus"}`}></i>
+                            </button>:""
+                        }
                     </div>
                     {/* <div className="sale">
                         <div className="d-flex justify-content-center align-items-center px-2 text-white sale-percent">15% Off</div>

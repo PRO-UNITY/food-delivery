@@ -110,9 +110,15 @@ const Register = () => {
                         <div className="w-100 d-flex justify-content-between gap-2 ">
                             <div className="w-100">
                             <label htmlFor="">Role</label>
-                            <input onChange={(e)=>setRole(e.target.value)} placeholder="....." required className="w-100 form-control" type="text" />
-                            </div>
-                            
+                            <select onChange={(e)=>setRole(e.target.value)} className="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                <option hidden className="form-control" value=""></option>
+                                <option className="form-control" value="users">Users</option>
+                                <option className="form-control" value="admins">Admin</option>
+                                <option className="form-control" value="kitchen">Kitchen</option>
+                                <option className="form-control" value="delivery">Delivery</option>
+                                <option className="form-control" value="manager">Manager</option>
+                            </select>
+                            </div> 
                         </div>
                         <div className="d-flex justify-content-between align-items-center">
                             <div className="d-flex gap-2 align-items-center">

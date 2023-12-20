@@ -26,6 +26,9 @@
 .bg-orange {
   background-color: rgb(255, 187, 0);
 }
+.bg-green {
+  background-color: rgb(46, 162, 123);
+}
 
 .demo-navbar{
   width: 950px !important;
