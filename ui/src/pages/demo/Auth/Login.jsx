@@ -17,7 +17,7 @@ const Login = () => {
         };
         await postData(user,"/auth/sigin").then((res)=>{
           localStorage.setItem('token',res.token.access)
-          console.log(res);
+          console.log("res");
           if(localStorage.getItem("token") !== "undefined" ){
             navigate('/admin')
             window.location.reload()
@@ -25,28 +25,33 @@ const Login = () => {
         })
     };
 
+    const ok =(e)=>{
+        e.preventDefault()
+        console.log("salom");
+    }
+
     return (
         <div className="container w-100 d-flex justify-content-center align-items-center py-5">
             <div className="card shadow">
                 <div className="card-header bg-warning">
                     <h3>Login</h3>
                 </div>
-                <form>
+                
                     <div className="card-body">
-                        <form>
+                        <form onSubmit={handleSignInUser}>
                             <label>Username</label>
                             <input ref={usernameRef} type="text" placeholder="andrey1" className="mb-2 form-control" />
                             <label>Password</label>
                             <input ref={passwordRef} type="password" placeholder="********" className="mb-2 form-control" />
-                        </form>
-                        <div className="d-flex justify-content-between align-items-center">
-                            <div className="d-flex gap-2 align-items-center">
-                            <p className="p-0 m-0">have you not account</p><Link to={'/register'} className="my-2 " type="button">Register</Link>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <div className="d-flex gap-2 align-items-center">
+                                <p className="p-0 m-0">have you not account</p><Link to={'/register'} className="my-2 " type="button">Register</Link>
+                                </div>
+                                <button type="submit" className="btn btn-warning float-end my-2">Login</button>
                             </div>
-                            <button onClick={handleSignInUser} className="btn btn-warning float-end my-2">Login</button>
-                        </div>
+                        </form>
+                        
                     </div>
-                </form>
             </div>
         </div>
     )
