@@ -245,11 +245,55 @@ class CategoriesKitchenViews(APIView):
 class CategoriesCrudViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+    serializer_class = AllFoodKitchenSerializers
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["name", "kitchen"]
 
-    def get(self, request, pk):
-        objects_list = get_object_or_404(FoodsCategories, id=pk)
-        serializers = AllCategoriesFoodsSerializer(objects_list)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+    @property
+    def paginator(self):
+        if not hasattr(self, "_paginator"):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        else:
+            pass
+        return self._paginator
+
+    def paginate_queryset(self, queryset):
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(queryset, self.request, view=self)
+
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
+
+    def get(self, request, pk, format=None, *args, **kwargs):
+        search_name = request.query_params.get("q", None)
+        search_restaurant = request.query_params.get("restaurant", None)
+        sort_by = request.query_params.get("sort", None)
+        queryset = Foods.objects.filter(categories=pk)
+
+        if search_name:
+            queryset = queryset.filter(Q(name__icontains=search_name))
+
+        if search_restaurant:
+            queryset = queryset.filter(Q(restaurant__id__icontains=search_restaurant))
+
+        if sort_by == "asc":
+            queryset = queryset.order_by("price")
+        elif sort_by == "desc":
+            queryset = queryset.order_by("-price")
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_paginated_response(
+                self.serializer_class(page, many=True).data
+            )
+        else:
+            serializer = self.serializer_class(queryset, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
         request=CategoriesFoodsCrudSerializer,

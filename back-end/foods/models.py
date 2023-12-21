@@ -15,7 +15,7 @@ class Foods(models.Model):
     name = models.CharField(max_length=250)
     food_img = models.ImageField(upload_to="foods")
     description = models.TextField()
-    price = models.CharField(max_length=100)
+    price = models.IntegerField(null=True, blank=True)
     kitchen = models.ForeignKey(
         KitchenUser, on_delete=models.CASCADE)
     categories = models.ForeignKey(
