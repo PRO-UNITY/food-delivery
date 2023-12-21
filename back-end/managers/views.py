@@ -8,7 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from authen.renderers import UserRenderers
 from authen.pagination import StandardResultsSetPagination
-from authen.models import CustomUser, KitchenUser
+from authen.models import CustomUser
+from kitchen.models import Restaurants
 from managers.serializers import (
     UserInformationSerializers,
     ManagerSignUpSerializers,
@@ -190,7 +191,7 @@ class ManagerKitchensViews(APIView):
             groups = user_get.groups.all()
             if groups:
                 if str(groups[0]) == "manager":
-                    queryset = KitchenUser.objects.filter(deliveryman_user=request.user)
+                    queryset = Restaurants.objects.filter(deliveryman_user=request.user)
                     serializers = AllKitchenSerializers(queryset, many=True)
                     return Response(serializers.data, status=status.HTTP_200_OK)
                 else:

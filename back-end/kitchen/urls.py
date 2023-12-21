@@ -1,22 +1,22 @@
 from django.urls import path
 from kitchen.views import (
-    KitchenCreateViews,
-    KitchenCrudViews,
-    CategoriesKitchenViews,
-    CategoriesCrudViews,
+    KitchenViews,
+    KitchenDetileViews,
+    KitchenCategoryFoodsViews,
     KitchenCategoryViews,
+    CategoryDeteileViews,
     KitchenFoodsViews,
-    AllKitchenFood,
+    KitchenFoods,
     KitchenCategoryFoodViews,
 )
 
 urlpatterns = [
-    path("", KitchenCreateViews.as_view()),
-    path("<int:pk>", KitchenCrudViews.as_view()),
-    path('<int:pk>/categories', KitchenCategoryViews.as_view()),
-    path('category', CategoriesKitchenViews.as_view()),
-    path('category/<int:pk>', CategoriesCrudViews.as_view()),
+    path("", KitchenViews.as_view()),
+    path("<int:pk>", KitchenDetileViews.as_view()),
+    path('<int:pk>/categories', KitchenCategoryFoodsViews.as_view()),
+    path('category', KitchenCategoryViews.as_view()),
+    path('category/<int:pk>', CategoryDeteileViews.as_view()),
     path("foods", KitchenFoodsViews.as_view()),
-    path("<int:pk>/foods", AllKitchenFood.as_view()),
+    path("<int:pk>/foods", KitchenFoods.as_view()),
     path("category/<int:id_category>/food/<int:pk>", KitchenCategoryFoodViews.as_view()),
 ]

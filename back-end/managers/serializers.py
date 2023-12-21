@@ -4,7 +4,8 @@ from django.contrib.auth.models import Group
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import MinLengthValidator, MaxLengthValidator
-from authen.models import CustomUser, KitchenUser
+from authen.models import CustomUser
+from kitchen.models import Restaurants
 
 
 class UserGroupSerizliers(serializers.ModelSerializer):
@@ -121,7 +122,7 @@ class ManagerSignUpSerializers(serializers.ModelSerializer):
 class AllKitchenSerializers(serializers.ModelSerializer):
 
     class Meta:
-        model = KitchenUser
+        model = Restaurants
         fields = [
             "id",
             "name",

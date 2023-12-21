@@ -7,10 +7,8 @@ from rest_framework.views import APIView
 from authen.renderers import UserRenderers
 from authen.pagination import StandardResultsSetPagination
 from authen.models import CustomUser
-from delivery.serializers import (
-    DeliverySignUpSerializers,
-    UserInformationSerializers
-)
+from authen.serializers.authen_serializers import UserInformationSerializers
+from deliveryman.serializers import DeliverySignUpSerializers
 
 
 class RegisterDeliveryViews(APIView):
@@ -76,14 +74,18 @@ class RegisterDeliveryViews(APIView):
             unexpected_fields = received_fields - expected_fields
             if unexpected_fields:
                 error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-                return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {'error': error_message},
+                    status=status.HTTP_400_BAD_REQUEST)
             serializer = DeliverySignUpSerializers(
                 data=request.data, context={"user_id": request.user.id}
             )
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    serializer.data, status=status.HTTP_201_CREATED)
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(
                 {"error": "The user is not logged in"},
@@ -123,7 +125,9 @@ class DeliveryUserCrud(APIView):
             unexpected_fields = received_fields - expected_fields
             if unexpected_fields:
                 error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-                return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {'error': error_message},
+                    status=status.HTTP_400_BAD_REQUEST)
             queryset = get_object_or_404(CustomUser, id=pk)
             serializer = DeliverySignUpSerializers(
                 instance=queryset,
@@ -134,7 +138,8 @@ class DeliveryUserCrud(APIView):
                 serializer.save(avatar=request.data.get("avatar"))
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(
-                {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "update error data"},
+                status=status.HTTP_400_BAD_REQUEST
             )
         else:
             return Response(

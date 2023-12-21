@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from authen.models import CustomUser, KitchenUser, KitchenLike
-from kitchen.models import KitchenFoods
+from authen.models import CustomUser
+from kitchen.models import Restaurants
 from foods.models import FoodsCategories, Foods
 
 
@@ -10,25 +10,11 @@ class UserInformationSerializers(serializers.ModelSerializer):
         fields = ["id", "username", "first_name", "last_name", "email"]
 
 
-class KitchenLikeSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = KitchenLike
-        fields = [
-            "id",
-            "like",
-            "id_kitchen",
-            "user_id",
-            "is_active",
-            "create_at",
-            "updated_at"
-        ]
-
-
 class AllKitchenSerializers(serializers.ModelSerializer):
     deliveryman_user = UserInformationSerializers(many=True, read_only=True)
 
     class Meta:
-        model = KitchenUser
+        model = Restaurants
         fields = [
             "id",
             "name",
@@ -56,7 +42,7 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = KitchenUser
+        model = Restaurants
         fields = [
             "id",
             "name",
@@ -77,7 +63,7 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
         groups = user_get.groups.all()
         if groups:
             if str(groups[0]) == "manager":
-                create_foods = KitchenUser.objects.create(**validated_data)
+                create_foods = Restaurants.objects.create(**validated_data)
                 create_foods.user = self.context.get("user")
                 create_foods.save()
                 return create_foods
@@ -148,7 +134,8 @@ class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
         groups = user_get.groups.all()
         if groups:
             if str(groups[0]) == "admins":
-                create_categories = FoodsCategories.objects.create(**validated_data)
+                create_categories = FoodsCategories.objects.create(
+                    **validated_data)
                 return create_categories
             else:
                 raise serializers.ValidationError(

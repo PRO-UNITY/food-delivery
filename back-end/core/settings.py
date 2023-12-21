@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     "authen",
     "kitchen",
     "foods",
-    "delivery",
     'managers',
     'order',
     'deliveryman',
@@ -102,7 +101,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": 'resipe',
+        "NAME": 'food_delivery',
         "USER": "postgres",
         "PASSWORD": "1",
         "HOST": "127.0.0.1",
