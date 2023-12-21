@@ -6,7 +6,8 @@ from authen.views.authen_views import (
     change_password,
     LogoutAPIView,
     RequestPasswordRestEmail,
-    SetNewPasswordView
+    SetNewPasswordView,
+    SendEmailCode,
 
 )
 
@@ -19,6 +20,7 @@ urlpatterns = [
         'password/reset',
         RequestPasswordRestEmail.as_view()),
     path('password/confirm', SetNewPasswordView.as_view()),
+    path('verification/email', SendEmailCode.as_view()),
     # social views
     path('socail/google', GoogleView.as_view()),
     path('socail/facebook', FacebookLogin.as_view()),

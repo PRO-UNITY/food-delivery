@@ -1,3 +1,5 @@
 from django.contrib import admin
+from order.models import OrderStatus, Orders
 
-# Register your models here.
+admin.site.register(OrderStatus)
+admin.site.register(Orders)

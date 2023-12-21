@@ -69,9 +69,9 @@ class AllFoodsViews(APIView):
             except ValueError:
                 return Response({"error": "Value error, ranger"}, status=status.HTTP_400_BAD_REQUEST)
         if sort_by == "price_asc":
-            queryset = queryset.order_by("id")
+            queryset = queryset.order_by("price")
         elif sort_by == "price_desc":
-            queryset = queryset.order_by("-id")
+            queryset = queryset.order_by("-price")
         page = self.paginate_queryset(queryset)
         if page is not None:    
             serializer = self.get_paginated_response(

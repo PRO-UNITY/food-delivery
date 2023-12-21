@@ -23,7 +23,6 @@ from authen.renderers import UserRenderers
 from authen.models import CustomUser
 from authen.serializers.authen_serializers import (
     UserSignUpSerializers,
-    KitchenSignUpSerializers,
     UserSigInInSerializers,
     UserUpdateSerializers,
     UserInformationSerializers,
@@ -82,22 +81,6 @@ class UserRegisterViews(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class KitchenRegisterViews(APIView):
-    """Kitchen register view"""
-
-    @extend_schema(
-        request=KitchenSignUpSerializers,
-        responses={201: KitchenSignUpSerializers},
-    )
-    def post(self, request):
-        serializer = KitchenSignUpSerializers(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            instanse = serializer.save()
-            tokens = get_token_for_user(instanse)
-            return Response({"token": tokens}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class UserSigInViews(APIView):
     """Signin users"""
 
@@ -136,41 +119,6 @@ class UserSigInViews(APIView):
                     status=status.HTTP_404_NOT_FOUND,
                 )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class SendEmailCode(APIView):
-    render_classes = [UserRenderers]
-    perrmisson_class = [IsAuthenticated]
-
-    def get(self, request):
-        """Sending a code to the e-mail of the logged-in user"""
-        data = request.user
-        verification_code = str(random.randint(100000, 999999))
-        send_mail(
-            "Verification Code",
-            f"Your verification code is: {verification_code}",
-            "istamovibrohim8@gmail.com",
-            [data.email],
-            fail_silently=False,
-        )
-
-        code_save = CustomUser.objects.filter(id=request.user.id)[0]
-        code_save.email_code = verification_code
-        code_save.save()
-        return Response({"message": "Send code email"})
-
-    def post(self, request):
-        """Check the code"""
-        email_code = request.data["email_code"]
-        if email_code == "":
-            context = {"Enter the email code !"}
-            return Response(context, status=status.HTTP_401_UNAUTHORIZED)
-        user_get = CustomUser.objects.filter(id=request.user.id)[0]
-        if email_code == user_get.email_code:
-            context = {"Welcome to the system !"}
-            return Response(context, status=status.HTTP_200_OK)
-        else:
-            return Response({"error": "The email code is incorrect !"})
 
 
 class UserProfilesViews(APIView):
@@ -246,6 +194,53 @@ def change_password(request):
                 {"error": "Incorrect old password."}, status=status.HTTP_400_BAD_REQUEST
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SendEmailCode(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            """Sending a code to the e-mail of the logged-in user"""
+            data = request.user
+            verification_code = str(random.randint(100000, 999999))
+            send_mail(
+                "Verification Code",
+                f"Your verification code is: {verification_code}",
+                "istamovibrohim8@gmail.com",
+                [data.email],
+                fail_silently=False,
+            )
+
+            code_save = CustomUser.objects.filter(id=request.user.id)[0]
+            code_save.email_code = verification_code
+            code_save.save()
+            return Response({"message": "Send code email"})
+        else:
+            return Response(
+                {"error": "The user is not logged in"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+    def post(self, request):
+        if request.user.is_authenticated:
+            """Check the code"""
+            email_code = request.data["email_code"]
+            if email_code == "":
+                context = {"Enter the email code !"}
+                return Response(context, status=status.HTTP_401_UNAUTHORIZED)
+            user_get = CustomUser.objects.filter(id=request.user.id)[0]
+            if email_code == user_get.email_code:
+                context = {"Welcome to the system !"}
+                return Response(context, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "The email code is incorrect !"})
+        else:
+            return Response(
+                {"error": "The user is not logged in"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
 
 class LogoutAPIView(APIView):

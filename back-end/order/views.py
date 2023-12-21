@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from authen.renderers import UserRenderers
-from delivery.models import Delivery
+from order.models import Orders
 from django.shortcuts import get_object_or_404
 from authen.pagination import StandardResultsSetPagination
 from order.serializers import (
@@ -55,7 +55,7 @@ class SendViews(APIView):
             search_restaurant = request.query_params.get("restaurant", None)
             search_status = request.query_params.get("status", None)
             sort_by = request.query_params.get("sort", None)
-            queryset = Delivery.objects.filter(klient=request.user)
+            queryset = Orders.objects.filter(klient=request.user)
 
             if search_restaurant:
                 queryset = queryset.filter(Q(kitchen__id__icontains=search_restaurant))
@@ -165,7 +165,7 @@ class OrderCrudViews(APIView):
         search_name = request.query_params.get("foods", None)
         sort_by = request.query_params.get("sort", None)
 
-        queryset = Delivery.objects.filter(id=pk)
+        queryset = Orders.objects.filter(id=pk)
         delivery_instance = get_object_or_404(queryset)
         foods_queryset = delivery_instance.foods
 
@@ -213,7 +213,7 @@ class OrderCrudViews(APIView):
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
             serializers = SendOrderSerializers(
-                instance=Delivery.objects.filter(id=pk)[0],
+                instance=Orders.objects.filter(id=pk)[0],
                 data=request.data,
                 partial=True,
             )

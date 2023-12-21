@@ -43,7 +43,6 @@ urlpatterns = [
     path('user', UserProfilesViews.as_view()),
     path("kitchen/", include("kitchen.urls")),
     path('foods/', include('foods.urls')),
-    path('delivery/', include('delivery.urls')),
     path('', include('managers.urls')),
     path('', include('order.urls')),
     path('deliveryman/', include('deliveryman.urls')),

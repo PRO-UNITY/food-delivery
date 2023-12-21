@@ -88,27 +88,3 @@ class UserGroupSerizliers(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ["id", "name"]
-
-
-class UserInformationSerializers(serializers.ModelSerializer):
-    """User Profiles Serializers"""
-    role = serializers.SerializerMethodField()
-
-    class Meta:
-        """User Model Fileds"""
-
-        model = CustomUser
-        fields = [
-            "id",
-            "username",
-            "first_name",
-            "last_name",
-            "avatar",
-            "email",
-            "role"
-        ]
-
-    def get_role(self, obj):
-        get_name = [roless.name for roless in obj.groups.all()]
-        for k in get_name:
-            return k

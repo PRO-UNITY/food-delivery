@@ -1,23 +1,17 @@
 from rest_framework import serializers
-from delivery.models import Delivery, StatusDelivery, Grade
+from order.models import OrderStatus, Orders
 
 
 class StatusSerializers(serializers.ModelSerializer):
     class Meta:
-        model = StatusDelivery
-        fields = '__all__'
-
-
-class RaitingSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = Grade
+        model = OrderStatus
         fields = '__all__'
 
 
 class OrderSerializers(serializers.ModelSerializer):
 
     class Meta:
-        model = Delivery
+        model = Orders
         fields = [
             "id",
             "klient",
@@ -39,7 +33,7 @@ class OrderSerializers(serializers.ModelSerializer):
 class OrderFoodsSerializers(serializers.ModelSerializer):
 
     class Meta:
-        model = Delivery
+        model = Orders
         fields = [
             "id",
             "foods",
@@ -49,7 +43,7 @@ class OrderFoodsSerializers(serializers.ModelSerializer):
 class SendOrderSerializers(serializers.ModelSerializer):
 
     class Meta:
-        model = Delivery
+        model = Orders
         fields = [
             "id",
             "klient",
@@ -66,7 +60,7 @@ class SendOrderSerializers(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        send_order = Delivery.objects.create(**validated_data)
+        send_order = Orders.objects.create(**validated_data)
         send_order.klient = self.context.get("klient")
         send_order.save()
         return send_order

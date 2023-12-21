@@ -1,5 +1,5 @@
 from django.db import models
-from authen.models import KitchenUser
+from kitchen.models import Restaurants
 
 
 class FoodsCategories(models.Model):
@@ -15,9 +15,9 @@ class Foods(models.Model):
     name = models.CharField(max_length=250)
     food_img = models.ImageField(upload_to="foods")
     description = models.TextField()
-    price = models.CharField(max_length=100)
+    price = models.IntegerField(null=True, blank=True)
     kitchen = models.ForeignKey(
-        KitchenUser, on_delete=models.CASCADE)
+        Restaurants, on_delete=models.CASCADE)
     categories = models.ForeignKey(
         FoodsCategories, on_delete=models.CASCADE, related_name='foods')
     create_at = models.DateTimeField(auto_now_add=True)

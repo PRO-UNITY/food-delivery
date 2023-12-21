@@ -1,15 +1,29 @@
 from django.db import models
-from authen.models import CustomUser, KitchenUser
+from authen.models import CustomUser
 
 
-class KitchenFoods(models.Model):
+class Restaurants(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
-    image_food = models.ImageField(upload_to='foods')
+    logo = models.ImageField(upload_to='logo_kitchen')
     user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE)
-    kitchen = models.ForeignKey(
-        KitchenUser, on_delete=models.CASCADE)
+        CustomUser,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='user'
+    )
+    is_active = models.BooleanField(default=False)
+    deliveryman_user = models.ManyToManyField(
+        CustomUser,
+        null=True,
+        blank=True,
+        related_name="delivery"
+    )
+    open_time = models.TimeField(null=True, blank=True)
+    close_time = models.TimeField(null=True, blank=True)
+    latitude = models.CharField(max_length=100)
+    longitude = models.CharField(max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from authen.models import CustomUser, KitchenUser
+from authen.models import CustomUser
+from kitchen.models import Restaurants
 from foods.models import FoodsCategories, Foods
 
 
@@ -11,7 +12,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
 
 class AllKitchenSerializers(serializers.ModelSerializer):
     class Meta:
-        model = KitchenUser
+        model = Restaurants
         fields = [
             "id",
             "name",
@@ -24,7 +25,37 @@ class AllKitchenSerializers(serializers.ModelSerializer):
         ]
 
 
+class FoodsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Foods
+        fields = [
+            "id",
+            "name",
+            "food_img",
+            "description",
+            "price",
+            "kitchen",
+            "categories",
+            "create_at",
+            "updated_at",
+        ]
+
+
 class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
+
+    food_count = serializers.SerializerMethodField()
+    foods  = FoodsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = FoodsCategories
+        fields = '__all__'
+
+    def get_food_count(self, obj):
+        return obj.foods.count()
+
+
+class CategoriesSerializer(serializers.ModelSerializer):
 
     food_count = serializers.SerializerMethodField()
 
@@ -33,12 +64,11 @@ class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_food_count(self, obj):
-        # Use the default reverse relation 'food_set' to get the related foods and calculate the count
         return obj.foods.count()
 
 
 class AllFoodsSerializer(serializers.ModelSerializer):
-    categories = AllCategoriesFoodsSerializer(read_only=True)
+    # categories = CategoriesFoodsSerializer(read_only=True)
 
     class Meta:
         model = Foods
