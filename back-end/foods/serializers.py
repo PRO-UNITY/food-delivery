@@ -56,10 +56,14 @@ class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
 
 
 class CategoriesFoodsSerializer(serializers.ModelSerializer):
+    food_count = serializers.SerializerMethodField()
 
     class Meta:
         model = FoodsCategories
         fields = '__all__'
+
+    def get_food_count(self, obj):
+        return obj.foods.count()
 
 
 class AllFoodsSerializer(serializers.ModelSerializer):
