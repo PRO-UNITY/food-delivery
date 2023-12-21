@@ -19,7 +19,7 @@ class Foods(models.Model):
     kitchen = models.ForeignKey(
         KitchenUser, on_delete=models.CASCADE)
     categories = models.ForeignKey(
-        FoodsCategories, on_delete=models.CASCADE)
+        FoodsCategories, on_delete=models.CASCADE, related_name='foods')
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

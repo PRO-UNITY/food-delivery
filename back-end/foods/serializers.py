@@ -25,9 +25,16 @@ class AllKitchenSerializers(serializers.ModelSerializer):
 
 
 class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
+
+    food_count = serializers.SerializerMethodField()
+
     class Meta:
         model = FoodsCategories
-        fields = ["id", "name", "create_at", "updated_at"]
+        fields = '__all__'
+
+    def get_food_count(self, obj):
+        # Use the default reverse relation 'food_set' to get the related foods and calculate the count
+        return obj.foods.count()
 
 
 class AllFoodsSerializer(serializers.ModelSerializer):
@@ -48,7 +55,7 @@ class AllFoodsSerializer(serializers.ModelSerializer):
         ]
 
 
-class   FoodsCrudSerializer(serializers.ModelSerializer):
+class FoodsCrudSerializer(serializers.ModelSerializer):
     food_img = serializers.ImageField(
         max_length=None,
         allow_empty_file=False,
