@@ -196,6 +196,41 @@ def change_password(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class SendEmailCode(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request):
+        """Sending a code to the e-mail of the logged-in user"""
+        data = request.user
+        verification_code = str(random.randint(100000, 999999))
+        send_mail(
+            "Verification Code",
+            f"Your verification code is: {verification_code}",
+            "istamovibrohim8@gmail.com",
+            [data.email],
+            fail_silently=False,
+        )
+
+        code_save = CustomUser.objects.filter(id=request.user.id)[0]
+        code_save.email_code = verification_code
+        code_save.save()
+        return Response({"message": "Send code email"})
+
+    def post(self, request):
+        """Check the code"""
+        email_code = request.data["email_code"]
+        if email_code == "":
+            context = {"Enter the email code !"}
+            return Response(context, status=status.HTTP_401_UNAUTHORIZED)
+        user_get = CustomUser.objects.filter(id=request.user.id)[0]
+        if email_code == user_get.email_code:
+            context = {"Welcome to the system !"}
+            return Response(context, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "The email code is incorrect !"})
+
+
 class LogoutAPIView(APIView):
     """Logout users"""
 
