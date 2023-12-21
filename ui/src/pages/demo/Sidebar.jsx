@@ -42,7 +42,7 @@ const DemoSidebar = ({ showSidebar }) => {
                     { JSON.parse(localStorage.getItem('card'))?.length > 0 ? <div className='notification'>{JSON.parse(localStorage.getItem('card'))?.length}</div> : "" }
                 </NavLink>
               </li>  
-              <li className="nav-item">
+              <li className="nav-item"> 
                 <NavLink to={localStorage.getItem('role')!=="undefined"?"/favourite":"/login"} className="nav-link text-start px-2" isActive={() => checkActive("/favourite")}>
                     <p className="text-start py-3"><i className="fa-solid fa-heart mx-3"></i>Favourite</p>
                 </NavLink>

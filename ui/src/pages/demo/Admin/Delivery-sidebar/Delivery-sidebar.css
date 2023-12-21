@@ -2,11 +2,8 @@
   width: 260px;
   min-height: 100vh
 }
-.active{
-  background-color: black !important;
-}
 .sidebar .nav .nav-link.active {
-  background: var(--primary) !important;
+  background: rgb(255, 187, 0) !important;
 }
 .sidebar .nav .nav-link.active i {
   color: var(--secondary) !important;
