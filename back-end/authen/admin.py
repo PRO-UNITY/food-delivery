@@ -24,11 +24,8 @@ class NewMyUser(ImportExportModelAdmin, UserAdmin):
             {
                 "fields": (
                     "email_code",
-                    "birth_date",
-                    "gender_id",
                     "avatar",
                     "user_id",
-                    "phone",
                 )
             },
         ),
@@ -39,11 +36,8 @@ class NewMyUser(ImportExportModelAdmin, UserAdmin):
             {
                 "fields": (
                     "email_code",
-                    "birth_date",
-                    "gender_id",
                     "avatar",
                     "user_id",
-                    "phone",
                 )
             },
         ),
