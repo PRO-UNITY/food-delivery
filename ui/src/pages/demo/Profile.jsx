@@ -100,7 +100,7 @@ const Profile = ({ showProfile, count }) => {
             </div>
             <div className="d-flex justify-content-between align-items-center">
                 <p>Total</p>
-                <p style={{fontWeight:"bold"}} className="mx-2"><span className="orange">$</span>{localStorage.getItem('card').total_price}</p>
+                <p style={{fontWeight:"bold"}} className="mx-2"><span className="orange">$</span></p>
             </div>
             <button className="btn btn-warning w-100 text-light">Checkout</button>
         </div>
