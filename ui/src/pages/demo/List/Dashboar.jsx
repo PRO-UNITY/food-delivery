@@ -58,7 +58,6 @@ const Dashboard = () => {
       useEffect(() => {
         const savedCard = JSON.parse(localStorage.getItem("card")) || [];
         setCard(savedCard);
-        console.log(savedCard);
       }, []);
     
 
@@ -133,7 +132,7 @@ const Dashboard = () => {
                             <Link to={`/category/${item.id}`} key={index} className="text-dark" style={{textDecoration:"none"}}>
                             <div className="category-item bg-white">
                             <i style={{fontSize:"35px"}} className="fa-solid fa-bowl-food orange"></i>
-                                <p className="name-category">{item?.name}</p>
+                            <p className="name-category p-0 m-0">{item?.name}</p>
                             </div>
                             </Link>
                         )
@@ -149,7 +148,7 @@ const Dashboard = () => {
                         <Link key={index} to={`/kitchen-details/${item.id}`} className="text-dark" style={{textDecoration:"none"}}>
                         <div className="category-item bg-white">
                             <img style={{width:"50px",height:"50px", borderRadius:"10px"}} src={`${item?.logo? BASE_URL+item?.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
-                            <p className="name-category">{item?.name}</p>
+                            <p className="name-category p-0 m-0">{item?.name}</p>
                         </div>
                         </Link>
                         )

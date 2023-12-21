@@ -33,7 +33,6 @@ const CategoryDetails = () => {
         if (currentPage <= 1) {
             setCurrentPage(currentPage + 1);
         }
-       
     };
 
     const handlePrevPage = () => {
@@ -101,6 +100,7 @@ const CategoryDetails = () => {
                             >
                                 {page+1}
                             </Pagination.Item>
+                            
                         ))}
                         <Pagination.Next onClick={handleNextPage} disabled={currentPage === totalPages} />
                     </Pagination>

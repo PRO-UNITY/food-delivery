@@ -30,7 +30,6 @@ const Dashboard = () => {
       useEffect(() => {
         const savedCard = JSON.parse(localStorage.getItem("card")) || [];
         setCard(savedCard);
-        console.log(savedCard);
       }, []);
 
     return ( 

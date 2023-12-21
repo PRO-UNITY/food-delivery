@@ -13,6 +13,25 @@
     outline: none;
     border: none;
 } 
+
+.notification{
+  font-size: 10px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(20, 220, 76);
+  border-radius: 50%;
+  position: absolute;
+  top: -5%;
+  right: -3%;
+  color: white;
+}
+
+.nav-link{
+  position: relative;
+}
   
 .profile{
   height: 100vh;

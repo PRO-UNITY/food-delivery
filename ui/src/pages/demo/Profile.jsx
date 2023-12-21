@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import './Demo.css'
-import { BASE_URL, getDataWithToken } from '../../functions/function'
+import { BASE_URL, getUserData } from '../../functions/function'
 import { Link } from 'react-router-dom'
 
 const Profile = () => {
     const [user, setUser] = useState(null)
 
     useEffect(()=>{
-        getDataWithToken('/user').
+        getUserData('/user').
         then((res)=>setUser(res))
     },[])
 
@@ -16,9 +16,9 @@ const Profile = () => {
             <div className="d-flex justify-content-end align-items-center mb-4">
                 {
                     user?.avatar ?
-                    <button className="btn-none ">
+                    <Link to={localStorage.getItem('role')=="admins"?'/admin':"/"} className="btn-none ">
                         <img style={{width:"50px", height:"50px", objectFit:"cover", borderRadius:"20%"}} src={`${user?.avatar ? BASE_URL+user.avatar : "https://plus.unsplash.com/premium_photo-1683121366070-5ceb7e007a97?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"}`} alt="" />
-                    </button> :
+                    </Link> :
                     <div className="d-flex gap-1">
                         <Link to={'/register'} className='btn btn-outline-warning'>Sign-up</Link>
                         <Link to={'/login'} className='btn btn-warning'>Sign-in</Link>

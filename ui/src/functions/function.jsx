@@ -62,6 +62,15 @@ export const getDataWithToken = async (url) => {
     return data;
 };
 
+export const getUserData = async (url) => {
+    const response = await fetch(BASE_URL + url, {
+        method: 'GET',
+        headers: getHeaderWithToken(localStorage.getItem('token')),
+    });
+    const data = await response.json();
+    return data;
+};
+
 export const getRole = async () => {
     const response = await fetch(BASE_URL + "/authen/user_profiles/", {
         method: 'GET',
@@ -84,7 +93,6 @@ export const getRoleUser = async () => {
         }
     );
     const data = await response.json();
-    console.log(data.role);
     const role = data?.role;
     localStorage.setItem('role', role);
     return role;

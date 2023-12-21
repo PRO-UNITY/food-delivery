@@ -18,7 +18,7 @@ const Login = () => {
         await postData(user,"/auth/sigin").then((res)=>{
           localStorage.setItem('token',res.token.access)
           if(localStorage.getItem("token") !== "undefined" ){
-            navigate('/admin')
+            navigate('/')
             window.location.reload()
         }
         })

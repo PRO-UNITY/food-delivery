@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import DemoLayout from "../../../Layout/Demoproject"
 import { BASE_URL, getDataWithToken, postDataWithToken } from "../../../functions/function"
 import { Link, useNavigate } from "react-router-dom"
+import Success from '../../../assets/images/success.png'
 // import Button from 'react-bootstrap/Button';
 // import Spinner from 'react-bootstrap/Spinner';
 
@@ -165,7 +166,7 @@ const FoodOrder = () => {
                 {
                     active?
                     <div className="d-flex justify-content-center align-items-center w-100">
-                    <img style={{width:"200px"}} src="https://cdn-icons-png.flaticon.com/512/148/148767.png" alt="" />
+                    <img style={{width:"200px"}} src={Success} alt="" />
                     </div>:""
                 }
             </div>
