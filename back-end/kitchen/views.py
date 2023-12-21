@@ -450,3 +450,13 @@ class AllKitchenFood(APIView):
         else:
             serializer = self.serializer_class(instance, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+
+
+class KitchenCategoryFoodViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request, id_category, pk):
+        objects_list = get_object_or_404(Foods, categories=id_category, id=pk)
+        serializers = AllFoodKitchenSerializers(objects_list)
+        return Response(serializers.data, status=status.HTTP_200_OK)

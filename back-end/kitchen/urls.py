@@ -7,6 +7,7 @@ from kitchen.views import (
     KitchenCategoryViews,
     KitchenFoodsViews,
     AllKitchenFood,
+    KitchenCategoryFoodViews,
 )
 
 urlpatterns = [
@@ -17,4 +18,5 @@ urlpatterns = [
     path('category/<int:pk>', CategoriesCrudViews.as_view()),
     path("foods", KitchenFoodsViews.as_view()),
     path("<int:pk>/foods", AllKitchenFood.as_view()),
+    path("category/<int:id_category>/food/<int:pk>", KitchenCategoryFoodViews.as_view()),
 ]
