@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
 import Spinner from 'react-bootstrap/Spinner';
+import { Link } from "react-router-dom";
 
 const CategoryDetails = () => {
     const [foods, setFoods] = useState([])
@@ -12,6 +13,7 @@ const CategoryDetails = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState('')
+    const [card, setCard] = useState([])
     const {id} = useParams()
     
     useEffect(()=>{
@@ -41,6 +43,19 @@ const CategoryDetails = () => {
         }
     };
 
+    const addToCard = (item) => {
+        const updatedCard = [...card, { ...item, count: 1 }];
+        const totalPrice = updatedCard.reduce((acc, curr) => acc + curr.price, 0);
+  
+        localStorage.setItem("card", JSON.stringify(updatedCard));
+        setCard(updatedCard);
+    }
+  
+      useEffect(() => {
+        const savedCard = JSON.parse(localStorage.getItem("card")) || [];
+        setCard(savedCard);
+      }, []);
+
     return (
         <DemoLayout setSearch={setSearch}>
             {
@@ -62,30 +77,36 @@ const CategoryDetails = () => {
                 <div className="foods">
                 {
                     foods.map((item,index)=>
-                    <div key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
+                    <Link key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
                     
                     <div className="w-100 d-flex justify-content-center">
-                    <img style={{width:"160px", height:"160px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                    <img className="mb-2" style={{width:"150px", height:"150px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                     </div>
-                    {/* <div className="mb-2">
+                    <div className="mb-2">
                     <i className="fa-solid fa-star orange"></i>
                     <i className="fa-solid fa-star orange"></i>
                     <i className="fa-solid fa-star orange"></i>
                     <i className="fa-solid fa-star orange"></i>
                     <i className="fa-solid fa-star orange"></i>
-                    </div> */}
+                    </div>
                     <div className="d-flex justify-content-between w-100 align-items-center">
                         <div>
-                        <p className="p-0 m-0">{item?.name}</p>
+                        <p style={{fontWeight:500}} className="p-0 m-0">{item?.name}</p>
                         <p style={{fontWeight:800}}><span className="orange">$</span>{item?.price}</p>
                         </div>
-                        <button className="btn-add bg-orange"><i className="fa-solid fa-plus"></i></button>
+                        {
+                            localStorage.getItem('role')!=="undefined"?
+                            <button disabled={card.some(cartItem => cartItem.id === item.id)} onClick={()=>addToCard(item)}
+                            className={`${card.some(cartItem => cartItem.id === item.id)?"btn-add bg-green":"btn-add bg-orange"}`}>
+                            <i className={`${card.some(cartItem => cartItem.id === item.id)?"fa-solid fa-check":"fa-solid fa-plus"}`}></i>
+                            </button>:""
+                        }
                     </div>
-                    {/* <div className="sale">
+                    <div className="sale">
                         <div className="d-flex justify-content-center align-items-center px-2 text-white sale-percent">15% Off</div>
-                        <button style={{color:"rgb(247, 69, 69)"}} className="btn-favourite"><i className="fa-solid fa-heart"></i></button>
-                    </div> */}
+                        <button style={{}} className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
                     </div>
+                    </Link>
                     )
                 }
                 </div>

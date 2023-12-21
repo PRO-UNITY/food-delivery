@@ -16,6 +16,7 @@ const FoodOrder = () => {
     const cardItems = localStorage.getItem("card");
     const [card, setCard] = useState(JSON.parse(cardItems));
     const [counts, setCounts] = useState(Array(card?.length).fill(1));
+    const [count, setCount] = useState(0)
     const navigate = useNavigate();
     const [totalPrices, setTotalPrices] = useState(
       card?.map((item, index) => calculateTotalPrice(item, counts[index]))
@@ -31,6 +32,7 @@ const FoodOrder = () => {
       setCounts(newCounts);
       updateTotalPrices(index, newCounts[index]);
       updateLocalStorage(index, newCounts[index]);
+      setCount(count=>count+1)
     };
 
     const removeFromCard = (index) => {
@@ -47,6 +49,7 @@ const FoodOrder = () => {
         setTotalPrices(newTotalPrices);
       
         localStorage.setItem("card", JSON.stringify(newCard));
+        setCount(count=>count+1)
       };
       
   
@@ -57,8 +60,10 @@ const FoodOrder = () => {
           setCounts(newCounts);
           updateTotalPrices(index, newCounts[index]);
           updateLocalStorage(index, newCounts[index]);
+          setCount(count=>count+1)
         } else {
           removeFromCard(index)
+          setCount(count=>count+1)
         }
       };
   
@@ -119,7 +124,7 @@ const FoodOrder = () => {
     //     )
     // }
     return ( 
-        <DemoLayout setSearch={setSearch}>
+        <DemoLayout count={count} setSearch={setSearch}>
             <div className=" body-main w-100 ">
                 <div className="p-3 rounded-2 w-100">
                 <h3 className="text-start">Food Order</h3>

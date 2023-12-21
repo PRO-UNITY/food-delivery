@@ -1,12 +1,23 @@
+*{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
 .active{
-    background-color: rgb(255, 187, 0) !important;
-    color: white !important;
-    border-radius: 10px;
-  }
+  background-color: #F8B602 !important;
+  color: white !important;
+  border-radius: 10px;
+}
+
+.body{
+  min-height: 100vh;
+}
 
 .hrms-doc-sidebar{
-    min-width: 250px;
-    height: 100vh;
+  min-width: 250px;
+  height: 130vh;
+}
+
+.text-sidebar{
+  color: #BEBAC8;
 }
 
 .searchbar input{
@@ -32,18 +43,26 @@
 .nav-link{
   position: relative;
 }
+
+.nav-item{
+  color: #BEBAC8;
+}
+
+.grey{
+  color: #BEBAC8;
+}
   
 .profile{
-  height: 100vh;
-  position: sticky;
+  min-height: 100vh;
+  position: static;
 }
 
 .orange{
-  color: rgb(255, 187, 0);
+  color: #F8B602;
 }
 
 .bg-orange {
-  background-color: rgb(255, 187, 0);
+  background-color: #F8B602;
 }
 .bg-green {
   background-color: rgb(46, 162, 123);
@@ -53,6 +72,47 @@
   width: 950px !important;
   max-height: 100px !important;
 }
+
+.btn-sign-in{
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.btn-outline{
+  background: white;
+  border: 1px solid #F8B602;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: #F8B602;
+  transition: 300ms;
+}
+.btn-outline:hover{
+  background-color: #F8B602;
+  color: white;
+  transition: 300ms;
+}
+
+.btn-vaucher{
+  border: none;
+  background: none;
+  background-color: white;
+  border-radius: 5px;
+  font-size: 12px;
+  padding: 7px 15px;
+  font-weight: bold;
+  
+}
+
+.sidebar-vaucher{
+  height: 150px;
+  border-radius: 15px;
+  color: white;
+  font-weight: 600;
+}
+
 .hrms-doc-asaide {
   max-width: 230px;
   width: 100%;
@@ -164,9 +224,13 @@
 .vaucher{
   width: 100%;
   height: 200px;
-  background-color: rgb(255, 187, 0);
+  background: url(https://img.freepik.com/premium-photo/flash-genius-happy-girl-hold-copybook-pointing-pen-up-child-genius-yellow-background-horizontal-isolated-poster-school-girl-student-banner-header-portrait-schoolgirl-copy-space_545934-26293.jpg?w=2000);
+  background-repeat: no-repeat;
+  background-size: cover;
   border-radius: 20px;
 }
+
+
 
 .categories{
   width: 100%;
@@ -205,7 +269,7 @@
 
 .food-item{
   width: 260px;
-  height: 260px;
+  min-height: 260px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -217,11 +281,11 @@
 
 .btn-add{
   border: none;
-  border-radius: 10px;
+  border-radius: 7px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 15px;
+  padding: 12px;
   color: white;
 }
 
@@ -249,7 +313,7 @@
 }
 
 .body-main{
-  height: 90vh;
+  height: 115vh;
   overflow-y: scroll;
 }
 .btn-none{
@@ -293,12 +357,24 @@
   .hrms-doc-navbar .searchbar {
     width: auto;
   }
+  .profile {
+    position: absolute;
+    transition: 0.5s;
+    min-height: 100vh;
+    right: -100%;
+    z-index: 9999;
+    margin-top: -2px;
+  }
+
   .hrms-doc-sidebar.show {
     left: 0;
   }
-  .profile{
-    display: none;
+  .profile.show {
+    left: 0;
   }
+  /* .profile{
+    display: none;
+  } */
   .card{
     width: 100%;
   }
@@ -313,8 +389,14 @@
     width: 275px;
   }
   .profile{
-    display: none;
+    position: absolute;
+    transition: 0.5s;
+    height: 90vh;
+    margin-top: 85px;
+    right: -100%;
+    z-index: 9999 !important;
   }
+
   .hrms-doc-sidebar {
     position: absolute;
     transition: 0.5s;
