@@ -16,6 +16,7 @@ from kitchen.serializers import (
     KitchenCrudSerializers,
     AllFoodKitchenSerializers,
     CategoriesFoodsCrudSerializer,
+    CategoriesFoodsSerializer,
 )
 
 
@@ -212,7 +213,7 @@ class KitchenCategoryViews(APIView):
 
     def get(self, request):
         objects_list = FoodsCategories.objects.all()
-        serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
+        serializers = CategoriesFoodsSerializer(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
