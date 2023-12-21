@@ -6,7 +6,7 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from django.core.validators import MinLengthValidator, MaxLengthValidator
-from authen.models import CustomUser, KitchenUser
+from authen.models import CustomUser
 from django.utils.encoding import (
     force_str,
 )

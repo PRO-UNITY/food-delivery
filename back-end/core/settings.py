@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     "authen",
     "kitchen",
     "foods",
-    "apps",
     "delivery",
     'managers',
     'order',

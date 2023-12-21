@@ -46,21 +46,6 @@ class AllKitchenSerializers(serializers.ModelSerializer):
         ]
 
 
-class KitchenUserWithCounterSerializer(serializers.ModelSerializer):
-    foods_count = serializers.SerializerMethodField()
-    like_count = serializers.SerializerMethodField()
-
-    class Meta:
-        model = KitchenUser
-        fields = '__all__'
-
-    def get_foods_count(self, obj):
-        return obj.foods_set.count()
-
-    def get_like_count(self, obj):
-        return obj.kitchenlike_set.count()
-
-
 class KitchenCrudSerializers(serializers.ModelSerializer):
     logo = serializers.ImageField(
         max_length=None,
@@ -151,68 +136,6 @@ class AllFoodKitchenSerializers(serializers.ModelSerializer):
             'food_img',
             'price',
             'kitchen', 'categories', 'create_at', 'updated_at']
-
-
-class DeliveryChickenSerializers(serializers.ModelSerializer):
-    delivery = UserInformationSerializers(many=True, read_only=True)
-
-    class Meta:
-        model = KitchenUser
-        fields = [
-            "id",
-            "delivery",
-        ]
-
-    def update(self, instance, validated_data):
-        deliveries_data = validated_data.pop("delivery")
-        instance.delivery.clear()
-        for delivery_data in deliveries_data:
-            instance.delivery.add(delivery_data)
-        instance.save()
-        return instance
-
-
-class FoodKitchenCrudSerializers(serializers.ModelSerializer):
-    image_food = serializers.ImageField(
-        max_length=None,
-        allow_empty_file=False,
-        allow_null=False,
-        use_url=False,
-        required=False,
-    )
-
-    class Meta:
-        model = KitchenFoods
-        fields = [
-            "id",
-            "name",
-            "description",
-            "image_food",
-            "user_id",
-            "kitchen_id",
-            "create_at",
-            "updated_at",
-        ]
-
-    def create(self, validated_data):
-        create_foods = KitchenFoods.objects.create(**validated_data)
-        create_foods.user_id = self.context.get("user_id")
-        create_foods.save()
-        return create_foods
-
-    def update(self, instance, validated_data):
-        instance.name = validated_data.get("name", instance.name)
-        instance.description = validated_data.get(
-            "description", instance.description)
-        instance.kitchen_id = validated_data.get(
-            "kitchen_id", instance.kitchen_id)
-        if instance.image_food == None:
-            instance.image_food = self.context.get("image_food")
-        else:
-            instance.image_food = validated_data.get(
-                "image_food", instance.image_food)
-        instance.save()
-        return instance
 
 
 class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
