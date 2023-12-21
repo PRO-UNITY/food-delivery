@@ -7,14 +7,6 @@ from kitchen.views import (
     KitchenCategoryViews,
     KitchenFoodsViews,
     AllKitchenFood,
-    # AllKitchenViews,
-    # KitchenFoodsCrudViews,
-    # CategoryFood,
-    # DeteileKitchenFood,
-    # KitchenLikeViews,
-    # KitchenCategoriesViews,
-    # KitchenIsActiveViews,
-    # ManagerKitchenCreateViews,
 )
 
 urlpatterns = [
@@ -25,12 +17,4 @@ urlpatterns = [
     path('category/<int:pk>', CategoriesCrudViews.as_view()),
     path("foods", KitchenFoodsViews.as_view()),
     path("<int:pk>/foods", AllKitchenFood.as_view()),
-    # path("kitchen_all", AllKitchenViews.as_view()),
-    # path("kitchen_foods_crud/<int:pk>", KitchenFoodsCrudViews.as_view()),
-    # path('category/<int:pk>', CategoryFood.as_view()),
-    # path("deteile_kitchen_food/<int:pk>", DeteileKitchenFood.as_view()),
-    # path("kitchen_like/<int:pk>", KitchenLikeViews.as_view()),
-    # path("category/<int:pk>", KitchenCategoriesViews.as_view()),
-    # path("kitchen_is_active", KitchenIsActiveViews.as_view()),
-    # path('add_manager/<int:pk>', ManagerKitchenCreateViews.as_view()),
 ]

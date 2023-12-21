@@ -10,8 +10,6 @@ from delivery.models import Delivery
 from django.shortcuts import get_object_or_404
 from authen.pagination import StandardResultsSetPagination
 from order.serializers import (
-    StatusSerializers,
-    RaitingSerializers,
     OrderFoodsSerializers,
     OrderSerializers,
     SendOrderSerializers,

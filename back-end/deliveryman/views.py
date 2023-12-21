@@ -91,22 +91,6 @@ class RegisterDeliveryViews(APIView):
             )
 
 
-class DeliveryUser(APIView):
-    """Kitchen all delivery"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
-    )
-    def get(self, request):
-        queryset = CustomUser.objects.filter(groups__name__in=["delivery"])
-        serializers = UserInformationSerializers(queryset, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
-
-
 class DeliveryUserCrud(APIView):
     """Change delivery information and status"""
 

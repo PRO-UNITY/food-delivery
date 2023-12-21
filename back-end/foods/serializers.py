@@ -30,23 +30,6 @@ class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "create_at", "updated_at"]
 
 
-class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FoodsCategories
-        fields = ["id", "name", "kitchen", "create_at", "updated_at"]
-
-    def create(self, validated_data):
-        create_categoires = FoodsCategories.objects.create(**validated_data)
-        create_categoires.save()
-        return create_categoires
-
-    def update(self, instance, validated_data):
-        instance.name = validated_data.get("name", instance.name)
-        instance.kitchen = validated_data.get("kitchen", instance.kitchen_id)
-        instance.save()
-        return instance
-
-
 class AllFoodsSerializer(serializers.ModelSerializer):
     categories = AllCategoriesFoodsSerializer(read_only=True)
 
@@ -65,7 +48,7 @@ class AllFoodsSerializer(serializers.ModelSerializer):
         ]
 
 
-class FoodsCrudSerializer(serializers.ModelSerializer):
+class   FoodsCrudSerializer(serializers.ModelSerializer):
     food_img = serializers.ImageField(
         max_length=None,
         allow_empty_file=False,
@@ -90,6 +73,7 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_get = self.context.get("user")
+        print(user_get)
         groups = user_get.groups.all()
         if groups:
             if str(groups[0]) == "kitchen":
