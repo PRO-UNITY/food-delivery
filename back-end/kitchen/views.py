@@ -10,13 +10,15 @@ from kitchen.pagination import StandardResultsSetPagination
 from authen.renderers import UserRenderers
 from kitchen.models import Restaurants
 from foods.models import FoodsCategories, Foods
-from foods.serializers import AllCategoriesFoodsSerializer
+from foods.serializers import (
+    CategoriesSerializer,
+    AllCategoriesFoodsSerializer,
+)
 from kitchen.serializers import (
     AllKitchenSerializers,
     KitchenCrudSerializers,
     AllFoodKitchenSerializers,
-    CategoriesFoodsCrudSerializer,
-    CategoriesFoodsSerializer,
+    CategoriesFoodsCrudSerializer
 )
 
 
@@ -213,7 +215,7 @@ class KitchenCategoryViews(APIView):
 
     def get(self, request):
         objects_list = FoodsCategories.objects.all()
-        serializers = CategoriesFoodsSerializer(objects_list, many=True)
+        serializers = CategoriesSerializer(objects_list, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(

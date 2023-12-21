@@ -55,7 +55,8 @@ class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
         return obj.foods.count()
 
 
-class CategoriesFoodsSerializer(serializers.ModelSerializer):
+class CategoriesSerializer(serializers.ModelSerializer):
+
     food_count = serializers.SerializerMethodField()
 
     class Meta:
