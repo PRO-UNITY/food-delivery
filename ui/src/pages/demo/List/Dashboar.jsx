@@ -42,9 +42,9 @@ const Dashboard = () => {
     },[])
 
     useEffect(()=>{
-        getDataWithToken(`/foods/?q=${search}`).
+        getDataWithToken(`/foods/?name=${search}`).
         then((res)=>{
-            setSearchFoods(res.data.results)           
+            setSearchFoods(res.data.results) 
         })
     },[search])
 
@@ -81,7 +81,7 @@ const Dashboard = () => {
                 </div>:
                 
             <div className="w-100 body-main  px-5 py-1">
-                {
+                {   
                     search != ""?
                     <div className="foods">
                 {
@@ -126,7 +126,7 @@ const Dashboard = () => {
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3 style={{fontWeight:"bold"}}>Category</h3>
-                <button style={{fontWeight:600}} className="orange text-center mb-1 btn-none">View All <i className="fa-solid fa-angle-right"></i></button>
+                <Link to={'/allcategories'} style={{fontWeight:600, textDecoration:"none"}} className="orange text-center mb-1 btn-none">View All <i className="fa-solid fa-angle-right"></i></Link>
                 </div>
                 <div className="categories w-100 mb-3">
                     {
@@ -134,7 +134,7 @@ const Dashboard = () => {
                             <Link to={`/category/${item.id}`} key={index} className="text-dark" style={{textDecoration:"none"}}>
                             <div className="category-item bg-white">
                             <i style={{fontSize:"35px"}} className="fa-solid fa-bowl-food orange"></i>
-                            <p className="name-category p-0 m-0 fs-6 grey">{item?.name}</p>
+                            <p className="name-category p-0 m-0 grey">{item?.name}</p>
                             </div>
                             </Link>
                         )
@@ -142,15 +142,15 @@ const Dashboard = () => {
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3 style={{fontWeight:"bold"}}>Restaurants</h3>
-                <button style={{fontWeight:600}} className="orange text-center mb-1 btn-none">View All <i className="fa-solid fa-angle-right"></i></button>
+                <Link to={'/allkitchens'} style={{fontWeight:600, textDecoration:"none"}} className="orange text-center mb-1 btn-none">View All <i className="fa-solid fa-angle-right"></i></Link>
                 </div>
                 <div className="categories w-100 mb-3">
                     {
                         kitchen.map((item, index)=>
-                        <Link key={index} to={`/kitchen-details/${item.id}`} className="text-dark" style={{textDecoration:"none"}}>
+                        <Link key={index} to={`/kitchen/${item.id}`} className="text-dark" style={{textDecoration:"none"}}>
                         <div className="category-item bg-white">
                             <img style={{width:"50px",height:"50px", borderRadius:"10px"}} src={`${item?.logo? BASE_URL+item?.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
-                            <p className="name-category p-0 m-0 fs-6 grey">{item?.name}</p>
+                            <p className="name-category p-0 m-0  grey">{item?.name}</p>
                         </div>
                         </Link>
                         )
@@ -158,7 +158,7 @@ const Dashboard = () => {
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3 style={{fontWeight:"bold"}}>Popular Foods</h3>
-                <button style={{fontWeight:600}} className="orange text-center mb-1 btn-none">View All <i className="fa-solid fa-angle-right"></i></button>
+                <Link to={'/allfoods'} style={{fontWeight:600, textDecoration:"none"}} className="orange text-center mb-1 btn-none">View All <i className="fa-solid fa-angle-right"></i></Link>
                 </div>
                 <div className="foods">
                 {

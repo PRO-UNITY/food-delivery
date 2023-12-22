@@ -7,23 +7,24 @@ import Success from '../../../assets/images/success.png'
 // import Spinner from 'react-bootstrap/Spinner';
 
 const calculateTotalPrice = (item, count) => {
-    return item.price * count;
+  return item.price * count;
 };
 
 const FoodOrder = () => {
-    const [search, setSearch] = useState('')
-    const [active, setActive] = useState(false)
-    const cardItems = localStorage.getItem("card");
+    const [search, setSearch] = useState('');
+    const [active, setActive] = useState(false);
+    const cardItems = localStorage.getItem('card');
     const [card, setCard] = useState(JSON.parse(cardItems));
-    const [counts, setCounts] = useState(Array(card?.length).fill(1));
-    const [count, setCount] = useState(0)
+    const [counts, setCounts] = useState(card?.map((item)=>item.count));
+    const [count, setCount] = useState(0);
     const navigate = useNavigate();
     const [totalPrices, setTotalPrices] = useState(
       card?.map((item, index) => calculateTotalPrice(item, counts[index]))
     );
     
+    
     useEffect(() => {
-      localStorage.setItem("card", JSON.stringify(card));
+      localStorage.setItem('card', JSON.stringify(card));
     }, [card]);
   
     const handleIncrement = (index) => {
@@ -32,8 +33,9 @@ const FoodOrder = () => {
       setCounts(newCounts);
       updateTotalPrices(index, newCounts[index]);
       updateLocalStorage(index, newCounts[index]);
-      setCount(count=>count+1)
+      setCount(count => count + 1);
     };
+    
 
     const removeFromCard = (index) => {
         const newCard = [...card];
@@ -53,25 +55,28 @@ const FoodOrder = () => {
       };
       
   
-    const handleDecrement = (index) => {
+      const handleDecrement = (index) => {
         const newCounts = [...counts];
         if (newCounts[index] > 1) {
           newCounts[index]--;
           setCounts(newCounts);
           updateTotalPrices(index, newCounts[index]);
           updateLocalStorage(index, newCounts[index]);
-          setCount(count=>count+1)
+          setCount(count => count + 1);
         } else {
-          removeFromCard(index)
-          setCount(count=>count+1)
+          removeFromCard(index);
+          setCount(count => count + 1);
         }
       };
+      
   
     const updateLocalStorage = (index, count) => {
       const updatedCard = [...card];
       updatedCard[index].count = count;
+      updatedCard[index].totalPrice = calculateTotalPrice(updatedCard[index], count);
       setCard(updatedCard);
     };
+      
   
     const updateTotalPrices = (index, count) => {
       const newTotalPrices = [...totalPrices];
@@ -150,7 +155,7 @@ const FoodOrder = () => {
                             className="btn btn-info"
                             onClick={() => handleIncrement(index)}
                           >
-                            <i className="fa-solid fa-plus"></i>
+                          <i className="fa-solid fa-plus"></i>
                           </button>
                           <button
                             className="btn btn-danger"

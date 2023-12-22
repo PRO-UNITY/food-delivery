@@ -8,9 +8,9 @@ const DemoLayout = ({ children, setSearch, count }) => {
   const [showSidebar, setshowSidebar] = useState(false );
   const [showProfile, setshowProfile] = useState(false );
   return (
-    <div className="bg-light body overflow-auto d-flex ">
+    <div className="bg-secondary body overflow-auto d-flex ">
         <DemoSidebar showSidebar={showSidebar} />
-        <div className="d-flex w-100 flex-column">
+        <div className="d-flex w-100 flex-column bg-light">
             <DemoNavbar setSearch={setSearch} setshowSidebar={setshowSidebar} setshowProfile={setshowProfile} />
             <main className="">{children}</main>
         </div>

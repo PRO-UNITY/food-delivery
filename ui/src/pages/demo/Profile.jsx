@@ -2,15 +2,21 @@ import { useEffect, useState } from 'react'
 import './Demo.css'
 import { BASE_URL, getUserData } from '../../functions/function'
 import { Link, useNavigate } from 'react-router-dom'
+import User from '../../assets/images/user.png'
 
 const Profile = ({ showProfile, count }) => {
     const [user, setUser] = useState(null);
     const [card, setCard] = useState([]);
     const navigate = useNavigate();
+    const token = localStorage.getItem('token')
 
     useEffect(()=>{
         getUserData('/user').
-        then((res)=>setUser(res))
+        then((res)=>{
+            setUser(res)
+            console.log(res);
+        })
+        
     },[])
 
     const logOut = () => {
@@ -21,28 +27,27 @@ const Profile = ({ showProfile, count }) => {
         window.location.reload()
     }
 
-    
-
     useEffect(()=>{
         const data = JSON.parse(localStorage.getItem('card'))
         setCard(data)
+        
     },[count])
-
     return (
-        <div className={`w-100 bg-white py-4 px-4 profile  ${showProfile && "show"}`}>
+        <div className={`w-100 bg-white pt-4 px-4 profile  ${showProfile && "show"}`}>
             <div className="d-flex justify-content-end align-items-center mb-4">
                 {
-                    user?.avatar ?
-                    <div className='d-flex gap-2 align-items-center'>
-                        <Link to={localStorage.getItem('role')=="admins"?'/admin':"/"} className="btn-none ">
-                        <img style={{width:"50px", height:"50px", objectFit:"cover", borderRadius:"20%"}} src={`${user?.avatar ? BASE_URL+user.avatar : "https://plus.unsplash.com/premium_photo-1683121366070-5ceb7e007a97?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"}`} alt="" />
-                        </Link>
-                        <button onClick={logOut} className='btn btn-outline-danger'>Log-out</button>
-                    </div> : 
+                    !token?
                     <div className="d-flex gap-1">
                         <Link to={'/register'} className='btn-sign-in bg-orange'>Sign-up</Link>
                         <Link to={'/login'} className='btn-sign-in bg-orange'>Sign-in</Link>
                     </div>
+                    : 
+                    <div className='d-flex gap-2 align-items-center'>
+                    <Link to={'/settings'} className="btn-none ">
+                    <img style={{width:"50px", height:"50px", objectFit:"cover", borderRadius:"50%"}} src={`${user?.avatar ? BASE_URL+user?.avatar : User}`} alt="" />
+                    </Link>
+                    <button onClick={logOut} className='btn btn-outline-danger'>Log-out</button>
+                </div>
                 }      
             </div>
             <h4 style={{fontWeight:700}}>Your Balance</h4>
@@ -69,30 +74,27 @@ const Profile = ({ showProfile, count }) => {
             <h6 className="text-secondary">Your Address</h6>
             <div className="d-flex justify-content-between align-items-center mb-2">
                 <p style={{fontWeight:"700"}} className="p-0 m-0"><i className="fa-solid fa-location-dot orange"></i> Elm Street, 23</p>
-                <button className="btn-outline">Change</button>
             </div>
-            <p className="text-secondary">Lorem ipsum dolor, sit amet dolor consectetur adipisicing elit.</p>
-            <div className="d-flex gap-3 mb-3">
-                <div className="btn btn-outline-secondary btn-sm">Add Details</div>
-                <div className="btn btn-outline-secondary btn-sm">Add Details</div>
-            </div>
+            <hr />
+            {/* <p className="text-secondary">Lorem ipsum dolor, sit amet dolor consectetur adipisicing elit.</p> */}
             <h5 style={{fontWeight:700}} className="mb-3">Order Menu</h5>
+            <div className="orders">
             {
                 card?.map((item, index)=>
-                    <div key={index} className="orders">
+                    <div key={index}>
                         <div className="card-order d-flex align-items-center justify-content-between mb-3">
                             <div className="d-flex gap-2">
                             <img style={{width:"50px", height:"50px"}} src={`${BASE_URL+item?.food_img}`} alt="" />
-                            <div>
+                            <div className='d-flex align-items-center'>
                                 <p style={{fontWeight:"bold"}} className="m-0 p-0">{item?.name}</p>
-                                <p style={{fontSize:"12px",}} className="m-0 p-0 text-secondary">x{item?.count}</p>
                             </div>
                             </div>
-                            <p style={{fontWeight:"bold"}} className="mx-2">+<span className="orange">{item?.price}</span>$</p>
+                            <p style={{fontWeight:"bold"}} className="mx-2">+<span className="orange">{item?.totalPrice}</span>$</p>
                         </div>
                     </div>
                 )
             }
+            </div>
             <hr />
             <div className="d-flex justify-content-between align-items-center">
                 <p style={{fontSize:"10px"}}>service</p>
@@ -102,7 +104,7 @@ const Profile = ({ showProfile, count }) => {
                 <p>Total</p>
                 <p style={{fontWeight:"bold"}} className="mx-2"><span className="orange">$</span></p>
             </div>
-            <button className="btn btn-warning w-100 text-light">Checkout</button>
+            <Link to={'/food-order'}><button className='btn-checkout'>Checkout</button></Link>
         </div>
     )
 }

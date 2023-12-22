@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom"
-import { CategoryDetails, Dashboard, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodOrder, KitchenDetails, Login, Notification, Register, Services, Settings, TaskList } from "./pages"
+import { AllCategories, AllFoods, AllKitchens, CategoryDetails, Dashboard, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodOrder, KitchenDetails, Login, Notification, Register, Services, Settings, TaskList } from "./pages"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OrderHistory from "./pages/demo/List/OrderHistory";
 import { useState, useEffect } from "react";
@@ -30,6 +30,9 @@ function App() {
       <Routes>
         <Route path="/" element={ <Dashboard/> } />
         <Route path="/home" element={ <Dashboard/> } />
+        <Route path="/allfoods" element={ <AllFoods/> } />
+        <Route path="/allcategories" element={ <AllCategories/> } />
+        <Route path="/allkitchens" element={ <AllKitchens/> } />
         {localStorage.getItem('role')==="kitchen"?<Route path="/dashboard" element={ <Dashboard/> } />:""}
         <Route path="/food-order" element={ <FoodOrder/> } />
         <Route path="/favourite" element={ <Favourite/> } />
@@ -38,7 +41,7 @@ function App() {
         <Route path="/register" element={ <Register/> } />
         <Route path="/login" element={ <Login/> } />
         <Route path="/category/:id" element={ <CategoryDetails/> } />
-        <Route path="/kitchen-details/:id" element={ <KitchenDetails/> } />
+        <Route path="/kitchen/:id" element={ <KitchenDetails/> } />
         <Route path="*" element={ <Pagenotfound/> } />
         <Route path="/admin" element={ localStorage.getItem('role')==="admins"?<DeliveryHome/>:<Dashboard/> } />
         <Route path="/edit-profile" element={ localStorage.getItem('role')==="admins"?<EditAdminProfile/>:<Login/> } />

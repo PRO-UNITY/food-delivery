@@ -1,4 +1,7 @@
 export { default as Dashboard } from './demo/List/Dashboar' 
+export { default as AllFoods } from './demo/List/AllFoods' 
+export { default as AllCategories } from './demo/List/AllCategories' 
+export { default as AllKitchens } from './demo/List/AllKitchens' 
 export { default as FoodOrder } from './demo/List/FoodOrder' 
 export { default as Favourite } from './demo/List/Favourite' 
 export { default as orderHistory } from './demo/List/OrderHistory' 
