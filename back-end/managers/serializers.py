@@ -18,6 +18,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
     """User Profiles Serializers"""
 
     role = serializers.SerializerMethodField()
+    avatar = serializers.ImageField(max_length=None, use_url=True)
 
     class Meta:
         """User Model Fileds"""
@@ -120,6 +121,7 @@ class ManagerSignUpSerializers(serializers.ModelSerializer):
 
 
 class AllKitchenSerializers(serializers.ModelSerializer):
+    logo = serializers.ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Restaurants

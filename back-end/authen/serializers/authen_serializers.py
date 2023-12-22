@@ -108,6 +108,7 @@ class UserSignUpSerializers(serializers.ModelSerializer):
 class UserUpdateSerializers(serializers.ModelSerializer):
     """Serializers"""
 
+    avatar = serializers.ImageField(max_length=None, use_url=True)
     first_name = serializers.CharField(
         max_length=50,
         validators=[
@@ -195,6 +196,7 @@ class UserSigInInSerializers(serializers.ModelSerializer):
 class UserInformationSerializers(serializers.ModelSerializer):
     """User Profiles Serializers"""
     role = serializers.SerializerMethodField()
+    avatar = serializers.ImageField(max_length=None, use_url=True)
 
     class Meta:
         """User Model Fileds"""
