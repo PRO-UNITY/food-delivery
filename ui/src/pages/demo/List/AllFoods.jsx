@@ -92,7 +92,7 @@ const AllFoods = () => {
                             <Link key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
                             
                             <div className="w-100 d-flex justify-content-center">
-                            <img className="mb-2" style={{width:"150px", height:"150px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                            <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                             </div>
                             <div className="mb-2">
                             <i className="fa-solid fa-star orange"></i>
@@ -132,7 +132,7 @@ const AllFoods = () => {
                         <Link key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
                         
                         <div className="w-100 d-flex justify-content-center">
-                        <img className="mb-2" style={{width:"150px", height:"150px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                        <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                         </div>
                         <div className="mb-2">
                         <i className="fa-solid fa-star orange"></i>

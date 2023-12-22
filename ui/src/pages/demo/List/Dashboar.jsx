@@ -89,7 +89,7 @@ const Dashboard = () => {
                     <Link key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
                     
                     <div className="w-100 d-flex justify-content-center">
-                    <img className="mb-2" style={{width:"150px", height:"150px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                    <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                     </div>
                     <div className="mb-2">
                     <i className="fa-solid fa-star orange"></i>
@@ -133,7 +133,7 @@ const Dashboard = () => {
                         category.map((item,index)=>
                             <Link to={`/category/${item.id}`} key={index} className="text-dark" style={{textDecoration:"none"}}>
                             <div className="category-item bg-white">
-                            <i style={{fontSize:"35px"}} className="fa-solid fa-bowl-food orange"></i>
+                            <i style={{fontSize:"25px"}} className="fa-solid fa-bowl-food orange"></i>
                             <p className="name-category p-0 m-0 grey">{item?.name}</p>
                             </div>
                             </Link>
@@ -149,7 +149,7 @@ const Dashboard = () => {
                         kitchen.map((item, index)=>
                         <Link key={index} to={`/kitchen/${item.id}`} className="text-dark" style={{textDecoration:"none"}}>
                         <div className="category-item bg-white">
-                            <img style={{width:"50px",height:"50px", borderRadius:"10px"}} src={`${item?.logo? BASE_URL+item?.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                            <img style={{width:"35px",height:"35px", borderRadius:"10px"}} src={`${item?.logo? BASE_URL+item?.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                             <p className="name-category p-0 m-0  grey">{item?.name}</p>
                         </div>
                         </Link>
@@ -166,7 +166,7 @@ const Dashboard = () => {
                     <Link key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
                     
                     <div className="w-100 d-flex justify-content-center">
-                    <img className="mb-2" style={{width:"150px", height:"150px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                    <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                     </div>
                     <div className="mb-2">
                     <i className="fa-solid fa-star orange"></i>
