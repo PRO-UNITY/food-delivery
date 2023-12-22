@@ -14,6 +14,10 @@
   border-radius: 10px;
 }
 
+.big-text-vaucher{
+  font-size: 28px;
+  font-weight: 600;
+}
 .body{
   height: 100vh;
 }
@@ -456,21 +460,26 @@
     width: 275px;
   }
 
+  .big-text-vaucher{
+    font-size: 18px;
+    font-weight: 500;
+  }
+
   .body{
     min-height: 100vh;
   }
   .profile{
     position: absolute;
     transition: 0.5s;
-    height: 90vh;
-    margin-top: 85px;
+    height: 80vh;
+    margin-top: 75px;
     left: 0;
     opacity: 0;
     width: 100% !important;
     z-index: -999 !important;
   }
   .profile.show{
-    height: 90vh;
+    height: 80vh;
     left: 0;
     opacity: 1;
     z-index: 9999 !important;
@@ -484,9 +493,9 @@
   .hrms-doc-sidebar {
     position: absolute;
     transition: 0.5s;
-    height: 90vh;
+    height: 80vh;
     width: 70%;
-    margin-top: 85px;
+    margin-top: 75px;
     left: -100%;
     z-index: 9999 !important;
   }
