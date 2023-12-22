@@ -44,7 +44,7 @@ class AllFoodsViews(APIView):
         return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
-        search_name = request.query_params.get("q", None)
+        search_name = request.query_params.get("name", None)
         search_category = request.query_params.get("category", None)
         search_restaurant = request.query_params.get("restaurant", None)
         search_description = request.query_params.get("description", None)
