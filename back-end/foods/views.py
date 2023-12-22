@@ -24,7 +24,6 @@ class AllFoodsViews(APIView):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "categories", "kitchen", "price", "description"]
 
-    @cache_page(60 * 15)
     @property
     def paginator(self):
         if not hasattr(self, "_paginator"):
