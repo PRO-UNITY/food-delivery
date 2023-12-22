@@ -27,6 +27,8 @@ class KitchenViews(APIView):
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
     serializer_class = AllKitchenSerializers
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["name", "description", "is_active", "open_time", "close_time"]
 
     @property
     def paginator(self):
@@ -50,14 +52,45 @@ class KitchenViews(APIView):
         return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
-        instance = Restaurants.objects.all()
-        page = self.paginate_queryset(instance)
-        if page is not None:
+        search_name = request.query_params.get("name", None)
+        search_description = request.query_params.get("description", None)
+        search_is_active = request.query_params.get("is_active", None)
+        search_open = request.query_params.get("open_time", None)
+        price_close = request.query_params.get("close_time", None)
+        sort_by = request.query_params.get("sort", None)
+        queryset = Restaurants.objects.all()
+
+        if search_name:
+            queryset = queryset.filter(Q(name__icontains=search_name))
+
+        if search_is_active:
+            queryset = queryset.filter(
+                Q(is_active=search_is_active))
+
+        if search_open:
+            queryset = queryset.filter(
+                Q(open_time__gte=search_open)
+            )
+
+        if price_close:
+            queryset = queryset.filter(
+                Q(close_time__lte=price_close)
+            )
+
+        if search_description:
+            queryset = queryset.filter(Q(description__icontains=search_description))
+
+        if sort_by == "asc":
+            queryset = queryset.order_by("id")
+        elif sort_by == "desc":
+            queryset = queryset.order_by("-id")
+        page = self.paginate_queryset(queryset)
+        if page is not None:    
             serializer = self.get_paginated_response(
                 self.serializer_class(page, many=True).data
             )
         else:
-            serializer = self.serializer_class(instance, many=True)
+            serializer = self.serializer_class(queryset, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(

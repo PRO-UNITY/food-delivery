@@ -21,7 +21,7 @@ class AllFoodsViews(APIView):
     pagination_class = StandardResultsSetPagination
     serializer_class = AllFoodsSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["name", "categories", "kitchen", "price"]
+    filterset_fields = ["name", "categories", "kitchen", "price", "description"]
 
     @property
     def paginator(self):
@@ -47,6 +47,7 @@ class AllFoodsViews(APIView):
         search_name = request.query_params.get("q", None)
         search_category = request.query_params.get("category", None)
         search_restaurant = request.query_params.get("restaurant", None)
+        search_description = request.query_params.get("description", None)
         price_range = request.query_params.get("price", None)
         sort_by = request.query_params.get("sort", None)
         queryset = Foods.objects.all()
@@ -55,10 +56,16 @@ class AllFoodsViews(APIView):
             queryset = queryset.filter(Q(name__icontains=search_name))
 
         if search_category:
-            queryset = queryset.filter(Q(categories__id=search_category))
+            queryset = queryset.filter(
+                Q(categories__id__icontains=search_category) | Q(categories__name__icontains=search_category))
 
         if search_restaurant:
-            queryset = queryset.filter(Q(restaurant__id__icontains=search_restaurant))
+            queryset = queryset.filter(
+                Q(kitchen__id__icontains=search_restaurant) | Q(kitchen__name__icontains=search_restaurant)
+            )
+
+        if search_description:
+            queryset = queryset.filter(Q(description__icontains=search_description))
 
         if price_range:
             try:
