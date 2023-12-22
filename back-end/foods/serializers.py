@@ -69,6 +69,7 @@ class CategoriesSerializer(serializers.ModelSerializer):
 
 class AllFoodsSerializer(serializers.ModelSerializer):
     # categories = CategoriesFoodsSerializer(read_only=True)
+    food_img = serializers.ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Foods

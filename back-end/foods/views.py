@@ -44,6 +44,7 @@ class AllFoodsViews(APIView):
         return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
+        req = request
         search_name = request.query_params.get("name", None)
         search_category = request.query_params.get("category", None)
         search_restaurant = request.query_params.get("restaurant", None)
@@ -82,10 +83,11 @@ class AllFoodsViews(APIView):
         page = self.paginate_queryset(queryset)
         if page is not None:    
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True).data
+                self.serializer_class(page, many=True, context={'request': request}).data
             )
         else:
-            serializer = self.serializer_class(queryset, many=True)
+            serializer = self.serializer_class(
+                queryset, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
