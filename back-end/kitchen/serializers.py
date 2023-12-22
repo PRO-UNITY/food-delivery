@@ -12,6 +12,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
 
 class AllKitchenSerializers(serializers.ModelSerializer):
     deliveryman_user = UserInformationSerializers(many=True, read_only=True)
+    logo = serializers.ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Restaurants
@@ -40,6 +41,7 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
         use_url=False,
         required=False,
     )
+    logo = serializers.ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Restaurants
@@ -112,6 +114,7 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
 
 
 class AllFoodKitchenSerializers(serializers.ModelSerializer):
+    food_img = serializers.ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Foods

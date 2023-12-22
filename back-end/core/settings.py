@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django_rest_passwordreset",
     'drf_spectacular',
     'drf_yasg',
+    # 'cacheops',
     # my_app
     "authen",
     "kitchen",
@@ -71,7 +72,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
-    # "core.middleware.JsonErrorResponseMiddleware"
+    # "core.cashe.CacheControlMiddleware"
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -145,14 +146,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-STATIC_URL = "static/"
+STATIC_URL = "/food-delivery/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 
-MEDIA_URL = "/media/"
+MEDIA_URL = "/food-delivery/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -263,6 +264,18 @@ SIMPLE_JWT = {
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",
 }
+
+# CACHEOPS = {
+#     'auth.user': {'ops': 'get', 'timeout': 60*15},
+#     'authen.*': {'ops': 'all', 'timeout': 60*15},
+#     'foods.*': {'ops': 'all', 'timeout': 60*15},
+#     'kitchen.*': {'ops': 'all', 'timeout': 60*15},
+#     'order.*': {'ops': 'all', 'timeout': 60*15},
+#     'manager.*': {'ops': 'all', 'timeout': 60*15},
+#     'deliveryman.*': {'ops': 'all', 'timeout': 60*15},
+# }
+
+# CACHE_TIMEOUT = 60 * 15  # 15 minutes
 
 SOCIAL_AUTH_FACEBOOK_KEY = "863244545502688"
 SOCIAL_AUTH_FACEBOOK_SECRET = "8d9a789122fc5f51ab48d03831412c45"

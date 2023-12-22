@@ -63,7 +63,7 @@ class ManagerKitchenViews(APIView):
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True).data
+                self.serializer_class(page, many=True, context={"request": request}).data
             )
         else:
             serializer = self.serializer_class(queryset, many=True)
@@ -158,6 +158,7 @@ class ManagerKitchenCrudViews(APIView):
                 )
             queryset = get_object_or_404(CustomUser, id=pk)
             serializer = ManagerSignUpSerializers(
+                context={"request": request},
                 instance=queryset,
                 data=request.data,
                 partial=True,
@@ -192,7 +193,7 @@ class ManagerKitchensViews(APIView):
             if groups:
                 if str(groups[0]) == "manager":
                     queryset = Restaurants.objects.filter(deliveryman_user=request.user)
-                    serializers = AllKitchenSerializers(queryset, many=True)
+                    serializers = AllKitchenSerializers(queryset, many=True, context={"request": request})
                     return Response(serializers.data, status=status.HTTP_200_OK)
                 else:
                     return Response(

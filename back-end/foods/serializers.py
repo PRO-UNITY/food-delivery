@@ -11,6 +11,8 @@ class UserInformationSerializers(serializers.ModelSerializer):
 
 
 class AllKitchenSerializers(serializers.ModelSerializer):
+    logo = serializers.ImageField(max_length=None, use_url=True)
+
     class Meta:
         model = Restaurants
         fields = [
@@ -26,6 +28,7 @@ class AllKitchenSerializers(serializers.ModelSerializer):
 
 
 class FoodsSerializer(serializers.ModelSerializer):
+    food_img = serializers.ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Foods
@@ -69,6 +72,7 @@ class CategoriesSerializer(serializers.ModelSerializer):
 
 class AllFoodsSerializer(serializers.ModelSerializer):
     # categories = CategoriesFoodsSerializer(read_only=True)
+    food_img = serializers.ImageField(max_length=None, use_url=True)
 
     class Meta:
         model = Foods
@@ -86,6 +90,8 @@ class AllFoodsSerializer(serializers.ModelSerializer):
 
 
 class FoodsCrudSerializer(serializers.ModelSerializer):
+
+    food_img = serializers.ImageField(max_length=None, use_url=True)
     food_img = serializers.ImageField(
         max_length=None,
         allow_empty_file=False,

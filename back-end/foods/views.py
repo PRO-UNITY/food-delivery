@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from kitchen.pagination import StandardResultsSetPagination
+from django.views.decorators.cache import cache_page
 from drf_spectacular.utils import extend_schema
 from authen.renderers import UserRenderers
 from foods.models import Foods
@@ -21,7 +22,7 @@ class AllFoodsViews(APIView):
     pagination_class = StandardResultsSetPagination
     serializer_class = AllFoodsSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["name", "categories", "kitchen", "price"]
+    filterset_fields = ["name", "categories", "kitchen", "price", "description"]
 
     @property
     def paginator(self):
@@ -44,9 +45,10 @@ class AllFoodsViews(APIView):
         return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
-        search_name = request.query_params.get("q", None)
+        search_name = request.query_params.get("name", None)
         search_category = request.query_params.get("category", None)
         search_restaurant = request.query_params.get("restaurant", None)
+        search_description = request.query_params.get("description", None)
         price_range = request.query_params.get("price", None)
         sort_by = request.query_params.get("sort", None)
         queryset = Foods.objects.all()
@@ -55,10 +57,16 @@ class AllFoodsViews(APIView):
             queryset = queryset.filter(Q(name__icontains=search_name))
 
         if search_category:
-            queryset = queryset.filter(Q(categories__id=search_category))
+            queryset = queryset.filter(
+                Q(categories__id__icontains=search_category) | Q(categories__name__icontains=search_category))
 
         if search_restaurant:
-            queryset = queryset.filter(Q(restaurant__id__icontains=search_restaurant))
+            queryset = queryset.filter(
+                Q(kitchen__id__icontains=search_restaurant) | Q(kitchen__name__icontains=search_restaurant)
+            )
+
+        if search_description:
+            queryset = queryset.filter(Q(description__icontains=search_description))
 
         if price_range:
             try:
@@ -75,10 +83,11 @@ class AllFoodsViews(APIView):
         page = self.paginate_queryset(queryset)
         if page is not None:    
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True).data
+                self.serializer_class(page, many=True, context={'request': request}).data
             )
         else:
-            serializer = self.serializer_class(queryset, many=True)
+            serializer = self.serializer_class(
+                queryset, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -130,7 +139,7 @@ class FoodsCrudViews(APIView):
 
     def get(self, request, pk):
         objects_list = get_object_or_404(Foods, id=pk)
-        serializers = AllFoodsSerializer(objects_list)
+        serializers = AllFoodsSerializer(objects_list, context={"request": request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -162,7 +171,7 @@ class FoodsCrudViews(APIView):
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
             serializers = FoodsCrudSerializer(
-                context={"user": request.user},
+                context={"user": request.user, "request": request},
                 instance=Foods.objects.filter(id=pk)[0],
                 data=request.data,
                 partial=True,
@@ -238,7 +247,7 @@ class CategoriesFoodsViews(APIView):
         page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True).data
+                self.serializer_class(page, many=True, context={'request': request}).data
             )
         else:
             serializer = self.serializer_class(instance, many=True)
