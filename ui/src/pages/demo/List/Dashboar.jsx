@@ -122,7 +122,7 @@ const Dashboard = () => {
                     <>
                 <div className="vaucher d-flex flex-column justify-content-center align-items-start p-4 mb-4">
                     <h3 className="text-white">Det Discount Vaucher <br /> Up To 20%</h3>
-                    <p className="text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. <br /> Neque reiciendis sit doloremque aliquam </p>
+                    <p className="text-white mini-text-vaucher">Lorem ipsum dolor sit amet consectetur adipisicing elit. <br /> Neque reiciendis sit doloremque aliquam </p>
                 </div>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3 style={{fontWeight:"bold"}}>Category</h3>

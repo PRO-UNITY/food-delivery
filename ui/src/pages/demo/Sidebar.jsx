@@ -29,13 +29,13 @@ const DemoSidebar = ({ showSidebar }) => {
         </div>
         <div className="side-body">
           <ul style={{listStyle:"none"}} className="px-3">
-              {localStorage.getItem('role')=== "kitchen"?
+              
               <li className="nav-item">
               <NavLink to={'/dashboard'} className="nav-link text-start px-2" isActive={() => checkActive("/dashboard")}>
                   <p className="text-start py-3 "><i className="fa-solid fa-utensils mx-3"></i>Dashboard</p>
               </NavLink>
-              </li> :"" 
-              }
+              </li>
+              
               <li className="nav-item">
                 <NavLink to={localStorage.getItem('role')!=="undefined"?"/food-order":"/login"} className="nav-link text-start px-2" isActive={() => checkActive("/food-order")}>
                     <p className="text-start py-3"><i className="fa-solid fa-truck mx-3"></i>Food Order</p>
@@ -71,7 +71,7 @@ const DemoSidebar = ({ showSidebar }) => {
           <div className="px-3 pt-3">
           <div className='bg-orange w-100 sidebar-vaucher d-flex flex-column justify-content-center align-items-start px-3'>
             <p className='p-0 m-0 mb-2'>Upgrade your <br /> Account to Get Free <br /> Vaucher</p>
-            <button className='btn-vaucher'>Upgrade</button>
+            {/* <button className='btn-vaucher'>Upgrade</button> */}
           </div>
           </div>
         </div>

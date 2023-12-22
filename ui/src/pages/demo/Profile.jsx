@@ -10,14 +10,13 @@ const Profile = ({ showProfile, count }) => {
     const navigate = useNavigate();
     const token = localStorage.getItem('token')
 
-    useEffect(()=>{
-        getUserData('/user').
-        then((res)=>{
-            setUser(res)
-            console.log(res);
-        })
+    // useEffect(()=>{
+    //     getUserData('/user').
+    //     then((res)=>{
+    //         setUser(res)
+    //     })
         
-    },[])
+    // },[])
 
     const logOut = () => {
         localStorage.removeItem('token')
@@ -33,7 +32,7 @@ const Profile = ({ showProfile, count }) => {
         
     },[count])
     return (
-        <div className={`w-100 bg-white pt-4 px-4 profile  ${showProfile && "show"}`}>
+        <div className={`bg-white pt-4 px-4 profile  ${showProfile && "show"}`}>
             <div className="d-flex justify-content-end align-items-center mb-4">
                 {
                     !token?
@@ -57,18 +56,18 @@ const Profile = ({ showProfile, count }) => {
                     <p className="m-0 p-0" style={{fontSize:"20px", fontWeight:800}}>$12.00</p>
                 </div>
                 <div className="w-50 d-flex">
-                <div className="w-50 top-up">
+                {/* <div className="w-50 top-up">
                     <button className="btn-none bg-white rounded px-3 py-2 mb-2">
                     <i className="fa-solid fa-arrow-up"></i>
                     </button>
                     <p style={{fontSize:"10px"}} className="text-white mx-1 mb-0">Top Up</p>
-                </div>
-                <div className="w-50 top-up">
+                </div> */}
+                {/* <div className="w-50 top-up">
                     <button className="btn-none bg-white rounded px-3 py-2 mb-2">
                     <i className="fa-solid fa-arrow-down"></i>
                     </button>
                     <p style={{fontSize:"10px"}} className="text-white mx-1 mb-0">Transfer</p>
-                </div>
+                </div> */}
                 </div>
             </div>
             <h6 className="text-secondary">Your Address</h6>
@@ -89,7 +88,7 @@ const Profile = ({ showProfile, count }) => {
                                 <p style={{fontWeight:"bold"}} className="m-0 p-0">{item?.name}</p>
                             </div>
                             </div>
-                            <p style={{fontWeight:"bold"}} className="mx-2">+<span className="orange">{item?.totalPrice}</span>$</p>
+                            <p style={{fontWeight:"bold"}} className="mx-2 m-0 p-0">+<span className="orange">{item?.totalPrice?item?.totalPrice:item?.price}</span></p>
                         </div>
                     </div>
                 )
@@ -98,7 +97,7 @@ const Profile = ({ showProfile, count }) => {
             <hr />
             <div className="d-flex justify-content-between align-items-center">
                 <p style={{fontSize:"10px"}}>service</p>
-                <p style={{fontWeight:"bold"}} className="mx-2">+<span className="orange">$</span>5.59</p>
+                <p style={{fontWeight:"bold"}} className="mx-2">+<span className="orange">$</span>1</p>
             </div>
             <div className="d-flex justify-content-between align-items-center">
                 <p>Total</p>

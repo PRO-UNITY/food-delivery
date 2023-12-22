@@ -33,7 +33,7 @@ function App() {
         <Route path="/allfoods" element={ <AllFoods/> } />
         <Route path="/allcategories" element={ <AllCategories/> } />
         <Route path="/allkitchens" element={ <AllKitchens/> } />
-        {localStorage.getItem('role')==="kitchen"?<Route path="/dashboard" element={ <Dashboard/> } />:""}
+        {<Route path="/dashboard" element={ <Dashboard/> } />}
         <Route path="/food-order" element={ <FoodOrder/> } />
         <Route path="/favourite" element={ <Favourite/> } />
         <Route path="/order-history" element={ <OrderHistory/> } />
@@ -43,7 +43,7 @@ function App() {
         <Route path="/category/:id" element={ <CategoryDetails/> } />
         <Route path="/kitchen/:id" element={ <KitchenDetails/> } />
         <Route path="*" element={ <Pagenotfound/> } />
-        <Route path="/admin" element={ localStorage.getItem('role')==="admins"?<DeliveryHome/>:<Dashboard/> } />
+        <Route path="/admin" element={ localStorage.getItem('role')==="kitchen"?<DeliveryHome/>:<Dashboard/> } />
         <Route path="/edit-profile" element={ localStorage.getItem('role')==="admins"?<EditAdminProfile/>:<Login/> } />
         <Route path="/statistic" element={ <DeliveryStatistic/> } />
         <Route path="/task-list" element={ <TaskList/> } />
