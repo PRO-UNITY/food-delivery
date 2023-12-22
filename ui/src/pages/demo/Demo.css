@@ -481,7 +481,7 @@
   }
   .profile.show{
     margin-top: 65px !important;
-    height: 80vh;
+    height: 100vh;
     left: 0;
     opacity: 1;
     z-index: 9999 !important;
@@ -495,8 +495,8 @@
   .hrms-doc-sidebar {
     position: absolute;
     transition: 0.5s;
-    height: 80vh;
-    width: 70%;
+    height: 100vh;
+    width: 100%;
     margin-top: 75px;
     left: -100%;
     z-index: 9999 !important;
