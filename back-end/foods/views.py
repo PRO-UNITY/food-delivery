@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from kitchen.pagination import StandardResultsSetPagination
+from django.views.decorators.cache import cache_page
 from drf_spectacular.utils import extend_schema
 from authen.renderers import UserRenderers
 from foods.models import Foods
@@ -23,6 +24,7 @@ class AllFoodsViews(APIView):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "categories", "kitchen", "price", "description"]
 
+    @cache_page(60 * 15)
     @property
     def paginator(self):
         if not hasattr(self, "_paginator"):
@@ -44,7 +46,6 @@ class AllFoodsViews(APIView):
         return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
-        req = request
         search_name = request.query_params.get("name", None)
         search_category = request.query_params.get("category", None)
         search_restaurant = request.query_params.get("restaurant", None)

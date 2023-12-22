@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "django_rest_passwordreset",
     'drf_spectacular',
     'drf_yasg',
-    'cacheops',
+    # 'cacheops',
     # my_app
     "authen",
     "kitchen",
@@ -72,7 +72,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
-    "core.cashe.CacheControlMiddleware"
+    # "core.cashe.CacheControlMiddleware"
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -265,17 +265,17 @@ SIMPLE_JWT = {
     "USER_ID_CLAIM": "user_id",
 }
 
-CACHEOPS = {
-    'auth.user': {'ops': 'get', 'timeout': 60*15},
-    'authen.*': {'ops': 'all', 'timeout': 60*15},
-    'foods.*': {'ops': 'all', 'timeout': 60*15},
-    'kitchen.*': {'ops': 'all', 'timeout': 60*15},
-    'order.*': {'ops': 'all', 'timeout': 60*15},
-    'manager.*': {'ops': 'all', 'timeout': 60*15},
-    'deliveryman.*': {'ops': 'all', 'timeout': 60*15},
-}
+# CACHEOPS = {
+#     'auth.user': {'ops': 'get', 'timeout': 60*15},
+#     'authen.*': {'ops': 'all', 'timeout': 60*15},
+#     'foods.*': {'ops': 'all', 'timeout': 60*15},
+#     'kitchen.*': {'ops': 'all', 'timeout': 60*15},
+#     'order.*': {'ops': 'all', 'timeout': 60*15},
+#     'manager.*': {'ops': 'all', 'timeout': 60*15},
+#     'deliveryman.*': {'ops': 'all', 'timeout': 60*15},
+# }
 
-CACHE_TIMEOUT = 60 * 15  # 15 minutes
+# CACHE_TIMEOUT = 60 * 15  # 15 minutes
 
 SOCIAL_AUTH_FACEBOOK_KEY = "863244545502688"
 SOCIAL_AUTH_FACEBOOK_SECRET = "8d9a789122fc5f51ab48d03831412c45"
