@@ -132,7 +132,7 @@ class UserProfilesViews(APIView):
         responses={201: UserInformationSerializers},
     )
     def get(self, request):
-        serializer = UserInformationSerializers(request.user)
+        serializer = UserInformationSerializers(request.user, context={'request':request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -142,6 +142,7 @@ class UserProfilesViews(APIView):
     def put(self, request, *args, **kwarg):
         queryset = get_object_or_404(CustomUser, id=request.user.id)
         serializer = UserUpdateSerializers(
+            context={"request": request},
             instance=queryset,
             data=request.data,
             partial=True,

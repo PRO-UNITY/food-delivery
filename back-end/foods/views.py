@@ -139,7 +139,7 @@ class FoodsCrudViews(APIView):
 
     def get(self, request, pk):
         objects_list = get_object_or_404(Foods, id=pk)
-        serializers = AllFoodsSerializer(objects_list)
+        serializers = AllFoodsSerializer(objects_list, context={"request": request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -171,7 +171,7 @@ class FoodsCrudViews(APIView):
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
             serializers = FoodsCrudSerializer(
-                context={"user": request.user},
+                context={"user": request.user, "request": request},
                 instance=Foods.objects.filter(id=pk)[0],
                 data=request.data,
                 partial=True,
@@ -247,7 +247,7 @@ class CategoriesFoodsViews(APIView):
         page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True).data
+                self.serializer_class(page, many=True, context={'request': request}).data
             )
         else:
             serializer = self.serializer_class(instance, many=True)

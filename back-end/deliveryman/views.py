@@ -51,7 +51,7 @@ class RegisterDeliveryViews(APIView):
         page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True).data
+                self.serializer_class(page, many=True, context={"request": request}).data
             )
         else:
             serializer = self.serializer_class(instance, many=True)
@@ -105,7 +105,7 @@ class DeliveryUserCrud(APIView):
     )
     def get(self, request, pk):
         queryset = get_object_or_404(CustomUser, id=pk)
-        serializers = UserInformationSerializers(queryset)
+        serializers = UserInformationSerializers(queryset, context={'request': request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -130,6 +130,7 @@ class DeliveryUserCrud(APIView):
                     status=status.HTTP_400_BAD_REQUEST)
             queryset = get_object_or_404(CustomUser, id=pk)
             serializer = DeliverySignUpSerializers(
+                context={'request': request},
                 instance=queryset,
                 data=request.data,
                 partial=True,

@@ -87,7 +87,7 @@ class KitchenViews(APIView):
         page = self.paginate_queryset(queryset)
         if page is not None:    
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True).data
+                self.serializer_class(page, many=True, context={'request':request}).data
             )
         else:
             serializer = self.serializer_class(queryset, many=True)
@@ -148,7 +148,7 @@ class KitchenDetileViews(APIView):
 
     def get(self, request, pk):
         objects_list = get_object_or_404(Restaurants, id=pk)
-        serializers = AllKitchenSerializers(objects_list)
+        serializers = AllKitchenSerializers(objects_list, context={"request": request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -183,6 +183,7 @@ class KitchenDetileViews(APIView):
                 )
             serializers = KitchenCrudSerializers(
                 context={
+                    "request": request,
                     "user": request.user,
                 },
                 instance=Restaurants.objects.filter(id=pk)[0],
@@ -238,7 +239,7 @@ class KitchenCategoryFoodsViews(APIView):
 
     def get(self, request, pk):
         objects_list = Foods.objects.filter(categories=pk)
-        serializers = AllCategoriesFoodsSerializer(objects_list, many=True)
+        serializers = AllCategoriesFoodsSerializer(objects_list, many=True, context={"request": request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
@@ -248,7 +249,7 @@ class KitchenCategoryViews(APIView):
 
     def get(self, request):
         objects_list = FoodsCategories.objects.all()
-        serializers = CategoriesSerializer(objects_list, many=True)
+        serializers = CategoriesSerializer(objects_list, many=True, context={"request": request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -337,7 +338,7 @@ class CategoryDeteileViews(APIView):
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True).data
+                self.serializer_class(page, many=True, context={"request": request}).data
             )
         else:
             serializer = self.serializer_class(queryset, many=True)
@@ -363,6 +364,7 @@ class CategoryDeteileViews(APIView):
                 )
             serializers = CategoriesFoodsCrudSerializer(
                 context={
+                    "request": request,
                     "user_id": request.user,
                 },
                 instance=FoodsCategories.objects.filter(id=pk)[0],
@@ -461,7 +463,7 @@ class KitchenFoodsViews(APIView):
         if page is not None:
             serializer = self.get_paginated_response(
                 {
-                    "results": self.serializer_class(page, many=True).data,
+                    "results": self.serializer_class(page, many=True, context={"request": request}).data,
                     "count": queryset.count(),
                 }
             )
@@ -501,7 +503,7 @@ class KitchenFoods(APIView):
         page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True).data
+                self.serializer_class(page, many=True, context={"request": request}).data
             )
         else:
             serializer = self.serializer_class(instance, many=True)
@@ -514,5 +516,5 @@ class KitchenCategoryFoodViews(APIView):
 
     def get(self, request, id_category, pk):
         objects_list = get_object_or_404(Foods, categories=id_category, id=pk)
-        serializers = AllFoodKitchenSerializers(objects_list)
+        serializers = AllFoodKitchenSerializers(objects_list, context={"request": request})
         return Response(serializers.data, status=status.HTTP_200_OK)
