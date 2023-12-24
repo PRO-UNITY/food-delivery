@@ -151,6 +151,9 @@ class UserUpdateSerializers(serializers.ModelSerializer):
             "last_name",
             "email",
             "avatar",
+            "phone",
+            "latitude",
+            "longitude",
         ]
 
     def update(self, instance, validated_data):
@@ -210,6 +213,9 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "avatar",
             "email",
             "role"
+            "phone",
+            "latitude",
+            "longitude",
         ]
 
     def get_role(self, obj):

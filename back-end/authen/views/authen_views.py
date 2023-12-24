@@ -147,6 +147,30 @@ class UserProfilesViews(APIView):
     )
     def put(self, request, *args, **kwarg):
         if request.user.is_authenticated:
+            expected_fields = set(
+                [
+                    "username",
+                    "password",
+                    "confirm_password",
+                    "first_name",
+                    "last_name",
+                    "email",
+                    "role",
+                    "phone",
+                    "latitude",
+                    "longitude",
+                ]
+            )
+            received_fields = set(request.data.keys())
+
+            unexpected_fields = received_fields - expected_fields
+            if unexpected_fields:
+                error_message = (
+                    f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+                )
+                return Response(
+                    {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
+                )
             queryset = get_object_or_404(CustomUser, id=request.user.id)
             serializer = UserUpdateSerializers(
                 context={"request": request},

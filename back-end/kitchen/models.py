@@ -2,9 +2,6 @@ from django.db import models
 from authen.models import CustomUser
 
 
-
-
-
 class Restaurants(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()

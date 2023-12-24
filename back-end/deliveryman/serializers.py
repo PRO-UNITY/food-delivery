@@ -53,6 +53,9 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
             "password",
             "confirm_password",
             "email",
+            "phone",
+            "latitude",
+            "longitude",
         ]
         extra_kwargs = {
             "first_name": {"required": True},
