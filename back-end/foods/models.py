@@ -35,7 +35,7 @@ class Foods(models.Model):
 
 
 class Favorite(models.Model):
-    food = models.ForeignKey(Foods, on_delete=models.CASCADE, null=True, blank=True)
+    food = models.ForeignKey(Foods, on_delete=models.CASCADE, null=True, blank=True, related_name="favorite")
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     is_favorite = models.BooleanField(default=False)
     create_at = models.DateTimeField(auto_now_add=True)
