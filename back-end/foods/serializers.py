@@ -1,7 +1,11 @@
 from rest_framework import serializers
 from authen.models import CustomUser
 from kitchen.models import Restaurants
-from foods.models import FoodsCategories, Foods
+from foods.models import (
+    FoodsCategories,
+    Foods,
+    Favorite,
+)
 
 
 class UserInformationSerializers(serializers.ModelSerializer):
@@ -162,3 +166,11 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"error": "User does not belong to any role"}
             )
+
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    food = AllFoodsSerializer(read_only=True)
+
+    class Meta:
+        model = Favorite
+        fields = "__all__"

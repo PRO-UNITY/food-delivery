@@ -212,7 +212,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "last_name",
             "avatar",
             "email",
-            "role"
+            "role",
             "phone",
             "latitude",
             "longitude",

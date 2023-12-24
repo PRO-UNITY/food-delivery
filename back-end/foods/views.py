@@ -9,10 +9,11 @@ from kitchen.pagination import StandardResultsSetPagination
 from django.views.decorators.cache import cache_page
 from drf_spectacular.utils import extend_schema
 from authen.renderers import UserRenderers
-from foods.models import Foods
+from foods.models import Foods, Favorite
 from foods.serializers import (
     AllFoodsSerializer,
     FoodsCrudSerializer,
+    FavoriteSerializer,
 )
 
 
@@ -58,11 +59,14 @@ class AllFoodsViews(APIView):
 
         if search_category:
             queryset = queryset.filter(
-                Q(categories__id__icontains=search_category) | Q(categories__name__icontains=search_category))
+                Q(categories__id__icontains=search_category)
+                | Q(categories__name__icontains=search_category)
+            )
 
         if search_restaurant:
             queryset = queryset.filter(
-                Q(kitchen__id__icontains=search_restaurant) | Q(kitchen__name__icontains=search_restaurant)
+                Q(kitchen__id__icontains=search_restaurant)
+                | Q(kitchen__name__icontains=search_restaurant)
             )
 
         if search_description:
@@ -71,23 +75,24 @@ class AllFoodsViews(APIView):
         if price_range:
             try:
                 start_price, end_price = map(int, price_range.split(","))
-                queryset = queryset.filter(
-                    Q(price__range=(start_price, end_price))
-                )
+                queryset = queryset.filter(Q(price__range=(start_price, end_price)))
             except ValueError:
-                return Response({"error": "Value error, ranger"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"error": "Value error, ranger"}, status=status.HTTP_400_BAD_REQUEST
+                )
         if sort_by == "price_asc":
             queryset = queryset.order_by("price")
         elif sort_by == "price_desc":
             queryset = queryset.order_by("-price")
         page = self.paginate_queryset(queryset)
-        if page is not None:    
+        if page is not None:
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True, context={'request': request}).data
+                self.serializer_class(
+                    page, many=True, context={"request": request}
+                ).data
             )
         else:
-            serializer = self.serializer_class(
-                queryset, many=True)
+            serializer = self.serializer_class(queryset, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -118,7 +123,7 @@ class AllFoodsViews(APIView):
                 return Response(
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
-            print(request.user) 
+            print(request.user)
             serializers = FoodsCrudSerializer(
                 data=request.data, context={"user": request.user}
             )
@@ -200,11 +205,9 @@ class FoodsCrudViews(APIView):
                         {"message": "Delete success"}, status=status.HTTP_200_OK
                     )
                 return Response(
-                        {
-                            "error": "It is not possible to add information to such a user"
-                        },
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
+                    {"error": "It is not possible to add information to such a user"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             return Response(
                 {"error": "User does not belong to any role"},
                 status=status.HTTP_401_UNAUTHORIZED,
@@ -247,8 +250,28 @@ class CategoriesFoodsViews(APIView):
         page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True, context={'request': request}).data
+                self.serializer_class(
+                    page, many=True, context={"request": request}
+                ).data
             )
         else:
             serializer = self.serializer_class(instance, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+
+
+class FavoriteViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            objects_list = Favorite.objects.filter(user=request.user.id, is_favorite=True)
+            serializers = FavoriteSerializer(
+                objects_list,
+                many=True, context={"request": request})
+            return Response(serializers.data, status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {"error": "The user is not logged in"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )

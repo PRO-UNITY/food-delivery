@@ -1,12 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
-from django.contrib.auth.models import AbstractUser, Group
-
-
-class Role(Group):
-    class Meta:
-        # Change the table name to 'my_group'
-        db_table = 'user_role_table'
+from django.contrib.auth.models import AbstractUser
 
 
 class CustomUser(AbstractUser):

@@ -1,5 +1,6 @@
 from django.db import models
 from kitchen.models import Restaurants
+from authen.models import CustomUser
 
 
 class FoodsCategories(models.Model):
@@ -31,3 +32,17 @@ class Foods(models.Model):
 
     class Meta:
         db_table = "food_table"
+
+
+class Favorite(models.Model):
+    food = models.ForeignKey(Foods, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    is_favorite = models.BooleanField(default=False)
+    create_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = "favorite_table"
