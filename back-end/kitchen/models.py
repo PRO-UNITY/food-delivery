@@ -2,6 +2,9 @@ from django.db import models
 from authen.models import CustomUser
 
 
+
+
+
 class Restaurants(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
@@ -29,3 +32,6 @@ class Restaurants(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        db_table = "restaurant_table"

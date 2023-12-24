@@ -10,6 +10,9 @@ class FoodsCategories(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        db_table = "food_category_table"
+
 
 class Foods(models.Model):
     name = models.CharField(max_length=250)
@@ -25,3 +28,6 @@ class Foods(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        db_table = "food_table"

@@ -227,7 +227,7 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "0.1.0",
 }
 AUTH_USER_MODEL = "authen.CustomUser"
-
+AUTH_GROUP_MODEL = "authen.UserRole"
 
 # Email Backend Configuration
 EMAIL_BACKEND = (
