@@ -159,6 +159,9 @@ class UserUpdateSerializers(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get("first_name", instance.first_name)
         instance.last_name = validated_data.get("last_name", instance.last_name)
+        instance.phone = validated_data.get("phone", instance.phone)
+        instance.latitude = validated_data.get("latitude", instance.latitude)
+        instance.longitude = validated_data.get("longitude", instance.longitude)
         instance.email = validated_data.get("email", instance.email)
         if instance.avatar == None:
             instance.avatar = self.context.get("avatar")

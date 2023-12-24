@@ -154,6 +154,7 @@ class UserProfilesViews(APIView):
                     "confirm_password",
                     "first_name",
                     "last_name",
+                    "avatar",
                     "email",
                     "role",
                     "phone",
