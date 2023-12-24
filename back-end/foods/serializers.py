@@ -168,9 +168,23 @@ class FoodsCrudSerializer(serializers.ModelSerializer):
             )
 
 
-class FavoriteSerializer(serializers.ModelSerializer):
+class FavoritesSerializer(serializers.ModelSerializer):
     food = AllFoodsSerializer(read_only=True)
 
     class Meta:
         model = Favorite
-        fields = "__all__"
+        fields = ["id", "food", "user", "is_favorite", "create_at", "updated_at"]
+
+
+class FavoriteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Favorite
+        fields = ["id", "food", "user", "is_favorite", "create_at", "updated_at"]
+
+    def create(self, validated_data):
+        us = self.context.get("user")
+        favorites = Favorite.objects.create(**validated_data)
+        favorites.user = us
+        favorites.save()
+        return favorites
