@@ -21,7 +21,7 @@ class Foods(models.Model):
     description = models.TextField()
     price = models.IntegerField(null=True, blank=True)
     kitchen = models.ForeignKey(
-        Restaurants, on_delete=models.CASCADE, related_name="foods")
+        Restaurants, on_delete=models.CASCADE, related_name="food")
     categories = models.ForeignKey(
         FoodsCategories, on_delete=models.CASCADE, related_name='foods')
     create_at = models.DateTimeField(auto_now_add=True)

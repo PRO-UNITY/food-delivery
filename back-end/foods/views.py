@@ -330,7 +330,7 @@ class FavoriteDeleteViews(APIView):
 
     def delete(self, request, pk):
         if request.user.is_authenticated:
-            objects_get = Favorite.objects.get(id=pk)
+            objects_get = Favorite.objects.get(food=pk)
             objects_get.delete()
             return Response(
                         {"message": "Delete success"}, status=status.HTTP_200_OK
