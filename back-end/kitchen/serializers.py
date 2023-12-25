@@ -150,24 +150,19 @@ class AllFoodKitchenSerializers(serializers.ModelSerializer):
         ]
 
 
+class CategoriesKitFoodsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FoodsCategories
+        fields = ["id", "name"]
+
+
 class KitchenKategorySerializers(serializers.ModelSerializer):
-    categories = AllCategoriesFoodsSerializer(read_only=True)
+    categories = CategoriesKitFoodsSerializer(read_only=True)
 
     class Meta:
         model = Foods
-        fields = ["id", "categories"]
-
-    def to_representation(self, instance):
-        seen_category_ids = set()
-        result = super().to_representation(instance)
-
-        # Filter out duplicate categories
-        result['categories'] = [
-            category for category in result['categories'] 
-            if category['id'] not in seen_category_ids and not seen_category_ids.add(category['id'])
-        ]
-
-        return result
+        fields = ["categories"]
 
 
 class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
