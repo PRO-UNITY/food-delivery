@@ -11,19 +11,17 @@ from authen.pagination import StandardResultsSetPagination
 from authen.models import CustomUser
 from kitchen.models import Restaurants
 from managers.serializers import (
-    UserInformationSerializers,
-    ManagerSignUpSerializers,
-    AllKitchenSerializers
+    UserInformationSerializer,
+    ManagerSignUpSerializer,
+    KitchensSerializer
     )
 
 
-class ManagerKitchenViews(APIView):
-    """The owner of the kitchen registers the manager"""
-
+class ManagersView(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
-    serializer_class = UserInformationSerializers
+    serializer_class = UserInformationSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["username", "categories", "kitchen", "price"]
 
@@ -70,8 +68,8 @@ class ManagerKitchenViews(APIView):
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
-        request=ManagerSignUpSerializers,
-        responses={201: ManagerSignUpSerializers},
+        request=ManagerSignUpSerializer,
+        responses={201: ManagerSignUpSerializer},
     )
     def post(self, request):
         if request.user.is_authenticated:
@@ -98,7 +96,7 @@ class ManagerKitchenViews(APIView):
                 return Response(
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
-            serializer = ManagerSignUpSerializers(
+            serializer = ManagerSignUpSerializer(
                 data=request.data, context={"user_id": request.user.id}
             )
             if serializer.is_valid(raise_exception=True):
@@ -112,24 +110,22 @@ class ManagerKitchenViews(APIView):
             )
 
 
-class ManagerKitchenCrudViews(APIView):
-    """Adds a manager for the kitchen"""
-
+class ManagerView(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
     @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
+        request=UserInformationSerializer,
+        responses={201: UserInformationSerializer},
     )
     def get(self, request, pk):
         queryset = get_object_or_404(CustomUser, id=pk)
-        serializers = UserInformationSerializers(queryset)
+        serializers = UserInformationSerializer(queryset)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
-        request=ManagerSignUpSerializers,
-        responses={201: ManagerSignUpSerializers},
+        request=ManagerSignUpSerializer,
+        responses={201: ManagerSignUpSerializer},
     )
     def put(self, request, pk):
         if request.user.is_authenticated:
@@ -157,7 +153,7 @@ class ManagerKitchenCrudViews(APIView):
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
             queryset = get_object_or_404(CustomUser, id=pk)
-            serializer = ManagerSignUpSerializers(
+            serializer = ManagerSignUpSerializer(
                 context={"request": request},
                 instance=queryset,
                 data=request.data,
@@ -177,14 +173,12 @@ class ManagerKitchenCrudViews(APIView):
 
 
 class ManagerKitchensViews(APIView):
-    """Adds a manager for the kitchen"""
-
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
     @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
+        request=KitchensSerializer,
+        responses={201: KitchensSerializer},
     )
     def get(self, request):
         if request.user.is_authenticated:
@@ -193,7 +187,7 @@ class ManagerKitchensViews(APIView):
             if groups:
                 if str(groups[0]) == "manager":
                     queryset = Restaurants.objects.filter(deliveryman_user=request.user)
-                    serializers = AllKitchenSerializers(queryset, many=True, context={"request": request})
+                    serializers = KitchensSerializer(queryset, many=True, context={"request": request})
                     return Response(serializers.data, status=status.HTTP_200_OK)
                 else:
                     return Response(

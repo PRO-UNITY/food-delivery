@@ -10,7 +10,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
         fields = ["id", "username", "first_name", "last_name", "email"]
 
 
-class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
+class CategoriesFoodSerializer(serializers.ModelSerializer):
     food_count = serializers.SerializerMethodField()
 
     class Meta:
@@ -21,18 +21,18 @@ class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
         return obj.foods.count()
 
 
-class FoodsAllSerializer(serializers.ModelSerializer):
-    categories = AllCategoriesFoodsSerializer(read_only=True)
+class FoodsSerializer(serializers.ModelSerializer):
+    categories = CategoriesFoodSerializer(read_only=True)
 
     class Meta:
         model = Foods
         fields = ["id", "categories"]
 
 
-class AllKitchenSerializers(serializers.ModelSerializer):
+class KitchensSerializer(serializers.ModelSerializer):
     deliveryman_user = UserInformationSerializers(many=True, read_only=True)
     logo = serializers.ImageField(max_length=None, use_url=True)
-    foods = FoodsAllSerializer(many=True, read_only=True)
+    foods = FoodsSerializer(many=True, read_only=True)
 
     class Meta:
         model = Restaurants
@@ -54,7 +54,7 @@ class AllKitchenSerializers(serializers.ModelSerializer):
         ]
 
 
-class KitchenCrudSerializers(serializers.ModelSerializer):
+class KitchenSerializers(serializers.ModelSerializer):
     logo = serializers.ImageField(
         max_length=None,
         allow_empty_file=False,
@@ -131,9 +131,9 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
             )
 
 
-class AllFoodKitchenSerializers(serializers.ModelSerializer):
+class KitchenFoodsSerializers(serializers.ModelSerializer):
     food_img = serializers.ImageField(max_length=None, use_url=True)
-    categories = AllCategoriesFoodsSerializer(read_only=True)
+    categories = CategoriesFoodSerializer(read_only=True)
     favorite = serializers.SerializerMethodField()
 
     class Meta:
@@ -167,7 +167,7 @@ class CategoriesKitFoodsSerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
-class KitchenKategorySerializers(serializers.ModelSerializer):
+class KitchenKategorySerializer(serializers.ModelSerializer):
     categories = CategoriesKitFoodsSerializer(read_only=True)
 
     class Meta:
@@ -175,7 +175,7 @@ class KitchenKategorySerializers(serializers.ModelSerializer):
         fields = ["categories"]
 
 
-class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
+class FoodCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodsCategories
         fields = ["id", "name", "create_at", "updated_at"]

@@ -10,24 +10,21 @@ from kitchen.pagination import StandardResultsSetPagination
 from authen.renderers import UserRenderers
 from kitchen.models import Restaurants
 from foods.models import FoodsCategories, Foods
-from foods.serializers import (
-    CategoriesSerializer,
-    AllCategoriesFoodsSerializer,
-)
+from foods.serializers import CategoriesSerializer
 from kitchen.serializers import (
-    AllKitchenSerializers,
-    KitchenCrudSerializers,
-    AllFoodKitchenSerializers,
-    CategoriesFoodsCrudSerializer,
-    KitchenKategorySerializers,
+    KitchensSerializer,
+    KitchenSerializers,
+    KitchenFoodsSerializers,
+    FoodCategorySerializer,
+    KitchenKategorySerializer,
 )
 
 
-class KitchenViews(APIView):
+class KitchensView(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
-    serializer_class = AllKitchenSerializers
+    serializer_class = KitchensSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "description", "is_active", "open_time", "close_time"]
 
@@ -91,8 +88,8 @@ class KitchenViews(APIView):
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
-        request=KitchenCrudSerializers,
-        responses={201: KitchenCrudSerializers},
+        request=KitchenSerializers,
+        responses={201: KitchenSerializers},
     )
     def post(self, request):
         if request.user.is_authenticated:
@@ -119,7 +116,7 @@ class KitchenViews(APIView):
                 return Response(
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
-            serializers = KitchenCrudSerializers(
+            serializers = KitchenSerializers(
                 data=request.data,
                 context={
                     "user": request.user,
@@ -136,18 +133,18 @@ class KitchenViews(APIView):
             )
 
 
-class KitchenDetileViews(APIView):
+class KitchenView(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request, pk):
         objects_list = get_object_or_404(Restaurants, id=pk)
-        serializers = AllKitchenSerializers(objects_list, context={"request": request})
+        serializers = KitchensSerializer(objects_list, context={"request": request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
-        request=KitchenCrudSerializers,
-        responses={201: KitchenCrudSerializers},
+        request=KitchenSerializers,
+        responses={201: KitchenSerializers},
     )
     def put(self, request, pk):
         if request.user.is_authenticated:
@@ -174,7 +171,7 @@ class KitchenDetileViews(APIView):
                 return Response(
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
-            serializers = KitchenCrudSerializers(
+            serializers = KitchenSerializers(
                 context={
                     "request": request,
                     "user": request.user,
@@ -224,19 +221,19 @@ class KitchenDetileViews(APIView):
             )
 
 
-class KitchenCategoryFoodsViews(APIView):
+class KitchenCategoryView(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request, pk):
         objects_list = set(Foods.objects.filter(kitchen=pk).distinct("categories__id"))
-        serializers = KitchenKategorySerializers(
+        serializers = KitchenKategorySerializer(
             objects_list, many=True, context={"request": request}
         )
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
-class KitchenCategoryViews(APIView):
+class FoodCategoriesView(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
@@ -248,8 +245,8 @@ class KitchenCategoryViews(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
-        request=CategoriesFoodsCrudSerializer,
-        responses={201: CategoriesFoodsCrudSerializer},
+        request=FoodCategorySerializer,
+        responses={201: FoodCategorySerializer},
     )
     def post(self, request):
         if request.user.is_authenticated:
@@ -264,7 +261,7 @@ class KitchenCategoryViews(APIView):
                 return Response(
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
-            serializers = CategoriesFoodsCrudSerializer(
+            serializers = FoodCategorySerializer(
                 data=request.data,
                 context={
                     "user_id": request.user,
@@ -281,11 +278,11 @@ class KitchenCategoryViews(APIView):
             )
 
 
-class CategoryDeteileViews(APIView):
+class FoodCategoryView(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
-    serializer_class = AllFoodKitchenSerializers
+    serializer_class = KitchenFoodsSerializers
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "kitchen"]
 
@@ -337,8 +334,8 @@ class CategoryDeteileViews(APIView):
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
-        request=CategoriesFoodsCrudSerializer,
-        responses={201: CategoriesFoodsCrudSerializer},
+        request=FoodCategorySerializer,
+        responses={201: FoodCategorySerializer},
     )
     def put(self, request, pk):
         if request.user.is_authenticated:
@@ -353,7 +350,7 @@ class CategoryDeteileViews(APIView):
                 return Response(
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
-            serializers = CategoriesFoodsCrudSerializer(
+            serializers = FoodCategorySerializer(
                 context={
                     "request": request,
                     "user_id": request.user,
@@ -403,9 +400,9 @@ class CategoryDeteileViews(APIView):
             )
 
 
-class KitchenFoodsViews(APIView):
+class KitchenFoodsView(APIView):
     pagination_class = StandardResultsSetPagination
-    serializer_class = AllFoodKitchenSerializers
+    serializer_class = KitchenFoodsSerializers
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "categories", "kitchen", "price"]
 
@@ -460,9 +457,9 @@ class KitchenFoodsViews(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class KitchenFoods(APIView):
+class KitchenFoodView(APIView):
     pagination_class = StandardResultsSetPagination
-    serializer_class = AllFoodKitchenSerializers
+    serializer_class = KitchenFoodsSerializers
 
     @property
     def paginator(self):
@@ -498,11 +495,11 @@ class KitchenFoods(APIView):
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
 
-class KitchenCategoryFoodViews(APIView):
+class KitchenCategoryFoodsView(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
-    serializer_class = AllFoodKitchenSerializers
+    serializer_class = KitchenFoodsSerializers
 
     @property
     def paginator(self):
