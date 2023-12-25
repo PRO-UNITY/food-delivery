@@ -1,12 +1,12 @@
 from django.urls import path
 from deliveryman.views import (
-    RegisterDeliveryViews,
-    DeliveryUserCrud
+    RegisterDelivery,
+    UserDelivery
 )
 
 
 urlpatterns = [
-    path('', RegisterDeliveryViews.as_view()),
-    path('<int:pk>', DeliveryUserCrud.as_view()),
+    path('', RegisterDelivery.as_view()),
+    path('<int:pk>', UserDelivery.as_view()),
 
 ]

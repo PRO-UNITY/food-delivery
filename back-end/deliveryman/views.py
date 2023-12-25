@@ -8,10 +8,10 @@ from authen.renderers import UserRenderers
 from authen.pagination import StandardResultsSetPagination
 from authen.models import CustomUser
 from authen.serializers.authen_serializers import UserInformationSerializer
-from deliveryman.serializers import DeliverySignUpSerializers
+from deliveryman.serializers import DeliverySignUpSerializer
 
 
-class RegisterDeliveryViews(APIView):
+class RegisterDelivery(APIView):
     """The owner of the kitchen registers the delivery"""
 
     render_classes = [UserRenderers]
@@ -58,8 +58,8 @@ class RegisterDeliveryViews(APIView):
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
-        request=DeliverySignUpSerializers,
-        responses={201: DeliverySignUpSerializers},
+        request=DeliverySignUpSerializer,
+        responses={201: DeliverySignUpSerializer},
     )
     def post(self, request):
         if request.user.is_authenticated:
@@ -77,7 +77,7 @@ class RegisterDeliveryViews(APIView):
                 return Response(
                     {'error': error_message},
                     status=status.HTTP_400_BAD_REQUEST)
-            serializer = DeliverySignUpSerializers(
+            serializer = DeliverySignUpSerializer(
                 data=request.data, context={"user_id": request.user.id}
             )
             if serializer.is_valid(raise_exception=True):
@@ -93,7 +93,7 @@ class RegisterDeliveryViews(APIView):
             )
 
 
-class DeliveryUserCrud(APIView):
+class UserDelivery(APIView):
     """Change delivery information and status"""
 
     render_classes = [UserRenderers]
@@ -109,8 +109,8 @@ class DeliveryUserCrud(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
-        request=DeliverySignUpSerializers,
-        responses={201: DeliverySignUpSerializers},
+        request=RegisterDelivery,
+        responses={201: RegisterDelivery},
     )
     def put(self, request, pk):
         if request.user.is_authenticated:
@@ -129,7 +129,7 @@ class DeliveryUserCrud(APIView):
                     {'error': error_message},
                     status=status.HTTP_400_BAD_REQUEST)
             queryset = get_object_or_404(CustomUser, id=pk)
-            serializer = DeliverySignUpSerializers(
+            serializer = RegisterDelivery(
                 context={'request': request},
                 instance=queryset,
                 data=request.data,

@@ -20,7 +20,6 @@ from kitchen.serializers import (
     AllFoodKitchenSerializers,
     CategoriesFoodsCrudSerializer,
     KitchenKategorySerializers,
-    
 )
 
 
@@ -46,8 +45,7 @@ class KitchenViews(APIView):
     def paginate_queryset(self, queryset):
         if self.paginator is None:
             return None
-        return self.paginator.paginate_queryset(
-            queryset, self.request, view=self)
+        return self.paginator.paginate_queryset(queryset, self.request, view=self)
 
     def get_paginated_response(self, data):
         assert self.paginator is not None
@@ -66,18 +64,13 @@ class KitchenViews(APIView):
             queryset = queryset.filter(Q(name__icontains=search_name))
 
         if search_is_active:
-            queryset = queryset.filter(
-                Q(is_active=search_is_active))
+            queryset = queryset.filter(Q(is_active=search_is_active))
 
         if search_open:
-            queryset = queryset.filter(
-                Q(open_time__gte=search_open)
-            )
+            queryset = queryset.filter(Q(open_time__gte=search_open))
 
         if price_close:
-            queryset = queryset.filter(
-                Q(close_time__lte=price_close)
-            )
+            queryset = queryset.filter(Q(close_time__lte=price_close))
 
         if search_description:
             queryset = queryset.filter(Q(description__icontains=search_description))
@@ -87,9 +80,11 @@ class KitchenViews(APIView):
         elif sort_by == "desc":
             queryset = queryset.order_by("-id")
         page = self.paginate_queryset(queryset)
-        if page is not None:    
+        if page is not None:
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True, context={'request':request}).data
+                self.serializer_class(
+                    page, many=True, context={"request": request}
+                ).data
             )
         else:
             serializer = self.serializer_class(queryset, many=True)
@@ -122,8 +117,7 @@ class KitchenViews(APIView):
                     f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
                 )
                 return Response(
-                    {"error": error_message},
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
             serializers = KitchenCrudSerializers(
                 data=request.data,
@@ -133,10 +127,8 @@ class KitchenViews(APIView):
             )
             if serializers.is_valid(raise_exception=True):
                 serializers.save(logo=request.data.get("logo"))
-                return Response(
-                    serializers.data, status=status.HTTP_201_CREATED)
-            return Response(
-                serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializers.data, status=status.HTTP_201_CREATED)
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(
                 {"error": "The user is not logged in"},
@@ -180,8 +172,7 @@ class KitchenDetileViews(APIView):
                     f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
                 )
                 return Response(
-                    {"error": error_message},
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
             serializers = KitchenCrudSerializers(
                 context={
@@ -196,8 +187,7 @@ class KitchenDetileViews(APIView):
                 serializers.save(logo=request.data.get("logo"))
                 return Response(serializers.data, status=status.HTTP_200_OK)
             return Response(
-                {"error": "update error data"},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
             )
         else:
             return Response(
@@ -214,8 +204,7 @@ class KitchenDetileViews(APIView):
                     objects_get = Restaurants.objects.get(id=pk)
                     objects_get.delete()
                     return Response(
-                        {"message": "Delete success"},
-                        status=status.HTTP_200_OK
+                        {"message": "Delete success"}, status=status.HTTP_200_OK
                     )
                 else:
                     return Response(
@@ -241,7 +230,9 @@ class KitchenCategoryFoodsViews(APIView):
 
     def get(self, request, pk):
         objects_list = set(Foods.objects.filter(kitchen=pk).distinct("categories__id"))
-        serializers = KitchenKategorySerializers(objects_list, many=True, context={"request": request})
+        serializers = KitchenKategorySerializers(
+            objects_list, many=True, context={"request": request}
+        )
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
@@ -251,7 +242,9 @@ class KitchenCategoryViews(APIView):
 
     def get(self, request):
         objects_list = FoodsCategories.objects.all()
-        serializers = CategoriesSerializer(objects_list, many=True, context={"request": request})
+        serializers = CategoriesSerializer(
+            objects_list, many=True, context={"request": request}
+        )
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -269,8 +262,7 @@ class KitchenCategoryViews(APIView):
                     f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
                 )
                 return Response(
-                    {"error": error_message},
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
             serializers = CategoriesFoodsCrudSerializer(
                 data=request.data,
@@ -280,10 +272,8 @@ class KitchenCategoryViews(APIView):
             )
             if serializers.is_valid(raise_exception=True):
                 serializers.save()
-                return Response(serializers.data,
-                                status=status.HTTP_201_CREATED)
-            return Response(serializers.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+                return Response(serializers.data, status=status.HTTP_201_CREATED)
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(
                 {"error": "The user is not logged in"},
@@ -313,8 +303,7 @@ class CategoryDeteileViews(APIView):
     def paginate_queryset(self, queryset):
         if self.paginator is None:
             return None
-        return self.paginator.paginate_queryset(
-            queryset, self.request, view=self)
+        return self.paginator.paginate_queryset(queryset, self.request, view=self)
 
     def get_paginated_response(self, data):
         assert self.paginator is not None
@@ -330,8 +319,7 @@ class CategoryDeteileViews(APIView):
             queryset = queryset.filter(Q(name__icontains=search_name))
 
         if search_restaurant:
-            queryset = queryset.filter(
-                Q(restaurant__id__icontains=search_restaurant))
+            queryset = queryset.filter(Q(restaurant__id__icontains=search_restaurant))
 
         if sort_by == "asc":
             queryset = queryset.order_by("price")
@@ -340,7 +328,9 @@ class CategoryDeteileViews(APIView):
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True, context={"request": request}).data
+                self.serializer_class(
+                    page, many=True, context={"request": request}
+                ).data
             )
         else:
             serializer = self.serializer_class(queryset, many=True)
@@ -361,8 +351,7 @@ class CategoryDeteileViews(APIView):
                     f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
                 )
                 return Response(
-                    {"error": error_message},
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
             serializers = CategoriesFoodsCrudSerializer(
                 context={
@@ -377,8 +366,7 @@ class CategoryDeteileViews(APIView):
                 serializers.save()
                 return Response(serializers.data, status=status.HTTP_200_OK)
             return Response(
-                {"error": "update error data"},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
             )
         else:
             return Response(
@@ -395,8 +383,7 @@ class CategoryDeteileViews(APIView):
                     objects_get = FoodsCategories.objects.get(id=pk)
                     objects_get.delete()
                     return Response(
-                        {"message": "Delete success"},
-                        status=status.HTTP_200_OK
+                        {"message": "Delete success"}, status=status.HTTP_200_OK
                     )
                 else:
                     return Response(
@@ -434,8 +421,7 @@ class KitchenFoodsViews(APIView):
     def paginate_queryset(self, queryset):
         if self.paginator is None:
             return None
-        return self.paginator.paginate_queryset(
-            queryset, self.request, view=self)
+        return self.paginator.paginate_queryset(queryset, self.request, view=self)
 
     def get_paginated_response(self, data):
         assert self.paginator is not None
@@ -448,13 +434,10 @@ class KitchenFoodsViews(APIView):
         queryset = Foods.objects.all()
 
         if search_category:
-            queryset = queryset.filter(
-                Q(categories__id__icontains=search_category)
-            )
+            queryset = queryset.filter(Q(categories__id__icontains=search_category))
 
         if search_restaurant:
-            queryset = queryset.filter(
-                Q(restaurant__id__icontains=search_restaurant))
+            queryset = queryset.filter(Q(restaurant__id__icontains=search_restaurant))
 
         if sort_by == "price_asc":
             queryset = queryset.order_by("id")
@@ -465,7 +448,9 @@ class KitchenFoodsViews(APIView):
         if page is not None:
             serializer = self.get_paginated_response(
                 {
-                    "results": self.serializer_class(page, many=True, context={"request": request}).data,
+                    "results": self.serializer_class(
+                        page, many=True, context={"request": request}
+                    ).data,
                     "count": queryset.count(),
                 }
             )
@@ -493,8 +478,7 @@ class KitchenFoods(APIView):
     def paginate_queryset(self, queryset):
         if self.paginator is None:
             return None
-        return self.paginator.paginate_queryset(
-            queryset, self.request, view=self)
+        return self.paginator.paginate_queryset(queryset, self.request, view=self)
 
     def get_paginated_response(self, data):
         assert self.paginator is not None
@@ -505,7 +489,9 @@ class KitchenFoods(APIView):
         page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True, context={"request": request}).data
+                self.serializer_class(
+                    page, many=True, context={"request": request}
+                ).data
             )
         else:
             serializer = self.serializer_class(instance, many=True)
@@ -532,8 +518,7 @@ class KitchenCategoryFoodViews(APIView):
     def paginate_queryset(self, queryset):
         if self.paginator is None:
             return None
-        return self.paginator.paginate_queryset(
-            queryset, self.request, view=self)
+        return self.paginator.paginate_queryset(queryset, self.request, view=self)
 
     def get_paginated_response(self, data):
         assert self.paginator is not None
@@ -542,9 +527,11 @@ class KitchenCategoryFoodViews(APIView):
     def get(self, request, id_category, pk, format=None, *args, **kwargs):
         queryset = Foods.objects.filter(categories=id_category, kitchen=pk)
         page = self.paginate_queryset(queryset)
-        if page is not None:    
+        if page is not None:
             serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True, context={'request':request}).data
+                self.serializer_class(
+                    page, many=True, context={"request": request}
+                ).data
             )
         else:
             serializer = self.serializer_class(queryset, many=True)

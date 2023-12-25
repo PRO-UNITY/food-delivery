@@ -6,23 +6,22 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from kitchen.pagination import StandardResultsSetPagination
-from django.views.decorators.cache import cache_page
 from drf_spectacular.utils import extend_schema
 from authen.renderers import UserRenderers
 from foods.models import Foods, Favorite
 from foods.serializers import (
-    AllFoodsSerializer,
-    FoodsCrudSerializer,
+    FoodsSerializer,
+    FoodSerializer,
     FavoritesSerializer,
     FavoriteSerializer,
 )
 
 
-class AllFoodsViews(APIView):
+class FoodsView(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
-    serializer_class = AllFoodsSerializer
+    serializer_class = FoodsSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "categories", "kitchen", "price", "description"]
 
@@ -97,8 +96,8 @@ class AllFoodsViews(APIView):
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
-        request=FoodsCrudSerializer,
-        responses={201: FoodsCrudSerializer},
+        request=FoodSerializer,
+        responses={201: FoodSerializer},
     )
     def post(self, request):
         if request.user.is_authenticated:
@@ -124,7 +123,7 @@ class AllFoodsViews(APIView):
                 return Response(
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
-            serializers = FoodsCrudSerializer(
+            serializers = FoodSerializer(
                 data=request.data, context={"user": request.user}
             )
             if serializers.is_valid(raise_exception=True):
@@ -138,18 +137,18 @@ class AllFoodsViews(APIView):
             )
 
 
-class FoodsCrudViews(APIView):
+class FoodViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request, pk):
         objects_list = get_object_or_404(Foods, id=pk)
-        serializers = AllFoodsSerializer(objects_list, context={"request": request})
+        serializers = FoodsSerializer(objects_list, context={"request": request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(
-        request=FoodsCrudSerializer,
-        responses={201: FoodsCrudSerializer},
+        request=FoodSerializer,
+        responses={201: FoodSerializer},
     )
     def put(self, request, pk):
         if request.user.is_authenticated:
@@ -175,7 +174,7 @@ class FoodsCrudViews(APIView):
                 return Response(
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
-            serializers = FoodsCrudSerializer(
+            serializers = FoodSerializer(
                 context={"user": request.user, "request": request},
                 instance=Foods.objects.filter(id=pk)[0],
                 data=request.data,
@@ -219,11 +218,11 @@ class FoodsCrudViews(APIView):
             )
 
 
-class CategoriesFoodsViews(APIView):
+class FoodCategories(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
-    serializer_class = AllFoodsSerializer
+    serializer_class = FoodsSerializer
 
     @property
     def paginator(self):
@@ -259,7 +258,7 @@ class CategoriesFoodsViews(APIView):
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
 
-class FavoriteViews(APIView):
+class FavouritesView(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
@@ -324,7 +323,7 @@ class FavoriteViews(APIView):
             )
 
 
-class FavoriteDeleteViews(APIView):
+class FavouriteViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
