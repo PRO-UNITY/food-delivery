@@ -517,6 +517,6 @@ class KitchenCategoryFoodViews(APIView):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request, id_category, pk):
-        objects_list = get_object_or_404(Foods, categories=id_category, id=pk)
-        serializers = AllFoodKitchenSerializers(objects_list, context={"request": request})
+        objects_list = Foods.objects.filter(categories=id_category, kitchen=pk)
+        serializers = AllFoodKitchenSerializers(objects_list, many=True, context={"request": request})
         return Response(serializers.data, status=status.HTTP_200_OK)
