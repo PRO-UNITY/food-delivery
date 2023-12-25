@@ -33,6 +33,9 @@ class UserInformationSerializers(serializers.ModelSerializer):
             "email",
             "role",
             "active_profile",
+            "phone",
+            "latitude",
+            "longitude",
         ]
 
     def get_role(self, obj):
@@ -89,6 +92,9 @@ class ManagerSignUpSerializers(serializers.ModelSerializer):
             "confirm_password",
             "email",
             "active_profile",
+            "phone",
+            "latitude",
+            "longitude",
         ]
         extra_kwargs = {
             "first_name": {"required": True},

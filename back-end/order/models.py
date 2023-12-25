@@ -9,6 +9,9 @@ class OrderStatus(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        db_table = "order_status"
+
 
 class Orders(models.Model):
     klient = models.ForeignKey(
@@ -42,3 +45,6 @@ class Orders(models.Model):
     longitude = models.CharField(max_length=250, blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "order_table"

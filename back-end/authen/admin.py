@@ -26,6 +26,9 @@ class NewMyUser(ImportExportModelAdmin, UserAdmin):
                     "email_code",
                     "avatar",
                     "user_id",
+                    "phone",
+                    "latitude",
+                    "longitude",
                 )
             },
         ),
@@ -38,6 +41,10 @@ class NewMyUser(ImportExportModelAdmin, UserAdmin):
                     "email_code",
                     "avatar",
                     "user_id",
+                    "phone",
+                    "phone",
+                    "latitude",
+                    "longitude",
                 )
             },
         ),

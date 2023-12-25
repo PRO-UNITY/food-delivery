@@ -132,27 +132,75 @@ class UserProfilesViews(APIView):
         responses={201: UserInformationSerializers},
     )
     def get(self, request):
-        serializer = UserInformationSerializers(request.user, context={'request':request})
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if request.user.is_authenticated:
+            serializer = UserInformationSerializers(request.user, context={'request':request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {"error": "The user is not logged in"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
     @extend_schema(
         request=UserUpdateSerializers,
         responses={201: UserUpdateSerializers},
     )
     def put(self, request, *args, **kwarg):
-        queryset = get_object_or_404(CustomUser, id=request.user.id)
-        serializer = UserUpdateSerializers(
-            context={"request": request},
-            instance=queryset,
-            data=request.data,
-            partial=True,
-        )
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(avatar=request.data.get("avatar"))
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(
-            {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
-        )
+        if request.user.is_authenticated:
+            expected_fields = set(
+                [
+                    "username",
+                    "password",
+                    "confirm_password",
+                    "first_name",
+                    "last_name",
+                    "avatar",
+                    "email",
+                    "role",
+                    "phone",
+                    "latitude",
+                    "longitude",
+                ]
+            )
+            received_fields = set(request.data.keys())
+
+            unexpected_fields = received_fields - expected_fields
+            if unexpected_fields:
+                error_message = (
+                    f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
+                )
+                return Response(
+                    {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
+                )
+            queryset = get_object_or_404(CustomUser, id=request.user.id)
+            serializer = UserUpdateSerializers(
+                context={"request": request},
+                instance=queryset,
+                data=request.data,
+                partial=True,
+            )
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(avatar=request.data.get("avatar"))
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(
+                {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
+            )
+        else:
+            return Response(
+                {"error": "The user is not logged in"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
+
+    def delete(self, request):
+        if request.user.is_authenticated:
+            user_delete = CustomUser.objects.get(id=request.user.id)
+            user_delete.delete()
+            return Response({'message': 'delete success'}, status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {"error": "The user is not logged in"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
 
 class UserDeteilseViews(APIView):

@@ -10,9 +10,30 @@ class UserInformationSerializers(serializers.ModelSerializer):
         fields = ["id", "username", "first_name", "last_name", "email"]
 
 
+class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
+
+    food_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = FoodsCategories
+        fields = ['id', 'name', 'food_count']
+
+    def get_food_count(self, obj):
+        return obj.foods.count()
+
+
+class FoodsAllSerializer(serializers.ModelSerializer):
+    categories = AllCategoriesFoodsSerializer(read_only=True)
+
+    class Meta:
+        model = Foods
+        fields = ["id", "categories"]
+
+
 class AllKitchenSerializers(serializers.ModelSerializer):
     deliveryman_user = UserInformationSerializers(many=True, read_only=True)
     logo = serializers.ImageField(max_length=None, use_url=True)
+    foods = FoodsAllSerializer(many=True, read_only=True)
 
     class Meta:
         model = Restaurants
@@ -28,6 +49,7 @@ class AllKitchenSerializers(serializers.ModelSerializer):
             "close_time",
             "latitude",
             "longitude",
+            "foods",
             "create_at",
             "updated_at",
         ]
