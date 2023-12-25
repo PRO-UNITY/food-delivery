@@ -515,8 +515,37 @@ class KitchenFoods(APIView):
 class KitchenCategoryFoodViews(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+    serializer_class = AllFoodKitchenSerializers
 
-    def get(self, request, id_category, pk):
-        objects_list = Foods.objects.filter(categories=id_category, kitchen=pk)
-        serializers = AllFoodKitchenSerializers(objects_list, many=True, context={"request": request})
-        return Response(serializers.data, status=status.HTTP_200_OK)
+    @property
+    def paginator(self):
+        if not hasattr(self, "_paginator"):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        else:
+            pass
+        return self._paginator
+
+    def paginate_queryset(self, queryset):
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(
+            queryset, self.request, view=self)
+
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
+
+    def get(self, request, id_category, pk, format=None, *args, **kwargs):
+        queryset = Foods.objects.filter(categories=id_category, kitchen=pk)
+        page = self.paginate_queryset(queryset)
+        if page is not None:    
+            serializer = self.get_paginated_response(
+                self.serializer_class(page, many=True, context={'request':request}).data
+            )
+        else:
+            serializer = self.serializer_class(queryset, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)

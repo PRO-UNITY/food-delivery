@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from authen.renderers import UserRenderers
 from authen.pagination import StandardResultsSetPagination
 from authen.models import CustomUser
-from authen.serializers.authen_serializers import UserInformationSerializers
+from authen.serializers.authen_serializers import UserInformationSerializer
 from deliveryman.serializers import DeliverySignUpSerializers
 
 
@@ -17,11 +17,11 @@ class RegisterDeliveryViews(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
-    serializer_class = UserInformationSerializers
+    serializer_class = UserInformationSerializer
 
     @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
+        request=UserInformationSerializer,
+        responses={201: UserInformationSerializer},
     )
     @property
     def paginator(self):
@@ -100,12 +100,12 @@ class DeliveryUserCrud(APIView):
     permission = [IsAuthenticated]
 
     @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
+        request=UserInformationSerializer,
+        responses={201: UserInformationSerializer},
     )
     def get(self, request, pk):
         queryset = get_object_or_404(CustomUser, id=pk)
-        serializers = UserInformationSerializers(queryset, context={'request': request})
+        serializers = UserInformationSerializer(queryset, context={'request': request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @extend_schema(

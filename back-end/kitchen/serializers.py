@@ -151,7 +151,6 @@ class AllFoodKitchenSerializers(serializers.ModelSerializer):
 
 
 class CategoriesKitFoodsSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = FoodsCategories
         fields = ["id", "name"]
@@ -162,7 +161,7 @@ class KitchenKategorySerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Foods
-        fields = ["categories"]
+        fields = ["categories", "foods"]
 
 
 class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
