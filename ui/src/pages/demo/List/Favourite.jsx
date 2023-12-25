@@ -14,8 +14,7 @@ const Dashboard = () => {
     useEffect(()=>{
         getDataWithToken(`/foods/`).
         then((res)=>{
-            const partFood = res.data.results.slice(0,3)
-            setFood(partFood)
+            setFood(res.data.results)
         })
     },[])
 
@@ -38,13 +37,15 @@ const Dashboard = () => {
                 <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Favourite Foods</h3>
                 </div>
-                <div className="foods">
+                {
+                    localStorage.getItem('token')?
+                    <div className="foods">
                     {
                     food.map((item, index)=>
-                    <Link key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
+                    <Link key={index} to={`/food-detail/${item.id}`} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
                     
                     <div className="w-100 d-flex justify-content-center">
-                    <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                    <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                     </div>
                     <div className="mb-2">
                     <i className="fa-solid fa-star orange"></i>
@@ -73,7 +74,10 @@ const Dashboard = () => {
                     </Link>
                         )
                     }   
-                </div>
+                </div>:
+                <h6>No any favourite foods, For adding to favourite please  <Link className="orange" to={'/login'}>login</Link></h6>
+
+                }
             </div>
         </DemoLayout>
     )

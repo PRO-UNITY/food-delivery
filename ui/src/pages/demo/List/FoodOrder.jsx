@@ -130,9 +130,12 @@ const FoodOrder = () => {
     // }
     return ( 
         <DemoLayout count={count} setSearch={setSearch}>
-            <div className=" body-main w-100 ">
+            <div className=" body-main w-100 p-5">
+            <h3 className="text-start">Food Order</h3>
+              {
+                localStorage.getItem('token')?
+              <>
                 <div className="p-3 rounded-2 w-100">
-                <h3 className="text-start">Food Order</h3>
                 <table className="table mb-3 border">
                   <thead>
                     <tr>
@@ -179,6 +182,9 @@ const FoodOrder = () => {
                     <img style={{width:"200px"}} src={Success} alt="" />
                     </div>:""
                 }
+                </>:
+                <h6 className="">No any orders, For ordering food please <Link className="orange" to={'/login'}>login</Link></h6>
+              }
             </div>
         </DemoLayout>
     )

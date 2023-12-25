@@ -60,13 +60,12 @@ const AllKitchens = () => {
                 <h3 style={{fontWeight:700}}>All Restaurants</h3>
                 <div className="foods">
                 {
-                    kitchen.map((item,index)=>
-                    <Link to={`/kitchen/${item.id}`} key={index} className="category w-100 py-2 px-4 d-flex justify-content-between align-items-center orange" style={{textDecoration:"none"}}>
-                        <div className="d-flex gap-4 align-items-center">
-                        <img style={{width:"50px",height:"50px", borderRadius:"10px"}} src={`${item?.logo? BASE_URL+item?.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
-                        <h4>{item.name}</h4>
-                        </div>
-                        <i className="fa-solid fa-chevron-right fs-4"></i>
+                    kitchen.map((item, index)=>
+                    <Link key={index} to={`/kitchen/${item.id}`} className="text-dark" style={{textDecoration:"none"}}>
+                    <div className="category-item bg-white">
+                        <img style={{width:"35px",height:"35px", borderRadius:"10px"}} src={`${item?.logo? item?.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                        <p className="name-category p-0 m-0  grey">{item?.name}</p>
+                    </div>
                     </Link>
                     )
                 }

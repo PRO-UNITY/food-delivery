@@ -16,7 +16,7 @@ const DemoNavbar = ({ setshowSidebar, setshowProfile, setSearch }) => {
           <input onChange={(e)=>setInputVal(e.target.value)} type="text" placeholder="What do you want eat today" className="px-2 py-1 w-75 bg-white" />
         </div>
         <i
-          className="fa-solid fa-bars position-absolute top-0 end-0 m-3 my-4 "
+          className="fa-solid fa-cart-shopping position-absolute top-0 end-0 m-3 my-4 "
           onClick={() => setshowProfile((prev) => !prev)}
         ></i>
         

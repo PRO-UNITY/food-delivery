@@ -4,6 +4,7 @@ import { BASE_URL, getDataWithToken } from "../../../functions/function"
 import { Link } from "react-router-dom"
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import Pagination from 'react-bootstrap/Pagination';
 
 const Dashboard = () => {
     const [loading, setLoading] = useState(true);
@@ -13,7 +14,11 @@ const Dashboard = () => {
     const [search, setSearch] = useState("")
     const [searchFoods, setSearchFoods] = useState([])
     const [card, setCard] = useState([])
+    const [favourite, setFavourite] = useState(JSON.parse(localStorage.getItem('favourite')) || [])
     const [count, setCount] = useState(0)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [bool, setBool] = useState(true)
 
     useEffect(()=>{
         getDataWithToken(`/kitchen/category`).
@@ -62,6 +67,42 @@ const Dashboard = () => {
         const savedCard = JSON.parse(localStorage.getItem("card")) || [];
         setCard(savedCard);
       }, []);
+
+      const addToFavourite = (item,index) => {
+        if(bool){
+            const updatedFavourite = [...favourite, { ...item }];
+            localStorage.setItem("favourite", JSON.stringify(updatedFavourite));
+            setFavourite(updatedFavourite);
+            setBool(false)
+        }else{
+            removeItem(index) 
+        }
+    }
+
+    const removeItem = (index) => {
+        const newFavourite = [...favourite];
+        newFavourite.splice(index, 1)
+        setFavourite(newFavourite)
+        localStorage.setItem('favourite', JSON.stringify(newFavourite))
+        setBool(true)
+    }
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage <= 1) {
+            setCurrentPage(currentPage + 1);
+        }
+       
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
     
     return ( 
         <DemoLayout setSearch={setSearch} count={count}>
@@ -86,10 +127,10 @@ const Dashboard = () => {
                     <div className="foods">
                 {
                     searchFoods?.map((item, index)=>
-                    <Link key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
+                    <Link to={`/food-detail/${item.id}`} key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
                     
                     <div className="w-100 d-flex justify-content-center">
-                    <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                    <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                     </div>
                     <div className="mb-2">
                     <i className="fa-solid fa-star orange"></i>
@@ -118,6 +159,22 @@ const Dashboard = () => {
                     </Link>
                     )
                 }   
+                            <div className="w-100 d-flex justify-content-center">
+                        <Pagination className="mt-4">
+                            <Pagination.Prev onClick={handlePrevPage} disabled={currentPage === 1} />
+                            {[...Array(totalPages).keys()].map((page) => (
+                                <Pagination.Item
+                                    key={page + 1}
+                                    active={page + 1 === currentPage}
+                                    onClick={() => handlePageChange(page + 1)}
+                                >
+                                    {page+1}
+                                </Pagination.Item>
+                                
+                            ))}
+                            <Pagination.Next onClick={handleNextPage} disabled={currentPage === totalPages} />
+                        </Pagination>
+            </div>
                 </div>: 
                     <>
                 <div className="vaucher d-flex flex-column justify-content-center align-items-start p-4 mb-4">
@@ -149,7 +206,7 @@ const Dashboard = () => {
                         kitchen.map((item, index)=>
                         <Link key={index} to={`/kitchen/${item.id}`} className="text-dark" style={{textDecoration:"none"}}>
                         <div className="category-item bg-white">
-                            <img style={{width:"35px",height:"35px", borderRadius:"10px"}} src={`${item?.logo? BASE_URL+item?.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                            <img style={{width:"35px",height:"35px", borderRadius:"10px"}} src={`${item?.logo? item?.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                             <p className="name-category p-0 m-0  grey">{item?.name}</p>
                         </div>
                         </Link>
@@ -163,10 +220,9 @@ const Dashboard = () => {
                 <div className="foods">
                 {
                     food.map((item, index)=>
-                    <Link key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
-                    
+                    <Link key={index} to={`/food-detail/${item.id}`} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>    
                     <div className="w-100 d-flex justify-content-center">
-                    <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                    <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                     </div>
                     <div className="mb-2">
                     <i className="fa-solid fa-star orange"></i>
@@ -190,7 +246,11 @@ const Dashboard = () => {
                     </div>
                     <div className="sale">
                         <div className="d-flex justify-content-center align-items-center px-2 text-white sale-percent">15% Off</div>
-                        <button style={{}} className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
+                        {
+                            favourite?.some(favouriteItem => favouriteItem.id === item.id)?
+                            <button onClick={removeItem} style={{}} className="btn-favourite orange"><i className="fa-solid fa-heart"></i></button>:
+                            <button onClick={()=>addToFavourite(item, index)} style={{}} className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
+                        }
                     </div>
                     </Link>
                     )

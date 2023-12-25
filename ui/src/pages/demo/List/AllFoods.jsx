@@ -20,10 +20,13 @@ const AllFoods = () => {
         getDataWithToken(`/foods/`).
         then((res)=>{
             const partFood = res.data.results
+            const residual = res.data.count%10
+            const pages = (res.data.count-residual)/10
+            setTotalPages(pages%2==0 && pages ===1?pages:pages+1);
             setFood(partFood)
             setLoading(false);
         })
-    },[])
+    },[currentPage])
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -92,7 +95,7 @@ const AllFoods = () => {
                             <Link key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
                             
                             <div className="w-100 d-flex justify-content-center">
-                            <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                            <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                             </div>
                             <div className="mb-2">
                             <i className="fa-solid fa-star orange"></i>
@@ -120,7 +123,23 @@ const AllFoods = () => {
                             </div>
                             </Link>
                             )
-                        }   
+                        } 
+                    <div className="w-100 d-flex justify-content-center">
+                        <Pagination className="mt-4">
+                            <Pagination.Prev onClick={handlePrevPage} disabled={currentPage === 1} />
+                            {[...Array(totalPages).keys()].map((page) => (
+                                <Pagination.Item
+                                    key={page + 1}
+                                    active={page + 1 === currentPage}
+                                    onClick={() => handlePageChange(page + 1)}
+                                >
+                                    {page+1}
+                                </Pagination.Item>
+                                
+                            ))}
+                            <Pagination.Next onClick={handleNextPage} disabled={currentPage === totalPages} />
+                        </Pagination>
+                    </div>  
                     </div>
                     </div>
                      :
@@ -132,7 +151,7 @@ const AllFoods = () => {
                         <Link key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
                         
                         <div className="w-100 d-flex justify-content-center">
-                        <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? BASE_URL+item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                        <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                         </div>
                         <div className="mb-2">
                         <i className="fa-solid fa-star orange"></i>
@@ -177,7 +196,7 @@ const AllFoods = () => {
                             ))}
                             <Pagination.Next onClick={handleNextPage} disabled={currentPage === totalPages} />
                         </Pagination>
-                        </div>
+                    </div>
                     </div>
                     
                 }

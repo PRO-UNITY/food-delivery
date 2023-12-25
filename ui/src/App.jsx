@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom"
-import { AllCategories, AllFoods, AllKitchens, CategoryDetails, Dashboard, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodOrder, KitchenDetails, Login, Notification, Register, Services, Settings, TaskList } from "./pages"
+import { AllCategories, AllFoods, AllKitchens, CategoryDetails, Dashboard, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FavouriteDetails, FoodDetail, FoodOrder, HistoryDetailOrder, KitchenDetails, Login, Notification, Register, Services, Settings, TaskList, UpdateSettings } from "./pages"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OrderHistory from "./pages/demo/List/OrderHistory";
 import { useState, useEffect } from "react";
@@ -29,19 +29,23 @@ function App() {
       >
       <Routes>
         <Route path="/" element={ <Dashboard/> } />
-        <Route path="/home" element={ <Dashboard/> } />
+        <Route path="/dashboard" element={ <Dashboard/> } />
         <Route path="/allfoods" element={ <AllFoods/> } />
         <Route path="/allcategories" element={ <AllCategories/> } />
         <Route path="/allkitchens" element={ <AllKitchens/> } />
         {<Route path="/dashboard" element={ <Dashboard/> } />}
         <Route path="/food-order" element={ <FoodOrder/> } />
         <Route path="/favourite" element={ <Favourite/> } />
+        <Route path="/favourite-details/:id" element={ <FavouriteDetails/> } />
+        <Route path="/food-detail/:id" element={ <FoodDetail/> } />
         <Route path="/order-history" element={ <OrderHistory/> } />
         <Route path="/settings" element={ <Settings/> } />
+        <Route path="/update-settings" element={ <UpdateSettings/> } />
         <Route path="/register" element={ <Register/> } />
         <Route path="/login" element={ <Login/> } />
         <Route path="/category/:id" element={ <CategoryDetails/> } />
         <Route path="/kitchen/:id" element={ <KitchenDetails/> } />
+        <Route path="/order-hIstory/:id" element={ <HistoryDetailOrder/> } />
         <Route path="*" element={ <Pagenotfound/> } />
         <Route path="/admin" element={ localStorage.getItem('role')==="kitchen"?<DeliveryHome/>:<Dashboard/> } />
         <Route path="/edit-profile" element={ localStorage.getItem('role')==="admins"?<EditAdminProfile/>:<Login/> } />
