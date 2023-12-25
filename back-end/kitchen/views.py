@@ -530,7 +530,7 @@ class KitchenCategoryFoodViews(APIView):
         if page is not None:
             serializer = self.get_paginated_response(
                 self.serializer_class(
-                    page, many=True, context={"request": request}
+                    page, many=True, context={'user': request.user.id, "request": request}
                 ).data
             )
         else:
