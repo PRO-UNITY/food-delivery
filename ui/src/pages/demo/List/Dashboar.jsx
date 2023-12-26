@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import DemoLayout from "../../../Layout/Demoproject"
-import { BASE_URL, getDataWithToken } from "../../../functions/function"
+import { BASE_URL, deleteData, getDataWithToken, getUserData, postDataWithToken } from "../../../functions/function"
 import { Link } from "react-router-dom"
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
@@ -14,11 +14,12 @@ const Dashboard = () => {
     const [search, setSearch] = useState("")
     const [searchFoods, setSearchFoods] = useState([])
     const [card, setCard] = useState([])
-    const [favourite, setFavourite] = useState(JSON.parse(localStorage.getItem('favourite')) || [])
     const [count, setCount] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [bool, setBool] = useState(true)
+    const token = localStorage.getItem('token')
+    const [isactive, setIsActive] = useState(false)
+
 
     useEffect(()=>{
         getDataWithToken(`/kitchen/category`).
@@ -26,7 +27,7 @@ const Dashboard = () => {
             setCategory(res)
             setLoading(false);
         })
-    },[])
+    },[isactive])
 
     useEffect(()=>{
         getDataWithToken(`/kitchen/`).
@@ -35,26 +36,43 @@ const Dashboard = () => {
             setKitchen(partKitchen)
             setLoading(false);
         })
-    },[])
+    },[isactive])
 
     useEffect(()=>{
-        getDataWithToken(`/foods/`).
-        then((res)=>{
-            const partFood = res.data.results.slice(0,3)
-            setFood(partFood)
-            setLoading(false);
-        })
-    },[])
-
-    useEffect(()=>{
-        getDataWithToken(`/foods/?name=${search}`).
+        const func = token?getUserData:getDataWithToken
+        func(`/foods/?name=${search}`).
         then((res)=>{
             setSearchFoods(res.data.results) 
             const residual = res.data.count%10
             const pages = (res.data.count-residual)/10
             setTotalPages(pages%2==0 && pages ===1?pages:pages+1);
         })
-    },[search])
+    },[search, isactive, token])
+
+    useEffect(()=>{
+            const func = token?getUserData:getDataWithToken
+            func(`/foods/`).
+            then((res)=>{
+                const partFood = res.data.results.slice(0,3)
+                setFood(partFood)
+                console.log(res.data.results);
+                setLoading(false);
+            })
+    },[token,isactive])
+
+    const addToFavourite = (item) => {
+        const data = {
+            food : item.id,
+            is_favorite : true
+        }
+        postDataWithToken(data,`/foods/favorites`)
+        setIsActive(p=>!p)
+    }
+
+    const removeItemFavoutite = (item) => {
+        deleteData(`/foods/favorite/${item.id}`)
+        setIsActive(p=>!p)
+    }
 
 
     const addToCard = (item) => {
@@ -70,25 +88,6 @@ const Dashboard = () => {
         const savedCard = JSON.parse(localStorage.getItem("card")) || [];
         setCard(savedCard);
       }, []);
-
-      const addToFavourite = (item,index) => {
-        if(bool){
-            const updatedFavourite = [...favourite, { ...item }];
-            localStorage.setItem("favourite", JSON.stringify(updatedFavourite));
-            setFavourite(updatedFavourite);
-            setBool(false)
-        }else{
-            removeItem(index) 
-        }
-    }
-
-    const removeItem = (index) => {
-        const newFavourite = [...favourite];
-        newFavourite.splice(index, 1)
-        setFavourite(newFavourite)
-        localStorage.setItem('favourite', JSON.stringify(newFavourite))
-        setBool(true)
-    }
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -130,11 +129,11 @@ const Dashboard = () => {
                     <div className="foods">
                 {
                     searchFoods?.map((item, index)=>
-                    <Link to={`/food-detail/${item.id}`} key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
+                    <div key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
                     
-                    <div className="w-100 d-flex justify-content-center">
+                    <Link to={`/food-detail/${item.id}`} className="w-100 d-flex justify-content-center">
                     <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
-                    </div>
+                    </Link>
                     <div className="mb-2">
                     <i className="fa-solid fa-star orange"></i>
                     <i className="fa-solid fa-star orange"></i>
@@ -157,9 +156,16 @@ const Dashboard = () => {
                     </div>
                     <div className="sale">
                         <div className="d-flex justify-content-center align-items-center px-2 text-white sale-percent">15% Off</div>
-                        <button style={{}} className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
+                        {token?
+                            <>
+                            {item.favorite ?
+                                <button onClick={()=>removeItemFavoutite(item)}  className="btn-favourite orange"><i className="fa-solid fa-heart"></i></button>:
+                                <button onClick={()=>addToFavourite(item)}  className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
+                            }
+                            </>:""
+                        }
                     </div>
-                    </Link>
+                    </div>
                     )
                 }   
                             <div className="w-100 d-flex justify-content-center">
@@ -223,10 +229,10 @@ const Dashboard = () => {
                 <div className="foods">
                 {
                     food.map((item, index)=>
-                    <Link key={index} to={`/food-detail/${item.id}`} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>    
-                    <div className="w-100 d-flex justify-content-center">
+                    <div key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>    
+                    <Link to={`/food-detail/${item.id}`} className="w-100 d-flex justify-content-center">
                     <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
-                    </div>
+                    </Link>
                     <div className="mb-2">
                     <i className="fa-solid fa-star orange"></i>
                     <i className="fa-solid fa-star orange"></i>
@@ -249,13 +255,16 @@ const Dashboard = () => {
                     </div>
                     <div className="sale">
                         <div className="d-flex justify-content-center align-items-center px-2 text-white sale-percent">15% Off</div>
-                        {
-                            favourite?.some(favouriteItem => favouriteItem.id === item.id)?
-                            <button onClick={removeItem} style={{}} className="btn-favourite orange"><i className="fa-solid fa-heart"></i></button>:
-                            <button onClick={()=>addToFavourite(item, index)} style={{}} className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
-                        }
+                        {token?
+                            <>
+                            {item.favorite ?
+                                <button onClick={()=>removeItemFavoutite(item)}  className="btn-favourite orange"><i className="fa-solid fa-heart"></i></button>:
+                                <button onClick={()=>addToFavourite(item)}  className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
+                            }
+                            </>:""
+                        }                        
                     </div>
-                    </Link>
+                    </div>
                     )
                 }   
             </div>

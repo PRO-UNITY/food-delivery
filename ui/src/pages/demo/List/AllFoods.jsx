@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import DemoLayout from "../../../Layout/Demoproject"
-import { getDataWithToken, BASE_URL } from "../../../functions/function"
+import { getDataWithToken, BASE_URL, postDataWithToken, deleteData, getUserData } from "../../../functions/function"
 import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
 import Spinner from 'react-bootstrap/Spinner';
@@ -15,6 +15,10 @@ const AllFoods = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [card, setCard] = useState([])
     const [count, setCount] = useState(0)
+    const [isactive, setIsActive] = useState(false)
+    const token = localStorage.getItem('token')
+
+
 
     useEffect(()=>{
         getDataWithToken(`/foods/`).
@@ -27,6 +31,31 @@ const AllFoods = () => {
             setLoading(false);
         })
     },[currentPage])
+
+    useEffect(()=>{
+        const func = token?getUserData:getDataWithToken
+        func(`/foods/`).
+        then((res)=>{
+            const partFood = res.data.results
+            setFood(partFood)
+            console.log(res.data.results);
+            setLoading(false);
+        })
+    },[token,isactive])
+
+    const addToFavourite = (item) => {
+        const data = {
+            food : item.id,
+            is_favorite : true
+        }
+        postDataWithToken(data,`/foods/favorites`)
+        setIsActive(p=>!p)
+    }
+
+    const removeItemFavoutite = (item) => {
+        deleteData(`/foods/favorite/${item.id}`)
+        setIsActive(p=>!p)
+    }
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -119,7 +148,14 @@ const AllFoods = () => {
                             </div>
                             <div className="sale">
                                 <div className="d-flex justify-content-center align-items-center px-2 text-white sale-percent">15% Off</div>
-                                <button style={{}} className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
+                                {token?
+                                    <>
+                                    {item.favorite ?
+                                        <button onClick={()=>removeItemFavoutite(item)}  className="btn-favourite orange"><i className="fa-solid fa-heart"></i></button>:
+                                        <button onClick={()=>addToFavourite(item)}  className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
+                                    }
+                                    </>:""
+                                }
                             </div>
                             </Link>
                             )

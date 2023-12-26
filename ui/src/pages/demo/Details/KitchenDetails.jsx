@@ -30,9 +30,10 @@ const KitchenDetails = () => {
     },[id, currentPage])
 
     useEffect(()=>{
-        getDataWithToken(`/kitchen/${id}`).
+        getDataWithToken(`/kitchen/${id}/categories`).
         then((res)=>{
-            setCategory(res.foods)
+            setCategory(res)
+            console.log(res);
         })
     },[])
 
@@ -111,7 +112,7 @@ const KitchenDetails = () => {
                     <h4>Categories of {data?.name}</h4>
                     <div className="categories w-100 mb-3">
                     {
-                        category.map((item,index)=>
+                        category?.map((item,index)=>
                             <Link to={`/category/${item.id}`} key={index} className="text-dark" style={{textDecoration:"none"}}>
                             <div className="category-item bg-white">
                             <i style={{fontSize:"25px"}} className="fa-solid fa-bowl-food orange"></i>
