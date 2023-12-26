@@ -1,17 +1,9 @@
 from rest_framework import serializers
-from authen.models import CustomUser
-from kitchen.models import Restaurants
 from foods.models import (
     FoodsCategories,
     Foods,
     Favorite,
 )
-
-
-class UserInformationSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ["id", "username", "first_name", "last_name", "email"]
 
 
 class FoodsSerializer(serializers.ModelSerializer):

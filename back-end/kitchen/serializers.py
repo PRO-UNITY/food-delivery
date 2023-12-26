@@ -1,13 +1,7 @@
 from rest_framework import serializers
-from authen.models import CustomUser
 from kitchen.models import Restaurants
+from authen.serializers.authen_serializers import UserInformationSerializer
 from foods.models import FoodsCategories, Foods, Favorite
-
-
-class UserInformationSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ["id", "username", "first_name", "last_name", "email"]
 
 
 class CategoriesFoodSerializer(serializers.ModelSerializer):
@@ -30,7 +24,7 @@ class FoodsSerializer(serializers.ModelSerializer):
 
 
 class KitchensSerializer(serializers.ModelSerializer):
-    deliveryman_user = UserInformationSerializers(many=True, read_only=True)
+    deliveryman_user = UserInformationSerializer(many=True, read_only=True)
     logo = serializers.ImageField(max_length=None, use_url=True)
     foods = FoodsSerializer(many=True, read_only=True)
 
@@ -119,7 +113,7 @@ class KitchenSerializers(serializers.ModelSerializer):
                     instance.logo = self.context.get("logo")
                 else:
                     instance.logo = validated_data.get("logo", instance.logo)
-
+                instance.save()
                 return instance
             else:
                 raise serializers.ValidationError(
