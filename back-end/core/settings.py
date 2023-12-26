@@ -268,17 +268,6 @@ SIMPLE_JWT = {
     "USER_ID_CLAIM": "user_id",
 }
 
-# CACHEOPS = {
-#     'auth.user': {'ops': 'get', 'timeout': 60*15},
-#     'authen.*': {'ops': 'all', 'timeout': 60*15},
-#     'foods.*': {'ops': 'all', 'timeout': 60*15},
-#     'kitchen.*': {'ops': 'all', 'timeout': 60*15},
-#     'order.*': {'ops': 'all', 'timeout': 60*15},
-#     'manager.*': {'ops': 'all', 'timeout': 60*15},
-#     'deliveryman.*': {'ops': 'all', 'timeout': 60*15},
-# }
-
-# CACHE_TIMEOUT = 60 * 15  # 15 minutes
 
 SOCIAL_AUTH_FACEBOOK_KEY = os.environ["SOCIAL_AUTH_FACEBOOK_KEY"]
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ["SOCIAL_AUTH_FACEBOOK_SECRET"]
