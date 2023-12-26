@@ -19,6 +19,7 @@ class FacebookSocialAuthSerializer(serializers.Serializer):
             return register_social_user(
                 provider=provider, user_id=user_id, email=email, name=name
             )
+
         except Exception as identifier:
             raise serializers.ValidationError(
                 "The token  is invalid or expired. Please login again."

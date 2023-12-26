@@ -1,7 +1,7 @@
-from django.contrib.auth import authenticate
-from authen.models import CustomUser
 import os
 import random
+from django.contrib.auth import authenticate
+from authen.models import CustomUser
 from rest_framework.exceptions import AuthenticationFailed
 
 

@@ -1,10 +1,10 @@
 from django.urls import path
 from authen.views.social_views import GoogleView, FacebookLogin
 from authen.views.authen_views import (
-    UserRegisterViews,
-    UserSigInViews,
+    UserSignUp,
+    UserSignIn,
     change_password,
-    LogoutAPIView,
+    UserLogout,
     RequestPasswordRestEmail,
     SetNewPasswordView,
     SendEmailCode,
@@ -12,10 +12,10 @@ from authen.views.authen_views import (
 )
 
 urlpatterns = [
-    path('signup', UserRegisterViews.as_view()),
-    path('sigin', UserSigInViews.as_view()),
+    path('signup', UserSignUp.as_view()),
+    path('sigin', UserSignIn.as_view()),
     path('password', change_password),
-    path('logout', LogoutAPIView.as_view()),
+    path('logout', UserLogout.as_view()),
     path(
         'password/reset',
         RequestPasswordRestEmail.as_view()),

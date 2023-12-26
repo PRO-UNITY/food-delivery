@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group
 from authen.models import CustomUser
 
 
-class DeliverySignUpSerializers(serializers.ModelSerializer):
+class DeliverySignUpSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(
         max_length=50,
         validators=[
@@ -85,9 +85,3 @@ class DeliverySignUpSerializers(serializers.ModelSerializer):
         )
         instance.save()
         return instance
-
-
-class UserGroupSerizliers(serializers.ModelSerializer):
-    class Meta:
-        model = Group
-        fields = ["id", "name"]

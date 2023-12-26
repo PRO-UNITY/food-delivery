@@ -10,7 +10,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from authen.views.authen_views import UserProfilesViews
+from authen.views.authen_views import UserProfile
 from managers.views import ManagerKitchenViews
 
 admin.site.site_url = None
@@ -40,7 +40,7 @@ urlpatterns = [
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("auth/", include("authen.urls")),
     path("admin/", admin.site.urls),
-    path('user', UserProfilesViews.as_view()),
+    path('user', UserProfile.as_view()),
     path("kitchen/", include("kitchen.urls")),
     path('foods/', include('foods.urls')),
     path('', include('managers.urls')),

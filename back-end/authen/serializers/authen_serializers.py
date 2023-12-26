@@ -1,4 +1,3 @@
-""" DJango DRF Serializers """
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth.models import Group
@@ -7,9 +6,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from authen.models import CustomUser
-from django.utils.encoding import (
-    force_str,
-)
+from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth import get_user_model
@@ -22,7 +19,7 @@ class UserGroupSerizliers(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
-class UserSignUpSerializers(serializers.ModelSerializer):
+class UserSignUpSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(
         max_length=50,
         validators=[
@@ -71,7 +68,7 @@ class UserSignUpSerializers(serializers.ModelSerializer):
             "email",
             "password",
             "confirm_password",
-            "role"
+            "role",
         ]
         extra_kwargs = {
             "first_name": {"required": True},
@@ -86,18 +83,18 @@ class UserSignUpSerializers(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        if validated_data['password'] != validated_data['confirm_password']:
-            raise serializers.ValidationError({"error":"Those passwords don't match"})
-        validated_data.pop('confirm_password')
-        role_name = validated_data.pop('role', None)
-        if role_name == 'admins':
+        if validated_data["password"] != validated_data["confirm_password"]:
+            raise serializers.ValidationError({"error": "Those passwords don't match"})
+        validated_data.pop("confirm_password")
+        role_name = validated_data.pop("role", None)
+        if role_name == "admins":
             raise serializers.ValidationError({"error": "You cant to submit this Role"})
 
         if role_name:
             try:
                 role = Group.objects.get(name=role_name)
             except ObjectDoesNotExist:
-                raise serializers.ValidationError({'error': "Invalid role"})
+                raise serializers.ValidationError({"error": "Invalid role"})
 
         create = get_user_model().objects.create_user(**validated_data)
         create.groups.add(role)
@@ -105,9 +102,7 @@ class UserSignUpSerializers(serializers.ModelSerializer):
         return create
 
 
-class UserUpdateSerializers(serializers.ModelSerializer):
-    """Serializers"""
-
+class UserUpdateSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(max_length=None, use_url=True)
     first_name = serializers.CharField(
         max_length=50,
@@ -171,9 +166,7 @@ class UserUpdateSerializers(serializers.ModelSerializer):
         return instance
 
 
-class UserSigInInSerializers(serializers.ModelSerializer):
-    """Serializers"""
-
+class UserSigInSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=50, min_length=2)
     password = serializers.CharField(max_length=50, min_length=1)
 
@@ -183,12 +176,9 @@ class UserSigInInSerializers(serializers.ModelSerializer):
         read_only_fields = ("username",)
 
     def validate(self, data):
-        # Check for additional keys in the data during a POST request
         if self.context.get("request") and self.context["request"].method == "POST":
             allowed_keys = set(self.fields.keys())
             input_keys = set(data.keys())
-
-            # Check for extra keys in the input data
             extra_keys = input_keys - allowed_keys
 
             if extra_keys:
@@ -199,14 +189,11 @@ class UserSigInInSerializers(serializers.ModelSerializer):
         return data
 
 
-class UserInformationSerializers(serializers.ModelSerializer):
-    """User Profiles Serializers"""
+class UserInformationSerializer(serializers.ModelSerializer):
     role = serializers.SerializerMethodField()
     avatar = serializers.ImageField(max_length=None, use_url=True)
 
     class Meta:
-        """User Model Fileds"""
-
         model = CustomUser
         fields = [
             "id",

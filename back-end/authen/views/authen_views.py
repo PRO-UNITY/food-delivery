@@ -22,10 +22,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from authen.renderers import UserRenderers
 from authen.models import CustomUser
 from authen.serializers.authen_serializers import (
-    UserSignUpSerializers,
-    UserSigInInSerializers,
-    UserUpdateSerializers,
-    UserInformationSerializers,
+    UserSignUpSerializer,
+    UserSigInSerializer,
+    UserUpdateSerializer,
+    UserInformationSerializer,
     ChangePasswordSerializer,
     LogoutSerializer,
     ResetPasswordSerializer,
@@ -41,15 +41,13 @@ def get_token_for_user(user):
     return {"refresh": str(refresh), "access": str(refresh.access_token)}
 
 
-class UserRegisterViews(APIView):
-    """UserRegister view"""
-
+class UserSignUp(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
     @extend_schema(
-        request=UserSignUpSerializers,
-        responses={201: UserSignUpSerializers},
+        request=UserSignUpSerializer,
+        responses={201: UserSignUpSerializer},
     )
     def post(self, request):
         expected_fields = set(
@@ -73,7 +71,7 @@ class UserRegisterViews(APIView):
             return Response(
                 {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
             )
-        serializer = UserSignUpSerializers(data=request.data)
+        serializer = UserSignUpSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             instanse = serializer.save()
             tokens = get_token_for_user(instanse)
@@ -81,14 +79,12 @@ class UserRegisterViews(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserSigInViews(APIView):
-    """Signin users"""
-
+class UserSignIn(APIView):
     render_classes = [UserRenderers]
 
     @extend_schema(
-        request=UserSigInInSerializers,
-        responses={201: UserSigInInSerializers},
+        request=UserSigInSerializer,
+        responses={201: UserSigInSerializer},
     )
     def post(self, request):
         expected_fields = set(["username", "password"])
@@ -102,7 +98,7 @@ class UserSigInViews(APIView):
             return Response(
                 {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
             )
-        serializer = UserSigInInSerializers(data=request.data, partial=True)
+        serializer = UserSigInSerializer(data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             username = request.data["username"]
             password = request.data["password"]
@@ -121,19 +117,19 @@ class UserSigInViews(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserProfilesViews(APIView):
-    """User profiles"""
-
+class UserProfile(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
     @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
+        request=UserInformationSerializer,
+        responses={201: UserInformationSerializer},
     )
     def get(self, request):
         if request.user.is_authenticated:
-            serializer = UserInformationSerializers(request.user, context={'request':request})
+            serializer = UserInformationSerializer(
+                request.user, context={"request": request}
+            )
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(
@@ -142,8 +138,8 @@ class UserProfilesViews(APIView):
             )
 
     @extend_schema(
-        request=UserUpdateSerializers,
-        responses={201: UserUpdateSerializers},
+        request=UserUpdateSerializer,
+        responses={201: UserUpdateSerializer},
     )
     def put(self, request, *args, **kwarg):
         if request.user.is_authenticated:
@@ -173,7 +169,7 @@ class UserProfilesViews(APIView):
                     {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
                 )
             queryset = get_object_or_404(CustomUser, id=request.user.id)
-            serializer = UserUpdateSerializers(
+            serializer = UserUpdateSerializer(
                 context={"request": request},
                 instance=queryset,
                 data=request.data,
@@ -195,28 +191,12 @@ class UserProfilesViews(APIView):
         if request.user.is_authenticated:
             user_delete = CustomUser.objects.get(id=request.user.id)
             user_delete.delete()
-            return Response({'message': 'delete success'}, status=status.HTTP_200_OK)
+            return Response({"message": "delete success"}, status=status.HTTP_200_OK)
         else:
             return Response(
                 {"error": "The user is not logged in"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
-
-
-class UserDeteilseViews(APIView):
-    """Detailed information about the user"""
-
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(
-        request=UserProfilesViews,
-        responses={201: UserProfilesViews},
-    )
-    def get(self, request, pk):
-        queryset = CustomUser.objects.filter(id=pk)
-        serializers = UserProfilesViews(queryset, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
 
 
 @extend_schema(
@@ -292,9 +272,7 @@ class SendEmailCode(APIView):
             )
 
 
-class LogoutAPIView(APIView):
-    """Logout users"""
-
+class UserLogout(APIView):
     serializer_class = LogoutSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -329,8 +307,6 @@ class RequestPasswordRestEmail(generics.GenericAPIView):
         responses={201: ResetPasswordSerializer},
     )
     def post(self, request):
-        serializers = self.serializer_class(data=request.data)
-
         email = request.data.get("email")
         print(email)
         if CustomUser.objects.filter(email=email).exists():
@@ -358,11 +334,11 @@ class RequestPasswordRestEmail(generics.GenericAPIView):
 
 
 class PasswordTokenCheckView(generics.GenericAPIView):
-    serializer_class = UserInformationSerializers
+    serializer_class = UserInformationSerializer
 
     @extend_schema(
-        request=UserInformationSerializers,
-        responses={201: UserInformationSerializers},
+        request=UserInformationSerializer,
+        responses={201: UserInformationSerializer},
     )
     def get(self, request, uidb64, token):
         try:

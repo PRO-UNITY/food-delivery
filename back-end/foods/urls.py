@@ -1,16 +1,16 @@
 from django.urls import path
 from foods.views import (
-    AllFoodsViews,
-    FoodsCrudViews,
-    CategoriesFoodsViews,
-    FavoriteViews,
-    FavoriteDeleteViews,
+    FoodsView,
+    FoodViews,
+    FoodCategories,
+    FavouritesView,
+    FavouriteViews,
 )
 
 urlpatterns = [
-    path("", AllFoodsViews.as_view()),
-    path("<int:pk>", FoodsCrudViews.as_view()),
-    path("category/<int:pk>", CategoriesFoodsViews.as_view()),
-    path("favorites", FavoriteViews.as_view()),
-    path("favorite/<int:pk>", FavoriteDeleteViews.as_view()),
+    path("", FoodsView.as_view()),
+    path("<int:pk>", FoodViews.as_view()),
+    path("category/<int:pk>", FoodCategories.as_view()),
+    path("favourites", FavouritesView.as_view()),
+    path("favourite/<int:pk>", FavouriteViews.as_view()),
 ]

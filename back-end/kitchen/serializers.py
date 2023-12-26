@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from authen.models import CustomUser
 from kitchen.models import Restaurants
-from foods.models import FoodsCategories, Foods
+from foods.models import FoodsCategories, Foods, Favorite
 
 
 class UserInformationSerializers(serializers.ModelSerializer):
@@ -134,6 +134,7 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
 class AllFoodKitchenSerializers(serializers.ModelSerializer):
     food_img = serializers.ImageField(max_length=None, use_url=True)
     categories = AllCategoriesFoodsSerializer(read_only=True)
+    favorite = serializers.SerializerMethodField()
 
     class Meta:
         model = Foods
@@ -145,13 +146,22 @@ class AllFoodKitchenSerializers(serializers.ModelSerializer):
             "price",
             "kitchen",
             "categories",
+            "favorite",
             "create_at",
             "updated_at",
         ]
 
+    def get_favorite(self, obj):
+        user = self.context.get('user')
+        user_favorities = Favorite.objects.filter(
+            user=user
+        )
+        if user_favorities.filter(food__id=obj.id).exists():
+            return True
+        return False
+
 
 class CategoriesKitFoodsSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = FoodsCategories
         fields = ["id", "name"]
