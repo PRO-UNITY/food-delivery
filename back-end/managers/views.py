@@ -59,7 +59,7 @@ class ManagersView(APIView, Pagination):
     @extend_schema(request=ManagerSignUpSerializer, responses={201: ManagerSignUpSerializer})
     def post(self, request):
         if request.user.is_authenticated:
-            expected_fields = set(["username", "password", "confirm_password", "first_name", "last_name", "email", "groups", "active_profile", "user_id"])
+            expected_fields = set(["username", "password", "confirm_password", "first_name", "last_name", "email", "groups", "active_profile", "user_id", 'phone', 'latitude', 'longitude'])
             received_fields = set(request.data.keys())
 
             unexpected_fields = received_fields - expected_fields
@@ -88,7 +88,7 @@ class ManagerView(APIView):
     @extend_schema(request=ManagerSignUpSerializer, responses={201: ManagerSignUpSerializer})
     def put(self, request, pk):
         if request.user.is_authenticated:
-            expected_fields = set(["username", "password", "confirm_password", "first_name", "last_name", "email", "groups", "active_profile", "user_id"])
+            expected_fields = set(["username", "password", "confirm_password", "first_name", "last_name", "email", "groups", "active_profile", "user_id", 'phone', 'latitude', 'longitude'])
             received_fields = set(request.data.keys())
 
             unexpected_fields = received_fields - expected_fields
