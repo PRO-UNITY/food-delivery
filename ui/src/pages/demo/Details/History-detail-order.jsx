@@ -20,7 +20,7 @@ const HistoryDetailOrder = () => {
     useEffect(()=>{
         setOrders(data?.filter(item=>item.id == id))
         console.log(data?.filter(item=>item.id == id));
-    },data)
+    },[data])
 
 
 
