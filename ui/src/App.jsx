@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from "react-router-dom"
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
 import { AllCategories, AllFoods, AllKitchens, CategoryDetails, Dashboard, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodDetail, FoodOrder, HistoryDetailOrder, KitchenCategoryDetail, KitchenDetails, Login, Notification, Register, Services, Settings, TaskList, UpdateSettings } from "./pages"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OrderHistory from "./pages/demo/List/OrderHistory";
@@ -13,10 +13,15 @@ function App() {
   const [activeNav, setactiveNav] = useState(1);
   const [activeHrmsDash, setActiveHrmsDash] = useState(1);
   const navigate = useNavigate()
+  const location = useLocation()
+  const currentUrl = location.pathname
+  console.log(currentUrl);
 
 
   useEffect(() => {
-    navigate('/dashboard')
+    if(currentUrl === '/'){
+      navigate('/dashboard')
+    }
     const fetchRole = async () => {
         const role = await getRoleUser();
         setRole(role);

@@ -65,12 +65,12 @@ const Dashboard = () => {
             food : item.id,
             is_favorite : true
         }
-        postDataWithToken(data,`/foods/favorites`)
+        postDataWithToken(data,`/foods/favourites`)
         setIsActive(p=>!p)
     }
 
     const removeItemFavoutite = (item) => {
-        deleteData(`/foods/favorite/${item.id}`)
+        deleteData(`/foods/favourite/${item.id}`)
         setIsActive(p=>!p)
     }
 
