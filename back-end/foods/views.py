@@ -9,7 +9,6 @@ from kitchen.pagination import StandardResultsSetPagination
 from drf_spectacular.utils import extend_schema
 from authen.renderers import UserRenderers
 from foods.models import Foods, Favorite
-from core.page import MyPagination
 from foods.serializers import (
     FoodsSerializer,
     FoodSerializer,
@@ -19,14 +18,32 @@ from foods.serializers import (
 
 
 class FoodsView(APIView):
-    renderer_classes = [UserRenderers]  # Fixed typo in render_classes
-    permission_classes = [IsAuthenticated]  # Fixed typo in permission_class
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
     serializer_class = FoodsSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "categories", "kitchen", "price", "description"]
 
-    cl = MyPagination()
+    @property
+    def paginator(self):
+        if not hasattr(self, "_paginator"):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        else:
+            pass
+        return self._paginator
+
+    def paginate_queryset(self, queryset):
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(queryset, self.request, view=self)
+
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
         search_name = request.query_params.get("name", None)
@@ -61,17 +78,15 @@ class FoodsView(APIView):
                 queryset = queryset.filter(Q(price__range=(start_price, end_price)))
             except ValueError:
                 return Response(
-                    {"error": "Value error, range"}, status=status.HTTP_400_BAD_REQUEST
+                    {"error": "Value error, ranger"}, status=status.HTTP_400_BAD_REQUEST
                 )
         if sort_by == "price_asc":
             queryset = queryset.order_by("price")
         elif sort_by == "price_desc":
             queryset = queryset.order_by("-price")
-
-        # Use self.cl for pagination
-        page = self.cl.paginate_queryset(queryset, request)
+        page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = self.cl.get_paginated_response(
+            serializer = self.get_paginated_response(
                 self.serializer_class(
                     page, many=True, context={'user': request.user.id, "request": request}
                 ).data
