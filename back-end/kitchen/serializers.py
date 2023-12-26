@@ -11,12 +11,11 @@ class UserInformationSerializers(serializers.ModelSerializer):
 
 
 class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
-
     food_count = serializers.SerializerMethodField()
 
     class Meta:
         model = FoodsCategories
-        fields = ['id', 'name', 'food_count']
+        fields = ["id", "name", "food_count"]
 
     def get_food_count(self, obj):
         return obj.foods.count()
@@ -107,18 +106,15 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
             if str(groups[0]) == "manager":
                 instance.name = validated_data.get("name", instance.name)
                 instance.description = validated_data.get(
-                    "description", instance.description)
-                instance.is_active = validated_data.get(
-                    "is_active", instance.is_active)
-                instance.open_time = validated_data.get(
-                    "open_time", instance.open_time
+                    "description", instance.description
                 )
+                instance.is_active = validated_data.get("is_active", instance.is_active)
+                instance.open_time = validated_data.get("open_time", instance.open_time)
                 instance.close_time = validated_data.get(
                     "close_time", instance.close_time
                 )
                 instance.latitude = validated_data.get("latitude", instance.latitude)
-                instance.longitude = validated_data.get(
-                    "longitude", instance.longitude)
+                instance.longitude = validated_data.get("longitude", instance.longitude)
                 if instance.logo == None:
                     instance.logo = self.context.get("logo")
                 else:
@@ -137,30 +133,49 @@ class KitchenCrudSerializers(serializers.ModelSerializer):
 
 class AllFoodKitchenSerializers(serializers.ModelSerializer):
     food_img = serializers.ImageField(max_length=None, use_url=True)
+    categories = AllCategoriesFoodsSerializer(read_only=True)
 
     class Meta:
         model = Foods
         fields = [
-            'id',
-            'name',
-            'description',
-            'food_img',
-            'price',
-            'kitchen', 'categories', 'create_at', 'updated_at']
+            "id",
+            "name",
+            "description",
+            "food_img",
+            "price",
+            "kitchen",
+            "categories",
+            "create_at",
+            "updated_at",
+        ]
+
+
+class CategoriesKitFoodsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FoodsCategories
+        fields = ["id", "name"]
+
+
+class KitchenKategorySerializers(serializers.ModelSerializer):
+    categories = CategoriesKitFoodsSerializer(read_only=True)
+
+    class Meta:
+        model = Foods
+        fields = ["categories"]
 
 
 class CategoriesFoodsCrudSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodsCategories
-        fields = ['id', 'name', "create_at", "updated_at"]
+        fields = ["id", "name", "create_at", "updated_at"]
 
     def create(self, validated_data):
         user_get = self.context.get("user_id")
         groups = user_get.groups.all()
         if groups:
             if str(groups[0]) == "admins":
-                create_categories = FoodsCategories.objects.create(
-                    **validated_data)
+                create_categories = FoodsCategories.objects.create(**validated_data)
                 return create_categories
             else:
                 raise serializers.ValidationError(

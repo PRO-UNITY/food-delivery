@@ -19,4 +19,5 @@ urlpatterns = [
     path("foods", KitchenFoodsViews.as_view()),
     path("<int:pk>/foods", KitchenFoods.as_view()),
     path("category/<int:id_category>/food/<int:pk>", KitchenCategoryFoodViews.as_view()),
+
 ]
