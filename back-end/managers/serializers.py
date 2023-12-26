@@ -41,7 +41,10 @@ class ManagerSignUpSerializer(serializers.ModelSerializer):
             username=validated_data["username"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
+            phone=validated_data["phone"],
             email=validated_data["email"],
+            latitude=validated_data["latitude"],
+            longitude=validated_data["longitude"],
         )
         user.user_id = self.context.get("user_id")
         user.set_password(validated_data["password"])
