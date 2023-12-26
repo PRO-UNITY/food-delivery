@@ -1,4 +1,5 @@
 from rest_framework.response import Response
+from core.pagination import Pagination
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
@@ -15,33 +16,13 @@ from kitchen.serializer.kitchen_serializers import (
 )
 
 
-class KitchensView(APIView):
+class KitchensView(APIView, Pagination):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
     serializer_class = KitchensSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "description", "is_active", "open_time", "close_time"]
-
-    @property
-    def paginator(self):
-        if not hasattr(self, "_paginator"):
-            if self.pagination_class is None:
-                self._paginator = None
-            else:
-                self._paginator = self.pagination_class()
-        else:
-            pass
-        return self._paginator
-
-    def paginate_queryset(self, queryset):
-        if self.paginator is None:
-            return None
-        return self.paginator.paginate_queryset(queryset, self.request, view=self)
-
-    def get_paginated_response(self, data):
-        assert self.paginator is not None
-        return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
         if request.user.is_authenticated:
@@ -80,9 +61,9 @@ class KitchensView(APIView):
                 queryset = queryset.order_by("id")
             elif sort_by == "desc":
                 queryset = queryset.order_by("-id")
-            page = self.paginate_queryset(queryset)
+            page = super().paginate_queryset(queryset)
             if page is not None:
-                serializer = self.get_paginated_response(
+                serializer = super().get_paginated_response(
                     self.serializer_class(page, many=True, context={"request": request}).data
                 )
             else:

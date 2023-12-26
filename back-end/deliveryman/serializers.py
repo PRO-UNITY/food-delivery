@@ -10,57 +10,22 @@ class DeliverySignUpSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(
         max_length=50,
         validators=[
-            MinLengthValidator(
-                limit_value=5, message="First name must be at least 5 characters."
-            ),
-            MaxLengthValidator(
-                limit_value=50, message="First name cannot exceed 50 characters."
-            ),
-        ],
-    )
+            MinLengthValidator(limit_value=5, message="First name must be at least 5 characters."),
+            MaxLengthValidator(limit_value=50, message="First name cannot exceed 50 characters.")])
     last_name = serializers.CharField(
         max_length=50,
         validators=[
-            MinLengthValidator(
-                limit_value=5, message="Last name must be at least 5 characters."
-            ),
-            MaxLengthValidator(
-                limit_value=50, message="Last name cannot exceed 50 characters."
-            ),
-        ],
-    )
-    username = serializers.CharField(
-        max_length=255,
-        min_length=5,
-        required=True,
-        validators=[UniqueValidator(queryset=CustomUser.objects.all())],
-    )
-    password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password]
-    )
+            MinLengthValidator(limit_value=5, message="Last name must be at least 5 characters."),
+            MaxLengthValidator(limit_value=50, message="Last name cannot exceed 50 characters.")])
+    username = serializers.CharField(max_length=255, min_length=5, required=True, validators=[UniqueValidator(queryset=CustomUser.objects.all())])
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     confirm_password = serializers.CharField(write_only=True, required=True)
-    email = serializers.EmailField(
-        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
-    )
+    email = serializers.EmailField(validators=[UniqueValidator(queryset=CustomUser.objects.all())])
 
     class Meta:
         model = CustomUser
-        fields = [
-            "id",
-            "username",
-            "first_name",
-            "last_name",
-            "password",
-            "confirm_password",
-            "email",
-            "phone",
-            "latitude",
-            "longitude",
-        ]
-        extra_kwargs = {
-            "first_name": {"required": True},
-            "last_name": {"required": True},
-        }
+        fields = ["id", "username", "first_name", "last_name", "password", "confirm_password", "email", "phone", "latitude", "longitude"]
+        extra_kwargs = {"first_name": {"required": True}, "last_name": {"required": True}}
 
     def create(self, validated_data):
         if validated_data["password"] != validated_data["confirm_password"]:
@@ -80,8 +45,6 @@ class DeliverySignUpSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        instance.active_profile = validated_data.get(
-            "active_profile", instance.active_profile
-        )
+        instance.active_profile = validated_data.get("active_profile", instance.active_profile)
         instance.save()
         return instance

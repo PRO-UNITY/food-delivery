@@ -1,4 +1,5 @@
 from rest_framework import status
+from core.pagination import Pagination
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from drf_spectacular.utils import extend_schema
@@ -16,37 +17,13 @@ from order.serializers import (
 )
 
 
-class SendViews(APIView):
+class SendViews(APIView, Pagination):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
     serializer_class = OrderSerializers
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["status", "kitchen"]
-
-    @extend_schema(
-        request=OrderSerializers,
-        responses={201: OrderSerializers},
-    )
-    @property
-    def paginator(self):
-        if not hasattr(self, "_paginator"):
-            if self.pagination_class is None:
-                self._paginator = None
-            else:
-                self._paginator = self.pagination_class()
-        else:
-            pass
-        return self._paginator
-
-    def paginate_queryset(self, queryset):
-        if self.paginator is None:
-            return None
-        return self.paginator.paginate_queryset(queryset, self.request, view=self)
-
-    def get_paginated_response(self, data):
-        assert self.paginator is not None
-        return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
         if request.user.is_authenticated:
@@ -65,19 +42,14 @@ class SendViews(APIView):
                 queryset = queryset.order_by("id")
             elif sort_by == "price_desc":
                 queryset = queryset.order_by("-id")
-            page = self.paginate_queryset(queryset)
+            page = super().paginate_queryset(queryset)
             if page is not None:
-                serializer = self.get_paginated_response(
-                    self.serializer_class(page, many=True).data
-                )
+                serializer = super().get_paginated_response(self.serializer_class(page, many=True).data)
             else:
                 serializer = self.serializer_class(queryset, many=True)
             return Response({"data": serializer.data}, status=status.HTTP_200_OK)
         else:
-            return Response(
-                {"error": "The user is not logged in"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
 
     @extend_schema(
         request=SendOrderSerializers,
@@ -127,37 +99,13 @@ class SendViews(APIView):
             )
 
 
-class OrderView(APIView):
+class OrderView(APIView, Pagination):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
     serializer_class = OrderFoodsSerializers
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["foods"]
-
-    @extend_schema(
-        request=SendOrderSerializers,
-        responses={201: SendOrderSerializers},
-    )
-    @property
-    def paginator(self):
-        if not hasattr(self, "_paginator"):
-            if self.pagination_class is None:
-                self._paginator = None
-            else:
-                self._paginator = self.pagination_class()
-        else:
-            pass
-        return self._paginator
-
-    def paginate_queryset(self, queryset):
-        if self.paginator is None:
-            return None
-        return self.paginator.paginate_queryset(queryset, self.request, view=self)
-
-    def get_paginated_response(self, data):
-        assert self.paginator is not None
-        return self.paginator.get_paginated_response(data)
 
     def get(self, request, pk, format=None, *args, **kwargs):
         search_name = request.query_params.get("foods", None)
@@ -175,9 +123,12 @@ class OrderView(APIView):
         elif sort_by == "desc":
             foods_queryset = sorted(foods_queryset, key=lambda x: x.get("id", 0), reverse=True)
 
-        page = self.paginate_queryset(foods_queryset)
-        serializer = OrderFoodsSerializers(page, many=True)
-        return self.get_paginated_response(serializer.data)
+        page = super().paginate_queryset(queryset)
+        if page is not None:
+            serializer = super().get_paginated_response(self.serializer_class(page, many=True).data)
+        else:
+            serializer = self.serializer_class(queryset, many=True)
+            return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
         request=SendOrderSerializers,
@@ -204,12 +155,8 @@ class OrderView(APIView):
 
             unexpected_fields = received_fields - expected_fields
             if unexpected_fields:
-                error_message = (
-                    f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-                )
-                return Response(
-                    {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
-                )
+                error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
+                return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
             serializers = SendOrderSerializers(
                 instance=Orders.objects.filter(id=pk)[0],
                 data=request.data,
@@ -218,11 +165,6 @@ class OrderView(APIView):
             if serializers.is_valid(raise_exception=True):
                 serializers.save()
                 return Response(serializers.data, status=status.HTTP_200_OK)
-            return Response(
-                {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(
-                {"error": "The user is not logged in"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED,)
