@@ -21,6 +21,7 @@ class DeliverySignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     confirm_password = serializers.CharField(write_only=True, required=True)
     email = serializers.EmailField(validators=[UniqueValidator(queryset=CustomUser.objects.all())])
+    avatar = serializers.ImageField(max_length=None, allow_empty_file=False, allow_null=False, use_url=False, required=False,)
 
     class Meta:
         model = CustomUser
@@ -48,6 +49,16 @@ class DeliverySignUpSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
+        instance.first_name = validated_data.get("first_name", instance.first_name)
+        instance.last_name = validated_data.get("last_name", instance.last_name)
+        instance.phone = validated_data.get("phone", instance.phone)
+        instance.latitude = validated_data.get("latitude", instance.latitude)
+        instance.longitude = validated_data.get("longitude", instance.longitude)
+        instance.email = validated_data.get("email", instance.email)
+        if instance.avatar == None:
+            instance.avatar = self.context.get("avatar")
+        else:
+            instance.avatar = validated_data.get("avatar", instance.avatar)
         instance.active_profile = validated_data.get("active_profile", instance.active_profile)
         instance.save()
         return instance

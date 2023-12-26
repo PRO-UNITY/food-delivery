@@ -41,7 +41,7 @@ class RegisterDelivery(APIView, Pagination):
     @extend_schema(request=DeliverySignUpSerializer, responses={201: DeliverySignUpSerializer})
     def post(self, request):
         if request.user.is_authenticated:
-            expected_fields = set(['username', 'password', 'confirm_password', 'first_name', 'last_name', 'email', 'groups', 'active_profile', 'user_id', 'phone', 'latitude', 'longitude'])
+            expected_fields = set(['username', 'password', 'confirm_password', 'first_name', 'last_name', 'email', 'groups', 'active_profile', 'user_id', 'phone', 'latitude', 'longitude','avatar'])
             received_fields = set(request.data.keys())
 
             unexpected_fields = received_fields - expected_fields
@@ -74,7 +74,7 @@ class UserDelivery(APIView):
     @extend_schema(request=RegisterDelivery, responses={201: RegisterDelivery})
     def put(self, request, pk):
         if request.user.is_authenticated:
-            expected_fields = set(['username', 'password', 'confirm_password', 'first_name', 'last_name', 'email', 'role', 'active_profile', 'phone', 'latitude', 'longitude'])
+            expected_fields = set(['username', 'password', 'confirm_password', 'first_name', 'last_name', 'email', 'role', 'active_profile', 'phone', 'latitude', 'longitude', 'avatar'])
             received_fields = set(request.data.keys())
 
             unexpected_fields = received_fields - expected_fields
