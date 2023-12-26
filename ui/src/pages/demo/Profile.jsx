@@ -11,13 +11,13 @@ const Profile = ({ showProfile, count }) => {
     const token = localStorage.getItem('token')
     const cardData = JSON.parse(localStorage.getItem('card'))
 
-    // useEffect(()=>{
-    //     getUserData('/user').
-    //     then((res)=>{
-    //         setUser(res)
-    //     })
+    useEffect(()=>{
+        getUserData('/user').
+        then((res)=>{
+            setUser(res)
+        })
         
-    // },[])
+    },[])
 
     const logOut = () => {
         localStorage.clear()
