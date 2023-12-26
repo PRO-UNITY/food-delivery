@@ -5,13 +5,11 @@ from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework_simplejwt import views as jwt_views
 from django.views.generic import TemplateView
-from rest_framework_simplejwt.views import TokenBlacklistView
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
+from drf_spectacular.views import SpectacularAPIView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from authen.views.authen_views import UserProfile
-from managers.views import ManagerKitchenViews
 
 admin.site.site_url = None
 

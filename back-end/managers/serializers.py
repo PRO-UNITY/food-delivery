@@ -14,9 +14,7 @@ class UserGroupSerizliers(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
-class UserInformationSerializers(serializers.ModelSerializer):
-    """User Profiles Serializers"""
-
+class UserInformationSerializer(serializers.ModelSerializer):
     role = serializers.SerializerMethodField()
     avatar = serializers.ImageField(max_length=None, use_url=True)
 
@@ -44,7 +42,7 @@ class UserInformationSerializers(serializers.ModelSerializer):
             return k
 
 
-class ManagerSignUpSerializers(serializers.ModelSerializer):
+class ManagerSignUpSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(
         max_length=50,
         validators=[
@@ -126,7 +124,7 @@ class ManagerSignUpSerializers(serializers.ModelSerializer):
         return instance
 
 
-class AllKitchenSerializers(serializers.ModelSerializer):
+class KitchensSerializer(serializers.ModelSerializer):
     logo = serializers.ImageField(max_length=None, use_url=True)
 
     class Meta:

@@ -17,8 +17,6 @@ from order.serializers import (
 
 
 class SendViews(APIView):
-    """The user orders the kitchen"""
-
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
@@ -129,7 +127,7 @@ class SendViews(APIView):
             )
 
 
-class OrderCrudViews(APIView):
+class OrderView(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
