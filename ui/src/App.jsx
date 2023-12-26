@@ -1,5 +1,5 @@
-import { Route, Routes } from "react-router-dom"
-import { AllCategories, AllFoods, AllKitchens, CategoryDetails, Dashboard, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FavouriteDetails, FoodDetail, FoodOrder, HistoryDetailOrder, KitchenCategoryDetail, KitchenDetails, Login, Notification, Register, Services, Settings, TaskList, UpdateSettings } from "./pages"
+import { Route, Routes, useNavigate } from "react-router-dom"
+import { AllCategories, AllFoods, AllKitchens, CategoryDetails, Dashboard, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodDetail, FoodOrder, HistoryDetailOrder, KitchenCategoryDetail, KitchenDetails, Login, Notification, Register, Services, Settings, TaskList, UpdateSettings } from "./pages"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OrderHistory from "./pages/demo/List/OrderHistory";
 import { useState, useEffect } from "react";
@@ -12,9 +12,11 @@ function App() {
   const [role, setRole] = useState('')
   const [activeNav, setactiveNav] = useState(1);
   const [activeHrmsDash, setActiveHrmsDash] = useState(1);
+  const navigate = useNavigate()
 
 
   useEffect(() => {
+    navigate('/dashboard')
     const fetchRole = async () => {
         const role = await getRoleUser();
         setRole(role);
@@ -28,7 +30,6 @@ function App() {
         value={{ activeNav, setactiveNav, activeHrmsDash, setActiveHrmsDash }}
       >
       <Routes>
-        <Route path="/" element={ <Dashboard/> } />
         <Route path="/dashboard" element={ <Dashboard/> } />
         <Route path="/allfoods" element={ <AllFoods/> } />
         <Route path="/allcategories" element={ <AllCategories/> } />
@@ -36,7 +37,6 @@ function App() {
         {<Route path="/dashboard" element={ <Dashboard/> } />}
         <Route path="/food-order" element={ <FoodOrder/> } />
         <Route path="/favourite" element={ <Favourite/> } />
-        <Route path="/favourite-details/:id" element={ <FavouriteDetails/> } />
         <Route path="/food-detail/:id" element={ <FoodDetail/> } />
         <Route path="/order-history" element={ <OrderHistory/> } />
         <Route path="/settings" element={ <Settings/> } />

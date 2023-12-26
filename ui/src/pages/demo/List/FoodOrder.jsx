@@ -103,7 +103,7 @@ const FoodOrder = () => {
             setActive(true)
             setTimeout(()=>{
                 setActive(false)
-                navigate(`/`)
+                navigate(`/dashboard`)
             },2000)
         })
         .then(() => localStorage.removeItem("card"));

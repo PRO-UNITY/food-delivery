@@ -21,7 +21,7 @@ const Profile = ({ showProfile, count }) => {
 
     const logOut = () => {
         localStorage.clear()
-        navigate('/')
+        navigate('/dashboard')
     }
     
     useEffect(()=>{
