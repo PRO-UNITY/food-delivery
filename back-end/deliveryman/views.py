@@ -96,7 +96,7 @@ class UserDelivery(APIView):
             user_get = request.user
             groups = user_get.groups.all()
             if groups:
-                if str(groups[0]) == "manager":
+                if str(groups[0]) == "kitchen":
                     queryset = CustomUser.objects.get(id=pk)
                     queryset.delete()
                     return Response({'message': 'success'}, status=status.HTTP_200_OK)
