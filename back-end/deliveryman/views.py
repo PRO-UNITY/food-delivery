@@ -43,17 +43,23 @@ class RegisterDelivery(APIView):
         return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
-        instance = CustomUser.objects.filter(
-            groups__name__in=["delivery"]
-        )
-        page = self.paginate_queryset(instance)
-        if page is not None:
-            serializer = self.get_paginated_response(
-                self.serializer_class(page, many=True, context={"request": request}).data
-            )
+        if request.user.is_authenticated:
+            user_get = request.user
+            groups = user_get.groups.all()
+            if groups:
+                if str(groups[0]) == "kitchen":
+                    instance = CustomUser.objects.filter(groups__name__in=["delivery"], user_id=request.user.id)
+                    page = self.paginate_queryset(instance)
+                    if page is not None:
+                        serializer = self.get_paginated_response(
+                            self.serializer_class(page, many=True, context={"request": request}).data
+                        )
+                    else:
+                        serializer = self.serializer_class(instance, many=True)
+                    return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+                return Response({"error": "You are not allowed to use this URL"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
-            serializer = self.serializer_class(instance, many=True)
-        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
 
     @extend_schema(
         request=DeliverySignUpSerializer,
@@ -143,3 +149,17 @@ class UserDelivery(APIView):
                 {"error": "The user is not logged in"},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
+
+    def delete(self, request, pk):
+        if request.user.is_authenticated:
+            user_get = request.user
+            groups = user_get.groups.all()
+            if groups:
+                if str(groups[0]) == "manager":
+                    queryset = CustomUser.objects.get(id=pk)
+                    queryset.delete()
+                    return Response({'message': 'success'}, status=status.HTTP_200_OK)
+                else:
+                    return Response({"error": "This user does not have permission"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
