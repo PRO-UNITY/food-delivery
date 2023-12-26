@@ -1,22 +1,29 @@
 import { useEffect, useState } from "react"
 import DemoLayout from "../../../Layout/Demoproject"
-import { BASE_URL, getDataWithToken } from "../../../functions/function"
+import { deleteData, getUserData } from "../../../functions/function"
 import { Link } from "react-router-dom"
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import Pagination from 'react-bootstrap/Pagination';
 
 const Dashboard = () => {
     const [card, setCard] = useState([])
     const [food, setFood] = useState([])
     const [search, setSearch] = useState('')
+    const [isactive, setIsActive] = useState('')
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
 
     useEffect(()=>{
-        getDataWithToken(`/foods/`).
+        getUserData(`/foods/favorites`).
         then((res)=>{
             setFood(res.data.results)
+            const residual = res.data.count%10
+            const pages = (res.data.count-residual)/10
+            setTotalPages(pages%2==0 && pages ===1?pages:pages+1);
         })
-    },[])
+    },[isactive, currentPage])
 
     const addToCard = (item) => {
         const updatedCard = [...card, { ...item, count: 1 }];
@@ -31,6 +38,27 @@ const Dashboard = () => {
         setCard(savedCard);
       }, []);
 
+      const removeItemFavoutite = (id) => {
+        deleteData(`/foods/favorite/${id}`)
+        setIsActive(p=>!p)
+    }
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage <= 1) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
     return ( 
         <DemoLayout setSearch={setSearch}>
             <div className="w-100 body-main  p-5">
@@ -39,14 +67,16 @@ const Dashboard = () => {
                 </div>
                 {
                     localStorage.getItem('token')?
-                    <div className="foods">
+                    <>
                     {
-                    food.map((item, index)=>
-                    <Link key={index} to={`/food-detail/${item.id}`} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
-                    
-                    <div className="w-100 d-flex justify-content-center">
-                    <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
-                    </div>
+                        food.length>0?
+                        <div className="foods">
+                    {
+                    food?.map((item, index)=>
+                    <div key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
+                    <Link to={`/food-detail/${item.food.id}`} className="w-100 d-flex justify-content-center">
+                    <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={item?.food.food_img} />
+                    </Link>
                     <div className="mb-2">
                     <i className="fa-solid fa-star orange"></i>
                     <i className="fa-solid fa-star orange"></i>
@@ -56,8 +86,8 @@ const Dashboard = () => {
                     </div>
                     <div className="d-flex justify-content-between w-100 align-items-center">
                         <div>
-                        <p style={{fontWeight:500}} className="p-0 m-0">{item?.name}</p>
-                        <p style={{fontWeight:800}}><span className="orange">$</span>{item?.price}</p>
+                        <p style={{fontWeight:500}} className="p-0 m-0">{item?.food.name}</p>
+                        <p style={{fontWeight:800}}><span className="orange">$</span>{item?.food.price}</p>
                         </div>
                         {
                             localStorage.getItem('role')!=="undefined"?
@@ -69,12 +99,31 @@ const Dashboard = () => {
                     </div>
                     <div className="sale">
                         <div className="d-flex justify-content-center align-items-center px-2 text-white sale-percent">15% Off</div>
-                        <button style={{}} className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
+                        <button onClick={()=>removeItemFavoutite(item.food.id)} style={{color:"rgb(247, 69, 69)"}} className="btn-favourite"><i className="fa-solid fa-trash"></i></button>
                     </div>
-                    </Link>
+                    </div>
                         )
                     }   
+                    <div className="w-100 d-flex justify-content-center">
+                        <Pagination className="mt-4">
+                            <Pagination.Prev onClick={handlePrevPage} disabled={currentPage === 1} />
+                            {[...Array(totalPages).keys()].map((page) => (
+                                <Pagination.Item
+                                    key={page + 1}
+                                    active={page + 1 === currentPage}
+                                    onClick={() => handlePageChange(page + 1)}
+                                >
+                                    {page+1}
+                                </Pagination.Item>
+                                
+                            ))}
+                            <Pagination.Next onClick={handleNextPage} disabled={currentPage === totalPages} />
+                        </Pagination>
+                    </div>  
                 </div>:
+                    <h6>No any favourite foods <Link className="orange" to={'/dashboard'}>add food</Link></h6>
+                    }
+                    </>:
                 <h6>No any favourite foods, For adding to favourite please  <Link className="orange" to={'/login'}>login</Link></h6>
 
                 }
