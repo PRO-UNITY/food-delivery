@@ -71,7 +71,7 @@ class UserDelivery(APIView):
         serializers = UserInformationSerializer(queryset, context={'request': request})
         return Response(serializers.data, status=status.HTTP_200_OK)
 
-    @extend_schema(request=RegisterDelivery, responses={201: RegisterDelivery})
+    @extend_schema(request=DeliverySignUpSerializer, responses={201: DeliverySignUpSerializer})
     def put(self, request, pk):
         if request.user.is_authenticated:
             expected_fields = set(['username', 'password', 'confirm_password', 'first_name', 'last_name', 'email', 'role', 'active_profile', 'phone', 'latitude', 'longitude'])
@@ -83,7 +83,7 @@ class UserDelivery(APIView):
                 return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
 
             queryset = get_object_or_404(CustomUser, id=pk)
-            serializer = RegisterDelivery(context={'request': request}, instance=queryset, data=request.data, partial=True)
+            serializer = DeliverySignUpSerializer(context={'request': request}, instance=queryset, data=request.data, partial=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save(avatar=request.data.get("avatar"))
                 return Response(serializer.data, status=status.HTTP_200_OK)
