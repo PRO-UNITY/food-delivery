@@ -25,7 +25,7 @@ const DemoSidebar = ({ showSidebar }) => {
          bg-white  ${showSidebar && "show"} `}
       >
         <div className="w-100 text-center mb-5">
-        <h2>Delivery</h2>
+        <h2>delivery</h2>
         </div>
         <div className="side-body">
           <ul style={{listStyle:"none"}} className="px-3">
