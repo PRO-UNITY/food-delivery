@@ -197,7 +197,7 @@ class KitchenView(APIView):
             user_get = request.user
             groups = user_get.groups.all()
             if groups:
-                if str(groups[0]) == "manager":
+                if str(groups[0]) == "kitchen":
                     objects_get = Restaurants.objects.get(id=pk)
                     objects_get.delete()
                     return Response(

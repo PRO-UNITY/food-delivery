@@ -103,7 +103,7 @@ class KitchenSerializers(serializers.ModelSerializer):
         user_get = self.context.get("user")
         groups = user_get.groups.all()
         if groups:
-            if str(groups[0]) == "manager":
+            if str(groups[0]) == "kitchen":
                 instance.name = validated_data.get("name", instance.name)
                 instance.description = validated_data.get(
                     "description", instance.description
