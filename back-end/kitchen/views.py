@@ -11,7 +11,6 @@ from authen.renderers import UserRenderers
 from kitchen.models import Restaurants
 from foods.models import FoodsCategories, Foods
 from foods.serializers import CategoriesSerializer
-from core.page import MyPagination
 from kitchen.serializers import (
     KitchensSerializer,
     KitchenSerializers,

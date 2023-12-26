@@ -85,7 +85,7 @@ class KitchenSerializers(serializers.ModelSerializer):
         user_get = self.context.get("user")
         groups = user_get.groups.all()
         if groups:
-            if str(groups[0]) == "manager":
+            if str(groups[0]) == "kitchen":
                 create_foods = Restaurants.objects.create(**validated_data)
                 create_foods.user = self.context.get("user")
                 create_foods.save()
