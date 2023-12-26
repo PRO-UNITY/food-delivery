@@ -1,56 +1,52 @@
 import { useEffect, useState } from "react"
 import DemoLayout from "../../../Layout/Demoproject"
-import { getDataWithToken, BASE_URL } from "../../../functions/function"
+import { getDataWithToken, BASE_URL, getUserData, postDataWithToken, deleteData } from "../../../functions/function"
 import { useParams } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
 import Spinner from 'react-bootstrap/Spinner';
 import { Link } from "react-router-dom";
 
-const KitchenDetails = () => {
+const KitchenCategoryDetail = () => {
     const [foods, setFoods] = useState([])
-    const [category, setCategory] = useState([])
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [search, setSearch] = useState('')
     const [card, setCard] = useState([])
-    const [data, setData] = useState({})
-    const {id} = useParams()
-    
+    const {category_id} = useParams()
+    const {kitchen_id} = useParams()
+    const token = localStorage.getItem('token')
+    const [isactive, setIsActive] = useState(false)
+
+
     useEffect(()=>{
-        getDataWithToken(`/kitchen/${id}/foods?page=${currentPage}`).
+        const func = token?getUserData:getDataWithToken
+        func(`/kitchen/category/${category_id}/food/${kitchen_id}?page=${currentPage}`).
         then((res)=>{
             setFoods(res.data.results)
+            console.log(res);
             const residual = res.data.count%10
             const pages = (res.data.count-residual)/10
             setTotalPages(pages%2==0 && pages ===1?pages:pages+1);
             setLoading(false);
         })
-    },[id, currentPage])
+    },[currentPage, isactive, token])
 
-    useEffect(()=>{
-        console.log("res");
-        getDataWithToken(`/kitchen/${id}/categories`).
-        then((res)=>{
-            setCategory(res)
-            console.log(res);
-        })
-    },[])
+    const addToFavourite = (item) => {
+        const data = {
+            food : item.id,
+            is_favorite : true
+        }
+        postDataWithToken(data,`/foods/favourites`)
+        setIsActive(p=>!p)
+    }
 
-    useEffect(()=>{
-        getDataWithToken(`/kitchen/${id}`).
-        then((res)=>{
-            setData(res)
-        })
-    },[])
-
-    useEffect(()=>{
-        getDataWithToken(`/kitchen/${id}`).
-        then((res)=>{
-            setData(res)
-        })
-    },[])
+    const removeItemFavoutite = (item) => {
+        deleteData(`/foods/favourite/${item.id}`)
+        setIsActive(p=>!p)
+    }
+    
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -59,8 +55,9 @@ const KitchenDetails = () => {
     const handleNextPage = () => {
         if (currentPage <= 1) {
             setCurrentPage(currentPage + 1);
+            
         }
-       
+        console.log(currentPage);
     };
 
     const handlePrevPage = () => {
@@ -77,10 +74,10 @@ const KitchenDetails = () => {
         setCard(updatedCard);
     }
   
-    useEffect(() => {
-      const savedCard = JSON.parse(localStorage.getItem("card")) || [];
-      setCard(savedCard);
-    }, []);
+      useEffect(() => {
+        const savedCard = JSON.parse(localStorage.getItem("card")) || [];
+        setCard(savedCard);
+      }, []);
 
     return (
         <DemoLayout setSearch={setSearch}>
@@ -99,44 +96,12 @@ const KitchenDetails = () => {
                 </Button>
                 </div>:
                 <div className="body-main w-100 p-5">
-                    <h3>About {data?.name}</h3>
                 
-                    
-                    <div className="order-history">
-                    <div className="img-order-history p-3">
-                        <img style={{borderRadius:"10px"}} src={data?.logo} alt="" />
-                    </div>
-                    <div className="title-order-history">
-                    <ul className="list-group w-100">
-                        <li className="list-group-item">Name : {data?.name}</li>
-                        <li className="list-group-item">Description : {data?.description}</li>
-                        <li className="list-group-item">Open time : {data?.open_time}</li>
-                        <li className="list-group-item">Close time : {data?.close_time}</li>
-                    </ul>
-                    </div>
-                    </div>
-                    
-                
-                    <h4>Categories of {data?.name}</h4>
-                    <div className="categories w-100 mb-3">
-                    {
-                        category?.map((item,index)=>
-                            <Link to={`/kitchen/category/${item.categories.id}/food/${id}`} key={index} className="text-dark" style={{textDecoration:"none"}}>
-                            <div className="category-item bg-white">
-                            <i style={{fontSize:"25px"}} className="fa-solid fa-bowl-food orange"></i>
-                            <p className="name-category p-0 m-0 grey">{item?.categories.name} x{item?.categories.food_count}</p>
-                            </div>
-                            </Link>
-                        )
-                    }
-                    </div>
-                    <hr />
-                    <h4>Foods of {data?.name}</h4>
-
                 <div className="foods">
                 {
                     foods.map((item,index)=>
-                    <Link key={index} to={`/food-detail/${item.id}`} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
+                    <Link key={index} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
+                    
                     <div className="w-100 d-flex justify-content-center">
                     <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
                     </div>
@@ -162,7 +127,14 @@ const KitchenDetails = () => {
                     </div>
                     <div className="sale">
                         <div className="d-flex justify-content-center align-items-center px-2 text-white sale-percent">15% Off</div>
-                        <button style={{}} className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
+                        {token?
+                            <>
+                            {item.favorite ?
+                                <button onClick={()=>removeItemFavoutite(item)}  className="btn-favourite orange"><i className="fa-solid fa-heart"></i></button>:
+                                <button onClick={()=>addToFavourite(item)}  className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
+                            }
+                            </>:""
+                        }
                     </div>
                     </Link>
                     )
@@ -179,6 +151,7 @@ const KitchenDetails = () => {
                             >
                                 {page+1}
                             </Pagination.Item>
+                            
                         ))}
                         <Pagination.Next onClick={handleNextPage} disabled={currentPage === totalPages} />
                     </Pagination>
@@ -190,4 +163,4 @@ const KitchenDetails = () => {
     )
 }
 
-export default KitchenDetails   
+export default KitchenCategoryDetail

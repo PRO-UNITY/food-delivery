@@ -16,7 +16,7 @@ const Dashboard = () => {
 
 
     useEffect(()=>{
-        getUserData(`/foods/favorites`).
+        getUserData(`/foods/favourites`).
         then((res)=>{
             setFood(res.data.results)
             const residual = res.data.count%10
@@ -39,7 +39,7 @@ const Dashboard = () => {
       }, []);
 
       const removeItemFavoutite = (id) => {
-        deleteData(`/foods/favorite/${id}`)
+        deleteData(`/foods/favourite/${id}`)
         setIsActive(p=>!p)
     }
 

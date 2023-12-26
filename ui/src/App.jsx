@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom"
-import { AllCategories, AllFoods, AllKitchens, CategoryDetails, Dashboard, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FavouriteDetails, FoodDetail, FoodOrder, HistoryDetailOrder, KitchenDetails, Login, Notification, Register, Services, Settings, TaskList, UpdateSettings } from "./pages"
+import { AllCategories, AllFoods, AllKitchens, CategoryDetails, Dashboard, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FavouriteDetails, FoodDetail, FoodOrder, HistoryDetailOrder, KitchenCategoryDetail, KitchenDetails, Login, Notification, Register, Services, Settings, TaskList, UpdateSettings } from "./pages"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OrderHistory from "./pages/demo/List/OrderHistory";
 import { useState, useEffect } from "react";
@@ -46,6 +46,7 @@ function App() {
         <Route path="/category/:id" element={ <CategoryDetails/> } />
         <Route path="/kitchen/:id" element={ <KitchenDetails/> } />
         <Route path="/order-hIstory/:id" element={ <HistoryDetailOrder/> } />
+        <Route path="//kitchen/category/:category_id/food/:kitchen_id" element={ <KitchenCategoryDetail/> } />
         <Route path="*" element={ <Pagenotfound/> } />
         <Route path="/admin" element={ localStorage.getItem('role')==="kitchen"?<DeliveryHome/>:<Dashboard/> } />
         <Route path="/edit-profile" element={ localStorage.getItem('role')==="admins"?<EditAdminProfile/>:<Login/> } />
