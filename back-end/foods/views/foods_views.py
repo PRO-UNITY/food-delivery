@@ -37,7 +37,45 @@ class FoodsView(APIView, Pagination):
                     else:
                         serializer = self.serializer_class(queryset, many=True)
                     return Response({"data": serializer.data}, status=status.HTTP_200_OK)
-            return Response({"error": "It is not possible to add information to such a user"}, status=status.HTTP_400_BAD_REQUEST)
+                elif str(groups[0]) == "users":
+                    search_name = request.query_params.get("name", None)
+                    search_category = request.query_params.get("category", None)
+                    search_restaurant = request.query_params.get("restaurant", None)
+                    search_description = request.query_params.get("description", None)
+                    price_range = request.query_params.get("price", None)
+                    sort_by = request.query_params.get("sort", None)
+                    queryset = Foods.objects.all()
+
+                    if search_name:
+                        queryset = queryset.filter(Q(name__icontains=search_name))
+
+                    if search_category:
+                        queryset = queryset.filter(Q(categories__id__icontains=search_category) | Q(categories__name__icontains=search_category))
+
+                    if search_restaurant:
+                        queryset = queryset.filter(Q(kitchen__id__icontains=search_restaurant) | Q(kitchen__name__icontains=search_restaurant))
+
+                    if search_description:
+                        queryset = queryset.filter(Q(description__icontains=search_description))
+
+                    if price_range:
+                        try:
+                            start_price, end_price = map(int, price_range.split(","))
+                            queryset = queryset.filter(Q(price__range=(start_price, end_price)))
+                        except ValueError:
+                            return Response({"error": "Value error, ranger"}, status=status.HTTP_400_BAD_REQUEST)
+                    if sort_by == "price_asc":
+                        queryset = queryset.order_by("price")
+                    elif sort_by == "price_desc":
+                        queryset = queryset.order_by("-price")
+
+                    page = super().paginate_queryset(queryset)
+                    if page is not None:
+                        serializer = super().get_paginated_response(self.serializer_class(page, many=True, context={'user': request.user.id, "request": request}).data)
+                    else:
+                        serializer = self.serializer_class(queryset, many=True)
+                    return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+
         else:
             search_name = request.query_params.get("name", None)
             search_category = request.query_params.get("category", None)
