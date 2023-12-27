@@ -6,24 +6,18 @@ import Pagination from 'react-bootstrap/Pagination';
 import Spinner from 'react-bootstrap/Spinner';
 import { Link } from "react-router-dom";
 
-const RestaurantHome = () => {
-    const [retaurant,setRetaurant] = useState([])
-    const [loading,setLoading] = useState(false)
+const CategoryHome = () => {
+    const [category,setCategory] = useState([])
+    const [loading,setLoading] = useState(true)
     const [search, setSearch] = useState('')
-    const [isactive, setIsactive] = useState(false)
 
     useEffect(()=>{
-        getUserData(`/kitchen/`).
+        getUserData(`/kitchen/category`).
         then((res)=>{
-            setRetaurant(res)
-            setLoading(false);
+            setCategory(res)
+            setLoading(false)
         })
-    },[isactive])
-
-    const deleteRestaurant = (id) => {
-        deleteData(`/kitchen/${id}`).then(()=>setIsactive(p=>!p)
-        )
-    }
+    },[])
 
     return (
         <DemoLayout setSearch={setSearch}>
@@ -44,22 +38,18 @@ const RestaurantHome = () => {
                 <div className="body-main w-100 p-5">
                 <div className="d-flex justify-content-between align-items-center">
                 <h3 style={{fontWeight:700}}>All Restaurants</h3>
-                <Link to={'/add-restaurant'} className="orange">Add Restaurant</Link>
                 </div>
                 <div className="foods">
                 {
-                    retaurant.map((item,index)=>
+                    category.map((item,index)=>
                     <div key={index} className="restaurant-item">
                     <div className="category-item bg-white">
-                    <Link className="text-dark" style={{textDecoration:"none"}} to={`/restaurant/${item.id}`}>
-                    <img style={{width:"35px",height:"35px", borderRadius:"10px"}} src={`${item?.logo? item?.logo:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
+                    <div className="text-dark" style={{textDecoration:"none"}}>
+                    <i style={{fontSize:"25px"}} className="fa-solid fa-bowl-food orange"></i>
                     <p className="name-category p-0 m-0 grey">{item?.name}</p>
-                    </Link>
+                    </div>
                     
                     </div>
-                    <button onClick={()=>deleteRestaurant(item.id)} className="trash">
-                        <i className="fa-solid fa-trash"></i> 
-                    </button>
                     </div>
                     )
                 }
@@ -71,4 +61,4 @@ const RestaurantHome = () => {
     )
 }
 
-export default RestaurantHome
+export default CategoryHome

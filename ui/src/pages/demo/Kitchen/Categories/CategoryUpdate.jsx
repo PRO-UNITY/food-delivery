@@ -7,7 +7,7 @@ import '../../Demo.css'
 import { useEffect } from "react";
 
 
-const RestaurantUpdate = () => {
+const CategoryUpdate = () => {
     const [search, setSearch] = useState('')
     const [data, setData] = useState({})
     const [loading, setLoading] = useState(true)
@@ -32,7 +32,12 @@ const RestaurantUpdate = () => {
         formData.append('latitude', latituderef.current.value)
         formData.append('longitude', longitudref.current.value)
         console.log(imgRef?.current?.files[0]);
-        c
+        if(imgRef?.current?.files[0]){
+            formData.append('logo', imgRef?.current?.files[0]);
+        }else{
+            formData.append('logo', data.logo);
+        }
+
         EditWithFormData(`/kitchen/${id}`, formData).
         then(()=>
         {
@@ -74,4 +79,4 @@ const RestaurantUpdate = () => {
     )
 }
 
-export default RestaurantUpdate
+export default CategoryUpdate

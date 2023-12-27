@@ -38,24 +38,24 @@ const Dashboard = () => {
         })
     },[isactive])
 
-    useEffect(()=>{
-        const func = token?getUserData:getDataWithToken
-        func(`/foods/?name=${search}`).
-        then((res)=>{
-            setSearchFoods(res.data.results) 
-            const residual = res.data.count%10
-            const pages = (res.data.count-residual)/10
-            setTotalPages(pages%2==0 && pages ===1?pages:pages+1);
-        })
-    },[search, isactive, token])
+    // useEffect(()=>{
+    //     const func = token?getUserData:getDataWithToken
+    //     func(`/foods/?name=${search}`).
+    //     then((res)=>{
+    //         setSearchFoods(res) 
+    //         const residual = res.data.count%10
+    //         const pages = (res.data.count-residual)/10
+    //         setTotalPages(pages%2==0 && pages ===1?pages:pages+1);
+    //     })
+    // },[search, isactive, token])
 
     useEffect(()=>{
             const func = token?getUserData:getDataWithToken
             func(`/foods/`).
             then((res)=>{
-                const partFood = res.data.results.slice(0,3)
-                setFood(partFood)
-                console.log(res.data.results);
+                // const partFood = res.slice(0,3)
+                // setFood(partFood)
+                console.log(res);
                 setLoading(false);
             })
     },[token,isactive])

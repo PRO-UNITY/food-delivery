@@ -1,5 +1,5 @@
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
-import { AllCategories, AllFoods, AllKitchens, CategoryDetails, Dashboard, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodDetail, FoodOrder, HistoryDetailOrder, KitchenCategoryDetail, KitchenDetails, Login, Notification, Register, RestaurantAdd, RestaurantDetails, RestaurantHome, RestaurantUpdate, Services, Settings, TaskList, UpdateSettings } from "./pages"
+import { AllCategories, AllFoods, AllKitchens, CategoryAdd, CategoryDetails, CategoryHome, CategoryUpdate, Dashboard, DeliveryAdd, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodAdd, FoodDetail, FoodHome, FoodOrder, FoodUpdate, HistoryDetailOrder, KitchenCategoryDetail, KitchenCategoryDetails, KitchenDeliveryDetails, KitchenDeliveryHome, KitchenDetails, KitchenFoodDetails, KitchenManagerDetails, KitchenManagerHome, Login, ManagerAdd, Notification, Register, RestaurantAdd, RestaurantDetails, RestaurantHome, RestaurantUpdate, Services, Settings, TaskList, UpdateSettings } from "./pages"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OrderHistory from "./pages/demo/List/OrderHistory";
 import { useState, useEffect } from "react";
@@ -39,6 +39,23 @@ function App() {
         <Route path="/add-restaurant" element={ <RestaurantAdd/> } />
         <Route path="/edit-restaurant/:id" element={ <RestaurantUpdate/> } />
         <Route path="/restaurant/:id" element={ <RestaurantDetails/> } />
+        <Route path="/categories" element={ <CategoryHome/> } />
+        <Route path="/add-category" element={ <CategoryAdd/> } />
+        <Route path="/edit-category/:id" element={ <CategoryUpdate/> } />
+        <Route path="/category/:id" element={ <KitchenCategoryDetails/> } />
+        {/*  */}
+        <Route path="/foods" element={ <FoodHome/> } />
+        <Route path="/add-food" element={ <FoodAdd/> } />
+        <Route path="/edit-food/:id" element={ <FoodUpdate/> } />
+        <Route path="/food/:id" element={ <KitchenFoodDetails/> } />
+        {/*  */}
+        <Route path="/deliveries" element={ <KitchenDeliveryHome/> } />
+        <Route path="/add-delivery" element={ <DeliveryAdd/> } />
+        <Route path="/delivery/:id" element={ <KitchenDeliveryDetails/> } />
+        {/*  */}
+        <Route path="/managers" element={ <KitchenManagerHome/> } />
+        <Route path="/add-manager" element={ <ManagerAdd/> } />
+        <Route path="/manager/:id" element={ <KitchenManagerDetails/> } />
         <Route path="/allfoods" element={ <AllFoods/> } />
         <Route path="/allcategories" element={ <AllCategories/> } />
         <Route path="/allkitchens" element={ <AllKitchens/> } />

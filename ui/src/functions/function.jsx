@@ -124,7 +124,6 @@ export const EditWithFormData = async (url, item) => {
     const response = await axios.put(BASE_URL+url, item, {
         headers: {    
             'Content-Type': 'multipart/formData',
-
             Authorization: `Bearer ${token}`,
         },
     });

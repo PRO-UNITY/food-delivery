@@ -26,3 +26,21 @@ export { default as RestaurantHome } from './demo/Kitchen/Restaurants/Restaurant
 export { default as RestaurantAdd } from './demo/Kitchen/Restaurants/RestaurantAdd'
 export { default as RestaurantUpdate } from './demo/Kitchen/Restaurants/RestaurantUpdate'
 export { default as RestaurantDetails } from './demo/Kitchen/Restaurants/RestaurantDetails'
+
+export { default as CategoryHome } from './demo/Kitchen/Categories/CategoryHome'
+export { default as CategoryAdd } from './demo/Kitchen/Categories/CategoryDetails'
+export { default as CategoryUpdate } from './demo/Kitchen/Categories/CategoryUpdate'
+export { default as KitchenCategoryDetails } from './demo/Kitchen/Categories/CategoryDetails'
+
+export { default as FoodHome } from './demo/Kitchen/Foods/FoodHome'
+export { default as FoodAdd } from './demo/Kitchen/Foods/FoodAdd'
+export { default as FoodUpdate } from './demo/Kitchen/Foods/FoodUpdate'
+export { default as KitchenFoodDetails } from './demo/Kitchen/Foods/FoodDetails'
+
+export { default as KitchenDeliveryHome } from './demo/Kitchen/Deliveries/DeliveryHome'
+export { default as DeliveryAdd } from './demo/Kitchen/Deliveries/DeliveryAdd'
+export { default as KitchenDeliveryDetails } from './demo/Kitchen/Deliveries/DeliveryDetails'
+
+export { default as KitchenManagerHome } from './demo/Kitchen/Managers/ManagerHome'
+export { default as ManagerAdd } from './demo/Kitchen/Managers/ManagerAdd'
+export { default as KitchenManagerDetails } from './demo/Kitchen/Managers/ManagerDetails'

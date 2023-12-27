@@ -475,6 +475,17 @@
   z-index: 1;
   background-color: white;
 }
+.container-avatar-supplier{
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: -8%;
+  border-radius: 50%;
+  border: 2px solid #5b5b5b;
+  padding: 4px;
+  z-index: 1;
+  background-color: white;
+}
 
 .avatar-user{
   width: 100%;
@@ -483,6 +494,12 @@
 }
 
 .container-avatar input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+.container-avatar-supplier input {
   position: absolute;
   top: 0;
   left: 0;
