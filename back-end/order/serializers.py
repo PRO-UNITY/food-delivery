@@ -37,6 +37,19 @@ class OrderFoodsSerializers(serializers.ModelSerializer):
         fields = [
             "id",
             "foods",
+            "klient",
+            "delivery",
+            "status",
+            "foods",
+            "kitchen",
+            "is_delivery",
+            "is_active",
+            "address",
+            "latitude",
+            "longitude",
+            "total_price",
+            "create_at",
+            "updated_at"
         ]
 
 
