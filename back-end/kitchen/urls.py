@@ -10,7 +10,7 @@ from kitchen.views.food_category import (
     FoodCategoriesView,
     FoodCategoryView
 )
-
+from kitchen.views.delivery_add_views import KitchenAddDeliveryman
 
 urlpatterns = [
     path("", KitchensView.as_view()),
@@ -21,5 +21,6 @@ urlpatterns = [
     path("foods", KitchenFoodsView.as_view()),
     path("<int:pk>/foods", KitchenFoodView.as_view()),
     path("category/<int:id_category>/food/<int:pk>", KitchenCategoryFoodsView.as_view()),
+    path('deliveryman/add/<int:pk>', KitchenAddDeliveryman.as_view()),
 
 ]

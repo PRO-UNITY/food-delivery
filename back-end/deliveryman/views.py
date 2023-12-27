@@ -104,22 +104,3 @@ class UserDelivery(APIView):
                     return Response({"error": "This user does not have permission"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-class DeliveryAddKitchen(APIView):
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @extend_schema(request=UserInformationSerializer, responses={201: UserInformationSerializer})
-    def get(self, request):
-        if request.user.is_authenticated:
-            user_get = request.user
-            groups = user_get.groups.all()
-            if groups:
-                if str(groups[0]) == "kitchen":
-                    queryset = CustomUser.objects.filter(user_id=request.user.id, groups__name__in=["delivery"], active_profile=True, delivery__isnull=True,)
-                    serializers = UserInformationSerializer(queryset, many=True, context={'request': request})
-                    return Response(serializers.data, status=status.HTTP_200_OK)
-                return Response({"error": "You are not allowed to use this URL"}, status=status.HTTP_401_UNAUTHORIZED)
-        else:
-            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
