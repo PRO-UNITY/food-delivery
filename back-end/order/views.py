@@ -102,33 +102,33 @@ class SendViews(APIView, Pagination):
 class OrderView(APIView, Pagination):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
-    pagination_class = StandardResultsSetPagination
-    serializer_class = OrderFoodsSerializers
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["foods"]
 
     def get(self, request, pk, format=None, *args, **kwargs):
-        search_name = request.query_params.get("foods", None)
-        sort_by = request.query_params.get("sort", None)
+        queryset = get_object_or_404(Orders, id=pk)
+        serializer = OrderSerializers(queryset, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    # def get(self, request, pk, format=None, *args, **kwargs):
+    #     search_name = request.query_params.get("foods", None)
+    #     sort_by = request.query_params.get("sort", None)
 
-        queryset = Orders.objects.filter(id=pk)
-        delivery_instance = get_object_or_404(queryset)
-        foods_queryset = delivery_instance.foods
+    #     queryset = Orders.objects.filter(id=pk)
+    #     delivery_instance = get_object_or_404(queryset)
+    #     foods_queryset = delivery_instance.foods
 
-        if search_name:
-            foods_queryset = [food for food in foods_queryset if food.get("foods", "").lower().find(search_name.lower()) != -1]
+    #     if search_name:
+    #         foods_queryset = [food for food in foods_queryset if food.get("foods", "").lower().find(search_name.lower()) != -1]
 
-        if sort_by == "asc":
-            foods_queryset = sorted(foods_queryset, key=lambda x: x.get("id", 0))
-        elif sort_by == "desc":
-            foods_queryset = sorted(foods_queryset, key=lambda x: x.get("id", 0), reverse=True)
+    #     if sort_by == "asc":
+    #         foods_queryset = sorted(foods_queryset, key=lambda x: x.get("id", 0))
+    #     elif sort_by == "desc":
+    #         foods_queryset = sorted(foods_queryset, key=lambda x: x.get("id", 0), reverse=True)
 
-        page = super().paginate_queryset(queryset)
-        if page is not None:
-            serializer = super().get_paginated_response(self.serializer_class(page, many=True).data)
-        else:
-            serializer = self.serializer_class(queryset, many=True)
-            return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+    #     page = super().paginate_queryset(queryset)
+    #     if page is not None:
+    #         serializer = super().get_paginated_response(self.serializer_class(page, many=True).data)
+    #     else:
+    #         serializer = self.serializer_class(queryset, many=True)
+    #         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @extend_schema(
         request=SendOrderSerializers,
