@@ -174,17 +174,26 @@ class OrderHistoryKitchenView(APIView, Pagination):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
-    serializer_class = OrderFoodsSerializers
+    serializer_class = OrderSerializers
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["foods"]
+    filterset_fields = ["delivery", 'status', 'kitchen']
 
     def get(self, request, format=None, *args, **kwargs):
         if request.user.is_authenticated:
-            search_name = request.query_params.get("foods", None)
+            search_delivery = request.query_params.get("delivery", None)
+            search_status = request.query_params.get("status", None)
+            search_kitchen = request.query_params.get("kitchen", None)
             sort_by = request.query_params.get("sort", None)
             queryset = Orders.objects.filter(kitchen__user__id=request.user.id)
-            if search_name:
-                queryset = queryset.filter(Q(name__icontains=search_name))
+
+            if search_delivery:
+                queryset = queryset.filter(Q(delivery__id__icontains=search_delivery) | Q(delivery__username__icontains=search_delivery))
+            
+            if search_status:
+                queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
+
+            if search_kitchen:
+                queryset = queryset.filter(Q(kitchen__id__icontains=search_kitchen) | Q(kitchen__name__icontains=search_kitchen))
 
             if sort_by == "asc":
                 queryset = queryset.order_by("id")
@@ -193,7 +202,8 @@ class OrderHistoryKitchenView(APIView, Pagination):
 
             page = super().paginate_queryset(queryset)
             if page is not None:
-                serializer = super().get_paginated_response(self.serializer_class(page, many=True).data)
+                serializer = self.serializer_class(page, many=True)
+                return super().get_paginated_response(serializer.data)
             else:
                 serializer = self.serializer_class(queryset, many=True)
                 return Response({"data": serializer.data}, status=status.HTTP_200_OK)

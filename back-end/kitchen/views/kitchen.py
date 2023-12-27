@@ -38,7 +38,7 @@ class KitchensView(APIView, Pagination):
                 return Response({"error": "It is not possible to add information to such a user"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             search_name = request.query_params.get("name", None)
-            search_description = request.query_params.get(" ", None)
+            search_description = request.query_params.get("description", None)
             search_is_active = request.query_params.get("is_active", None)
             search_open = request.query_params.get("open_time", None)
             price_close = request.query_params.get("close_time", None)
