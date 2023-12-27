@@ -159,10 +159,15 @@ class KitchenAddDeliverymanView(APIView):
     @extend_schema(request=KitchenSerializers, responses={201: KitchenSerializers})
     def put(self, request, pk):
         if request.user.is_authenticated:
-            serializers = KitchenSerializers(instance=Restaurants.objects.filter(id=pk)[0], data=request.data, partial=True)
-            if serializers.is_valid(raise_exception=True):
-                serializers.save()
-                return Response(serializers.data, status=status.HTTP_200_OK)
-            return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST)
+            user_get = request.user
+            groups = user_get.groups.all()
+            if groups:
+                if str(groups[0]) == "kitchen":
+                    serializers = KitchenSerializers(instance=Restaurants.objects.filter(id=pk)[0], context={"user_get": request.user.id}, data=request.data, partial=True)
+                    if serializers.is_valid(raise_exception=True):
+                        serializers.save()
+                        return Response(serializers.data, status=status.HTTP_200_OK)
+                    return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "You are not allowed to use this URL"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)

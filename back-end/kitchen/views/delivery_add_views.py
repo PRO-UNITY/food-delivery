@@ -33,7 +33,7 @@ class KitchenAddDeliveryman(APIView):
     @extend_schema(request=KitchenSerializers, responses={201: KitchenSerializers})
     def put(self, request, pk):
         if request.user.is_authenticated:
-            serializers = KitchenSerializers(instance=Restaurants.objects.filter(id=pk)[0], data=request.data, partial=True)
+            serializers = KitchenSerializers(context={"user_get": request.user.id}, instance=Restaurants.objects.filter(id=pk)[0], data=request.data, partial=True)
             if serializers.is_valid(raise_exception=True):
                 serializers.save()
                 return Response(serializers.data, status=status.HTTP_200_OK)
