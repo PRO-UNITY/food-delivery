@@ -168,3 +168,34 @@ class OrderView(APIView, Pagination):
             return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED,)
+
+
+class OrderHistoryKitchenView(APIView, Pagination):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+    serializer_class = OrderFoodsSerializers
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["foods"]
+
+    def get(self, request, format=None, *args, **kwargs):
+        if request.user.is_authenticated:
+            search_name = request.query_params.get("foods", None)
+            sort_by = request.query_params.get("sort", None)
+            queryset = Orders.objects.filter(kitchen__user__id=request.user.id)
+            if search_name:
+                queryset = queryset.filter(Q(name__icontains=search_name))
+
+            if sort_by == "asc":
+                queryset = queryset.order_by("id")
+            elif sort_by == "desc":
+                queryset = queryset.order_by("-id")
+
+            page = super().paginate_queryset(queryset)
+            if page is not None:
+                serializer = super().get_paginated_response(self.serializer_class(page, many=True).data)
+            else:
+                serializer = self.serializer_class(queryset, many=True)
+                return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)

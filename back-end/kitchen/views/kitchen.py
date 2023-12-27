@@ -198,7 +198,7 @@ class KitchenAddManagerView(APIView):
             if groups:
                 if str(groups[0]) == "kitchen":
                     objects_get = Restaurants.objects.filter(id=pk)
-                    queryset = CustomUser.objects.filter(user_id=request.user.id, groups__name__in=["manager"], active_profile=True, manager__isnull=True)
+                    queryset = CustomUser.objects.filter(user_id=request.user.id, groups__name__in=["manager"], active_profile=True, delivery__isnull=True)
                     active_deliverman = KitchensSerializer(objects_get, many=True, context={'request': request})
                     no_active_deliveryman = UserInformationSerializer(queryset, many=True, context={'request': request})
                     return Response({'active_employe': active_deliverman.data, 'no_active_employe': no_active_deliveryman.data}, status=status.HTTP_200_OK)
