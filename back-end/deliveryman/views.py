@@ -12,8 +12,6 @@ from deliveryman.serializers import DeliverySignUpSerializer
 
 
 class RegisterDelivery(APIView):
-    """The owner of the kitchen registers the delivery"""
-
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
@@ -94,8 +92,6 @@ class RegisterDelivery(APIView):
 
 
 class UserDelivery(APIView):
-    """Change delivery information and status"""
-
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
