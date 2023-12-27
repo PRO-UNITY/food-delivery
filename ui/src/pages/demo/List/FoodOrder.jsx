@@ -131,7 +131,7 @@ const FoodOrder = () => {
     return ( 
         <DemoLayout count={count} setSearch={setSearch}>
             <div className=" body-main w-100 p-5">
-            <h3 className="text-start">Food Order</h3>
+            <h3 className="text-start mb-3">Food Order</h3>
               {
                 localStorage.getItem('token')?
               <>

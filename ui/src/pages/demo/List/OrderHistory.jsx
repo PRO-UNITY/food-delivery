@@ -14,6 +14,7 @@ const OrderHistory = () => {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const token = localStorage.getItem('token')
 
 
     useEffect(()=>{
@@ -47,10 +48,10 @@ const OrderHistory = () => {
     return ( 
         <DemoLayout setSearch={setSearch}>
             <div className=" body-main w-100  p-5">
-            <h3>Order History</h3>
-              
-                
-                <>
+            <h3 className="mb-3">Order History</h3>
+                {
+                    token?
+                    <>
                 {
                 loading?
                 <div className="container w-100 body-main d-flex justify-content-center align-items-center py-5">
@@ -112,7 +113,9 @@ const OrderHistory = () => {
                     </div>  
                 </>
                 }
-                </>
+                </>:
+                <h6>No any order-history  <Link className="orange" to={'/login'}>login</Link></h6>
+                }
                 
                
                 

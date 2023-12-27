@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 const Settings = () => {
     const [search, setSearch] = useState('')
     const [user, setUser] = useState({})
+    const token = localStorage.getItem('token')
 
     useEffect(()=>{
         getUserData('/user').
@@ -17,7 +18,10 @@ const Settings = () => {
     return ( 
         <DemoLayout setSearch={setSearch}>
             <div className=" body-main w-100 p-5">
-               <div className="settings">
+                <h3 className="mb-3">Settings</h3>
+            {
+                token?
+                <div className="settings">
                 <div className="container-avatar">
                     <img  className="avatar-user" src={user.avatar} alt="" />
                 </div>
@@ -33,7 +37,9 @@ const Settings = () => {
                         <Link to={'/update-settings'} style={{border:"none"}} className="btn-sign-in bg-orange mx-auto">update profile</Link>
                     </div>
                 </div>
-               </div>
+               </div>:
+               <h6>No settings for this please <Link className="orange" to={'/login'}>login</Link></h6>
+            }
             </div>
         </DemoLayout>
     )

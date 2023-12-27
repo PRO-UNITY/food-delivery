@@ -15,7 +15,6 @@ function App() {
   const navigate = useNavigate()
   const location = useLocation()
   const currentUrl = location.pathname
-  console.log(currentUrl);
 
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import DemoLayout from "../../../Layout/Demoproject"
-import { getDataWithToken, BASE_URL } from "../../../functions/function"
+import { getDataWithToken, BASE_URL, getUserData, postDataWithToken, deleteData } from "../../../functions/function"
 import { useParams } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
@@ -17,17 +17,23 @@ const KitchenDetails = () => {
     const [card, setCard] = useState([])
     const [data, setData] = useState({})
     const {id} = useParams()
+    const {category_id} = useParams()
+    const {kitchen_id} = useParams()
+    const token = localStorage.getItem('token')
+    const [isactive, setIsActive] = useState(false)
     
     useEffect(()=>{
-        getDataWithToken(`/kitchen/${id}/foods?page=${currentPage}`).
+        const func = token?getUserData:getDataWithToken
+        func(`/kitchen/${id}/foods?page=${currentPage}`).
         then((res)=>{
             setFoods(res.data.results)
+            console.log(res.data.results)
             const residual = res.data.count%10
             const pages = (res.data.count-residual)/10
             setTotalPages(pages%2==0 && pages ===1?pages:pages+1);
             setLoading(false);
         })
-    },[id, currentPage])
+    },[id, currentPage, isactive])
 
     useEffect(()=>{
         console.log("res");
@@ -81,6 +87,33 @@ const KitchenDetails = () => {
       const savedCard = JSON.parse(localStorage.getItem("card")) || [];
       setCard(savedCard);
     }, []);
+
+    useEffect(()=>{
+        const func = token?getUserData:getDataWithToken
+        func(`/kitchen/category/${category_id}/food/${kitchen_id}?page=${currentPage}`).
+        then((res)=>{
+            setFoods(res.data.results)
+            const residual = res.data.count%10
+            const pages = (res.data.count-residual)/10
+            setTotalPages(pages%2==0 && pages ===1?pages:pages+1);
+            setLoading(false);
+        })
+    },[currentPage, isactive, token])
+
+    const addToFavourite = (item) => {
+        const data = {
+            food : item.id,
+            is_favorite : true
+        }
+        postDataWithToken(data,`/foods/favourites`)
+        setIsActive(p=>!p)
+    }
+
+    const removeItemFavoutite = (item) => {
+        deleteData(`/foods/favourite/${item.id}`)
+        setIsActive(p=>!p)
+    }
+    
 
     return (
         <DemoLayout setSearch={setSearch}>
@@ -136,10 +169,10 @@ const KitchenDetails = () => {
                 <div className="foods">
                 {
                     foods.map((item,index)=>
-                    <Link key={index} to={`/food-detail/${item.id}`} className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
-                    <div className="w-100 d-flex justify-content-center">
+                    <div key={index}  className="food-item bg-white  text-dark" style={{textDecoration:"none"}}>
+                    <Link to={`/food-detail/${item.id}`} className="w-100 d-flex justify-content-center">
                     <img className="mb-2" style={{width:"100px", height:"100px", objectFit:"contain", borderRadius:"20px"}} src={`${item?.food_img? item?.food_img:"https://www.freeiconspng.com/uploads/food-icon-7.png"}`} />
-                    </div>
+                    </Link>
                     <div className="mb-2">
                     <i className="fa-solid fa-star orange"></i>
                     <i className="fa-solid fa-star orange"></i>
@@ -162,9 +195,16 @@ const KitchenDetails = () => {
                     </div>
                     <div className="sale">
                         <div className="d-flex justify-content-center align-items-center px-2 text-white sale-percent">15% Off</div>
-                        <button style={{}} className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
+                        {token?
+                            <>
+                            {item.favorite ?
+                                <button onClick={()=>removeItemFavoutite(item)}  className="btn-favourite orange"><i className="fa-solid fa-heart"></i></button>:
+                                <button onClick={()=>addToFavourite(item)}  className="btn-favourite grey"><i className="fa-solid fa-heart"></i></button>
+                            }
+                            </>:""
+                        }                    
                     </div>
-                    </Link>
+                    </div>
                     )
                 }
                 </div>
