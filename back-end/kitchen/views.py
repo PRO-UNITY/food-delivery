@@ -11,7 +11,6 @@ from authen.renderers import UserRenderers
 from kitchen.models import Restaurants
 from foods.models import FoodsCategories, Foods
 from foods.serializers import CategoriesSerializer
-from core.page import MyPagination
 from kitchen.serializers import (
     KitchensSerializer,
     KitchenSerializers,
@@ -198,7 +197,7 @@ class KitchenView(APIView):
             user_get = request.user
             groups = user_get.groups.all()
             if groups:
-                if str(groups[0]) == "manager":
+                if str(groups[0]) == "kitchen":
                     objects_get = Restaurants.objects.get(id=pk)
                     objects_get.delete()
                     return Response(
