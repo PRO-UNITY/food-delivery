@@ -7,7 +7,7 @@ from drf_spectacular.utils import extend_schema
 from authen.renderers import UserRenderers
 from foods.models import Foods, Favorite
 from core.pagination import Pagination
-from foods.serializers.foods_serializers import (
+from foods.serializers.favourite_serializers import (
     FoodsSerializer,
     FavoritesSerializer,
     FavoriteSerializer,
