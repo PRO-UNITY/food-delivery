@@ -103,20 +103,25 @@ class KitchenView(APIView):
     @extend_schema(request=KitchenSerializers, responses={201: KitchenSerializers})
     def put(self, request, pk):
         if request.user.is_authenticated:
-            expected_fields = set(["name", "logo", "description", "user_id", "is_active", "open_time", "close_time", "latitude", "longitude",])
-            received_fields = set(request.data.keys())
+            user_get = request.user
+            groups = user_get.groups.all()
+            if groups:
+                if str(groups[0]) == "kitchen":
+                    expected_fields = set(["name", "logo", "description", "user_id", "is_active", "open_time", "close_time", "latitude", "longitude",])
+                    received_fields = set(request.data.keys())
 
-            unexpected_fields = received_fields - expected_fields
-            if unexpected_fields:
-                error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
-                return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
+                    unexpected_fields = received_fields - expected_fields
+                    if unexpected_fields:
+                        error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
+                        return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
 
-            serializers = KitchenSerializers(context={"request": request, "user": request.user}, instance=Restaurants.objects.filter(id=pk)[0], data=request.data, partial=True)
+                    serializers = KitchenSerializers(context={"request": request, "user": request.user}, instance=Restaurants.objects.filter(id=pk)[0], data=request.data, partial=True)
 
-            if serializers.is_valid(raise_exception=True):
-                serializers.save(logo=request.data.get("logo"))
-                return Response(serializers.data, status=status.HTTP_200_OK)
-            return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST)
+                    if serializers.is_valid(raise_exception=True):
+                        serializers.save(logo=request.data.get("logo"))
+                        return Response(serializers.data, status=status.HTTP_200_OK)
+                    return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "User does not belong to any role"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -151,7 +156,7 @@ class KitchenAddDeliverymanView(APIView):
                     queryset = CustomUser.objects.filter(user_id=request.user.id, groups__name__in=["delivery"], active_profile=True, delivery__isnull=True)
                     active_deliverman = KitchensSerializer(objects_get, many=True, context={'request': request})
                     no_active_deliveryman = UserInformationSerializer(queryset, many=True, context={'request': request})
-                    return Response({'active_delivery': active_deliverman.data, 'no_active_deliveryman': no_active_deliveryman.data}, status=status.HTTP_200_OK)
+                    return Response({'active_employe': active_deliverman.data, 'no_active_employe': no_active_deliveryman.data}, status=status.HTTP_200_OK)
                 return Response({"error": "You are not allowed to use this URL"}, status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
@@ -163,6 +168,58 @@ class KitchenAddDeliverymanView(APIView):
             groups = user_get.groups.all()
             if groups:
                 if str(groups[0]) == "kitchen":
+                    expected_fields = set(["employes"])
+                    received_fields = set(request.data.keys())
+
+                    unexpected_fields = received_fields - expected_fields
+                    if unexpected_fields:
+                        error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
+                        return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
+                    serializers = KitchenSerializers(instance=Restaurants.objects.filter(id=pk)[0], context={"user_get": request.user.id}, data=request.data, partial=True)
+                    serializers = KitchenSerializers(instance=Restaurants.objects.filter(id=pk)[0], context={"user_get": request.user.id}, data=request.data, partial=True)
+                    if serializers.is_valid(raise_exception=True):
+                        serializers.save()
+                        return Response(serializers.data, status=status.HTTP_200_OK)
+                    return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "You are not allowed to use this URL"}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class KitchenAddManagerView(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    @extend_schema(request=UserInformationSerializer, responses={201: UserInformationSerializer})
+    def get(self, request, pk):
+        if request.user.is_authenticated:
+            user_get = request.user
+            groups = user_get.groups.all()
+            if groups:
+                if str(groups[0]) == "kitchen":
+                    objects_get = Restaurants.objects.filter(id=pk)
+                    queryset = CustomUser.objects.filter(user_id=request.user.id, groups__name__in=["manager"], active_profile=True, manager__isnull=True)
+                    active_deliverman = KitchensSerializer(objects_get, many=True, context={'request': request})
+                    no_active_deliveryman = UserInformationSerializer(queryset, many=True, context={'request': request})
+                    return Response({'active_employe': active_deliverman.data, 'no_active_employe': no_active_deliveryman.data}, status=status.HTTP_200_OK)
+                return Response({"error": "You are not allowed to use this URL"}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    @extend_schema(request=KitchenSerializers, responses={201: KitchenSerializers})
+    def put(self, request, pk):
+        if request.user.is_authenticated:
+            user_get = request.user
+            groups = user_get.groups.all()
+            if groups:
+                if str(groups[0]) == "kitchen":
+                    expected_fields = set(["employes"])
+                    received_fields = set(request.data.keys())
+
+                    unexpected_fields = received_fields - expected_fields
+                    if unexpected_fields:
+                        error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
+                        return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
                     serializers = KitchenSerializers(instance=Restaurants.objects.filter(id=pk)[0], context={"user_get": request.user.id}, data=request.data, partial=True)
                     if serializers.is_valid(raise_exception=True):
                         serializers.save()
