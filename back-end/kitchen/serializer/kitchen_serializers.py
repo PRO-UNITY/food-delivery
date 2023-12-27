@@ -50,6 +50,10 @@ class KitchenSerializers(serializers.ModelSerializer):
         groups = user_get.groups.all()
         if groups:
             if str(groups[0]) == "kitchen":
+                deliveries_data = validated_data.pop('deliveryman_user')
+                instance.deliveryman_user.clear()
+                for delivery_data in deliveries_data:
+                    instance.deliveryman_user.add(delivery_data)
                 instance.name = validated_data.get("name", instance.name)
                 instance.description = validated_data.get("description", instance.description)
                 instance.is_active = validated_data.get("is_active", instance.is_active)
