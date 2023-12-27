@@ -69,7 +69,7 @@ const EditProfile = () => {
           <form onSubmit={handleSubmit} className="card w-100 profile-setting-card overfoll p-4">
             <div className="card-head rounded-3 d-flex align-items-center justify-content-center p-4 flex-column bg-light">
               <div className="user-img d-flex align-items-center rounded-circle justify-content-center">
-                <img style={{width:"40px", height:"40px", borderRadius:"50%", objectFit:"cover"}} src={`https://api.prounity.uz/food-delivery${user.avatar}`} alt="" />
+                <img style={{width:"40px", height:"40px", borderRadius:"50%", objectFit:"cover"}} src={user.avatar} alt="" />
               </div>
               <span className="my-2">Image must be 256 x 256px - Max 2MB</span>
               <div className="mt-1">

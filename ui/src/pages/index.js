@@ -20,3 +20,9 @@ export { default as DeliveryStatistic } from './demo/Admin/Delivery-statistic/De
 export { default as Services } from './demo/Admin/Delivery-services/Delivery-services'
 export { default as Notification } from './demo/Admin/Delivery-notification/Delivery-notification'
 export { default as TaskList } from './demo/Admin/Task-list/Task-list'
+
+// For Kitchen role
+export { default as RestaurantHome } from './demo/Kitchen/Restaurants/RestaurantHome'
+export { default as RestaurantAdd } from './demo/Kitchen/Restaurants/RestaurantAdd'
+export { default as RestaurantUpdate } from './demo/Kitchen/Restaurants/RestaurantUpdate'
+export { default as RestaurantDetails } from './demo/Kitchen/Restaurants/RestaurantDetails'

@@ -19,7 +19,6 @@ const DemoNavbar = ({ setshowSidebar, setshowProfile, setSearch }) => {
           className="fa-solid fa-cart-shopping position-absolute top-0 end-0 m-3 my-4 "
           onClick={() => setshowProfile((prev) => !prev)}
         ></i>
-        
       </div>
     );
   };

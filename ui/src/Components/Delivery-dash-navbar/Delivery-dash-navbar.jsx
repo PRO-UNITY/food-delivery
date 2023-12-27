@@ -47,7 +47,7 @@ const DeliveryDashNavbar = () => {
                       borderRadius:"50%",
                       objectFit:"cover"
                     }}
-                    src={`https://api.prounity.uz/food-delivery${user.avatar}`}
+                    src={user.avatar}
                     alt=""
                   />
                 </Link>

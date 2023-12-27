@@ -100,7 +100,7 @@ useEffect(()=>{
           <img
             width={60}
             className="rounded-circle my-2"
-            src={`https://api.prounity.uz/food-delivery${user.avatar}`}
+            src={user.avatar}
             alt=""
           />
           <div className="name fw-bolder">{user.username}</div>

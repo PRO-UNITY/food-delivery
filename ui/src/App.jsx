@@ -1,5 +1,5 @@
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
-import { AllCategories, AllFoods, AllKitchens, CategoryDetails, Dashboard, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodDetail, FoodOrder, HistoryDetailOrder, KitchenCategoryDetail, KitchenDetails, Login, Notification, Register, Services, Settings, TaskList, UpdateSettings } from "./pages"
+import { AllCategories, AllFoods, AllKitchens, CategoryDetails, Dashboard, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodDetail, FoodOrder, HistoryDetailOrder, KitchenCategoryDetail, KitchenDetails, Login, Notification, Register, RestaurantAdd, RestaurantDetails, RestaurantHome, RestaurantUpdate, Services, Settings, TaskList, UpdateSettings } from "./pages"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OrderHistory from "./pages/demo/List/OrderHistory";
 import { useState, useEffect } from "react";
@@ -15,6 +15,7 @@ function App() {
   const navigate = useNavigate()
   const location = useLocation()
   const currentUrl = location.pathname
+  const roleuser = localStorage.getItem('role')
 
 
   useEffect(() => {
@@ -34,7 +35,10 @@ function App() {
         value={{ activeNav, setactiveNav, activeHrmsDash, setActiveHrmsDash }}
       >
       <Routes>
-        <Route path="/dashboard" element={ <Dashboard/> } />
+        <Route path="/dashboard" element={ roleuser==='kitchen'? <RestaurantHome/>: <Dashboard/> } />
+        <Route path="/add-restaurant" element={ <RestaurantAdd/> } />
+        <Route path="/edit-restaurant/:id" element={ <RestaurantUpdate/> } />
+        <Route path="/restaurant/:id" element={ <RestaurantDetails/> } />
         <Route path="/allfoods" element={ <AllFoods/> } />
         <Route path="/allcategories" element={ <AllCategories/> } />
         <Route path="/allkitchens" element={ <AllKitchens/> } />
@@ -53,7 +57,7 @@ function App() {
         <Route path="//kitchen/category/:category_id/food/:kitchen_id" element={ <KitchenCategoryDetail/> } />
         <Route path="*" element={ <Pagenotfound/> } />
         <Route path="/admin" element={ localStorage.getItem('role')==="kitchen"?<DeliveryHome/>:<Dashboard/> } />
-        <Route path="/edit-profile" element={ localStorage.getItem('role')==="admins"?<EditAdminProfile/>:<Login/> } />
+        <Route path="/edit-profile" element={ localStorage.getItem('role')==="kitchen"?<EditAdminProfile/>:<Login/> } />
         <Route path="/statistic" element={ <DeliveryStatistic/> } />
         <Route path="/task-list" element={ <TaskList/> } />
         <Route path="/services" element={ <Services/> } />

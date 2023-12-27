@@ -122,7 +122,9 @@ export const AddWithFormData = async (url, item) => {
 export const EditWithFormData = async (url, item) => {
     const token = localStorage.getItem('token')
     const response = await axios.put(BASE_URL+url, item, {
-        headers: {
+        headers: {    
+            'Content-Type': 'multipart/formData',
+
             Authorization: `Bearer ${token}`,
         },
     });
