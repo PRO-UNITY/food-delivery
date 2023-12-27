@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from order.models import OrderStatus, Orders
+from foods.models import Foods
 
 
 class StatusSerializers(serializers.ModelSerializer):
@@ -8,7 +9,26 @@ class StatusSerializers(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class FoodsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Foods
+        fields = [
+            "id",
+            "name",
+            "food_img",
+            "description",
+            "price",
+            "kitchen",
+            "categories",
+            "favorite",
+            "create_at",
+            "updated_at",
+        ]
+
+
 class OrderSerializers(serializers.ModelSerializer):
+    # foods = FoodsSerializer(many=True, read_only=True)
 
     class Meta:
         model = Orders
