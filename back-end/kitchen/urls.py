@@ -1,14 +1,16 @@
 from django.urls import path
-from kitchen.views import (
-    KitchensView,
-    KitchenView,
-    KitchenCategoryView,
-    FoodCategoriesView,
-    FoodCategoryView,
+from kitchen.views.kitchen import KitchensView, KitchenView
+from kitchen.views.kitchen_foods import (
     KitchenFoodsView,
     KitchenFoodView,
     KitchenCategoryFoodsView,
 )
+from kitchen.views.food_category import (
+    KitchenCategoryView,
+    FoodCategoriesView,
+    FoodCategoryView
+)
+
 
 urlpatterns = [
     path("", KitchensView.as_view()),
