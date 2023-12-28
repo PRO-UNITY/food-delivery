@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { getUserData, EditWithFormData } from "../../../../functions/function";
 import DemoLayout from "../../../../Layout/Demoproject";
 
-const AddDeliverToKitchen = () => {
+const AddManagerToKitchen = () => {
   const [search, setSearch] = useState("");
   const [delivery, setDelivery] = useState([]);
   const [busyDelivery, setBusyDelivery] = useState([]);
@@ -13,13 +13,14 @@ const AddDeliverToKitchen = () => {
   const [status, setStatus] = useState(false)
 
   useEffect(() => {
-    getUserData(`/kitchen/deliveryman/add/${id}`).then((res) => {
+    getUserData(`/kitchen/manager/add/${id}`).then((res) => {
       setDelivery(res.no_active_employe);
+      console.log(res);
     });
   }, [status]);
 
   useEffect(() => {
-    getUserData(`/kitchen/deliveryman/add/${id}`).then((res) => {
+    getUserData(`/kitchen/manager/add/${id}`).then((res) => {
       setBusyDelivery(res.active_employe[0].employes);
       console.log(res.active_employe[0].employes);
     });
@@ -52,7 +53,7 @@ const AddDeliverToKitchen = () => {
       formData.append("employes", item.id);
     });
 
-    EditWithFormData(`/kitchen/deliveryman/add/${id}`, formData).then(()=>setStatus(!status));
+    EditWithFormData(`/kitchen/manager/add/${id}`, formData).then(()=>setStatus(!status));
   };
 
   const handleAddDeliver2 = () => {
@@ -66,7 +67,7 @@ const AddDeliverToKitchen = () => {
     });
     
 
-    EditWithFormData(`/kitchen/deliveryman/add/${id}`, formData).then(()=>setStatus(!status));
+    EditWithFormData(`/kitchen/manager/add/${id}`, formData).then(()=>setStatus(!status));
   };
 
   return (
@@ -149,4 +150,4 @@ const AddDeliverToKitchen = () => {
   );
 };
 
-export default AddDeliverToKitchen;
+export default AddManagerToKitchen;

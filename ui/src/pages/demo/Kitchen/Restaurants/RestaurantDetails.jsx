@@ -49,7 +49,7 @@ const RestaurantDetails = () => {
             add supplier
           </Link>
           <Link
-            to={`/edit-restaurant/${data.id}`}
+            to={`/add-manager/${data.id}`}
             style={{ textDecoration: "none" }}
             className="btn btn-primary"
           >
