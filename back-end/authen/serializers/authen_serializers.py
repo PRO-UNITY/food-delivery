@@ -206,6 +206,7 @@ class UserInformationSerializer(serializers.ModelSerializer):
             "phone",
             "latitude",
             "longitude",
+            "active_profile",
         ]
 
     def get_role(self, obj):

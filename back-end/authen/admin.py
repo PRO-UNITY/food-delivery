@@ -29,6 +29,7 @@ class NewMyUser(ImportExportModelAdmin, UserAdmin):
                     "phone",
                     "latitude",
                     "longitude",
+                    "active_profile",
                 )
             },
         ),
@@ -45,6 +46,7 @@ class NewMyUser(ImportExportModelAdmin, UserAdmin):
                     "phone",
                     "latitude",
                     "longitude",
+                    "active_profile",
                 )
             },
         ),

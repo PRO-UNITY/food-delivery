@@ -1,7 +1,7 @@
 from django.urls import path
 from deliveryman.views import (
     RegisterDelivery,
-    UserDelivery
+    UserDelivery,
 )
 
 

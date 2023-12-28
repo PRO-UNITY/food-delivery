@@ -104,4 +104,3 @@ class UserDelivery(APIView):
                     return Response({"error": "This user does not have permission"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
-
