@@ -12,6 +12,8 @@ import Button from "react-bootstrap/Button";
 import Pagination from "react-bootstrap/Pagination";
 import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
+import CategoryCard from "../../../CleanComponents/CategoryCard";
+import KitchenCategoryCard from "../../../CleanComponents/KitchenCategoryDetail";
 
 const KitchenDetails = () => {
   const [foods, setFoods] = useState([]);
@@ -158,22 +160,7 @@ const KitchenDetails = () => {
           <h4>Categories of {data?.name}</h4>
           <div className="categories w-100 mb-3">
             {category?.map((item, index) => (
-              <Link
-                to={`/kitchen/category/${item.categories.id}/food/${id}`}
-                key={index}
-                className="text-dark"
-                style={{ textDecoration: "none" }}
-              >
-                <div className="category-item bg-white">
-                  <i
-                    style={{ fontSize: "25px" }}
-                    className="fa-solid fa-bowl-food orange"
-                  ></i>
-                  <p className="name-category p-0 m-0 grey">
-                    {item?.categories.name} x{item?.categories.food_count}
-                  </p>
-                </div>
-              </Link>
+              <KitchenCategoryCard key={index} {...item}/>
             ))}
           </div>
           <hr />

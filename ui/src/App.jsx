@@ -1,5 +1,5 @@
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
-import { AddManagerToKitchen, AddSupplier, AllCategories, AllFoods, AllKitchens, CategoryAdd, CategoryDetails, CategoryHome, CategoryUpdate, Dashboard, DeliveryAdd, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodAdd, FoodDetail, FoodHome, FoodOrder, FoodUpdate, HistoryDetailOrder, KitchenCategoryDetail, KitchenCategoryDetails, KitchenDeliveryDetails, KitchenDeliveryHome, KitchenDetails, KitchenFoodDetails, KitchenManagerDetails, KitchenManagerHome, Login, ManagerAdd, Notification, Register, RestaurantAdd, RestaurantDetails, RestaurantHome, RestaurantUpdate, Services, Settings, TaskList, UpdateSettings } from "./pages"
+import { AddManagerToKitchen, AddSupplier, AllCategories, AllFoods, AllKitchens, CategoryAdd, CategoryDetails, CategoryHome, CategoryUpdate, Dashboard, DeliveryAdd, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodAdd, FoodDetail, FoodHome, FoodOrder, FoodUpdate, HistoryDetailOrder, HistoryKitchen, KitchenCategoryDetail, KitchenCategoryDetails, KitchenDeliveryDetails, KitchenDeliveryHome, KitchenDetails, KitchenFoodDetails, KitchenManagerDetails, KitchenManagerHome, Login, ManagerAdd, Notification, Register, RestaurantAdd, RestaurantDetails, RestaurantHome, RestaurantUpdate, Services, Settings, TaskList, UpdateSettings } from "./pages"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OrderHistory from "./pages/demo/List/OrderHistory";
 import { useState, useEffect } from "react";
@@ -41,6 +41,7 @@ function App() {
         <Route path="/restaurant/:id" element={ <RestaurantDetails/> } />
         <Route path="/add-supplier/:id" element={ <AddSupplier/> } />
         <Route path="/add-manager/:id" element={ <AddManagerToKitchen/> } />
+        <Route path="/history-kitchen" element={ <HistoryKitchen/> } />
         {/*  */}
         <Route path="/categories" element={ <CategoryHome/> } />
         <Route path="/add-category" element={ <CategoryAdd/> } />
@@ -71,10 +72,10 @@ function App() {
         <Route path="/update-settings" element={ <UpdateSettings/> } />
         <Route path="/register" element={ <Register/> } />
         <Route path="/login" element={ <Login/> } />
-        <Route path="/category/:id" element={ <CategoryDetails/> } />
+        <Route path="/kitchen/category/:id" element={ <CategoryDetails/> } />
         <Route path="/kitchen/:id" element={ <KitchenDetails/> } />
         <Route path="/order-hIstory/:id" element={ <HistoryDetailOrder/> } />
-        <Route path="//kitchen/category/:category_id/food/:kitchen_id" element={ <KitchenCategoryDetail/> } />
+        <Route path="/kitchen/category/:category_id/food/:kitchen_id" element={ <KitchenCategoryDetail/> } />
         <Route path="*" element={ <Pagenotfound/> } />
         <Route path="/admin" element={ localStorage.getItem('role')==="kitchen"?<DeliveryHome/>:<Dashboard/> } />
         <Route path="/edit-profile" element={ localStorage.getItem('role')==="kitchen"?<EditAdminProfile/>:<Login/> } />

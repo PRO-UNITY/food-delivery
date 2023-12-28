@@ -20,6 +20,7 @@ const Profile = ({ showProfile, count }) => {
   const logOut = () => {
     localStorage.clear();
     navigate("/dashboard");
+    window.location.reload()
   };
 
   useEffect(() => {

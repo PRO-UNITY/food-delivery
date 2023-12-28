@@ -4,7 +4,7 @@ const CategoryCard = (props) => {
   const { id, name } = props;
   return (
     <Link
-      to={`/category/${id}`}
+      to={`/kitchen/category/${id}`}
       className="text-dark"
       style={{ textDecoration: "none" }}
     >

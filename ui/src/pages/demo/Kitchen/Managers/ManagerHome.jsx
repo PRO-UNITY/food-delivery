@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DemoLayout from "../../../../Layout/Demoproject";
-import { deleteData, getUserData } from "../../../../functions/function";
+import { deleteData, getUserData, putData } from "../../../../functions/function";
 import Button from "react-bootstrap/Button";
 import Pagination from "react-bootstrap/Pagination";
 import Spinner from "react-bootstrap/Spinner";
@@ -29,6 +29,22 @@ const KitchenManagerHome = () => {
 
   const deleteDelivery = (id) => {
     deleteData(`/manager/${id}`).then(() => setIsactive((p) => !p));
+  };
+
+  const statusFalse = (item) => {
+    const status = {
+      active_profile: false,
+    };
+    putData(status, `/deliveryman/${item.id}`);
+    setIsactive(!isactive);
+  };
+
+  const statusTrue = (item) => {
+    const status = {
+      active_profile: true,
+    };
+    putData(status, `/deliveryman/${item.id}`);
+    setIsactive(!isactive);
   };
 
   return (
@@ -78,6 +94,21 @@ const KitchenManagerHome = () => {
                 </Link>
                 <div className="w-100">
                   <p className="text-center">{item.username}</p>
+                  {item.active_profile ? (
+                      <button
+                        onClick={() => statusFalse(item)}
+                        className="btn-none w-100"
+                      >
+                        <p className="text-center text-success">avtive</p>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => statusTrue(item)}
+                        className="btn-none w-100"
+                      >
+                        <p className="text-center text-danger">no active</p>
+                      </button>
+                    )}
                 </div>
                 <div className="d-flex justify-content-between w-100 align-items-center">
                   <Link

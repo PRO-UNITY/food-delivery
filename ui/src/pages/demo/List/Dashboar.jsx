@@ -29,6 +29,7 @@ const Dashboard = () => {
   useEffect(() => {
     getDataWithToken(`/kitchen/category`).then((res) => {
       setCategory(res);
+      console.log(res);
       setLoading(false);
     });
   }, [isactive]);

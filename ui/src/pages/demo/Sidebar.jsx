@@ -144,6 +144,21 @@ const DemoSidebar = ({ showSidebar }) => {
             ) : (
               ""
             )}
+            {role === "kitchen" ? (
+              <li className="nav-item">
+                <NavLink
+                  to={"/history-kitchen"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/history-kitchen")}
+                >
+                  <p className="text-start py-3">
+                  <i className="fa-solid fa-clock-rotate-left mx-3"></i>order history
+                  </p>
+                </NavLink>
+              </li>
+            ) : (
+              ""
+            )}
             <li className="nav-item">
               <NavLink
                 to={"/settings"}

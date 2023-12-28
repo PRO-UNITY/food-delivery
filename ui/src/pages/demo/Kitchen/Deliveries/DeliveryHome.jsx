@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import DemoLayout from "../../../../Layout/Demoproject";
-import { deleteData, getUserData } from "../../../../functions/function";
+import {
+  EditWithFormData,
+  deleteData,
+  getUserData,
+  putData,
+} from "../../../../functions/function";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
@@ -18,6 +23,7 @@ const KitchenDeliveryHome = () => {
   useEffect(() => {
     getUserData(`/deliveryman/?page=${currentPage}`).then((res) => {
       setDeliveries(res.data.results);
+      console.log(res.data.results);
       const residual = res.data.count % 10;
       const pages = (res.data.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
@@ -27,6 +33,22 @@ const KitchenDeliveryHome = () => {
 
   const deleteDelivery = (id) => {
     deleteData(`/deliveryman/${id}`).then(() => setIsactive((p) => !p));
+  };
+
+  const statusFalse = (item) => {
+    const status = {
+      active_profile: false,
+    };
+    putData(status, `/deliveryman/${item.id}`);
+    setIsactive(!isactive);
+  };
+
+  const statusTrue = (item) => {
+    const status = {
+      active_profile: true,
+    };
+    putData(status, `/deliveryman/${item.id}`);
+    setIsactive(!isactive);
   };
 
   return (
@@ -77,6 +99,21 @@ const KitchenDeliveryHome = () => {
                   </Link>
                   <div className="w-100">
                     <p className="text-center">{item.username}</p>
+                    {item.active_profile ? (
+                      <button
+                        onClick={() => statusFalse(item)}
+                        className="btn-none w-100"
+                      >
+                        <p className="text-center text-success">avtive</p>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => statusTrue(item)}
+                        className="btn-none w-100"
+                      >
+                        <p className="text-center text-danger">no active</p>
+                      </button>
+                    )}
                   </div>
                   <div className="d-flex justify-content-between w-100 align-items-center">
                     <Link

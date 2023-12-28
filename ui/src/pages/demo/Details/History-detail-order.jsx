@@ -10,22 +10,18 @@ const HistoryDetailOrder = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    getUserData(`/orders`).then((res) => {
-      setData(res.data.results);
-      // setLoading(false);
+    getUserData(`/order/${id}/foods`).then((res) => {
+      setOrders(res.foods);
+      console.log(res);
     });
   }, []);
 
-  useEffect(() => {
-    setOrders(data?.filter((item) => item.id == id));
-    console.log(data?.filter((item) => item.id == id));
-  }, [data]);
 
   return (
     <DemoLayout setSearch={setSearch}>
       <div className=" body-main w-100  p-5">
         <h3>Order History Details</h3>
-        {orders[0]?.foods?.map((item, index) => (
+        {orders.map((item, index) => (
           <div key={index} className="order-history">
             <div className="img-order-history p-3">
               <img src={`${item.food_img}`} alt="" />
