@@ -14,7 +14,7 @@ class Restaurants(models.Model):
         related_name='user'
     )
     is_active = models.BooleanField(default=False)
-    deliveryman_user = models.ManyToManyField(
+    employes = models.ManyToManyField(
         CustomUser,
         null=True,
         blank=True,
