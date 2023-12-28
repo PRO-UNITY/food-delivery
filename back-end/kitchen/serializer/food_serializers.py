@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from foods.models import FoodsCategories, Foods
+from foods.models import FoodsCategories, Foods, Favorite
 
 
 class CategoriesFoodSerializer(serializers.ModelSerializer):
@@ -21,3 +21,10 @@ class KitchenFoodsSerializers(serializers.ModelSerializer):
     class Meta:
         model = Foods
         fields = ["id", "name", "description", "food_img", "price", "kitchen", "categories", "favorite", "create_at", "updated_at"]
+
+    def get_favorite(self, obj):
+        user = self.context.get('user')
+        user_favorities = Favorite.objects.filter(user=user)
+        if user_favorities.filter(food__id=obj.id).exists():
+            return True
+        return False

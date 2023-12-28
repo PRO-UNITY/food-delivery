@@ -24,7 +24,7 @@ class DeliverySignUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ["id", "username", "first_name", "last_name", "password", "confirm_password", "email", "phone", "latitude", "longitude"]
+        fields = ["id", "username", "first_name", "last_name", "password", "active_profile", "confirm_password", "email", "phone", "latitude", "longitude"]
         extra_kwargs = {"first_name": {"required": True}, "last_name": {"required": True}}
 
     def create(self, validated_data):
