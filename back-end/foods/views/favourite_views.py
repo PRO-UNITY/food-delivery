@@ -24,7 +24,7 @@ class FoodCategories(APIView, Pagination):
         instance = Foods.objects.filter(categories=pk)
         page = super().paginate_queryset(instance)
         if page is not None:
-            serializer = super().get_paginated_response(self.serializer_class(page, many=True, context={"request": request}).data)
+            serializer = super().get_paginated_response(self.serializer_class(page, many=True, context={"user": request.user, "request": request}).data)
         else:
             serializer = self.serializer_class(instance, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)

@@ -28,9 +28,8 @@ class Orders(models.Model):
         null=True,
         blank=True
     )
-    kitchen = models.ForeignKey(
+    kitchen = models.ManyToManyField(
         Restaurants,
-        on_delete=models.CASCADE,
         null=True,
         blank=True,
         related_name='kitchen'
