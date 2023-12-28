@@ -1,5 +1,5 @@
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
-import { AllCategories, AllFoods, AllKitchens, CategoryAdd, CategoryDetails, CategoryHome, CategoryUpdate, Dashboard, DeliveryAdd, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodAdd, FoodDetail, FoodHome, FoodOrder, FoodUpdate, HistoryDetailOrder, KitchenCategoryDetail, KitchenCategoryDetails, KitchenDeliveryDetails, KitchenDeliveryHome, KitchenDetails, KitchenFoodDetails, KitchenManagerDetails, KitchenManagerHome, Login, ManagerAdd, Notification, Register, RestaurantAdd, RestaurantDetails, RestaurantHome, RestaurantUpdate, Services, Settings, TaskList, UpdateSettings } from "./pages"
+import { AddSupplier, AllCategories, AllFoods, AllKitchens, CategoryAdd, CategoryDetails, CategoryHome, CategoryUpdate, Dashboard, DeliveryAdd, DeliveryHome, DeliveryStatistic, EditAdminProfile, Favourite, FoodAdd, FoodDetail, FoodHome, FoodOrder, FoodUpdate, HistoryDetailOrder, KitchenCategoryDetail, KitchenCategoryDetails, KitchenDeliveryDetails, KitchenDeliveryHome, KitchenDetails, KitchenFoodDetails, KitchenManagerDetails, KitchenManagerHome, Login, ManagerAdd, Notification, Register, RestaurantAdd, RestaurantDetails, RestaurantHome, RestaurantUpdate, Services, Settings, TaskList, UpdateSettings } from "./pages"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OrderHistory from "./pages/demo/List/OrderHistory";
 import { useState, useEffect } from "react";
@@ -39,6 +39,8 @@ function App() {
         <Route path="/add-restaurant" element={ <RestaurantAdd/> } />
         <Route path="/edit-restaurant/:id" element={ <RestaurantUpdate/> } />
         <Route path="/restaurant/:id" element={ <RestaurantDetails/> } />
+        <Route path="/add-supplier/:id" element={ <AddSupplier/> } />
+        {/*  */}
         <Route path="/categories" element={ <CategoryHome/> } />
         <Route path="/add-category" element={ <CategoryAdd/> } />
         <Route path="/edit-category/:id" element={ <CategoryUpdate/> } />

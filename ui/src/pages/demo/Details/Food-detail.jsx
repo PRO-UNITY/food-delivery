@@ -1,45 +1,42 @@
-import { useEffect, useState } from "react"
-import DemoLayout from "../../../Layout/Demoproject"
-import { getDataWithToken, getUserData } from "../../../functions/function"
-import { useParams } from "react-router-dom"
+import { useEffect, useState } from "react";
+import DemoLayout from "../../../Layout/Demoproject";
+import { getDataWithToken, getUserData } from "../../../functions/function";
+import { useParams } from "react-router-dom";
 
 const FoodDetail = () => {
-    const [search, setSearch] = useState('')
-    const [orders, setOrders] = useState([])
-    const [data, setData] = useState([])
-    const {id} = useParams()
+  const [search, setSearch] = useState("");
+  const [orders, setOrders] = useState([]);
+  const [data, setData] = useState([]);
+  const { id } = useParams();
 
-    useEffect(()=>{
-        getDataWithToken(`/foods/${id}`).
-        then((res)=>{
-            setData(res)
-        })
-    },[])
+  useEffect(() => {
+    getDataWithToken(`/foods/${id}`).then((res) => {
+      setData(res);
+    });
+  }, []);
 
-    return (
-        <DemoLayout setSearch={setSearch}>
-            <div className=" body-main w-100  p-5">
-                <h3>Food Details</h3>
-                
-                    
-                    <div className="order-history">
-                    <div className="img-order-history p-3">
-                        <img className="w-75" src={`${data.food_img}`} alt="" />
-                    </div>
-                    <div className="title-order-history">
-                    <ul className="list-group w-100">
-                        <li className="list-group-item">Name : {data.name}</li>
-                        <li className="list-group-item">Description : {data.description}</li>
-                        <li className="list-group-item">Price : {data.price}</li>
-                    </ul>
-                    </div>
-                    </div>
-                    
-                
-            </div>
-        </DemoLayout>
-        
-    )
-}
+  return (
+    <DemoLayout setSearch={setSearch}>
+      <div className=" body-main w-100  p-5">
+        <h3>Food Details</h3>
 
-export default FoodDetail
+        <div className="order-history">
+          <div className="img-order-history p-3">
+            <img className="w-75" src={`${data.food_img}`} alt="" />
+          </div>
+          <div className="title-order-history">
+            <ul className="list-group w-100">
+              <li className="list-group-item">Name : {data.name}</li>
+              <li className="list-group-item">
+                Description : {data.description}
+              </li>
+              <li className="list-group-item">Price : {data.price}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </DemoLayout>
+  );
+};
+
+export default FoodDetail;

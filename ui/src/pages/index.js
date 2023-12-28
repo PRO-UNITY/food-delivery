@@ -26,6 +26,7 @@ export { default as RestaurantHome } from './demo/Kitchen/Restaurants/Restaurant
 export { default as RestaurantAdd } from './demo/Kitchen/Restaurants/RestaurantAdd'
 export { default as RestaurantUpdate } from './demo/Kitchen/Restaurants/RestaurantUpdate'
 export { default as RestaurantDetails } from './demo/Kitchen/Restaurants/RestaurantDetails'
+export { default as AddSupplier } from './demo/Kitchen/Restaurants/AddSupplier'
 
 export { default as CategoryHome } from './demo/Kitchen/Categories/CategoryHome'
 export { default as CategoryAdd } from './demo/Kitchen/Categories/CategoryDetails'
