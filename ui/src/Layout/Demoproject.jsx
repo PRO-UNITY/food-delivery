@@ -4,7 +4,7 @@ import DemoNavbar from "../pages/demo/Navbar";
 import DemoSidebar from "../pages/demo/Sidebar";
 import Profile from "../pages/demo/Profile";
 
-const DemoLayout = ({ children, setSearch, count }) => {
+const DemoLayout = ({ children, setSearch, counter }) => {
   const [showSidebar, setshowSidebar] = useState(false);
   const [showProfile, setshowProfile] = useState(false);
   return (
@@ -18,7 +18,7 @@ const DemoLayout = ({ children, setSearch, count }) => {
         />
         <main className="">{children}</main>
       </div>
-      <Profile showProfile={showProfile} count={count} />
+      <Profile showProfile={showProfile} counter={counter} />
     </div>
   );
 };

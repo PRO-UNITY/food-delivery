@@ -4,7 +4,7 @@ import { BASE_URL, getUserData } from "../../functions/function";
 import { Link, useNavigate } from "react-router-dom";
 import User from "../../assets/images/user.png";
 
-const Profile = ({ showProfile, count }) => {
+const Profile = ({ showProfile, counter }) => {
   const [user, setUser] = useState(null);
   const [card, setCard] = useState([]);
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const Profile = ({ showProfile, count }) => {
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("card"));
     setCard(data);
-  }, [count]);
+  }, [counter]);
 
   return (
     <div className={`bg-white pt-4 px-4 profile  ${showProfile && "show"}`}>

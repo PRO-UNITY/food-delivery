@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import DemoLayout from "../../../Layout/Demoproject";
-import {
-  getDataWithToken,
-  getUserData,
-} from "../../../functions/function";
+import { getDataWithToken, getUserData } from "../../../functions/function";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
@@ -20,7 +17,7 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [searchFoods, setSearchFoods] = useState([]);
   const [card, setCard] = useState([]);
-  const [count, setCount] = useState(0);
+  const [counter, setCounter] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const token = localStorage.getItem("token");
@@ -29,7 +26,6 @@ const Dashboard = () => {
   useEffect(() => {
     getDataWithToken(`/kitchen/category`).then((res) => {
       setCategory(res);
-      console.log(res);
       setLoading(false);
     });
   }, [isactive]);
@@ -61,8 +57,24 @@ const Dashboard = () => {
     });
   }, [token, isactive]);
 
+  const addToFavourite = (item) => {
+    const data = {
+      food: item.id,
+      is_favorite: true,
+    };
+    postDataWithToken(data, `/foods/favourites`);
+    setIsActive((p) => !p);
+  };
+
+  const removeItemFavoutite = (item) => {
+    deleteData(`/foods/favourite/${item.id}`);
+    setIsActive((p) => !p);
+  };
+
+
+
   return (
-    <DemoLayout setSearch={setSearch} count={count}>
+    <DemoLayout setSearch={setSearch} counter={counter}>
       {loading ? (
         <div className="container body-main d-flex justify-content-center align-items-center py-5">
           <Button variant="warning" disabled>
@@ -81,12 +93,7 @@ const Dashboard = () => {
           {search != "" ? (
             <div className="foods">
               {searchFoods?.map((item, index) => (
-                <FoodCard
-                  key={index}
-                  {...item}
-                  setCount={setCount}
-                  setIsActive={setIsActive}
-                />
+              <FoodCard key={index} {...item} setCount={setCount} count={count}/>
               ))}
               <div className="w-100 d-flex justify-content-center">
                 <PaginationCard
@@ -149,12 +156,7 @@ const Dashboard = () => {
               </div>
               <div className="foods">
                 {food.map((item, index) => (
-                  <FoodCard
-                    key={index}
-                    {...item}
-                    setCount={setCount}
-                    setIsActive={setIsActive}
-                  />
+                  <FoodCard key={index} {...item} setCounter={setCounter} counter={counter}/>
                 ))}
               </div>
             </>

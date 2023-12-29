@@ -3,10 +3,20 @@ import { deleteData, postDataWithToken } from "../functions/function";
 import { useState, useEffect } from "react";
 
 const FoodCard = (props) => {
-  const { id, food_img, name, price, favorite, setCount, setIsActive } = props;
+  const {
+    id,
+    food_img,
+    name,
+    price,
+    favorite,
+    setCounter,
+    setIsActive,
+    counter,
+  } = props;
   const token = localStorage.getItem("token");
-  const [card, setCard] = useState([]);
-  
+  const [card, setCard] = useState(
+    JSON.parse(localStorage.getItem("card")) || []
+  );
 
   const addToFavourite = (item) => {
     const data = {
@@ -23,12 +33,11 @@ const FoodCard = (props) => {
   };
 
   const addToCard = (item) => {
+    const card = JSON.parse(localStorage.getItem('card')) || []
     const updatedCard = [...card, { ...item, count: 1 }];
-    const totalPrice = updatedCard.reduce((acc, curr) => acc + curr.price, 0);
-    setCount((count) => count + 1);
-
     localStorage.setItem("card", JSON.stringify(updatedCard));
-    setCard(updatedCard);
+    setCounter((counter) => counter + 1);
+    setCard(updatedCard)
   };
 
   useEffect(() => {
