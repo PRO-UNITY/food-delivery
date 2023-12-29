@@ -10,6 +10,7 @@ from authen.renderers import UserRenderers
 from order.models import Orders
 from django.shortcuts import get_object_or_404
 from authen.pagination import StandardResultsSetPagination
+from kitchen.models import Restaurants
 from order.serializers import (
     OrderFoodsSerializers,
     OrderSerializers,
@@ -184,8 +185,11 @@ class OrderHistoryKitchenView(APIView, Pagination):
             search_status = request.query_params.get("status", None)
             search_kitchen = request.query_params.get("kitchen", None)
             sort_by = request.query_params.get("sort", None)
-            queryset = Orders.objects.filter(kitchen__user__id=request.user.id)
-
+            queryset = Orders.objects.all()
+            # kitchen = list([kitchen_ids['kitchen'] for kitchen_ids in food])
+            # filter_kitchen_user = Restaurants.objects.filter(user=request.user.id).values_list('id', flat=True)
+            # if set(kitchen) & set(filter_kitchen_user):
+            #     print(kitchen)
             if search_delivery:
                 queryset = queryset.filter(Q(delivery__id__icontains=search_delivery) | Q(delivery__username__icontains=search_delivery))
 
