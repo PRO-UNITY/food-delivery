@@ -20,7 +20,7 @@ parts/
 sdist/
 var/
 wheels/
-.migrations/
+/migrations/__pycache__/
 share/python-wheels/
 *.egg-info/
 .installed.cfg
