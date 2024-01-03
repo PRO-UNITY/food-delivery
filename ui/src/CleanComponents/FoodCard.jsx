@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { deleteData, postDataWithToken } from "../functions/function";
+import { deleteData, postDataWithToken } from "../Functions/Function";
 import { useState, useEffect } from "react";
 
 const FoodCard = (props) => {
@@ -16,7 +16,7 @@ const FoodCard = (props) => {
   const token = localStorage.getItem("token");
   const [card, setCard] = useState(
     JSON.parse(localStorage.getItem("card")) || []
-  );
+  );  
 
   const addToFavourite = (item) => {
     const data = {
@@ -33,11 +33,11 @@ const FoodCard = (props) => {
   };
 
   const addToCard = (item) => {
-    const card = JSON.parse(localStorage.getItem('card')) || []
+    const card = JSON.parse(localStorage.getItem("card")) || [];
     const updatedCard = [...card, { ...item, count: 1 }];
     localStorage.setItem("card", JSON.stringify(updatedCard));
     setCounter((counter) => counter + 1);
-    setCard(updatedCard)
+    setCard(updatedCard);
   };
 
   useEffect(() => {

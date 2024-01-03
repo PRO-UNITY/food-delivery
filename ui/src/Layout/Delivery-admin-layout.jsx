@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import DeliveryDashNavbar from "../Components/Delivery-dash-navbar/Delivery-dash-navbar";
-import DeliverySidebar from "../pages/demo/Admin/Delivery-sidebar/Delivery-sidebar";
+import DeliverySidebar from "../pages/Admin/Delivery-sidebar/Delivery-sidebar";
 
 const DeliveryAdminLayout = ({ children }) => {
   return (
