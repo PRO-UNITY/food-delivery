@@ -1,5 +1,8 @@
 from pathlib import Path
 from datetime import timedelta
+import cloudinary
+import cloudinary.api
+import cloudinary.uploader
 from dotenv import load_dotenv
 import os
 
@@ -31,6 +34,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
     # Django rest
     "rest_framework",
     "django_filters",
@@ -38,16 +42,16 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "django_rest_passwordreset",
-    'drf_spectacular',
-    'drf_yasg',
+    "drf_spectacular",
+    "drf_yasg",
     # 'cacheops',
     # my_app
     "authen",
     "kitchen",
     "foods",
-    'managers',
-    'order',
-    'deliveryman',
+    "managers",
+    "order",
+    "deliveryman",
     # socaill apps
     "django.contrib.sites",
     "dj_rest_auth",
@@ -60,6 +64,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     "rest_framework.authtoken",
     "dj_rest_auth.registration",
+    "cloudinary",
 ]
 
 SITE_ID = 1
@@ -154,9 +159,16 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 
 MEDIA_URL = "/food-delivery/media/"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "/home/ibrokhim/Desktop/projects/media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+cloudinary.config(
+    CLOUD_NAME="ddom6zmhz",
+    API_KEY="118745292796737",
+    API_SECRET="AVRxcx04CtgLIHNiPGRTb6jykd0",
+)
+
+# DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -175,12 +187,12 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
 }
 
-access_token_lifetime_days = int(os.environ['ACCESS_TOKEN_LIFETIME_DAYS'])
-refresh_token_lifetime_days = int(os.environ['REFRESH_TOKEN_LIFETIME_DAYS'])
+access_token_lifetime_days = int(os.environ["ACCESS_TOKEN_LIFETIME_DAYS"])
+refresh_token_lifetime_days = int(os.environ["REFRESH_TOKEN_LIFETIME_DAYS"])
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=access_token_lifetime_days),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=refresh_token_lifetime_days),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=refresh_token_lifetime_days),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer", "Token"),
@@ -271,6 +283,6 @@ SIMPLE_JWT = {
 
 SOCIAL_AUTH_FACEBOOK_KEY = os.environ["SOCIAL_AUTH_FACEBOOK_KEY"]
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ["SOCIAL_AUTH_FACEBOOK_SECRET"]
-SOCIAL_AUTH_FACEBOOK_APP_NAME = os.environ["SOCIAL_AUTH_FACEBOOK_APP_NAME"],
+SOCIAL_AUTH_FACEBOOK_APP_NAME = (os.environ["SOCIAL_AUTH_FACEBOOK_APP_NAME"],)
 
 # FORCE_SCRIPT_NAME = "/food-delivery"
