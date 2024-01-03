@@ -154,7 +154,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 
 MEDIA_URL = "/food-delivery/media/"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "/home/ibrokhim/Desktop/projects/media")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
@@ -273,4 +273,4 @@ SOCIAL_AUTH_FACEBOOK_KEY = os.environ["SOCIAL_AUTH_FACEBOOK_KEY"]
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ["SOCIAL_AUTH_FACEBOOK_SECRET"]
 SOCIAL_AUTH_FACEBOOK_APP_NAME = os.environ["SOCIAL_AUTH_FACEBOOK_APP_NAME"],
 
-FORCE_SCRIPT_NAME = "/food-delivery"
+# FORCE_SCRIPT_NAME = "/food-delivery"
