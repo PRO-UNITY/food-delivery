@@ -140,7 +140,7 @@ STATIC_URL = "/food-delivery/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 MEDIA_URL = "/food-delivery/media/"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "/home/media")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 cloudinary.config(
