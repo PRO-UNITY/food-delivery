@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import DemoLayout from "../../Layout/Demoproject";
-import { getUserData } from "../../Functions/Function";
 import { Link } from "react-router-dom";
+import DemoLayout from "../../Layout/Demoproject";
+import { getUserData } from "../../Services/Services";
+import ListProfile from "../../Components/SubComponents/ListProfile";
 
 const Settings = () => {
   const [search, setSearch] = useState("");
@@ -22,23 +23,10 @@ const Settings = () => {
               <img className="avatar-user" src={user.avatar} alt="" />
             </div>
             <div className="w-100 mt-5">
-              <ul className="list-group w-100 mb-3">
-                <li className="list-group-item">Username : {user?.username}</li>
-                <li className="list-group-item">
-                  Firstname : {user?.first_name}
-                </li>
-                <li className="list-group-item">
-                  Lastname : {user?.last_name}
-                </li>
-                <li className="list-group-item">Email : {user?.email}</li>
-                <li className="list-group-item">
-                  Phone number : {user?.phone ? user.phone : "No number yet"}
-                </li>
-              </ul>
+              <ListProfile {...user} />
               <div className="w-100 d-flex justify-content-center">
                 <Link
                   to={"/update-settings"}
-                  style={{ border: "none" }}
                   className="btn-sign-in bg-orange mx-auto"
                 >
                   update profile
@@ -49,7 +37,7 @@ const Settings = () => {
         ) : (
           <h6>
             No settings for this please{" "}
-            <Link className="orange" to={"/login"}>
+            <Link className="text-orange" to={"/login"}>
               login
             </Link>
           </h6>

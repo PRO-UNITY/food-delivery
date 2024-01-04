@@ -1,8 +1,8 @@
+import "../../pages/Demo.css";
 import { useEffect, useState } from "react";
-import "../pages/Demo.css";
-import { getUserData } from "../Functions/Function";
 import { Link, useNavigate } from "react-router-dom";
-import User from "../assets/images/user.png";
+import { getUserData } from "../../Services/Services";
+import User from "../../assets/images/user.png";
 
 const Profile = ({ showProfile, counter }) => {
   const [user, setUser] = useState(null);
@@ -33,7 +33,6 @@ const Profile = ({ showProfile, counter }) => {
       <div className="d-flex justify-content-end align-items-center mb-4">
         {!token ? (
           <div className="d-flex gap-1">
-            {/* <Link to={'/register'} className='btn-sign-in bg-orange'>Sign-up</Link> */}
             <Link to={"/login"} className="btn-sign-in bg-orange">
               Sign-in
             </Link>
@@ -65,7 +64,7 @@ const Profile = ({ showProfile, counter }) => {
           <h6 className="text-secondary">Your Address</h6>
           <div className="d-flex justify-content-between align-items-center mb-2">
             <p style={{ fontWeight: "700" }} className="p-0 m-0">
-              <i className="fa-solid fa-location-dot orange"></i> Elm Street, 23
+              <i className="fa-solid fa-location-dot text-orange"></i> Elm Street, 23
             </p>
           </div>
           <hr />
@@ -95,7 +94,7 @@ const Profile = ({ showProfile, counter }) => {
                         className="mx-2 m-0 p-0"
                       >
                         +
-                        <span className="orange">
+                        <span className="text-orange">
                           {item?.totalPrice ? item?.totalPrice : item?.price}
                         </span>
                       </p>
@@ -113,7 +112,7 @@ const Profile = ({ showProfile, counter }) => {
               <div className="d-flex justify-content-between align-items-center">
                 <p>Total</p>
                 <p style={{ fontWeight: "bold" }} className="mx-2">
-                  <span className="orange">$</span>
+                  <span className="text-orange">$</span>
                 </p>
               </div>
               <Link to={"/food-order"}>

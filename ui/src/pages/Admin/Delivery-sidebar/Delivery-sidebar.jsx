@@ -3,7 +3,7 @@ import "./Delivery-sidebar.css";
 import { useContext } from "react";
 import { ActiveNavContext } from "../../../Context/ActiveNav";
 import { useState, useEffect } from "react";
-import { getUserData } from "../../../Functions/Function";
+import { getUserData } from "../../../Services/Services";
 
 const sideNavs = [
   { id: 1, path: "/admin", name: "Dashboard1", icon: "fa-house" },

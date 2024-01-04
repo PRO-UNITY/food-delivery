@@ -1,4 +1,4 @@
-import "../pages/Demo.css";
+import "../../pages/Demo.css";
 import { useState } from "react";
 
 const DemoNavbar = ({ setshowSidebar, setshowProfile, setSearch }) => {
@@ -12,7 +12,7 @@ const DemoNavbar = ({ setshowSidebar, setshowProfile, setSearch }) => {
         onClick={() => setshowSidebar((prev) => !prev)}
       ></i>
       <div className="searchbar w-50 bg-white mx-auto py-1 px-2 rounded">
-        <i className="fa-solid fa-magnifying-glass orange"></i>
+        <i className="fa-solid fa-magnifying-glass text-orange"></i>
         <input
           onChange={(e) => setInputVal(e.target.value)}
           type="text"

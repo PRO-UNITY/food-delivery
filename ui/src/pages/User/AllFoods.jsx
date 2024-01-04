@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import DemoLayout from "../../Layout/Demoproject";
-import { getDataWithToken, getUserData } from "../../Functions/Function";
-import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
-import PaginationCard from "../../CleanComponents/Pagination";
-import FoodCard from "../../CleanComponents/FoodCard";
+import { getDataWithToken, getUserData } from "../../Services/Services";
+import PaginationCard from "../../Components/SubComponents/Pagination";
+import FoodCard from "../../Components/SubComponents/FoodCard";
+import Loader from "../../Components/SubComponents/Loader";
 
 const AllFoods = () => {
   const [food, setFood] = useState([]);
@@ -37,7 +36,7 @@ const AllFoods = () => {
       console.log(res.data.results);
       setLoading(false);
     });
-  }, [token, isactive]);
+  }, [token, counter]);
 
   useEffect(() => {
     getDataWithToken(`/foods/?name=${search}`).then((res) => {
@@ -46,29 +45,18 @@ const AllFoods = () => {
   }, [search]);
 
   return (
-    <DemoLayout setSearch={setSearch}>
+    <DemoLayout setSearch={setSearch} counter={counter}>
       {loading ? (
-        <div className="container body-main d-flex justify-content-center align-items-center py-5">
-          <Button variant="warning" disabled>
-            <Spinner
-              as="span"
-              animation="grow"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-            />
-            Loading...
-          </Button>
-        </div>
+        <Loader />
       ) : (
         <>
           {search != "" ? (
             <div className="body-main w-100 p-5">
-              {searchFood.length > 0 ? (
-                <h3 style={{ fontWeight: 700 }}>Foods by your search</h3>
-              ) : (
-                <h3 style={{ fontWeight: 700 }}>No any food by your search</h3>
-              )}
+              <h3>
+                {searchFood.length > 0
+                  ? "Foods by your search"
+                  : "No any food by your search"}
+              </h3>
               <div className="foods">
                 {searchFood?.map((item, index) => (
                   <FoodCard
@@ -89,7 +77,7 @@ const AllFoods = () => {
             </div>
           ) : (
             <div className="body-main w-100 p-5">
-              <h3 style={{ fontWeight: 700 }}>All Foods</h3>
+              <h3>All Foods</h3>
               <div className="foods">
                 {food.map((item, index) => (
                   <FoodCard

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import DeliveryAdminLayout from "../../../Layout/Delivery-admin-layout";
+import DeliveryAdminLayout from "../../../Layout/DeliveryAdminLayout";
 
 const btns = [
   { id: 1, name: "Active", count: 8 },
@@ -11,7 +11,7 @@ const TaskList = () => {
   const [showMenu, setshowMenu] = useState(false);
   return (
     <DeliveryAdminLayout>
-       <div className="hrms-dashboasrd-home mt-4 overflow-auto">
+      <div className="hrms-dashboasrd-home mt-4 overflow-auto">
         <div className="container ">
           <h3>Tasks</h3>
           <div className="btns my-2">
@@ -38,7 +38,6 @@ const TaskList = () => {
             <table className="table m-0">
               <tbody>
                 <tr>
-                  
                   <td>
                     <h6 className="m-0 mt-2">Oct 01, 2022 </h6>
                     <span className="text-secondary ">Start Date</span>

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import DemoLayout from "../../../Layout/Demoproject";
-import { getUserData } from "../../../Functions/Function";
-import { Link, useParams } from "react-router-dom";
+import { getUserData } from "../../../Services/Services";
 import Supplier from "../../../assets/images/supplier.png";
+import ListProfile from "../../../Components/SubComponents/ListProfile";
 
 const KitchenManagerDetails = () => {
   const [search, setSearch] = useState("");
@@ -19,31 +20,15 @@ const KitchenManagerDetails = () => {
   }, []);
   return (
     <DemoLayout setSearch={setSearch}>
-      <div className=" body-main w-100 p-5">
+      <div className="body-main w-100 p-5">
         <h3 className="mb-3">Settings</h3>
         {
           <div className="settings">
             <div className="container-avatar">
-              <img
-                className="avatar-user"
-                src={data?.avatar ? data?.avatar : Supplier}
-                alt=""
-              />
+              <img className="avatar-user" src={Supplier} alt="" />
             </div>
             <div className="w-100 mt-5">
-              <ul className="list-group w-100 mb-3">
-                <li className="list-group-item">Username : {data?.username}</li>
-                <li className="list-group-item">
-                  Firstname : {data?.first_name}
-                </li>
-                <li className="list-group-item">
-                  Lastname : {data?.last_name}
-                </li>
-                <li className="list-group-item">Email : {data?.email}</li>
-                <li className="list-group-item">
-                  Phone number : {data?.phone ? data.phone : "No number yet"}
-                </li>
-              </ul>
+              <ListProfile {...data} />
             </div>
           </div>
         }

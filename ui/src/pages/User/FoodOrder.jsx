@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import DemoLayout from "../../Layout/Demoproject";
-import { postDataWithToken } from "../../Functions/Function";
 import { Link, useNavigate } from "react-router-dom";
+import DemoLayout from "../../Layout/Demoproject";
+import { postDataWithToken } from "../../Services/Services";
 import Success from "../../assets/images/success.png";
 
 const calculateTotalPrice = (item, count) => {
@@ -103,24 +103,6 @@ const FoodOrder = () => {
       .then(() => localStorage.removeItem("card"));
   };
 
-  // const [loading, setLoading] = useState(true);
-
-  // if (loading) {
-  //     return (
-  //         <div className="container d-flex justify-content-center align-items-center py-5">
-  //             <Button variant="warning" disabled>
-  //                 <Spinner
-  //                 as="span"
-  //                 animation="grow"
-  //                 size="sm"
-  //                 role="status"
-  //                 aria-hidden="true"
-  //                 />
-  //                 Loading...
-  //             </Button>
-  //         </div>
-  //     )
-  // }
   return (
     <DemoLayout count={count} setSearch={setSearch}>
       <div className=" body-main w-100 p-5">
@@ -181,7 +163,7 @@ const FoodOrder = () => {
             </div>
             {active ? (
               <div className="d-flex justify-content-center align-items-center w-100">
-                <img style={{ width: "200px" }} src={Success} alt="" />
+                <img className="succesOrder" src={Success} alt="" />
               </div>
             ) : (
               ""
@@ -190,7 +172,7 @@ const FoodOrder = () => {
         ) : (
           <h6 className="">
             No any orders, For ordering food please{" "}
-            <Link className="orange" to={"/login"}>
+            <Link className="text-orange" to={"/login"}>
               login
             </Link>
           </h6>

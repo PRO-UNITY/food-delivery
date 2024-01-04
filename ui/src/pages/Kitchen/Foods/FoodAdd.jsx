@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
-import DemoLayout from "../../../Layout/Demoproject";
-import { AddWithFormData, getUserData } from "../../../Functions/Function";
-import { useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import "../../Demo.css";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import DemoLayout from "../../../Layout/Demoproject";
+import { AddWithFormData, getUserData } from "../../../Services/Services";
 
 const FoodAdd = () => {
   const [search, setSearch] = useState("");
@@ -45,13 +44,9 @@ const FoodAdd = () => {
   };
 
   return (
-    <DemoLayout setSearch={setSearch}>
-      <div className="body-main w-100 p-5">
+
         <div className="card w-100">
-          <div
-            style={{ background: "#F8B602" }}
-            className="card-header  text-light"
-          >
+          <div className="card-header  text-light">
             <h3>Add Food</h3>
           </div>
           <div className="card-body">
@@ -121,8 +116,7 @@ const FoodAdd = () => {
             </form>
           </div>
         </div>
-      </div>
-    </DemoLayout>
+
   );
 };
 

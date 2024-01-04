@@ -1,3 +1,5 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useState, useEffect } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import {
   AddManagerToKitchen,
@@ -40,10 +42,8 @@ import {
   TaskList,
   UpdateSettings,
 } from "./pages";
-import "bootstrap/dist/css/bootstrap.min.css";
 import OrderHistory from "./pages/User/OrderHistory";
-import { useState, useEffect } from "react";
-import { getRoleUser } from "./Functions/Function";
+import { getRoleUser } from "./Services/Services";
 import Pagenotfound from "./Pagenotfound";
 import { ActiveNavContext } from "./Context/ActiveNav";
 
@@ -88,7 +88,7 @@ function App() {
           {/*  */}
           <Route path="/categories" element={<CategoryHome />} />
           {/*  */}
-          <Route path="/foods" element={<FoodHome />}>
+          <Route path="foods" element={<FoodHome />}>
             <Route path="add" element={<FoodAdd />} />
           </Route>
           <Route path="/edit-food/:id" element={<FoodUpdate />} />

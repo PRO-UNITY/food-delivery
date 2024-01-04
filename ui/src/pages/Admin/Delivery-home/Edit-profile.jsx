@@ -1,8 +1,8 @@
 // import { Dropdown, DropdownButton, Form, InputGroup } from "react-bootstrap";
 import { useRef } from "react";
-import DeliveryAdminLayout from "../../../Layout/Delivery-admin-layout";
+import DeliveryAdminLayout from "../../../Layout/DeliveryAdminLayout";
 import { useEffect, useState } from "react";
-import { getUserData } from "../../../Functions/Function";
+import { getUserData } from "../../../Services/Services";
 import axios from "axios";
 
 const EditProfile = () => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import DemoLayout from "../../Layout/Demoproject";
-import { getDataWithToken } from "../../Functions/Function";
 import { useParams } from "react-router-dom";
+import DemoLayout from "../../Layout/Demoproject";
+import { getDataWithToken } from "../../Services/Services";
 
 const FoodDetail = () => {
   const [search, setSearch] = useState("");
@@ -19,7 +19,6 @@ const FoodDetail = () => {
     <DemoLayout setSearch={setSearch}>
       <div className=" body-main w-100  p-5">
         <h3>Food Details</h3>
-
         <div className="order-history">
           <div className="img-order-history p-3">
             <img className="w-75" src={`${data.food_img}`} alt="" />

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import DemoLayout from "../../../Layout/Demoproject";
-import { getUserData } from "../../../Functions/Function";
 import { Link, useParams } from "react-router-dom";
+import DemoLayout from "../../../Layout/Demoproject";
+import { getUserData } from "../../../Services/Services";
 
 const KitchenFoodDetails = () => {
   const [search, setSearch] = useState("");
@@ -40,8 +40,7 @@ const KitchenFoodDetails = () => {
         <div className="w-100">
           <Link
             to={`/edit-food/${data.id}`}
-            style={{ textDecoration: "none" }}
-            className="btn-orange float-end"
+            className="btn-orange float-end border-none"
           >
             update
           </Link>

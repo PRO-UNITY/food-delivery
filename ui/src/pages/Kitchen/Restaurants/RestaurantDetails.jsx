@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import DemoLayout from "../../../Layout/Demoproject";
-import { getUserData } from "../../../Functions/Function";
 import { Link, useParams } from "react-router-dom";
+import DemoLayout from "../../../Layout/Demoproject";
+import { getUserData } from "../../../Services/Services";
 
 const RestaurantDetails = () => {
   const [search, setSearch] = useState("");
@@ -12,7 +12,6 @@ const RestaurantDetails = () => {
   useEffect(() => {
     getUserData(`/kitchen/${id}`).then((res) => {
       setData(res);
-      console.log(res);
       setLoading(false);
     });
   }, []);
@@ -43,22 +42,19 @@ const RestaurantDetails = () => {
         <div className="w-100 d-flex justify-content-center gap-2">
           <Link
             to={`/add-supplier/${data.id}`}
-            style={{ textDecoration: "none" }}
-            className="btn btn-success "
+            className="btn btn-success border-none"
           >
             add supplier
           </Link>
           <Link
             to={`/add-manager/${data.id}`}
-            style={{ textDecoration: "none" }}
-            className="btn btn-primary"
+            className="btn btn-primary border-none"
           >
             add manager
           </Link>
           <Link
             to={`/edit-restaurant/${data.id}`}
-            style={{ textDecoration: "none" }}
-            className="btn btn-warning "
+            className="btn btn-warning border-none"
           >
             update
           </Link>

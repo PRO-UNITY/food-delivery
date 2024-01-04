@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import DemoLayout from "../../Layout/Demoproject";
-import { getUserData } from "../../Functions/Function";
 import { useParams } from "react-router-dom";
+import DemoLayout from "../../Layout/Demoproject";
+import { getUserData } from "../../Services/Services";
 
 const HistoryDetailOrder = () => {
   const [search, setSearch] = useState("");
@@ -33,7 +33,6 @@ const HistoryDetailOrder = () => {
                   Description : {item.description}
                 </li>
                 <li className="list-group-item">Price : {item.price}</li>
-                {/* <li className="list-group-item">Time Order : {item.create_at}</li> */}
               </ul>
             </div>
           </div>

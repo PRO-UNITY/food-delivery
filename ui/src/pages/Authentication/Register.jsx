@@ -1,6 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { postData } from "../../Functions/Function";
+import { Link, useNavigate } from "react-router-dom";
+import { postData } from "../../Services/Services";
 
 const Register = () => {
   const [firstname, setFirstname] = useState("");

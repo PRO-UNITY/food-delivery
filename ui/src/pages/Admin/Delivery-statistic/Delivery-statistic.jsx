@@ -3,7 +3,7 @@ import { Bar, Doughnut, Line, Pie, PolarArea } from "react-chartjs-2";
 import "./Delivery-statistic.css";
 import revenueData from "./data/chartData";
 import sourceData from "./data/sourceData.json";
-import DeliveryAdminLayout from "../../../Layout/Delivery-admin-layout";
+import DeliveryAdminLayout from "../../../Layout/DeliveryAdminLayout";
 
 const DeliveryStatistic = () => {
   defaults.maintainAspectRatio = false;

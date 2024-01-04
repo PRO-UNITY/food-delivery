@@ -1,27 +1,27 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import DeliveryAdminLayout from "../../../Layout/Delivery-admin-layout";
+import DeliveryAdminLayout from "../../../Layout/DeliveryAdminLayout";
 
 const DeliveryServices = () => {
   const [showMenu, setshowMenu] = useState(false);
   return (
     <DeliveryAdminLayout>
-       <div className="hrms-dashboasrd-home mt-4 overflow-auto">
+      <div className="hrms-dashboasrd-home mt-4 overflow-auto">
         <div className="container">
           <h3>Services</h3>
-          
+
           <div className="card w-100 p-0 rounded overflow-hidden">
             <table className="table m-0">
               <tbody>
                 <tr>
-                  
                   <td>
                     <h6 className="m-0 mt-2">Frontend </h6>
                     <span className="text-secondary ">Sevice</span>
                   </td>
                   <td>
                     <h6 className="m-0 mt-2">
-                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem, architecto?
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Exercitationem, architecto?
                     </h6>
                     <span className="text-secondary">Content</span>
                   </td>
@@ -64,7 +64,10 @@ const DeliveryServices = () => {
                     <span className="text-secondary ">Service</span>
                   </td>
                   <td>
-                    <h6 className="m-0 mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis, eos.</h6>
+                    <h6 className="m-0 mt-2">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Perferendis, eos.
+                    </h6>
                     <span className="text-secondary">Content</span>
                   </td>
                   <td>
@@ -92,4 +95,3 @@ const DeliveryServices = () => {
 };
 
 export default DeliveryServices;
-

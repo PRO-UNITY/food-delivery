@@ -1,13 +1,8 @@
-import { useEffect, useState } from "react";
-import DemoLayout from "../../../Layout/Demoproject";
-import {
-  AddWithFormData,
-  getDataWithToken,
-  getUserData,
-} from "../../../Functions/Function";
-import { useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import "../../Demo.css";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import DemoLayout from "../../../Layout/Demoproject";
+import { AddWithFormData } from "../../../Services/Services";
 
 const DeliveryAdd = () => {
   const [search, setSearch] = useState("");
@@ -44,10 +39,7 @@ const DeliveryAdd = () => {
     <DemoLayout setSearch={setSearch}>
       <div className="body-main w-100 p-5">
         <div className="card w-100">
-          <div
-            style={{ background: "#F8B602" }}
-            className="card-header  text-light"
-          >
+          <div className="card-header text-light">
             <h3>Add Supplier</h3>
           </div>
           <div className="card-body">

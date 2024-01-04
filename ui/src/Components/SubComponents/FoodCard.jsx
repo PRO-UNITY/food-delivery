@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import { deleteData, postDataWithToken } from "../Functions/Function";
 import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { deleteData, postDataWithToken } from "../../Services/Services";
 
 const FoodCard = (props) => {
   const {
@@ -14,9 +14,11 @@ const FoodCard = (props) => {
     counter,
   } = props;
   const token = localStorage.getItem("token");
+  const location = useLocation();
+  const currentUrl = location.pathname;
   const [card, setCard] = useState(
     JSON.parse(localStorage.getItem("card")) || []
-  );  
+  );
 
   const addToFavourite = (item) => {
     const data = {
@@ -24,12 +26,12 @@ const FoodCard = (props) => {
       is_favorite: true,
     };
     postDataWithToken(data, `/foods/favourites`);
-    setIsActive((p) => !p);
+    setCounter((counter) => counter + 1);
   };
 
   const removeItemFavoutite = (item) => {
     deleteData(`/foods/favourite/${item.id}`);
-    setIsActive((p) => !p);
+    setCounter((counter) => counter + 1);
   };
 
   const addToCard = (item) => {
@@ -70,11 +72,11 @@ const FoodCard = (props) => {
         />
       </Link>
       <div className="mb-2">
-        <i className="fa-solid fa-star orange"></i>
-        <i className="fa-solid fa-star orange"></i>
-        <i className="fa-solid fa-star orange"></i>
-        <i className="fa-solid fa-star orange"></i>
-        <i className="fa-solid fa-star orange"></i>
+        <i className="fa-solid fa-star text-orange"></i>
+        <i className="fa-solid fa-star text-orange"></i>
+        <i className="fa-solid fa-star text-orange"></i>
+        <i className="fa-solid fa-star text-orange"></i>
+        <i className="fa-solid fa-star text-orange"></i>
       </div>
       <div className="d-flex justify-content-between w-100 align-items-center">
         <div>
@@ -82,7 +84,7 @@ const FoodCard = (props) => {
             {name}
           </p>
           <p style={{ fontWeight: 800 }}>
-            <span className="orange">$</span>
+            <span className="text-orange">$</span>
             {price}
           </p>
         </div>
@@ -114,20 +116,31 @@ const FoodCard = (props) => {
         </div>
         {token ? (
           <>
-            {favorite ? (
+            {currentUrl === "/favourite" ? (
               <button
                 onClick={() => removeItemFavoutite(props)}
-                className="btn-favourite orange"
+                className="btn-favourite red"
               >
-                <i className="fa-solid fa-heart"></i>
+                <i className="fa-solid fa-trash"></i>
               </button>
             ) : (
-              <button
-                onClick={() => addToFavourite(props)}
-                className="btn-favourite grey"
-              >
-                <i className="fa-solid fa-heart"></i>
-              </button>
+              <>
+                {favorite ? (
+                  <button
+                    onClick={() => removeItemFavoutite(props)}
+                    className="btn-favourite text-orange"
+                  >
+                    <i className="fa-solid fa-heart"></i>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => addToFavourite(props)}
+                    className="btn-favourite grey"
+                  >
+                    <i className="fa-solid fa-heart"></i>
+                  </button>
+                )}
+              </>
             )}
           </>
         ) : (

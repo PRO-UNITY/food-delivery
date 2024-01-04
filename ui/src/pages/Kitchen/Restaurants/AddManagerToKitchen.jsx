@@ -1,6 +1,6 @@
-import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getUserData, EditWithFormData } from "../../../Functions/Function";
+import { useParams } from "react-router-dom";
+import { getUserData, EditWithFormData } from "../../../Services/Services";
 import DemoLayout from "../../../Layout/Demoproject";
 
 const AddManagerToKitchen = () => {
@@ -15,14 +15,12 @@ const AddManagerToKitchen = () => {
   useEffect(() => {
     getUserData(`/kitchen/manager/add/${id}`).then((res) => {
       setDelivery(res.no_active_employe);
-      console.log(res);
     });
   }, [status]);
 
   useEffect(() => {
     getUserData(`/kitchen/manager/add/${id}`).then((res) => {
       setBusyDelivery(res.active_employe[0].employes);
-      console.log(res.active_employe[0].employes);
     });
   }, [status]);
 
@@ -59,8 +57,6 @@ const AddManagerToKitchen = () => {
   };
 
   const handleAddDeliver2 = () => {
-    console.log(busyDelivery);
-    console.log(selectedItems2);
     const formData = new FormData();
     busyDelivery.forEach((item) => {
       if (!selectedItems2[item.id]) {

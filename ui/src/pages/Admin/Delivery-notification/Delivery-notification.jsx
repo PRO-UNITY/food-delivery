@@ -1,11 +1,11 @@
 import { useState } from "react";
-import DeliveryAdminLayout from "../../../Layout/Delivery-admin-layout";
+import DeliveryAdminLayout from "../../../Layout/DeliveryAdminLayout";
 
 const DeliveryNotification = () => {
   const [showMenu, setshowMenu] = useState(false);
   return (
     <DeliveryAdminLayout>
-       <div className="hrms-dashboasrd-home mt-4 overflow-auto">
+      <div className="hrms-dashboasrd-home mt-4 overflow-auto">
         <div className="container">
           <h3>Notifications</h3>
           <div className="card w-100 p-0 rounded overflow-hidden">
@@ -19,9 +19,7 @@ const DeliveryNotification = () => {
                   <td>
                     <h6 className="m-0 mt-2">
                       <i className="fa-solid fa-circle-exclamation text-primary"></i>
-                      <span className="text-primary fw-normal">
-                        14:02
-                      </span>
+                      <span className="text-primary fw-normal">14:02</span>
                     </h6>
                     <span className="text-secondary">Incoming Time</span>
                   </td>
@@ -57,9 +55,7 @@ const DeliveryNotification = () => {
                   <td>
                     <h6 className="m-0 mt-2">
                       <i className="fa-solid fa-circle-exclamation text-primary"></i>
-                      <span className="text-primary fw-normal">
-                        22:05
-                      </span>
+                      <span className="text-primary fw-normal">22:05</span>
                     </h6>
                     <span className="text-secondary">Incoming Time</span>
                   </td>

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { postData } from "../../Functions/Function";
+import { postData } from "../../Services/Services";
 
 const Login = () => {
   const usernameRef = useRef();

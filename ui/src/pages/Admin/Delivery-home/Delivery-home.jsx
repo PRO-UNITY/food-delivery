@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./Delivery-dash.css";
 import { Link } from "react-router-dom";
-import DeliveryAdminLayout from "../../../Layout/Delivery-admin-layout";
+import DeliveryAdminLayout from "../../../Layout/DeliveryAdminLayout";
 const btns = [
   { id: 1, name: "Active", count: 8 },
   { id: 2, name: "Inactive", count: 24 },

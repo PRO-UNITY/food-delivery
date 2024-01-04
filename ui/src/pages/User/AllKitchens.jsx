@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import DemoLayout from "../../Layout/Demoproject";
-import { getDataWithToken } from "../../Functions/Function";
-import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
-import PaginationCard from "../../CleanComponents/Pagination";
-import KitchenCard from "../../CleanComponents/KitchenCard";
+import { getDataWithToken } from "../../Services/Services";
+import PaginationCard from "../../Components/SubComponents/Pagination";
+import KitchenCard from "../../Components/SubComponents/KitchenCard";
+import Loader from "../../Components/SubComponents/Loader";
 
 const AllKitchens = () => {
   const [kitchen, setKitchen] = useState([]);
@@ -16,6 +15,9 @@ const AllKitchens = () => {
   useEffect(() => {
     getDataWithToken(`/kitchen/`).then((res) => {
       const partKitchen = res.data.results;
+      const residual = res.data.count % 10;
+      const pages = (res.data.count - residual) / 10;
+      setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
       setKitchen(partKitchen);
       setLoading(false);
     });
@@ -24,21 +26,10 @@ const AllKitchens = () => {
   return (
     <DemoLayout setSearch={setSearch}>
       {loading ? (
-        <div className="container body-main d-flex justify-content-center align-items-center py-5">
-          <Button variant="warning" disabled>
-            <Spinner
-              as="span"
-              animation="grow"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-            />
-            Loading...
-          </Button>
-        </div>
+        <Loader />
       ) : (
         <div className="body-main w-100 p-5">
-          <h3 style={{ fontWeight: 700 }}>All Restaurants</h3>
+          <h3>All Restaurants</h3>
           <div className="foods">
             {kitchen.map((item, index) => (
               <KitchenCard key={index} {...item} />

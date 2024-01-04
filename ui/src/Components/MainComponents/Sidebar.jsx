@@ -1,7 +1,7 @@
-import "../pages/Demo.css";
-import { NavLink, Link } from "react-router-dom";
+import "../../pages/Demo.css";
 import { useEffect, useState } from "react";
-import { getDataWithToken, BASE_URL } from "../Functions/Function";
+import { NavLink, Link, Outlet } from "react-router-dom";
+import { getDataWithToken, BASE_URL } from "../../Services/Services";
 
 const DemoSidebar = ({ showSidebar }) => {
   const [user, setUser] = useState(null);
@@ -204,7 +204,6 @@ const DemoSidebar = ({ showSidebar }) => {
               <p className="p-0 m-0 mb-2">
                 Upgrade your <br /> Account to Get Free <br /> Vaucher
               </p>
-              {/* <button className='btn-vaucher'>Upgrade</button> */}
             </div>
           </div>
         </div>

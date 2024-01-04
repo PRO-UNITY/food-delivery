@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DemoLayout from "../../Layout/Demoproject";
-import { getUserData } from "../../Functions/Function";
-import { Link, useNavigate } from "react-router-dom";
+import { getUserData } from "../../Services/Services";
 import axios from "axios";
 
 const UpdateSettings = () => {
@@ -108,10 +108,7 @@ const UpdateSettings = () => {
               className="form-control mb-3"
             />
             <div className="w-100 d-flex justify-content-center">
-              <button
-                style={{ border: "none" }}
-                className="btn-sign-in bg-orange mx-auto w-50"
-              >
+              <button className="btn-sign-in bg-orange mx-auto w-50 border-0">
                 save
               </button>
             </div>

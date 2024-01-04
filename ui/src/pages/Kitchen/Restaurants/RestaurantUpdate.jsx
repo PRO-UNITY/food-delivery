@@ -1,10 +1,9 @@
-import { useState } from "react";
-import DemoLayout from "../../../Layout/Demoproject";
-import { EditWithFormData, getUserData } from "../../../Functions/Function";
-import { useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import "../../Demo.css";
-import { useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import DemoLayout from "../../../Layout/Demoproject";
+import { EditWithFormData, getUserData } from "../../../Services/Services";
+
 
 const RestaurantUpdate = () => {
   const [search, setSearch] = useState("");
@@ -48,10 +47,7 @@ const RestaurantUpdate = () => {
     <DemoLayout setSearch={setSearch}>
       <div className="body-main w-100 p-5">
         <div className="card w-100">
-          <div
-            style={{ background: "#F8B602" }}
-            className="card-header  text-light"
-          >
+          <div className="card-header text-light">
             <h3>Update Restaurant</h3>
           </div>
           <div className="card-body">

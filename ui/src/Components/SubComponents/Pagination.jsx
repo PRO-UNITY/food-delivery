@@ -19,7 +19,7 @@ const PaginationCard = (props) => {
     }
   };
 
-  return (
+  return (  
     <Pagination className="mt-4">
       <Pagination.Prev onClick={handlePrevPage} disabled={currentPage === 1} />
       {[...Array(totalPages).keys()].map((page) => (

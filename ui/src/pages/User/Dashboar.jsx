@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import DemoLayout from "../../Layout/Demoproject";
-import { getDataWithToken, getUserData } from "../../Functions/Function";
 import { Link } from "react-router-dom";
-import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
-import FoodCard from "../../CleanComponents/FoodCard";
-import KitchenCard from "../../CleanComponents/KitchenCard";
-import CategoryCard from "../../CleanComponents/CategoryCard";
-import PaginationCard from "../../CleanComponents/Pagination";
+import DemoLayout from "../../Layout/Demoproject";
+import { getDataWithToken, getUserData } from "../../Services/Services";
+import FoodCard from "../../Components/SubComponents/FoodCard";
+import KitchenCard from "../../Components/SubComponents/KitchenCard";
+import CategoryCard from "../../Components/SubComponents/CategoryCard";
+import PaginationCard from "../../Components/SubComponents/Pagination";
+import Loader from "../../Components/SubComponents/Loader";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -46,7 +45,7 @@ const Dashboard = () => {
       const pages = (res.data.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
     });
-  }, [search, isactive, token]);
+  }, [search, counter, token]);
 
   useEffect(() => {
     const func = token ? getUserData : getDataWithToken;
@@ -55,23 +54,12 @@ const Dashboard = () => {
       setFood(partFood);
       setLoading(false);
     });
-  }, [token, isactive]);
+  }, [token, counter]);
 
   return (
     <DemoLayout setSearch={setSearch} counter={counter}>
       {loading ? (
-        <div className="container body-main d-flex justify-content-center align-items-center py-5">
-          <Button variant="warning" disabled>
-            <Spinner
-              as="span"
-              animation="grow"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-            />
-            Loading...
-          </Button>
-        </div>
+        <Loader />
       ) : (
         <div className="w-100 body-main  px-5 py-1">
           {search != "" ? (
@@ -104,11 +92,10 @@ const Dashboard = () => {
                 </p>
               </div>
               <div className="d-flex justify-content-between align-items-center mb-3">
-                <h3 style={{ fontWeight: "bold" }}>Category</h3>
+                <h3>Category</h3>
                 <Link
                   to={"/allcategories"}
-                  style={{ fontWeight: 600, textDecoration: "none" }}
-                  className="orange text-center mb-1 btn-none"
+                  className="text-orange text-center mb-1 btn-none text-link"
                 >
                   View All <i className="fa-solid fa-angle-right"></i>
                 </Link>
@@ -119,11 +106,10 @@ const Dashboard = () => {
                 ))}
               </div>
               <div className="d-flex justify-content-between align-items-center mb-3">
-                <h3 style={{ fontWeight: "bold" }}>Restaurants</h3>
+                <h3>Restaurants</h3>
                 <Link
                   to={"/allkitchens"}
-                  style={{ fontWeight: 600, textDecoration: "none" }}
-                  className="orange text-center mb-1 btn-none"
+                  className="text-orange text-center mb-1 btn-none text-link"
                 >
                   View All <i className="fa-solid fa-angle-right"></i>
                 </Link>
@@ -134,11 +120,10 @@ const Dashboard = () => {
                 ))}
               </div>
               <div className="d-flex justify-content-between align-items-center mb-3">
-                <h3 style={{ fontWeight: "bold" }}>Popular Foods</h3>
+                <h3>Popular Foods</h3>
                 <Link
                   to={"/allfoods"}
-                  style={{ fontWeight: 600, textDecoration: "none" }}
-                  className="orange text-center mb-1 btn-none"
+                  className="text-orange text-center mb-1 btn-none text-link"
                 >
                   View All <i className="fa-solid fa-angle-right"></i>
                 </Link>

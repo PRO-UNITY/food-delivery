@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import DemoNavbar from "../Components/Navbar";
-import DemoSidebar from "../Components/Sidebar";
-import Profile from "../Components/Profile";
+import DemoNavbar from "../Components/MainComponents/Navbar";
+import DemoSidebar from "../Components/MainComponents/Sidebar";
+import Profile from "../Components/MainComponents/Profile";
 
 const DemoLayout = ({ children, setSearch, counter }) => {
   const [showSidebar, setshowSidebar] = useState(false);

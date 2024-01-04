@@ -1,11 +1,11 @@
 import { Nav, Navbar } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import "./Delivery-dash-navbar.css";
+import "./DeliveryDashNavbar.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
-import { getUserData } from "../../Functions/Function";
+import { getUserData } from "../../Services/Services";
 
 const DeliveryDashNavbar = () => {
   const [show, setShow] = useState(false);
