@@ -30,11 +30,12 @@ class Pagination:
 
 
 class PaginationMethod(Pagination):
-
     def page(self, instance, serializers):
         page = super().paginate_queryset(instance)
         if page is not None:
-            serializer = super().get_paginated_response(serializers(page, many=True).data)
+            serializer = super().get_paginated_response(
+                serializers(page, many=True).data
+            )
         else:
             serializer = serializers(instance, many=True)
         return serializer
