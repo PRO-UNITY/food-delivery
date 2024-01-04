@@ -17,7 +17,6 @@ class KitchenAddDeliveryman(APIView):
     permission = [IsAuthenticated]
 
     @check_kitchen_permission
-    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request, pk):
         objects_get = Restaurants.objects.filter(id=pk)
         queryset = CustomUser.objects.filter(user_id=request.user.id, groups__name__in=["delivery"], active_profile=True, delivery__isnull=True)

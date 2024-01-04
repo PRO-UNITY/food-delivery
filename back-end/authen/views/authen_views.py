@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.decorators import action
 from authen.renderers import UserRenderers
 from authen.models import CustomUser
 from authen.utils import Util
@@ -44,7 +45,11 @@ class UserSignUp(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
-    @swagger_auto_schema(request_body=UserSignUpSerializer)
+    @action(methods=['post'], detail=False)
+    @swagger_auto_schema(
+        request_body=UserSignUpSerializer,
+        responses={201: "Created - Item created successfully",},
+        tags=["auth"],)
     def post(self, request):
         expected_fields = set(["username", "password", "confirm_password", "first_name", "last_name", "email", "role"])
         received_fields = set(request.data.keys())
@@ -63,7 +68,11 @@ class UserSignUp(APIView):
 class UserSignIn(APIView):
     render_classes = [UserRenderers]
 
-    @swagger_auto_schema(request_body=UserSigInSerializer)
+    @action(methods=['post'], detail=True)
+    @swagger_auto_schema(
+        request_body=UserSigInSerializer,
+        responses={201: "Created - Item created successfully",},
+        tags=["auth"],)
     def post(self, request):
         expected_fields = set(["username", "password"])
         received_fields = set(request.data.keys())
@@ -88,7 +97,6 @@ class UserProfile(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
-    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request):
         if request.user.is_authenticated:
             serializer = UserInformationSerializer(request.user, context={"request": request})
@@ -96,7 +104,11 @@ class UserProfile(APIView):
         else:
             return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @swagger_auto_schema(request_body=UserUpdateSerializer)
+    @action(methods=['put'], detail=True)
+    @swagger_auto_schema(
+        request_body=UserUpdateSerializer,
+        responses={201: "update - Item update successfully",},
+        tags=["auth"],)
     def put(self, request, *args, **kwarg):
         if request.user.is_authenticated:
             expected_fields = set(["username", "password", "confirm_password", "first_name", "last_name", "avatar", "email", "role", "phone", "latitude", "longitude",])
@@ -123,7 +135,6 @@ class UserProfile(APIView):
             return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-@extend_schema(request=ChangePasswordSerializer, responses={201: ChangePasswordSerializer})
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def change_password(request):
@@ -183,7 +194,7 @@ class UserLogout(APIView):
     serializer_class = LogoutSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    @swagger_auto_schema(request_body=LogoutSerializer)
+    @action(methods=['post'], detail=False)
     def post(self, request):
         expected_fields = set(["refresh"])
         received_fields = set(request.data.keys())
@@ -203,6 +214,7 @@ class RequestPasswordRestEmail(generics.GenericAPIView):
     serializer_class = ResetPasswordSerializer
 
     @swagger_auto_schema(request_body=ResetPasswordSerializer)
+    @action(methods=['post'], detail=False)
     def post(self, request):
         email = request.data.get("email")
         print(email)
@@ -228,7 +240,7 @@ class RequestPasswordRestEmail(generics.GenericAPIView):
 class PasswordTokenCheckView(generics.GenericAPIView):
     serializer_class = UserInformationSerializer
 
-    @swagger_auto_schema(request_body=UserInformationSerializer)
+    @action(methods=['get'], detail=False)
     def get(self, request, uidb64, token):
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
@@ -244,7 +256,7 @@ class PasswordTokenCheckView(generics.GenericAPIView):
 class SetNewPasswordView(generics.GenericAPIView):
     serializer_class = PasswordResetCompleteSerializer
 
-    @swagger_auto_schema(request_body=PasswordResetCompleteSerializer)
+    @action(methods=['patch'], detail=False)
     def patch(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)

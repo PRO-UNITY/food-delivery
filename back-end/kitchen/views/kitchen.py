@@ -58,7 +58,6 @@ class KitchensView(APIView, Pagination):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "description", "is_active", "open_time", "close_time"]
 
-    @swagger_auto_schema(request_body=KitchensSerializer)
     def get(self, request, format=None, *args, **kwargs):
         if request.user.is_authenticated:
             user_get = request.user
@@ -131,7 +130,6 @@ class KitchenAddDeliverymanView(APIView):
     permission = [IsAuthenticated]
 
     @check_kitchen_permission
-    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request, pk):
         objects_get = Restaurants.objects.filter(id=pk)
         queryset = CustomUser.objects.filter(user_id=request.user.id, groups__name__in=["delivery"], active_profile=True, delivery__isnull=True,)
@@ -160,7 +158,6 @@ class KitchenAddManagerView(APIView):
     permission = [IsAuthenticated]
 
     @check_kitchen_permission
-    @swagger_auto_schema(request_body=KitchensSerializer)
     def get(self, request, pk):
         objects_get = Restaurants.objects.filter(id=pk)
         queryset = CustomUser.objects.filter(user_id=request.user.id, groups__name__in=["manager"], active_profile=True, delivery__isnull=True,)

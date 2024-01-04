@@ -18,7 +18,6 @@ class KitchenFoodsView(APIView, Pagination):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "categories", "kitchen", "price"]
 
-    @swagger_auto_schema(request_body=KitchenFoodsSerializers)
     def get(self, request, format=None, *args, **kwargs):
         search_category = request.query_params.get("category", None)
         search_restaurant = request.query_params.get("restaurant", None)
@@ -44,7 +43,6 @@ class KitchenFoodView(APIView, Pagination):
     pagination_class = StandardResultsSetPagination
     serializer_class = KitchenFoodsSerializers
 
-    @swagger_auto_schema(request_body=KitchenFoodsSerializers)
     def get(self, request, pk, format=None, *args, **kwargs):
         instance = Foods.objects.filter(kitchen=pk)
         page = super().paginate_queryset(instance)
@@ -62,7 +60,6 @@ class KitchenCategoryFoodsView(APIView, Pagination):
     pagination_class = StandardResultsSetPagination
     serializer_class = KitchenFoodsSerializers
 
-    @swagger_auto_schema(request_body=KitchenFoodsSerializers)
     def get(self, request, id_category, pk, format=None, *args, **kwargs):
         queryset = Foods.objects.filter(categories=id_category, kitchen=pk)
         page = super().paginate_queryset(queryset)

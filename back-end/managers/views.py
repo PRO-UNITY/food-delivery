@@ -32,7 +32,6 @@ class ManagersView(APIView, Pagination):
     filterset_fields = ["username", "categories", "kitchen", "price"]
 
     @check_kitchen_permission
-    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request, format=None, *args, **kwargs):
         user = request.user
         username = request.query_params.get("username", None)
@@ -66,7 +65,6 @@ class ManagerView(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
-    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request, pk):
         queryset = get_object_or_404(CustomUser, id=pk)
         serializers = UserInformationSerializer(queryset)
@@ -100,7 +98,6 @@ class ManagerKitchensViews(APIView):
     permission = [IsAuthenticated]
 
     @check_manager_permission
-    @swagger_auto_schema(request_body=KitchensSerializer)
     def get(self, request):
         queryset = Restaurants.objects.filter(deliveryman_user=request.user)
         serializers = KitchensSerializer(queryset, many=True, context={"request": request})

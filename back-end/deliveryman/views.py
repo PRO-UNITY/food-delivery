@@ -20,7 +20,6 @@ class RegisterDelivery(APIView, Pagination):
     serializer_class = UserInformationSerializer
 
     @check_kitchen_permission
-    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request, format=None, *args, **kwargs):
         user = request.user
         instance = CustomUser.objects.filter(groups__name__in=["delivery"], user_id=user.id)
@@ -50,7 +49,6 @@ class UserDelivery(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
-    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request, pk):
         queryset = get_object_or_404(CustomUser, id=pk)
         serializer = UserInformationSerializer(queryset, context={"request": request})
@@ -76,7 +74,6 @@ class UserDelivery(APIView):
         return Response({"error": "Update error data"}, status=status.HTTP_400_BAD_REQUEST)
 
     @check_kitchen_permission
-    @extend_schema(responses={200: "Success"})
     def delete(self, request, pk):
         queryset = get_object_or_404(CustomUser, id=pk)
         queryset.delete()
