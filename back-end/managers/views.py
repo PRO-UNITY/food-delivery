@@ -12,7 +12,10 @@ from utils.pagination import StandardResultsSetPagination
 from authen.models import CustomUser
 from kitchen.models import Restaurants
 from drf_yasg.utils import swagger_auto_schema
-from utils.user_permission import check_kitchen_permission, check_manager_permission
+from utils.user_permission import (
+    check_kitchen_permission,
+    check_manager_permission
+)
 from managers.serializers import (
     UserInformationSerializer,
     ManagerSignUpSerializer,
@@ -29,6 +32,7 @@ class ManagersView(APIView, Pagination):
     filterset_fields = ["username", "categories", "kitchen", "price"]
 
     @check_kitchen_permission
+    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request, format=None, *args, **kwargs):
         user = request.user
         username = request.query_params.get("username", None)
@@ -40,7 +44,7 @@ class ManagersView(APIView, Pagination):
         queryset = queryset.order_by(order_by_field)
         page = super().paginate_queryset(queryset)
         serializer = self.serializer_class(page, many=True, context={"request": request}) if page else self.serializer_class(queryset, many=True)
-        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+        return super().get_paginated_response(serializer.data)
 
     @check_kitchen_permission
     @swagger_auto_schema(request_body=ManagerSignUpSerializer)
@@ -62,14 +66,14 @@ class ManagerView(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
-    @extend_schema(request=UserInformationSerializer, responses={201: UserInformationSerializer})
+    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request, pk):
         queryset = get_object_or_404(CustomUser, id=pk)
         serializers = UserInformationSerializer(queryset)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @check_kitchen_permission
-    @extend_schema(request=ManagerSignUpSerializer, responses={201: ManagerSignUpSerializer})
+    @swagger_auto_schema(request_body=ManagerSignUpSerializer)
     def put(self, request, pk):
         expected_fields = set(["username", "password", "confirm_password", "first_name", "last_name", "email", "groups", "active_profile", "user_id", "phone", "latitude", "longitude",])
         received_fields = set(request.data.keys())
@@ -96,7 +100,7 @@ class ManagerKitchensViews(APIView):
     permission = [IsAuthenticated]
 
     @check_manager_permission
-    @extend_schema(request=KitchensSerializer, responses={201: KitchensSerializer})
+    @swagger_auto_schema(request_body=KitchensSerializer)
     def get(self, request):
         queryset = Restaurants.objects.filter(deliveryman_user=request.user)
         serializers = KitchensSerializer(queryset, many=True, context={"request": request})

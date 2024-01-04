@@ -1,12 +1,12 @@
 from rest_framework.response import Response
-from utils.pagination import Pagination
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
-from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from drf_yasg.utils import swagger_auto_schema
+from utils.pagination import Pagination
 from utils.pagination import StandardResultsSetPagination
 from utils.user_permission import check_kitchen_permission
 from authen.serializers.authen_serializers import UserInformationSerializer
@@ -58,6 +58,7 @@ class KitchensView(APIView, Pagination):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "description", "is_active", "open_time", "close_time"]
 
+    @swagger_auto_schema(request_body=KitchensSerializer)
     def get(self, request, format=None, *args, **kwargs):
         if request.user.is_authenticated:
             user_get = request.user
@@ -79,7 +80,7 @@ class KitchensView(APIView, Pagination):
             return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @check_kitchen_permission
-    @extend_schema(request=KitchenSerializers, responses={201: KitchenSerializers})
+    @swagger_auto_schema(request_body=KitchenSerializers)
     def post(self, request):
         expected_fields = set(["name", "logo", "description", "user", "is_active", "open_time", "close_time", "latitude", "longitude",])
         received_fields = set(request.data.keys())
@@ -104,7 +105,7 @@ class KitchenView(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @check_kitchen_permission
-    @extend_schema(request=KitchenSerializers, responses={201: KitchenSerializers})
+    @swagger_auto_schema(request_body=KitchenSerializers)
     def put(self, request, pk):
         expected_fields = set(["name", "logo", "description", "user_id", "is_active", "open_time", "close_time", "latitude", "longitude",])
         received_fields = set(request.data.keys())
@@ -130,7 +131,7 @@ class KitchenAddDeliverymanView(APIView):
     permission = [IsAuthenticated]
 
     @check_kitchen_permission
-    @extend_schema(request=UserInformationSerializer, responses={201: UserInformationSerializer})
+    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request, pk):
         objects_get = Restaurants.objects.filter(id=pk)
         queryset = CustomUser.objects.filter(user_id=request.user.id, groups__name__in=["delivery"], active_profile=True, delivery__isnull=True,)
@@ -139,7 +140,7 @@ class KitchenAddDeliverymanView(APIView):
         return Response({"active_employe": active_deliverman.data, "no_active_employe": no_active_deliveryman.data,}, status=status.HTTP_200_OK,)
 
     @check_kitchen_permission
-    @extend_schema(request=KitchenSerializers, responses={201: KitchenSerializers})
+    @swagger_auto_schema(request_body=KitchenSerializers)
     def put(self, request, pk):
         expected_fields = set(["employes"])
         received_fields = set(request.data.keys())
@@ -159,7 +160,7 @@ class KitchenAddManagerView(APIView):
     permission = [IsAuthenticated]
 
     @check_kitchen_permission
-    @extend_schema(request=UserInformationSerializer, responses={201: UserInformationSerializer})
+    @swagger_auto_schema(request_body=KitchensSerializer)
     def get(self, request, pk):
         objects_get = Restaurants.objects.filter(id=pk)
         queryset = CustomUser.objects.filter(user_id=request.user.id, groups__name__in=["manager"], active_profile=True, delivery__isnull=True,)
@@ -168,7 +169,7 @@ class KitchenAddManagerView(APIView):
         return Response({"active_employe": active_deliverman.data, "no_active_employe": no_active_deliveryman.data,}, status=status.HTTP_200_OK,)
 
     @check_kitchen_permission
-    @extend_schema(request=KitchenSerializers, responses={201: KitchenSerializers})
+    @swagger_auto_schema(request_body=KitchenSerializers)
     def put(self, request, pk):
         expected_fields = set(["employes"])
         received_fields = set(request.data.keys())
@@ -180,4 +181,4 @@ class KitchenAddManagerView(APIView):
         if serializers.is_valid(raise_exception=True):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_200_OK)
-        return Response({"error": "update error data"},status=status.HTTP_400_BAD_REQUEST,)
+        return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST,)

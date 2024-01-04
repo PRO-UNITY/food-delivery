@@ -14,6 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from drf_yasg.utils import swagger_auto_schema
 from authen.renderers import UserRenderers
 from authen.models import CustomUser
 from authen.utils import Util
@@ -43,7 +44,7 @@ class UserSignUp(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
-    @extend_schema(request=UserSignUpSerializer, responses={201: UserSignUpSerializer})
+    @swagger_auto_schema(request_body=UserSignUpSerializer)
     def post(self, request):
         expected_fields = set(["username", "password", "confirm_password", "first_name", "last_name", "email", "role"])
         received_fields = set(request.data.keys())
@@ -62,7 +63,7 @@ class UserSignUp(APIView):
 class UserSignIn(APIView):
     render_classes = [UserRenderers]
 
-    @extend_schema(request=UserSigInSerializer, responses={201: UserSigInSerializer})
+    @swagger_auto_schema(request_body=UserSigInSerializer)
     def post(self, request):
         expected_fields = set(["username", "password"])
         received_fields = set(request.data.keys())
@@ -87,7 +88,7 @@ class UserProfile(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
-    @extend_schema(request=UserInformationSerializer, responses={201: UserInformationSerializer})
+    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request):
         if request.user.is_authenticated:
             serializer = UserInformationSerializer(request.user, context={"request": request})
@@ -95,10 +96,7 @@ class UserProfile(APIView):
         else:
             return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @extend_schema(
-        request=UserUpdateSerializer,
-        responses={201: UserUpdateSerializer},
-    )
+    @swagger_auto_schema(request_body=UserUpdateSerializer)
     def put(self, request, *args, **kwarg):
         if request.user.is_authenticated:
             expected_fields = set(["username", "password", "confirm_password", "first_name", "last_name", "avatar", "email", "role", "phone", "latitude", "longitude",])
@@ -185,7 +183,7 @@ class UserLogout(APIView):
     serializer_class = LogoutSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    @extend_schema(request=LogoutSerializer, responses={201: LogoutSerializer})
+    @swagger_auto_schema(request_body=LogoutSerializer)
     def post(self, request):
         expected_fields = set(["refresh"])
         received_fields = set(request.data.keys())
@@ -204,7 +202,7 @@ class UserLogout(APIView):
 class RequestPasswordRestEmail(generics.GenericAPIView):
     serializer_class = ResetPasswordSerializer
 
-    @extend_schema(request=ResetPasswordSerializer, responses={201: ResetPasswordSerializer})
+    @swagger_auto_schema(request_body=ResetPasswordSerializer)
     def post(self, request):
         email = request.data.get("email")
         print(email)
@@ -230,7 +228,7 @@ class RequestPasswordRestEmail(generics.GenericAPIView):
 class PasswordTokenCheckView(generics.GenericAPIView):
     serializer_class = UserInformationSerializer
 
-    @extend_schema(request=UserInformationSerializer, responses={201: UserInformationSerializer})
+    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request, uidb64, token):
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
@@ -246,7 +244,7 @@ class PasswordTokenCheckView(generics.GenericAPIView):
 class SetNewPasswordView(generics.GenericAPIView):
     serializer_class = PasswordResetCompleteSerializer
 
-    @extend_schema(request=PasswordResetCompleteSerializer, responses={201: PasswordResetCompleteSerializer})
+    @swagger_auto_schema(request_body=PasswordResetCompleteSerializer)
     def patch(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)

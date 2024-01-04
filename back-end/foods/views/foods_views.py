@@ -5,10 +5,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from utils.pagination import StandardResultsSetPagination
-from drf_spectacular.utils import extend_schema
+from drf_yasg.utils import swagger_auto_schema
 from authen.renderers import UserRenderers
 from foods.models import Foods
+from utils.pagination import StandardResultsSetPagination
 from utils.pagination import Pagination
 from utils.user_permission import check_kitchen_permission
 from foods.serializers.foods_serializers import (
@@ -74,7 +74,7 @@ class FoodsView(APIView, Pagination):
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @check_kitchen_permission
-    @extend_schema(request=FoodSerializer, responses={201: FoodSerializer},)
+    @swagger_auto_schema(request_body=FoodSerializer)
     def post(self, request):
         expected_fields = set(["name", "food_img", "description", "price", "kitchen", "categories", "create_at", "updated_at",])
         received_fields = set(request.data.keys())
@@ -99,7 +99,7 @@ class FoodViews(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @check_kitchen_permission
-    @extend_schema(request=FoodSerializer, responses={201: FoodSerializer},)
+    @swagger_auto_schema(request_body=FoodSerializer)
     def put(self, request, pk):
         expected_fields = set(["name", "food_img", "description", "price", "kitchen", "categories", "create_at", "updated_at",])
         received_fields = set(request.data.keys())

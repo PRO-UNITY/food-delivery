@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from drf_yasg.utils import swagger_auto_schema
 from authen.renderers import UserRenderers
 from utils.user_permission import check_kitchen_permission
 from authen.models import CustomUser
@@ -16,7 +17,7 @@ class KitchenAddDeliveryman(APIView):
     permission = [IsAuthenticated]
 
     @check_kitchen_permission
-    @extend_schema(request=UserInformationSerializer, responses={201: UserInformationSerializer})
+    @swagger_auto_schema(request_body=UserInformationSerializer)
     def get(self, request, pk):
         objects_get = Restaurants.objects.filter(id=pk)
         queryset = CustomUser.objects.filter(user_id=request.user.id, groups__name__in=["delivery"], active_profile=True, delivery__isnull=True)
@@ -25,7 +26,7 @@ class KitchenAddDeliveryman(APIView):
         return Response({'active_delivery': active_deliverman.data, 'no_active_deliveryman': no_active_deliveryman.data}, status=status.HTTP_200_OK)
 
     @check_kitchen_permission
-    @extend_schema(request=KitchenSerializers, responses={201: KitchenSerializers})
+    @swagger_auto_schema(request_body=KitchenSerializers)
     def put(self, request, pk):
         serializers = KitchenSerializers(context={"user_get": request.user.id}, instance=Restaurants.objects.filter(id=pk)[0], data=request.data, partial=True)
         if serializers.is_valid(raise_exception=True):

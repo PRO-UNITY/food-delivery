@@ -1,14 +1,15 @@
 from rest_framework import status
-from utils.pagination import Pagination
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
 from authen.renderers import UserRenderers
 from order.models import Orders
-from django.shortcuts import get_object_or_404
+from utils.pagination import Pagination
 from utils.pagination import StandardResultsSetPagination
 from utils.user_permission import check_user_permission, check_kitchen_permission
 from order.serializers import (
@@ -47,7 +48,7 @@ class SendViews(APIView, Pagination):
             return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @check_user_permission
-    @extend_schema(request=SendOrderSerializers, responses={201: SendOrderSerializers},)
+    @swagger_auto_schema(request_body=SendOrderSerializers)
     def post(self, request):
         expected_fields = set(["klient", "delivery", "status", "foods", "kitchen", "is_delivery", "is_active", "address", "total_price", "create_at", "updated_at",])
         received_fields = set(request.data.keys())
@@ -72,7 +73,7 @@ class OrderView(APIView, Pagination):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @check_user_permission
-    @extend_schema(request=SendOrderSerializers, responses={201: SendOrderSerializers},)
+    @swagger_auto_schema(request_body=SendOrderSerializers)
     def put(self, request, pk):
         expected_fields = set(["klient", "delivery", "status", "foods", "kitchen", "is_delivery", "is_active", "address", "total_price", "create_at", "updated_at",])
         received_fields = set(request.data.keys())

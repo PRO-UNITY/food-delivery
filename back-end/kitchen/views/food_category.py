@@ -1,11 +1,11 @@
 from rest_framework.response import Response
-from utils.pagination import Pagination
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
-from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from drf_yasg.utils import swagger_auto_schema
+from utils.pagination import Pagination
 from utils.pagination import StandardResultsSetPagination
 from authen.renderers import UserRenderers
 from utils.user_permission import check_admin_permission
@@ -38,7 +38,7 @@ class FoodCategoriesView(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     @check_admin_permission
-    @extend_schema(request=FoodCategorySerializer, responses={201: FoodCategorySerializer})
+    @swagger_auto_schema(request_body=FoodCategorySerializer)
     def post(self, request):
         expected_fields = set(["name", "create_at", "updated_at"])
         received_fields = set(request.data.keys())
@@ -82,7 +82,7 @@ class FoodCategoryView(APIView, Pagination):
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @check_admin_permission
-    @extend_schema(request=FoodCategorySerializer, responses={201: FoodCategorySerializer})
+    @swagger_auto_schema(request_body=FoodCategorySerializer)
     def put(self, request, pk):
         expected_fields = set(["name", "create_at", "updated_at"])
         received_fields = set(request.data.keys())

@@ -2,10 +2,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from utils.pagination import StandardResultsSetPagination
 from drf_spectacular.utils import extend_schema
+from drf_yasg.utils import swagger_auto_schema
 from authen.renderers import UserRenderers
 from foods.models import Foods, Favorite
+from utils.pagination import StandardResultsSetPagination
 from utils.pagination import Pagination
 from utils.user_permission import check_user_permission
 from foods.serializers.favourite_serializers import (
@@ -48,7 +49,7 @@ class FavouritesView(APIView, Pagination):
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     @check_user_permission
-    @extend_schema(request=FavoriteSerializer, responses={201: FavoriteSerializer})
+    @swagger_auto_schema(request_body=FavoriteSerializer)
     def post(self, request):
         serializers = FavoriteSerializer(data=request.data, context={"user": request.user})
         if serializers.is_valid(raise_exception=True):
