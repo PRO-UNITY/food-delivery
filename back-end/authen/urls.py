@@ -16,12 +16,9 @@ urlpatterns = [
     path('sigin', UserSignIn.as_view()),
     path('password', change_password),
     path('logout', UserLogout.as_view()),
-    path(
-        'password/reset',
-        RequestPasswordRestEmail.as_view()),
+    path('password/reset', RequestPasswordRestEmail.as_view()),
     path('password/confirm', SetNewPasswordView.as_view()),
     path('verification/email', SendEmailCode.as_view()),
-    # social views
     path('socail/google', GoogleView.as_view()),
     path('socail/facebook', FacebookLogin.as_view()),
 ]

@@ -50,26 +50,10 @@ class FoodCategorySerializer(serializers.ModelSerializer):
         fields = ["id", "name", "create_at", "updated_at"]
 
     def create(self, validated_data):
-        user_get = self.context.get("user_id")
-        groups = user_get.groups.all()
-        if groups:
-            if str(groups[0]) == "admins":
-                create_categories = FoodsCategories.objects.create(**validated_data)
-                return create_categories
-            else:
-                raise serializers.ValidationError({"error": "It is not possible to add information to such a user"})
-        else:
-            raise serializers.ValidationError({"error": "User does not belong to any role"})
+        create_categories = FoodsCategories.objects.create(**validated_data)
+        return create_categories
 
     def update(self, instance, validated_data):
-        user_get = self.context.get("user_id")
-        groups = user_get.groups.all()
-        if groups:
-            if str(groups[0]) == "admins":
-                instance.name = validated_data.get("name", instance.name)
-                instance.save()
-                return instance
-            else:
-                raise serializers.ValidationError({"error": "It is not possible to add information to such a user"})
-        else:
-            raise serializers.ValidationError({"error": "User does not belong to any role"})
+        instance.name = validated_data.get("name", instance.name)
+        instance.save()
+        return instance

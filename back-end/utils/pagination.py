@@ -1,3 +1,12 @@
+from rest_framework import pagination
+
+
+class StandardResultsSetPagination(pagination.PageNumberPagination):
+    page_size = 10
+    page_size_query_param = "limit"
+    max_page_size = 1000
+
+
 class Pagination:
     @property
     def paginator(self):
@@ -18,3 +27,14 @@ class Pagination:
     def get_paginated_response(self, data):
         assert self.paginator is not None
         return self.paginator.get_paginated_response(data)
+
+
+class PaginationMethod(Pagination):
+
+    def page(self, instance, serializers):
+        page = super().paginate_queryset(instance)
+        if page is not None:
+            serializer = super().get_paginated_response(serializers(page, many=True).data)
+        else:
+            serializer = serializers(instance, many=True)
+        return serializer
