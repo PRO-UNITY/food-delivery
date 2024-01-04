@@ -181,4 +181,4 @@ SWAGGER_SETTINGS = {
 }
 AUTH_USER_MODEL = "authentification.CustomUser"
 
-# FORCE_SCRIPT_NAME = "/food-delivery"
+FORCE_SCRIPT_NAME = "/food-delivery"
