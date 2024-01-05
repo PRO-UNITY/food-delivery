@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Outlet, useOutlet } from "react-router-dom";
 import DemoLayout from "../../../Layout/Demoproject";
 import { deleteData, getUserData } from "../../../Services/Services";
 import Loader from "../../../Components/SubComponents/Loader";
@@ -9,10 +9,12 @@ const RestaurantHome = () => {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [isactive, setIsactive] = useState(false);
+  const outlet = useOutlet()
 
   useEffect(() => {
     getUserData(`/kitchen/`).then((res) => {
       setRetaurant(res);
+      console.log(res);
       setLoading(false);
     });
   }, [isactive]);
@@ -27,40 +29,48 @@ const RestaurantHome = () => {
         <Loader />
       ) : (
         <div className="body-main w-100 p-5">
-          <div className="d-flex justify-content-between align-items-center">
-            <h3>All Restaurants</h3>
-            <Link to={"/add-restaurant"} className="text-orange">
-              Add Restaurant
-            </Link>
-          </div>
-          <div className="foods">
-            {retaurant.map((item, index) => (
-              <div key={index} className="restaurant-item">
-                <div className="category-item bg-white">
-                  <Link
-                    className="text-dark border-none"
-                    to={`/restaurant/${item.id}`}
-                  >
-                    <img
-                      className="logo-restaurant"
-                      src={`${
-                        item?.logo
-                          ? item?.logo
-                          : "https://www.freeiconspng.com/uploads/food-icon-7.png"
-                      }`}
-                    />
-                    <p className="name-category p-0 m-0 grey">{item?.name}</p>
-                  </Link>
-                </div>
-                <button
-                  onClick={() => deleteRestaurant(item.id)}
-                  className="trash"
-                >
-                  <i className="fa-solid fa-trash"></i>
-                </button>
+          {outlet ? (
+            <Outlet />
+          ) : (
+            <>
+              <div className="d-flex justify-content-between align-items-center">
+                <h3>All Restaurants</h3>
+                <Link to={"add"} className="text-orange">
+                  Add Restaurant
+                </Link>
               </div>
-            ))}
-          </div>
+              <div className="foods">
+                {retaurant?.map((item, index) => (
+                  <div key={index} className="restaurant-item">
+                    <div className="category-item bg-white">
+                      <Link
+                        className="text-dark border-none"
+                        to={`/restaurant/${item.id}`}
+                      >
+                        <img
+                          className="logo-restaurant"
+                          src={`${
+                            item?.logo
+                              ? item?.logo
+                              : "https://www.freeiconspng.com/uploads/food-icon-7.png"
+                          }`}
+                        />
+                        <p className="name-category p-0 m-0 grey">
+                          {item?.name}
+                        </p>
+                      </Link>
+                    </div>
+                    <button
+                      onClick={() => deleteRestaurant(item.id)}
+                      className="trash"
+                    >
+                      <i className="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       )}
     </DemoLayout>

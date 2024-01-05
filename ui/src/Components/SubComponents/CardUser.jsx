@@ -60,7 +60,7 @@ const CardUser = (props) => {
       <div className="d-flex justify-content-between w-100 align-items-center">
         <Link
           style={{ textDecoration: "none" }}
-          to={`/delivery/${id}`}
+          to={`${id}`}
           className={`btn btn-success`}
         >
           <i className="fa-solid fa-eye"></i> &nbsp; more

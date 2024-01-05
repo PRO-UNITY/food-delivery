@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import DemoLayout from "../../../Layout/Demoproject";
 import { EditWithFormData, getUserData } from "../../../Services/Services";
 
-
 const RestaurantUpdate = () => {
   const [search, setSearch] = useState("");
   const [data, setData] = useState({});
@@ -44,65 +43,63 @@ const RestaurantUpdate = () => {
   }, []);
 
   return (
-    <DemoLayout setSearch={setSearch}>
-      <div className="body-main w-100 p-5">
-        <div className="card w-100">
-          <div className="card-header text-light">
-            <h3>Update Restaurant</h3>
-          </div>
-          <div className="card-body">
-            <form onSubmit={handleSubmit}>
-              <input
-                defaultValue={data.name}
-                ref={nameRef}
-                type="text"
-                placeholder="name"
-                className="form-control mb-2"
-              />
-              <input
-                defaultValue={data.description}
-                ref={descriptionRef}
-                type="text"
-                placeholder="description"
-                className="form-control mb-2"
-              />
-              <input ref={imgRef} type="file" className="form-control mb-2" />
-              <input
-                defaultValue={data.open_time}
-                ref={openref}
-                type="text"
-                placeholder="open_time"
-                className="form-control mb-2"
-              />
-              <input
-                defaultValue={data.close_time}
-                ref={closeref}
-                type="text"
-                placeholder="close_time"
-                className="form-control mb-2"
-              />
-              <input
-                defaultValue={data.latitude}
-                ref={latituderef}
-                type="text"
-                placeholder="latitude"
-                className="form-control mb-2"
-              />
-              <input
-                defaultValue={data.longitude}
-                ref={longitudref}
-                type="text"
-                placeholder="longitude"
-                className="form-control mb-2"
-              />
-              <button type="submit" className="btn-orange">
-                save
-              </button>
-            </form>
-          </div>
+    <>
+      <div className="card w-100">
+        <div className="card-header text-light">
+          <h3>Update Restaurant</h3>
+        </div>
+        <div className="card-body">
+          <form onSubmit={handleSubmit}>
+            <input
+              defaultValue={data.name}
+              ref={nameRef}
+              type="text"
+              placeholder="name"
+              className="form-control mb-2"
+            />
+            <input
+              defaultValue={data.description}
+              ref={descriptionRef}
+              type="text"
+              placeholder="description"
+              className="form-control mb-2"
+            />
+            <input ref={imgRef} type="file" className="form-control mb-2" />
+            <input
+              defaultValue={data.open_time}
+              ref={openref}
+              type="text"
+              placeholder="open_time"
+              className="form-control mb-2"
+            />
+            <input
+              defaultValue={data.close_time}
+              ref={closeref}
+              type="text"
+              placeholder="close_time"
+              className="form-control mb-2"
+            />
+            <input
+              defaultValue={data.latitude}
+              ref={latituderef}
+              type="text"
+              placeholder="latitude"
+              className="form-control mb-2"
+            />
+            <input
+              defaultValue={data.longitude}
+              ref={longitudref}
+              type="text"
+              placeholder="longitude"
+              className="form-control mb-2"
+            />
+            <button type="submit" className="btn-orange">
+              save
+            </button>
+          </form>
         </div>
       </div>
-    </DemoLayout>
+    </>
   );
 };
 

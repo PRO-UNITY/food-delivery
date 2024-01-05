@@ -30,59 +30,57 @@ const RestaurantAdd = () => {
   };
 
   return (
-    <DemoLayout setSearch={setSearch}>
-      <div className="body-main w-100 p-5">
-        <div className="card w-100">
-          <div className="card-header  text-light">
-            <h3>Add Restaurant</h3>
-          </div>
-          <div className="card-body">
-            <form onSubmit={handleSubmit}>
-              <input
-                ref={nameRef}
-                type="text"
-                placeholder="name"
-                className="form-control mb-2"
-              />
-              <input
-                ref={descriptionRef}
-                type="text"
-                placeholder="description"
-                className="form-control mb-2"
-              />
-              <input ref={imgRef} type="file" className="form-control mb-2" />
-              <input
-                ref={openref}
-                type="text"
-                placeholder="open_time"
-                className="form-control mb-2"
-              />
-              <input
-                ref={closeref}
-                type="text"
-                placeholder="close_time"
-                className="form-control mb-2"
-              />
-              <input
-                ref={latituderef}
-                type="text"
-                placeholder="latitude"
-                className="form-control mb-2"
-              />
-              <input
-                ref={longitudref}
-                type="text"
-                placeholder="longitude"
-                className="form-control mb-2"
-              />
-              <button type="submit" className="btn-orange">
-                create
-              </button>
-            </form>
-          </div>
+    <>
+      <div className="card w-100">
+        <div className="card-header  text-light">
+          <h3>Add Restaurant</h3>
+        </div>
+        <div className="card-body">
+          <form onSubmit={handleSubmit}>
+            <input
+              ref={nameRef}
+              type="text"
+              placeholder="name"
+              className="form-control mb-2"
+            />
+            <input
+              ref={descriptionRef}
+              type="text"
+              placeholder="description"
+              className="form-control mb-2"
+            />
+            <input ref={imgRef} type="file" className="form-control mb-2" />
+            <input
+              ref={openref}
+              type="text"
+              placeholder="open_time"
+              className="form-control mb-2"
+            />
+            <input
+              ref={closeref}
+              type="text"
+              placeholder="close_time"
+              className="form-control mb-2"
+            />
+            <input
+              ref={latituderef}
+              type="text"
+              placeholder="latitude"
+              className="form-control mb-2"
+            />
+            <input
+              ref={longitudref}
+              type="text"
+              placeholder="longitude"
+              className="form-control mb-2"
+            />
+            <button type="submit" className="btn-orange">
+              create
+            </button>
+          </form>
         </div>
       </div>
-    </DemoLayout>
+    </>
   );
 };
 

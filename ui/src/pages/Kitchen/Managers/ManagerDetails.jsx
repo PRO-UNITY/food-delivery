@@ -19,21 +19,19 @@ const KitchenManagerDetails = () => {
     });
   }, []);
   return (
-    <DemoLayout setSearch={setSearch}>
-      <div className="body-main w-100 p-5">
-        <h3 className="mb-3">Settings</h3>
-        {
-          <div className="settings">
-            <div className="container-avatar">
-              <img className="avatar-user" src={Supplier} alt="" />
-            </div>
-            <div className="w-100 mt-5">
-              <ListProfile {...data} />
-            </div>
+    <>
+      <h3 className="mb-3">Settings</h3>
+      {
+        <div className="settings">
+          <div className="container-avatar">
+            <img className="avatar-user" src={Supplier} alt="" />
           </div>
-        }
-      </div>
-    </DemoLayout>
+          <div className="w-100 mt-5">
+            <ListProfile {...data} />
+          </div>
+        </div>
+      }
+    </>
   );
 };
 

@@ -70,82 +70,81 @@ const AddDeliverToKitchen = () => {
   };
 
   return (
-    <DemoLayout setSearch={setSearch}>
-      <div className="body-main w-100 p-5">
-        <div className="d-flex flex-column justify-content-start align-items-start gap-2 w-100 vh-100 p-1">
-          <div className="border p-3 rounded-2 w-100">
-            <h4>Deliveries</h4>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">N</th>
-                  <th scope="col">Full name</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">Select</th>
+    <>
+      <div className="d-flex flex-column justify-content-start align-items-start gap-2 w-100 vh-100 p-1">
+          
+        <div className="border p-3 rounded-2 w-100">
+          <h4>Deliveries</h4>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">N</th>
+                <th scope="col">Full name</th>
+                <th scope="col">Username</th>
+                <th scope="col">Select</th>
+              </tr>
+            </thead>
+            <tbody>
+              {delivery?.map((item, index) => (
+                <tr className="align-middle" key={item.id}>
+                  <th>{index + 1}</th>
+                  <td>{`${item.first_name} ${item.last_name}`}</td>
+                  <td>{item.username}</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedItems[item.id] || false}
+                      onChange={() => handleCheckboxChange(item.id)}
+                    />
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {delivery?.map((item, index) => (
-                  <tr className="align-middle" key={item.id}>
-                    <th>{index + 1}</th>
-                    <td>{`${item.first_name} ${item.last_name}`}</td>
-                    <td>{item.username}</td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedItems[item.id] || false}
-                        onChange={() => handleCheckboxChange(item.id)}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <button
-              onClick={handleAddDeliver}
-              className="btn btn-outline-primary float-end"
-            >
-              add deliver
-            </button>
-          </div>
-          <div className="border p-3 rounded-2 w-100">
-            <h4>Deliveries of this restaurant</h4>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">N</th>
-                  <th scope="col">Full name</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">Select</th>
+              ))}
+            </tbody>
+          </table>
+          <button
+            onClick={handleAddDeliver}
+            className="btn btn-outline-primary float-end"
+          >
+            add deliver
+          </button>
+        </div>
+        <div className="border p-3 rounded-2 w-100">
+          <h4>Deliveries of this restaurant</h4>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">N</th>
+                <th scope="col">Full name</th>
+                <th scope="col">Username</th>
+                <th scope="col">Select</th>
+              </tr>
+            </thead>
+            <tbody>
+              {busyDelivery?.map((item, index) => (
+                <tr className="align-middle" key={item.id}>
+                  <th>{index + 1}</th>
+                  <td>{`${item.first_name} ${item.last_name}`}</td>
+                  <td>{item.username}</td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={selectedItems2[item.id] || false}
+                      onChange={() => handleCheckboxChange2(item.id)}
+                    />
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {busyDelivery?.map((item, index) => (
-                  <tr className="align-middle" key={item.id}>
-                    <th>{index + 1}</th>
-                    <td>{`${item.first_name} ${item.last_name}`}</td>
-                    <td>{item.username}</td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={selectedItems2[item.id] || false}
-                        onChange={() => handleCheckboxChange2(item.id)}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <button
-              onClick={handleAddDeliver2}
-              className="btn btn-outline-primary float-end"
-            >
-              add deliver
-            </button>
-          </div>
+              ))}
+            </tbody>
+          </table>
+          <button
+            onClick={handleAddDeliver2}
+            className="btn btn-outline-primary float-end"
+          >
+            add deliver
+          </button>
         </div>
       </div>
-    </DemoLayout>
+    </>
   );
 };
 

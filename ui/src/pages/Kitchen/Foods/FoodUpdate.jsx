@@ -52,11 +52,10 @@ const FoodUpdate = () => {
   };
 
   return (
-    <DemoLayout setSearch={setSearch}>
-      <div className="body-main w-100 p-5">
+      <>
         <div className="card w-100">
           <div className="card-header text-light">
-            <h3>Add Food</h3>
+            <h3>Update Food</h3>
           </div>
           <div className="card-body">
             <form onSubmit={handleSubmit}>
@@ -123,13 +122,12 @@ const FoodUpdate = () => {
                 ))}
               </select>
               <button type="submit" className="btn-orange">
-                create
+                save
               </button>
             </form>
           </div>
         </div>
-      </div>
-    </DemoLayout>
+      </>
   );
 };
 

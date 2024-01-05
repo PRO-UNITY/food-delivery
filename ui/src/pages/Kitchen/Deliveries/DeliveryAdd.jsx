@@ -36,8 +36,7 @@ const DeliveryAdd = () => {
   };
 
   return (
-    <DemoLayout setSearch={setSearch}>
-      <div className="body-main w-100 p-5">
+      <>
         <div className="card w-100">
           <div className="card-header text-light">
             <h3>Add Supplier</h3>
@@ -104,8 +103,7 @@ const DeliveryAdd = () => {
             </form>
           </div>
         </div>
-      </div>
-    </DemoLayout>
+      </>
   );
 };
 

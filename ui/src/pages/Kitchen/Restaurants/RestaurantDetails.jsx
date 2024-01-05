@@ -17,8 +17,7 @@ const RestaurantDetails = () => {
   }, []);
 
   return (
-    <DemoLayout setSearch={setSearch}>
-      <div className=" body-main w-100  p-5">
+      <>
         <h3>About {data.name}</h3>
         <div key={data.id} className="order-history">
           <div className="img-order-history p-3">
@@ -41,26 +40,25 @@ const RestaurantDetails = () => {
         </div>
         <div className="w-100 d-flex justify-content-center gap-2">
           <Link
-            to={`/add-supplier/${data.id}`}
+            to={`add-supplier`}
             className="btn btn-success border-none"
           >
             add supplier
           </Link>
           <Link
-            to={`/add-manager/${data.id}`}
+            to={`add-manager`}
             className="btn btn-primary border-none"
           >
             add manager
           </Link>
           <Link
-            to={`/edit-restaurant/${data.id}`}
+            to={`edit`}
             className="btn btn-warning border-none"
           >
             update
           </Link>
         </div>
-      </div>
-    </DemoLayout>
+      </>
   );
 };
 

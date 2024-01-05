@@ -41,7 +41,7 @@ const TableHistory = (props) => {
       <div className="d-flex w-100 justify-content-between">
         <h6 className="text-start">Total price : {total_price}</h6>
         <Link
-          to={`/order-history/${id}`}
+          to={`${id}`}
           className="text-orange text-center mb-1 btn-none"
         >
           viev order-history

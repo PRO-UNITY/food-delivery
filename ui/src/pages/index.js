@@ -1,4 +1,5 @@
 export { default as Dashboard } from "./User/Dashboar";
+export { default as KitchenDashboard } from "./Kitchen/KitchenDashboard/KitchenDashboard";
 export { default as AllFoods } from "./User/AllFoods";
 export { default as AllCategories } from "./User/AllCategories";
 export { default as AllKitchens } from "./User/AllKitchens";

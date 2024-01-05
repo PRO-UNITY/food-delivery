@@ -31,9 +31,9 @@ const DemoSidebar = ({ showSidebar }) => {
             <li className="nav-item">
               {role === "kitchen" ? (
                 <NavLink
-                  to={"/dashboard"}
+                  to={"/restaurant"}
                   className="nav-link text-start px-2"
-                  isActive={() => checkActive("/dashboard")}
+                  isActive={() => checkActive("/restaurant")}
                 >
                   <p className="text-start py-3 ">
                     <i className="fa-solid fa-utensils mx-3"></i>Restaurants
@@ -118,9 +118,9 @@ const DemoSidebar = ({ showSidebar }) => {
                 </NavLink>
               ) : (
                 <NavLink
-                  to={"/order-history"}
+                  to={"/history"}
                   className="nav-link text-start px-2"
-                  isActive={() => checkActive("/order-history")}
+                  isActive={() => checkActive("/history")}
                 >
                   <p className="text-start py-3">
                     <i className="fa-solid fa-clock-rotate-left mx-3"></i>Order
@@ -147,9 +147,9 @@ const DemoSidebar = ({ showSidebar }) => {
             {role === "kitchen" ? (
               <li className="nav-item">
                 <NavLink
-                  to={"/history-kitchen"}
+                  to={"/history"}
                   className="nav-link text-start px-2"
-                  isActive={() => checkActive("/history-kitchen")}
+                  isActive={() => checkActive("/history")}
                 >
                   <p className="text-start py-3">
                     <i className="fa-solid fa-clock-rotate-left mx-3"></i>order

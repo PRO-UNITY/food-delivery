@@ -50,7 +50,7 @@ const KitchenFood = (props) => {
         </div>
         <Link
           style={{ textDecoration: "none" }}
-          to={`/food/${id}`}
+          to={`${id}`}
           className={`btn-add bg-green`}
         >
           <i className="fa-solid fa-eye"></i>

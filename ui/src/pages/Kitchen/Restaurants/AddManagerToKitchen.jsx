@@ -70,11 +70,11 @@ const AddManagerToKitchen = () => {
   };
 
   return (
-    <DemoLayout setSearch={setSearch}>
-      <div className="body-main w-100 p-5">
+      <div>
         <div className="d-flex flex-column justify-content-start align-items-start gap-2 w-100 vh-100 p-1">
+        <h3>Add Manager to your kitchen</h3>
           <div className="border p-3 rounded-2 w-100">
-            <h4>Deliveries</h4>
+            <h4>Managers</h4>
             <table className="table">
               <thead>
                 <tr>
@@ -105,11 +105,11 @@ const AddManagerToKitchen = () => {
               onClick={handleAddDeliver}
               className="btn btn-outline-primary float-end"
             >
-              add deliver
+              add manager
             </button>
           </div>
           <div className="border p-3 rounded-2 w-100">
-            <h4>Deliveries of this restaurant</h4>
+            <h4>Manager of this restaurant</h4>
             <table className="table">
               <thead>
                 <tr>
@@ -140,12 +140,11 @@ const AddManagerToKitchen = () => {
               onClick={handleAddDeliver2}
               className="btn btn-outline-primary float-end"
             >
-              add deliver
+              add manager
             </button>
           </div>
         </div>
       </div>
-    </DemoLayout>
   );
 };
 

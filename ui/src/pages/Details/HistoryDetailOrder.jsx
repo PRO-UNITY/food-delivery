@@ -17,28 +17,26 @@ const HistoryDetailOrder = () => {
   }, []);
 
   return (
-    <DemoLayout setSearch={setSearch}>
-      <div className=" body-main w-100  p-5">
-        <h3>Order History Details</h3>
-        {orders.map((item, index) => (
-          <div key={index} className="order-history">
-            <div className="img-order-history p-3">
-              <img src={`${item.food_img}`} alt="" />
-            </div>
-            <div className="title-order-history">
-              <ul className="list-group w-100">
-                <li className="list-group-item">Name : {item.name}</li>
-                <li className="list-group-item">Count : {item.count}</li>
-                <li className="list-group-item">
-                  Description : {item.description}
-                </li>
-                <li className="list-group-item">Price : {item.price}</li>
-              </ul>
-            </div>
+    <>
+      <h3>Order History Details</h3>
+      {orders.map((item, index) => (
+        <div key={index} className="order-history">
+          <div className="img-order-history p-3">
+            <img src={`${item.food_img}`} alt="" />
           </div>
-        ))}
-      </div>
-    </DemoLayout>
+          <div className="title-order-history">
+            <ul className="list-group w-100">
+              <li className="list-group-item">Name : {item.name}</li>
+              <li className="list-group-item">Count : {item.count}</li>
+              <li className="list-group-item">
+                Description : {item.description}
+              </li>
+              <li className="list-group-item">Price : {item.price}</li>
+            </ul>
+          </div>
+        </div>
+      ))}
+    </>
   );
 };
 

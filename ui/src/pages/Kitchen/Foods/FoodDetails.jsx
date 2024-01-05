@@ -16,37 +16,35 @@ const KitchenFoodDetails = () => {
     });
   }, []);
   return (
-    <DemoLayout setSearch={setSearch}>
-      <div className=" body-main w-100  p-5">
-        <h3>{data.name}</h3>
-        <div key={data?.id} className="order-history">
-          <div className="img-order-history p-3">
-            <img
-              src={`${data?.food_img}`}
-              style={{ borderRadius: "20px" }}
-              alt=""
-            />
-          </div>
-          <div className="title-order-history">
-            <ul className="list-group w-100">
-              <li className="list-group-item">Name : {data?.name}</li>
-              <li className="list-group-item">
-                Description : {data?.description}
-              </li>
-              <li className="list-group-item">Price : {data?.price}</li>
-            </ul>
-          </div>
+    <>
+      <h3>{data.name}</h3>
+      <div key={data?.id} className="order-history">
+        <div className="img-order-history p-3">
+          <img
+            src={`${data?.food_img}`}
+            style={{ borderRadius: "20px" }}
+            alt=""
+          />
         </div>
-        <div className="w-100">
-          <Link
-            to={`/edit-food/${data.id}`}
-            className="btn-orange float-end border-none"
-          >
-            update
-          </Link>
+        <div className="title-order-history">
+          <ul className="list-group w-100">
+            <li className="list-group-item">Name : {data?.name}</li>
+            <li className="list-group-item">
+              Description : {data?.description}
+            </li>
+            <li className="list-group-item">Price : {data?.price}</li>
+          </ul>
         </div>
       </div>
-    </DemoLayout>
+      <div className="w-100">
+        <Link
+          to={`edit`}
+          className="btn-orange float-end border-none"
+        >
+          update
+        </Link>
+      </div>
+    </>
   );
 };
 

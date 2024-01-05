@@ -49,73 +49,71 @@ const UpdateSettings = () => {
   };
 
   return (
-    <DemoLayout setSearch={setSearch}>
-      <div className=" body-main w-100 p-5">
-        <form onSubmit={handleSubmit} className="settings">
-          <div className="container-avatar">
-            <img className="avatar-user" src={user.avatar} alt="" />
-            <label htmlFor="fileInput" className="icon-button m-0 p-0">
-              <i className="fa-regular fa-pen-to-square"></i>
-            </label>
-            <input
-              ref={imgRef}
-              type="file"
-              id="fileInput"
-              className="form-control mb-3"
-            />
+    <>
+      <form onSubmit={handleSubmit} className="settings">
+        <div className="container-avatar">
+          <img className="avatar-user" src={user.avatar} alt="" />
+          <label htmlFor="fileInput" className="icon-button m-0 p-0">
+            <i className="fa-regular fa-pen-to-square"></i>
+          </label>
+          <input
+            ref={imgRef}
+            type="file"
+            id="fileInput"
+            className="form-control mb-3"
+          />
+        </div>
+        <div className="w-100 mt-5">
+          <label htmlFor="">Firstname</label>
+          <input
+            ref={firstnameRef}
+            defaultValue={user?.first_name}
+            type="text"
+            className="form-control mb-3"
+          />
+          <label htmlFor="">Lastname</label>
+          <input
+            ref={lastnameRef}
+            defaultValue={user?.last_name}
+            type="text"
+            className="form-control mb-3"
+          />
+          <label htmlFor="">Email</label>
+          <input
+            ref={emailRef}
+            defaultValue={user?.email}
+            type="text"
+            className="form-control mb-3"
+          />
+          <label htmlFor="">Phone</label>
+          <input
+            ref={phoneRef}
+            defaultValue={user?.phone ? user.phone : ""}
+            type="text"
+            className="form-control mb-3"
+          />
+          <label htmlFor="">Latitude</label>
+          <input
+            ref={latitudeRef}
+            defaultValue={user?.latitude ? user.latitude : ""}
+            type="text"
+            className="form-control mb-3"
+          />
+          <label htmlFor="">Longitude</label>
+          <input
+            ref={longitudeRef}
+            defaultValue={user?.longitude ? user.longitude : ""}
+            type="text"
+            className="form-control mb-3"
+          />
+          <div className="w-100 d-flex justify-content-center">
+            <button className="btn-sign-in bg-orange mx-auto w-50 border-0">
+              save
+            </button>
           </div>
-          <div className="w-100 mt-5">
-            <label htmlFor="">Firstname</label>
-            <input
-              ref={firstnameRef}
-              defaultValue={user?.first_name}
-              type="text"
-              className="form-control mb-3"
-            />
-            <label htmlFor="">Lastname</label>
-            <input
-              ref={lastnameRef}
-              defaultValue={user?.last_name}
-              type="text"
-              className="form-control mb-3"
-            />
-            <label htmlFor="">Email</label>
-            <input
-              ref={emailRef}
-              defaultValue={user?.email}
-              type="text"
-              className="form-control mb-3"
-            />
-            <label htmlFor="">Phone</label>
-            <input
-              ref={phoneRef}
-              defaultValue={user?.phone ? user.phone : ""}
-              type="text"
-              className="form-control mb-3"
-            />
-            <label htmlFor="">Latitude</label>
-            <input
-              ref={latitudeRef}
-              defaultValue={user?.latitude ? user.latitude : ""}
-              type="text"
-              className="form-control mb-3"
-            />
-            <label htmlFor="">Longitude</label>
-            <input
-              ref={longitudeRef}
-              defaultValue={user?.longitude ? user.longitude : ""}
-              type="text"
-              className="form-control mb-3"
-            />
-            <div className="w-100 d-flex justify-content-center">
-              <button className="btn-sign-in bg-orange mx-auto w-50 border-0">
-                save
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </DemoLayout>
+        </div>
+      </form>
+    </>
   );
 };
 
