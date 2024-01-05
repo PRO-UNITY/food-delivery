@@ -20,10 +20,8 @@ class Foods(models.Model):
     food_img = models.ImageField(upload_to="foods")
     description = models.TextField()
     price = models.IntegerField(null=True, blank=True)
-    kitchen = models.ForeignKey(
-        Restaurants, on_delete=models.CASCADE, related_name="food")
-    categories = models.ForeignKey(
-        FoodsCategories, on_delete=models.CASCADE, related_name='foods')
+    kitchen = models.ForeignKey(Restaurants, on_delete=models.CASCADE, related_name="food")
+    categories = models.ForeignKey(FoodsCategories, on_delete=models.CASCADE, related_name="foods")
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

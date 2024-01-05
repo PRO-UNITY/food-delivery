@@ -1,5 +1,8 @@
 from pathlib import Path
 from datetime import timedelta
+import cloudinary
+import cloudinary.api
+import cloudinary.uploader
 from dotenv import load_dotenv
 import os
 
@@ -8,21 +11,15 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-p+$#(-kv%f*8b7q^9^)hp7h*jo#1k+q2hcetyws12d1u_hbdfi"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ["DEBUG"]
-
 ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
-
 INSTALLED_APPS = [
     "import_export",
     "django.contrib.admin",
@@ -31,24 +28,21 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Django rest
     "rest_framework",
     "django_filters",
     "corsheaders",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "django_rest_passwordreset",
-    'drf_spectacular',
-    'drf_yasg',
-    # 'cacheops',
-    # my_app
+    "drf_spectacular",
+    "drf_yasg",
     "authen",
     "kitchen",
     "foods",
-    'managers',
-    'order',
-    'deliveryman',
-    # socaill apps
+    "managers",
+    "order",
+    "deliveryman",
+
     "django.contrib.sites",
     "dj_rest_auth",
     "social_django",
@@ -60,6 +54,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     "rest_framework.authtoken",
     "dj_rest_auth.registration",
+    "cloudinary",
 ]
 
 SITE_ID = 1
@@ -75,7 +70,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
-    # "core.cashe.CacheControlMiddleware"
+    "core.middleware.JsonErrorResponseMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -100,8 +95,6 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 
 # Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -115,8 +108,6 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -134,8 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
@@ -146,21 +135,23 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_URL = "/food-delivery/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
-
 MEDIA_URL = "/food-delivery/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+cloudinary.config(
+    CLOUD_NAME="ddom6zmhz",
+    API_KEY="118745292796737",
+    API_SECRET="AVRxcx04CtgLIHNiPGRTb6jykd0",
+)
+
+# DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTHENTICATION_CLASSES = ("dj_rest_auth.authentication.AllAuthJWTAuthentication",)
 
@@ -175,12 +166,12 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
 }
 
-access_token_lifetime_days = int(os.environ['ACCESS_TOKEN_LIFETIME_DAYS'])
-refresh_token_lifetime_days = int(os.environ['REFRESH_TOKEN_LIFETIME_DAYS'])
+access_token_lifetime_days = int(os.environ["ACCESS_TOKEN_LIFETIME_DAYS"])
+refresh_token_lifetime_days = int(os.environ["REFRESH_TOKEN_LIFETIME_DAYS"])
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=access_token_lifetime_days),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=refresh_token_lifetime_days),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=refresh_token_lifetime_days),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer", "Token"),
@@ -231,7 +222,6 @@ AUTH_GROUP_MODEL = "authen.UserRole"
 
 # Email Backend Configuration
 EMAIL_BACKEND = (
-    # Replace with your preferred backend
     "django.core.mail.backends.smtp.EmailBackend"
 )
 
@@ -243,25 +233,14 @@ EMAIL_USE_TLS = True
 EMAIL_TIMEOUT = 300
 DEFAULT_FROM_EMAIL = os.environ["DEFAULT_FROM_EMAIL"]
 
-SOCIALACCOUNT_PROVIDERS = {
-    "facebook": {
-        "APP": {
-            "client_id": os.environ["SOCIAL_AUTH_FACEBOOK_KEY"],
-            "secret": os.environ["SOCIAL_AUTH_FACEBOOK_SECRET"],
-        }
-    },
-}
-
+SOCIALACCOUNT_PROVIDERS = {"facebook": {"APP": {"client_id": os.environ["SOCIAL_AUTH_FACEBOOK_KEY"], "secret": os.environ["SOCIAL_AUTH_FACEBOOK_SECRET"],}},}
 AUTHENTICATION_BACKENDS = [
     "social_core.backends.facebook.FacebookOAuth2",
     "allauth.account.auth_backends.AuthenticationBackend",
-    # ...
 ]
 
 REST_USE_JWT = True
-JWT_AUTH = {
-    "JWT_RESPONSE_PAYLOAD_HANDLER": "authentification.utils.jwt_response_payload_handler",
-}
+JWT_AUTH = {"JWT_RESPONSE_PAYLOAD_HANDLER": "authentification.utils.jwt_response_payload_handler"}
 
 SIMPLE_JWT = {
     "USER_ID_FIELD": "id",
@@ -271,6 +250,6 @@ SIMPLE_JWT = {
 
 SOCIAL_AUTH_FACEBOOK_KEY = os.environ["SOCIAL_AUTH_FACEBOOK_KEY"]
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ["SOCIAL_AUTH_FACEBOOK_SECRET"]
-SOCIAL_AUTH_FACEBOOK_APP_NAME = os.environ["SOCIAL_AUTH_FACEBOOK_APP_NAME"],
+SOCIAL_AUTH_FACEBOOK_APP_NAME = (os.environ["SOCIAL_AUTH_FACEBOOK_APP_NAME"],)
 
 FORCE_SCRIPT_NAME = "/food-delivery"

@@ -4,8 +4,6 @@ from django.views.static import serve
 from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework_simplejwt import views as jwt_views
-from django.views.generic import TemplateView
-from drf_spectacular.views import SpectacularAPIView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -28,14 +26,6 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path(
-        "docs/",
-        TemplateView.as_view(
-            template_name="doc.html", extra_context={"schema_url": "api_schema"}
-        ),
-        name="swagger-ui",
-    ),
-    path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("auth/", include("authen.urls")),
     path("admin/", admin.site.urls),
     path('user', UserProfile.as_view()),
@@ -48,12 +38,4 @@ urlpatterns = [
 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += [
-    re_path(
-        r"^media/(?P<path>.*)$",
-        serve,
-        {
-            "document_root": settings.MEDIA_ROOT,
-        },
-    ),
-]
+urlpatterns += [re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT,},),]

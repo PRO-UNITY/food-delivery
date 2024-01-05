@@ -3,11 +3,6 @@ import random
 from drf_spectacular.utils import extend_schema
 from django.shortcuts import get_object_or_404
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import (
-    smart_str,
-    smart_bytes,
-    DjangoUnicodeDecodeError,
-)
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
@@ -19,8 +14,16 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.decorators import action
 from authen.renderers import UserRenderers
 from authen.models import CustomUser
+from authen.utils import Util
+from django.utils.encoding import (
+    smart_str,
+    smart_bytes,
+    DjangoUnicodeDecodeError,
+)
 from authen.serializers.authen_serializers import (
     UserSignUpSerializer,
     UserSigInSerializer,
@@ -31,12 +34,9 @@ from authen.serializers.authen_serializers import (
     ResetPasswordSerializer,
     PasswordResetCompleteSerializer,
 )
-from authen.utils import Util
 
 
-# JWT token refresh
 def get_token_for_user(user):
-    """Django Authe token"""
     refresh = RefreshToken.for_user(user)
     return {"refresh": str(refresh), "access": str(refresh.access_token)}
 
@@ -45,32 +45,18 @@ class UserSignUp(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
 
-    @extend_schema(
-        request=UserSignUpSerializer,
-        responses={201: UserSignUpSerializer},
-    )
+    @action(methods=['post'], detail=False)
+    @swagger_auto_schema(
+        request_body=UserSignUpSerializer,
+        responses={201: "Created - Item created successfully",},
+        tags=["auth"],)
     def post(self, request):
-        expected_fields = set(
-            [
-                "username",
-                "password",
-                "confirm_password",
-                "first_name",
-                "last_name",
-                "email",
-                "role",
-            ]
-        )
+        expected_fields = set(["username", "password", "confirm_password", "first_name", "last_name", "email", "role"])
         received_fields = set(request.data.keys())
-
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:
-            error_message = (
-                f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-            )
-            return Response(
-                {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
-            )
+            error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
+            return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializer = UserSignUpSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             instanse = serializer.save()
@@ -82,22 +68,18 @@ class UserSignUp(APIView):
 class UserSignIn(APIView):
     render_classes = [UserRenderers]
 
-    @extend_schema(
-        request=UserSigInSerializer,
-        responses={201: UserSigInSerializer},
-    )
+    @action(methods=['post'], detail=True)
+    @swagger_auto_schema(
+        request_body=UserSigInSerializer,
+        responses={201: "Created - Item created successfully",},
+        tags=["auth"],)
     def post(self, request):
         expected_fields = set(["username", "password"])
         received_fields = set(request.data.keys())
-
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:
-            error_message = (
-                f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-            )
-            return Response(
-                {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
-            )
+            error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
+            return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializer = UserSigInSerializer(data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             username = request.data["username"]
@@ -105,15 +87,9 @@ class UserSignIn(APIView):
             user = authenticate(username=username, password=password)
             if user is not None:
                 tokens = get_token_for_user(user)
-                return Response(
-                    {"token": tokens},
-                    status=status.HTTP_200_OK,
-                )
+                return Response({"token": tokens}, status=status.HTTP_200_OK)
             else:
-                return Response(
-                    {"error": ["This user is not available to the system"]},
-                    status=status.HTTP_404_NOT_FOUND,
-                )
+                return Response({"error": ["This user is not available to the system"]}, status=status.HTTP_404_NOT_FOUND)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -121,71 +97,34 @@ class UserProfile(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
-    @extend_schema(
-        request=UserInformationSerializer,
-        responses={201: UserInformationSerializer},
-    )
     def get(self, request):
         if request.user.is_authenticated:
-            serializer = UserInformationSerializer(
-                request.user, context={"request": request}
-            )
+            serializer = UserInformationSerializer(request.user, context={"request": request})
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response(
-                {"error": "The user is not logged in"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
 
-    @extend_schema(
-        request=UserUpdateSerializer,
-        responses={201: UserUpdateSerializer},
-    )
+    @action(methods=['put'], detail=True)
+    @swagger_auto_schema(
+        request_body=UserUpdateSerializer,
+        responses={201: "update - Item update successfully",},
+        tags=["auth"],)
     def put(self, request, *args, **kwarg):
         if request.user.is_authenticated:
-            expected_fields = set(
-                [
-                    "username",
-                    "password",
-                    "confirm_password",
-                    "first_name",
-                    "last_name",
-                    "avatar",
-                    "email",
-                    "role",
-                    "phone",
-                    "latitude",
-                    "longitude",
-                ]
-            )
+            expected_fields = set(["username", "password", "confirm_password", "first_name", "last_name", "avatar", "email", "role", "phone", "latitude", "longitude",])
             received_fields = set(request.data.keys())
-
             unexpected_fields = received_fields - expected_fields
             if unexpected_fields:
-                error_message = (
-                    f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-                )
-                return Response(
-                    {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
-                )
+                error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
+                return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
             queryset = get_object_or_404(CustomUser, id=request.user.id)
-            serializer = UserUpdateSerializer(
-                context={"request": request},
-                instance=queryset,
-                data=request.data,
-                partial=True,
-            )
+            serializer = UserUpdateSerializer(context={"request": request}, instance=queryset, data=request.data, partial=True)
             if serializer.is_valid(raise_exception=True):
                 serializer.save(avatar=request.data.get("avatar"))
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response(
-                {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(
-                {"error": "The user is not logged in"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
 
     def delete(self, request):
         if request.user.is_authenticated:
@@ -193,20 +132,12 @@ class UserProfile(APIView):
             user_delete.delete()
             return Response({"message": "delete success"}, status=status.HTTP_200_OK)
         else:
-            return Response(
-                {"error": "The user is not logged in"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-@extend_schema(
-    request=ChangePasswordSerializer,
-    responses={201: ChangePasswordSerializer},
-)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def change_password(request):
-    """Change password"""
     if request.method == "POST":
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
@@ -215,13 +146,8 @@ def change_password(request):
                 user.set_password(serializer.data.get("new_password"))
                 user.save()
                 update_session_auth_hash(request, user)
-                return Response(
-                    {"message": "Password changed successfully."},
-                    status=status.HTTP_200_OK,
-                )
-            return Response(
-                {"error": "Incorrect old password."}, status=status.HTTP_400_BAD_REQUEST
-            )
+                return Response({"message": "Password changed successfully."}, status=status.HTTP_200_OK)
+            return Response({"error": "Incorrect old password."}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -231,7 +157,6 @@ class SendEmailCode(APIView):
 
     def get(self, request):
         if request.user.is_authenticated:
-            """Sending a code to the e-mail of the logged-in user"""
             data = request.user
             verification_code = str(random.randint(100000, 999999))
             send_mail(
@@ -247,14 +172,10 @@ class SendEmailCode(APIView):
             code_save.save()
             return Response({"message": "Send code email"})
         else:
-            return Response(
-                {"error": "The user is not logged in"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
 
     def post(self, request):
         if request.user.is_authenticated:
-            """Check the code"""
             email_code = request.data["email_code"]
             if email_code == "":
                 context = {"Enter the email code !"}
@@ -266,32 +187,22 @@ class SendEmailCode(APIView):
             else:
                 return Response({"error": "The email code is incorrect !"})
         else:
-            return Response(
-                {"error": "The user is not logged in"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class UserLogout(APIView):
     serializer_class = LogoutSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-    @extend_schema(
-        request=LogoutSerializer,
-        responses={201: LogoutSerializer},
-    )
+    @action(methods=['post'], detail=False)
     def post(self, request):
         expected_fields = set(["refresh"])
         received_fields = set(request.data.keys())
 
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:
-            error_message = (
-                f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-            )
-            return Response(
-                {"error": error_message}, status=status.HTTP_400_BAD_REQUEST
-            )
+            error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
+            return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -302,10 +213,8 @@ class UserLogout(APIView):
 class RequestPasswordRestEmail(generics.GenericAPIView):
     serializer_class = ResetPasswordSerializer
 
-    @extend_schema(
-        request=ResetPasswordSerializer,
-        responses={201: ResetPasswordSerializer},
-    )
+    @swagger_auto_schema(request_body=ResetPasswordSerializer)
+    @action(methods=['post'], detail=False)
     def post(self, request):
         email = request.data.get("email")
         print(email)
@@ -324,56 +233,30 @@ class RequestPasswordRestEmail(generics.GenericAPIView):
 
             Util.send(data)
 
-            return Response(
-                {"success": "We have sent you to rest your password"},
-                status=status.HTTP_200_OK,
-            )
-        return Response(
-            {"error": "This email is not found.."}, status=status.HTTP_404_NOT_FOUND
-        )
+            return Response({"success": "We have sent you to rest your password"}, status=status.HTTP_200_OK)
+        return Response({"error": "This email is not found.."}, status=status.HTTP_404_NOT_FOUND)
 
 
 class PasswordTokenCheckView(generics.GenericAPIView):
     serializer_class = UserInformationSerializer
 
-    @extend_schema(
-        request=UserInformationSerializer,
-        responses={201: UserInformationSerializer},
-    )
+    @action(methods=['get'], detail=False)
     def get(self, request, uidb64, token):
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
             user = CustomUser.objects.get(id=id)
             if not PasswordResetTokenGenerator().check_token(user, token):
-                return Response(
-                    {"error": "Token is not valid, Please request a new one"},
-                    status=status.HTTP_401_UNAUTHORIZED,
-                )
-            return Response(
-                {
-                    "success": True,
-                    "msg": "Credential Valid",
-                    "uidb64": uidb64,
-                    "token": token,
-                },
-                status=status.HTTP_200_OK,
-            )
-
+                return Response({"error": "Token is not valid, Please request a new one"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"success": True, "msg": "Credential Valid", "uidb64": uidb64, "token": token}, status=status.HTTP_200_OK)
         except DjangoUnicodeDecodeError:
             if not PasswordResetTokenGenerator().check_token(user, token):
-                return Response(
-                    {"error": "Token is not valid, Please request a new one"},
-                    status=status.HTTP_401_UNAUTHORIZED,
-                )
+                return Response({"error": "Token is not valid, Please request a new one"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class SetNewPasswordView(generics.GenericAPIView):
     serializer_class = PasswordResetCompleteSerializer
 
-    @extend_schema(
-        request=PasswordResetCompleteSerializer,
-        responses={201: PasswordResetCompleteSerializer},
-    )
+    @action(methods=['patch'], detail=False)
     def patch(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)

@@ -20,60 +20,22 @@ class UserGroupSerizliers(serializers.ModelSerializer):
 
 
 class UserSignUpSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(
-        max_length=50,
-        validators=[
-            MinLengthValidator(
-                limit_value=5, message="First name must be at least 5 characters."
-            ),
-            MaxLengthValidator(
-                limit_value=50, message="First name cannot exceed 50 characters."
-            ),
-        ],
-    )
-    last_name = serializers.CharField(
-        max_length=50,
-        validators=[
-            MinLengthValidator(
-                limit_value=5, message="Last name must be at least 5 characters."
-            ),
-            MaxLengthValidator(
-                limit_value=50, message="Last name cannot exceed 50 characters."
-            ),
-        ],
-    )
-    username = serializers.CharField(
-        max_length=255,
-        min_length=5,
-        required=True,
-        validators=[UniqueValidator(queryset=CustomUser.objects.all())],
-    )
-    password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password]
-    )
+    first_name = serializers.CharField(max_length=50, validators=[
+            MinLengthValidator(limit_value=5, message="First name must be at least 5 characters."),
+            MaxLengthValidator(limit_value=50, message="First name cannot exceed 50 characters.")],)
+    last_name = serializers.CharField(max_length=50, validators=[
+            MinLengthValidator(limit_value=5, message="Last name must be at least 5 characters."),
+            MaxLengthValidator(limit_value=50, message="Last name cannot exceed 50 characters."),])
+    username = serializers.CharField(max_length=255, min_length=5, required=True, validators=[UniqueValidator(queryset=CustomUser.objects.all())])
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     confirm_password = serializers.CharField(write_only=True, required=True)
-
-    email = serializers.EmailField(
-        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
-    )
+    email = serializers.EmailField(validators=[UniqueValidator(queryset=CustomUser.objects.all())])
     role = serializers.CharField(max_length=255, write_only=True)
 
     class Meta:
         model = CustomUser
-        fields = [
-            "id",
-            "username",
-            "first_name",
-            "last_name",
-            "email",
-            "password",
-            "confirm_password",
-            "role",
-        ]
-        extra_kwargs = {
-            "first_name": {"required": True},
-            "last_name": {"required": True},
-        }
+        fields = ["id", "username", "first_name", "last_name", "email", "password", "confirm_password", "role"]
+        extra_kwargs = {"first_name": {"required": True}, "last_name": {"required": True}}
 
     def validate_password(self, value):
         try:
@@ -89,54 +51,26 @@ class UserSignUpSerializer(serializers.ModelSerializer):
         role_name = validated_data.pop("role", None)
         if role_name == "admins":
             raise serializers.ValidationError({"error": "You cant to submit this Role"})
-
         if role_name:
             try:
                 role = Group.objects.get(name=role_name)
             except ObjectDoesNotExist:
                 raise serializers.ValidationError({"error": "Invalid role"})
-
         create = get_user_model().objects.create_user(**validated_data)
         create.groups.add(role)
-
         return create
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(max_length=None, use_url=True)
-    first_name = serializers.CharField(
-        max_length=50,
-        validators=[
-            MinLengthValidator(
-                limit_value=5, message="First name must be at least 5 characters."
-            ),
-            MaxLengthValidator(
-                limit_value=50, message="First name cannot exceed 50 characters."
-            ),
-        ],
-    )
-    last_name = serializers.CharField(
-        max_length=50,
-        validators=[
-            MinLengthValidator(
-                limit_value=5, message="Last name must be at least 5 characters."
-            ),
-            MaxLengthValidator(
-                limit_value=50, message="Last name cannot exceed 50 characters."
-            ),
-        ],
-    )
-
-    avatar = serializers.ImageField(
-        max_length=None,
-        allow_empty_file=False,
-        allow_null=False,
-        use_url=False,
-        required=False,
-    )
-    email = serializers.EmailField(
-        validators=[UniqueValidator(queryset=CustomUser.objects.all())]
-    )
+    first_name = serializers.CharField(max_length=50, validators=[
+            MinLengthValidator(limit_value=5, message="First name must be at least 5 characters."),
+            MaxLengthValidator(limit_value=50, message="First name cannot exceed 50 characters."),],)
+    last_name = serializers.CharField(max_length=50, validators=[
+            MinLengthValidator(limit_value=5, message="Last name must be at least 5 characters."),
+            MaxLengthValidator(limit_value=50, message="Last name cannot exceed 50 characters."),],)
+    avatar = serializers.ImageField(max_length=None, allow_empty_file=False, allow_null=False, use_url=False, required=False,)
+    email = serializers.EmailField(validators=[UniqueValidator(queryset=CustomUser.objects.all())])
 
     class Meta:
         model = CustomUser

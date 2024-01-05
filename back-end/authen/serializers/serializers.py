@@ -4,8 +4,6 @@ from authen.views.register import register_social_user
 
 
 class FacebookSocialAuthSerializer(serializers.Serializer):
-    """Handles serialization of facebook related data"""
-
     auth_token = serializers.CharField()
 
     def validate_auth_token(self, auth_token):
