@@ -12,21 +12,10 @@ class FoodsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Foods
-        fields = [
-            "id",
-            "name",
-            "food_img",
-            "description",
-            "price",
-            "kitchen",
-            "categories",
-            "favorite",
-            "create_at",
-            "updated_at",
-        ]
+        fields = ["id", "name", "food_img", "description", "price", "kitchen", "categories", "favorite", "create_at", "updated_at",]
 
     def get_favorite(self, obj):
-        user = self.context.get('user')
+        user = self.context.get("user")
         user_favorities = Favorite.objects.filter(user=user)
         if user_favorities.filter(food__id=obj.id).exists():
             return True
@@ -34,25 +23,23 @@ class FoodsSerializer(serializers.ModelSerializer):
 
 
 class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
-
     food_count = serializers.SerializerMethodField()
-    foods  = FoodsSerializer(many=True, read_only=True)
+    foods = FoodsSerializer(many=True, read_only=True)
 
     class Meta:
         model = FoodsCategories
-        fields = '__all__'
+        fields = "__all__"
 
     def get_food_count(self, obj):
         return obj.foods.count()
 
 
 class CategoriesSerializer(serializers.ModelSerializer):
-
     food_count = serializers.SerializerMethodField()
 
     class Meta:
         model = FoodsCategories
-        fields = '__all__'
+        fields = "__all__"
 
     def get_food_count(self, obj):
         return obj.foods.count()
@@ -67,7 +54,6 @@ class FavoritesSerializer(serializers.ModelSerializer):
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Favorite
         fields = ["id", "food", "user", "is_favorite", "create_at", "updated_at"]
