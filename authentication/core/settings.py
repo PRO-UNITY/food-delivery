@@ -161,6 +161,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5174",
     "http://localhost:5173",
+    "http://127.0.0.1:8002",
 ] 
 
 # swagger
@@ -181,4 +182,4 @@ SWAGGER_SETTINGS = {
 }
 AUTH_USER_MODEL = "authentification.CustomUser"
 
-# FORCE_SCRIPT_NAME = "/food-delivery"
+FORCE_SCRIPT_NAME = "/auth-delivery"

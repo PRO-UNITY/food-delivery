@@ -7,6 +7,7 @@ from authen.models import CustomUser
 from kitchen.models import Restaurants
 
 
+
 class UserInformationSerializer(serializers.ModelSerializer):
     role = serializers.SerializerMethodField()
     avatar = serializers.ImageField(max_length=None, use_url=True)
