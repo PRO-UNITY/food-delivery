@@ -45,8 +45,7 @@ class SendViews(APIView, Pagination):
             serializer = super().get_paginated_response(self.serializer_class(page, many=True).data)
         else:
             serializer = self.serializer_class(queryset, many=True)
-            return Response({"data": serializer.data}, status=status.HTTP_200_OK)
-
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
     @check_user_permission
     @swagger_auto_schema(request_body=SendOrderSerializers)
     def post(self, request):

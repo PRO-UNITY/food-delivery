@@ -24,16 +24,17 @@ schema_view = get_schema_view(
    permission_classes=(permissions.AllowAny,),
 )
 urlpatterns = [
-    path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path("auth/", include("authen.urls")),
-    path("admin/", admin.site.urls),
-    path('user', UserProfile.as_view()),
-    path("kitchen/", include("kitchen.urls")),
-    path('foods/', include('foods.urls')),
-    path('', include('managers.urls')),
-    path('', include('order.urls')),
-    path('deliveryman/', include('deliveryman.urls')),
+   # path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+   path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+   path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+   path("auth/", include("authen.urls")),
+   path("admin/", admin.site.urls),
+   path('user', UserProfile.as_view()),
+   path("kitchen/", include("kitchen.urls")),
+   path('foods/', include('foods.urls')),
+   path('', include('managers.urls')),
+   path('', include('order.urls')),
+   path('deliveryman/', include('deliveryman.urls')),
 ]
 
 
