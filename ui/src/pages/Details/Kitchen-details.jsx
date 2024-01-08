@@ -16,7 +16,6 @@ const KitchenDetails = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [search, setSearch] = useState("");
   const [card, setCard] = useState([]);
   const [data, setData] = useState({});
   const { id } = useParams();
@@ -29,7 +28,6 @@ const KitchenDetails = () => {
     const func = token ? getUserData : getDataWithToken;
     func(`/kitchen/${id}/foods?page=${currentPage}`).then((res) => {
       setFoods(res.data.results);
-      console.log(res.data.results);
       const residual = res.data.count % 10;
       const pages = (res.data.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);

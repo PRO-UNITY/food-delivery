@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { deleteData, postDataWithToken } from "../../Services/Services";
+import StarRating from "./StarsRating";
 
 const FoodCard = (props) => {
   const {
@@ -71,13 +72,7 @@ const FoodCard = (props) => {
           }`}
         />
       </Link>
-      <div className="mb-2">
-        <i className="fa-solid fa-star text-orange"></i>
-        <i className="fa-solid fa-star text-orange"></i>
-        <i className="fa-solid fa-star text-orange"></i>
-        <i className="fa-solid fa-star text-orange"></i>
-        <i className="fa-solid fa-star text-orange"></i>
-      </div>
+      <StarRating numStars={5} />
       <div className="d-flex justify-content-between w-100 align-items-center">
         <div>
           <p style={{ fontWeight: 500 }} className="p-0 m-0">

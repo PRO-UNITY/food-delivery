@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import StarRating from "./StarsRating";
 
 const KitchenFood = (props) => {
   const { id, food_img, price, name, setIsactive } = props;
@@ -31,13 +32,7 @@ const KitchenFood = (props) => {
           }`}
         />
       </Link>
-      <div className="mb-2">
-        <i className="fa-solid fa-star text-orange"></i>
-        <i className="fa-solid fa-star text-orange"></i>
-        <i className="fa-solid fa-star text-orange"></i>
-        <i className="fa-solid fa-star text-orange"></i>
-        <i className="fa-solid fa-star text-orange"></i>
-      </div>
+      <StarRating numStars={5} />
       <div className="d-flex justify-content-between w-100 align-items-center">
         <div>
           <p style={{ fontWeight: 500 }} className="p-0 m-0">

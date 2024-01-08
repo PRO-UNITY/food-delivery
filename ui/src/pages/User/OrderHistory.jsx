@@ -18,6 +18,7 @@ const OrderHistory = () => {
   useEffect(() => {
     getUserData(`/orders?page=${currentPage}`).then((res) => {
       setOrders(res.data.results);
+      console.log(res);
       const residual = res.data.count % 10;
       const pages = (res.data.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);

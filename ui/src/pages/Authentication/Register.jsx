@@ -11,7 +11,6 @@ const Register = () => {
   const [password2, setPassword2] = useState("");
   const [role, setRole] = useState("");
   const navigate = useNavigate();
-  const [active, setActive] = useState(false);
   const [alertMessage, setAlertMessage] = useState({
     text: "",
     type: "",
@@ -56,21 +55,6 @@ const Register = () => {
       }
     }
   };
-
-  useEffect(() => {
-    if (
-      username != "" &&
-      firstname != "" &&
-      lastname != "" &&
-      email != "" &&
-      password != "" &&
-      password2 != "" &&
-      role != ""
-    ) {
-      setActive(true);
-      console.log(active);
-    }
-  }, [password2]);
 
   return (
     <div className="container w-100 d-flex flex-column justify-content-center align-items-center py-5">

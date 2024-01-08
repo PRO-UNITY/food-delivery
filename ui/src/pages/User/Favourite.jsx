@@ -16,7 +16,6 @@ const Dashboard = () => {
   useEffect(() => {
     getUserData(`/foods/favourites`).then((res) => {
       setFood(res.data.results);
-      console.log(res.data.results);
       const residual = res.data.count % 10;
       const pages = (res.data.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);

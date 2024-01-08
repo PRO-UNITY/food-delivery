@@ -3,9 +3,9 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DemoLayout from "../../../Layout/Demoproject";
 import { AddWithFormData } from "../../../Services/Services";
+import CreateEmployee from "../../../Components/SubComponents/CreateEmpleyee";
 
 const DeliveryAdd = () => {
-  const [search, setSearch] = useState("");
   const usernameRef = useRef();
   const firstnameRef = useRef(null);
   const lastnameRef = useRef(null);
@@ -36,74 +36,25 @@ const DeliveryAdd = () => {
   };
 
   return (
-      <>
-        <div className="card w-100">
-          <div className="card-header text-light">
-            <h3>Add Supplier</h3>
-          </div>
-          <div className="card-body">
-            <form onSubmit={handleSubmit}>
-              <input
-                ref={firstnameRef}
-                type="text"
-                placeholder="firstname"
-                className="form-control mb-2"
-              />
-              <input
-                ref={lastnameRef}
-                type="text"
-                placeholder="lastname"
-                className="form-control mb-2"
-              />
-              <input
-                ref={usernameRef}
-                type="text"
-                placeholder="username"
-                className="form-control mb-2"
-              />
-              <input
-                ref={emailRef}
-                type="email"
-                placeholder="email"
-                className="form-control mb-2"
-              />
-              <input
-                ref={phoneRef}
-                type="text"
-                placeholder="phone"
-                className="form-control mb-2"
-              />
-              <input
-                ref={latitudeRef}
-                type="text"
-                placeholder="latitude"
-                className="form-control mb-2"
-              />
-              <input
-                ref={longitudeRef}
-                type="text"
-                placeholder="longitude"
-                className="form-control mb-2"
-              />
-              <input
-                ref={passwordRef}
-                type="text"
-                placeholder="password"
-                className="form-control mb-2"
-              />
-              <input
-                ref={passwordRef2}
-                type="text"
-                placeholder="confirm password"
-                className="form-control mb-2"
-              />
-              <button type="submit" className="btn-orange">
-                create
-              </button>
-            </form>
-          </div>
+    <>
+      <div className="card w-100">
+        <div className="card-header text-light">
+          <h3>Add Supplier</h3>
         </div>
-      </>
+        <CreateEmployee
+          usernameRef={usernameRef}
+          firstnameRef={firstnameRef}
+          lastnameRef={lastnameRef}
+          emailRef={emailRef}
+          passwordRef={passwordRef}
+          passwordRef2={passwordRef2}
+          phoneRef={phoneRef}
+          longitudeRef={longitudeRef}
+          latitudeRef={latitudeRef}
+          handleSubmit={handleSubmit}
+        />
+      </div>
+    </>
   );
 };
 

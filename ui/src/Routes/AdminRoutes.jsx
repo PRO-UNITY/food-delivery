@@ -38,6 +38,7 @@ const AdminRoutes = () => {
       <Route path="/task-list" element={<TaskList />} />
       <Route path="/services" element={<Services />} />
       <Route path="/notification" element={<Notification />} />
+      {/* <Route path="*" element={<Pagenotfound/>} /> */}
     </Routes>
   );
 };

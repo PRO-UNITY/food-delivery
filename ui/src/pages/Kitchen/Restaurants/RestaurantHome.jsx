@@ -14,7 +14,6 @@ const RestaurantHome = () => {
   useEffect(() => {
     getUserData(`/kitchen/`).then((res) => {
       setRetaurant(res);
-      console.log(res);
       setLoading(false);
     });
   }, [isactive]);

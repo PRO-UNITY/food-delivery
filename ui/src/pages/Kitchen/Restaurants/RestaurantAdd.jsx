@@ -1,11 +1,10 @@
 import "../../Demo.css";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import DemoLayout from "../../../Layout/Demoproject";
 import { AddWithFormData } from "../../../Services/Services";
+import RestaurantAction from "../../../Components/SubComponents/RestaurantAction";
 
 const RestaurantAdd = () => {
-  const [search, setSearch] = useState("");
   const nameRef = useRef();
   const descriptionRef = useRef();
   const imgRef = useRef();
@@ -20,13 +19,15 @@ const RestaurantAdd = () => {
     const formData = new FormData();
     formData.append("name", nameRef.current.value);
     formData.append("description", descriptionRef.current.value);
-    formData.append("logo", imgRef.current.files[0]);
+    if (imgRef.current.files[0]) {
+      formData.append("logo", imgRef?.current?.files[0]);
+    }
     formData.append("open_time", openref.current.value);
     formData.append("close_time", closeref.current.value);
     formData.append("latitude", latituderef.current.value);
     formData.append("longitude", longitudref.current.value);
 
-    AddWithFormData("/kitchen/", formData).then(() => navigate("/dashboard"));
+    AddWithFormData("/kitchen/", formData).then(() => navigate("/restaurant"));
   };
 
   return (
@@ -35,50 +36,17 @@ const RestaurantAdd = () => {
         <div className="card-header  text-light">
           <h3>Add Restaurant</h3>
         </div>
-        <div className="card-body">
-          <form onSubmit={handleSubmit}>
-            <input
-              ref={nameRef}
-              type="text"
-              placeholder="name"
-              className="form-control mb-2"
-            />
-            <input
-              ref={descriptionRef}
-              type="text"
-              placeholder="description"
-              className="form-control mb-2"
-            />
-            <input ref={imgRef} type="file" className="form-control mb-2" />
-            <input
-              ref={openref}
-              type="text"
-              placeholder="open_time"
-              className="form-control mb-2"
-            />
-            <input
-              ref={closeref}
-              type="text"
-              placeholder="close_time"
-              className="form-control mb-2"
-            />
-            <input
-              ref={latituderef}
-              type="text"
-              placeholder="latitude"
-              className="form-control mb-2"
-            />
-            <input
-              ref={longitudref}
-              type="text"
-              placeholder="longitude"
-              className="form-control mb-2"
-            />
-            <button type="submit" className="btn-orange">
-              create
-            </button>
-          </form>
-        </div>
+        <RestaurantAction
+          data={{}}
+          nameRef={nameRef}
+          descriptionRef={descriptionRef}
+          openref={openref}
+          closeref={closeref}
+          latituderef={latituderef}
+          longitudref={longitudref}
+          imgRef={imgRef}
+          handleSubmit={handleSubmit}
+        />
       </div>
     </>
   );

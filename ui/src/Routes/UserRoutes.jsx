@@ -8,6 +8,8 @@ import {
   Favourite,
   FoodDetail,
   FoodOrder,
+  HistoryDetailOrder,
+  HistoryKitchen,
   KitchenCategoryDetail,
   KitchenDashboard,
   KitchenDetails,
@@ -15,9 +17,10 @@ import {
   UpdateSettings,
 } from "../pages";
 import Pagenotfound from "../Pagenotfound";
+import OrderHistory from "../pages/User/OrderHistory";
 
 const UserRoutes = () => {
-    const roleuser = localStorage.getItem("role");
+  const roleuser = localStorage.getItem("role");
   return (
     <Routes>
       <Route
@@ -39,6 +42,7 @@ const UserRoutes = () => {
         path="/kitchen/category/:category_id/food/:kitchen_id"
         element={<KitchenCategoryDetail />}
       />
+      {/* <Route path="*" element={<Pagenotfound/>} /> */}
     </Routes>
   );
 };

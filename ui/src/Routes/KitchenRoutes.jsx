@@ -21,6 +21,7 @@ import {
   RestaurantUpdate,
 } from "../pages";
 import OrderHistory from "../pages/User/OrderHistory";
+import Pagenotfound from "../Pagenotfound";
 
 const KitchenRoutes = () => {
   const roleuser = localStorage.getItem("role");
@@ -58,6 +59,7 @@ const KitchenRoutes = () => {
         <Route path="add" element={<ManagerAdd />} />
         <Route path=":id" element={<KitchenManagerDetails />} />
       </Route>
+      {/* <Route path="*" element={<Pagenotfound/>} /> */}
     </Routes>
   );
 };
