@@ -8,7 +8,7 @@ from drf_yasg.utils import swagger_auto_schema
 from utils.pagination import Pagination
 from utils.pagination import StandardResultsSetPagination
 from authen.renderers import UserRenderers
-from utils.user_permission import check_admin_permission
+from utils.permission_auth import check_admin_permission
 from foods.models import Foods, FoodsCategories
 from foods.serializers.favourite_serializers import CategoriesSerializer
 from kitchen.serializer.category_serializers import (
@@ -39,14 +39,16 @@ class FoodCategoriesView(APIView):
 
     @check_admin_permission
     @swagger_auto_schema(request_body=FoodCategorySerializer)
-    def post(self, request):
+    def post(self, request, user_id=None):
+        if user_id is None:
+            return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         expected_fields = set(["name", "create_at", "updated_at"])
         received_fields = set(request.data.keys())
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:
             error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
             return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
-        serializers = FoodCategorySerializer(data=request.data, context={"user_id": request.user})
+        serializers = FoodCategorySerializer(data=request.data, context={"user_id": user_id})
         if serializers.is_valid(raise_exception=True):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
@@ -83,21 +85,25 @@ class FoodCategoryView(APIView, Pagination):
 
     @check_admin_permission
     @swagger_auto_schema(request_body=FoodCategorySerializer)
-    def put(self, request, pk):
+    def put(self, request, pk, user_id=None):
+        if user_id is None:
+            return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         expected_fields = set(["name", "create_at", "updated_at"])
         received_fields = set(request.data.keys())
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:
             error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
             return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
-        serializers = FoodCategorySerializer(context={"request": request, "user_id": request.user,}, instance=FoodsCategories.objects.filter(id=pk)[0], data=request.data, partial=True,)
+        serializers = FoodCategorySerializer(context={"request": request, "user_id": user_id,}, instance=FoodsCategories.objects.filter(id=pk)[0], data=request.data, partial=True,)
         if serializers.is_valid(raise_exception=True):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_200_OK)
         return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST)
 
     @check_admin_permission
-    def delete(self, request, pk):
+    def delete(self, request, pk, user_id=None):
+        if user_id is None:
+            return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         objects_get = FoodsCategories.objects.get(id=pk)
         objects_get.delete()
         return Response({"message": "Delete success"}, status=status.HTTP_200_OK)

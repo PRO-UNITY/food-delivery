@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from utils.pagination import Pagination
 from utils.pagination import StandardResultsSetPagination
-from utils.user_permission import check_kitchen_permission
+from utils.permission_auth import check_kitchen_permission, check_kitchentwo_permission
 from authen.serializers.authen_serializers import UserInformationSerializer
 from authen.models import CustomUser
 from authen.renderers import UserRenderers
@@ -58,18 +58,14 @@ class KitchensView(APIView, Pagination):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "description", "is_active", "open_time", "close_time"]
 
-    def get(self, request, format=None, *args, **kwargs):
-        if request.user.is_authenticated:
-            user_get = request.user
-            groups = user_get.groups.all()
-            if groups and str(groups[0]) == "kitchen":
-                queryset = Restaurants.objects.filter(user=request.user)
-                serializer = KitchensSerializer(queryset, many=True, context={"request": request})
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                return Response({"error": "It is not possible to add information to such a user"}, status=status.HTTP_400_BAD_REQUEST,)
+    @check_kitchentwo_permission
+    def get(self, request, user_id=None ,format=None, *args, **kwargs):
+        queryset = Restaurants.objects.all()
+        if user_id:
+            queryset = queryset.filter(user=user_id)
+            serializer = KitchensSerializer(queryset, many=True, context={"request": request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            queryset = Restaurants.objects.all()
             queryset = filter_restaurants(queryset, request.query_params)
             page = super().paginate_queryset(queryset)
             if page is not None:
