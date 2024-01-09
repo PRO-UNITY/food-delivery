@@ -12,6 +12,20 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import AuthenticationFailed
 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    # Add any additional fields you want to include in the response
+    custom_field = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        # Call the parent class's validate method to perform the default validation
+        data = super().validate(attrs)
+
+        # You can customize the response data here
+        data['custom_field'] = self.context['request'].data.get('custom_field', None)
+
+        return data
 
 class UserGroupSerizliers(serializers.ModelSerializer):
     class Meta:

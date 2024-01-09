@@ -1,7 +1,6 @@
 from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
-from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,7 +10,7 @@ from authen.renderers import UserRenderers
 from order.models import Orders
 from utils.pagination import Pagination
 from utils.pagination import StandardResultsSetPagination
-from utils.user_permission import check_user_permission, check_kitchen_permission
+from utils.permission_auth import check_user_permission, check_kitchen_permission
 from order.serializers import (
     OrderSerializers,
     SendOrderSerializers,
@@ -27,11 +26,13 @@ class SendViews(APIView, Pagination):
     filterset_fields = ["status", "kitchen"]
 
     @check_user_permission
-    def get(self, request, format=None, *args, **kwargs):
+    def get(self, request, user_id=None, format=None, *args, **kwargs):
+        if user_id is None:
+            return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         search_restaurant = request.query_params.get("restaurant", None)
         search_status = request.query_params.get("status", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(klient=request.user)
+        queryset = Orders.objects.filter(klient=user_id)
         if search_restaurant:
             queryset = queryset.filter(Q(kitchen__id__icontains=search_restaurant))
         if search_status:
@@ -46,16 +47,19 @@ class SendViews(APIView, Pagination):
         else:
             serializer = self.serializer_class(queryset, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
-    @check_user_permission
+
     @swagger_auto_schema(request_body=SendOrderSerializers)
-    def post(self, request):
+    @check_user_permission
+    def post(self, request, user_id=None):
+        if user_id is None:
+            return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         expected_fields = set(["klient", "delivery", "status", "foods", "kitchen", "is_delivery", "is_active", "address", "total_price", "create_at", "updated_at",])
         received_fields = set(request.data.keys())
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:
             error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
             return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
-        serializers = SendOrderSerializers(data=request.data, context={"klient": request.user,},)
+        serializers = SendOrderSerializers(data=request.data, context={"klient": user_id,},)
         if serializers.is_valid(raise_exception=True):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
@@ -73,7 +77,9 @@ class OrderView(APIView, Pagination):
 
     @check_user_permission
     @swagger_auto_schema(request_body=SendOrderSerializers)
-    def put(self, request, pk):
+    def put(self, request, pk, user_id=None):
+        if user_id is None:
+            return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         expected_fields = set(["klient", "delivery", "status", "foods", "kitchen", "is_delivery", "is_active", "address", "total_price", "create_at", "updated_at",])
         received_fields = set(request.data.keys())
         unexpected_fields = received_fields - expected_fields
@@ -96,7 +102,9 @@ class OrderHistoryKitchenView(APIView, Pagination):
     filterset_fields = ["delivery", "status", "kitchen"]
 
     @check_kitchen_permission
-    def get(self, request, format=None, *args, **kwargs):
+    def get(self, request, user_id=None, format=None, *args, **kwargs):
+        if user_id is None:
+            return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         search_delivery = request.query_params.get("delivery", None)
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
@@ -130,11 +138,13 @@ class OrderHistoryuserView(APIView, Pagination):
     filterset_fields = ["status", "kitchen"]
 
     @check_user_permission
-    def get(self, request, format=None, *args, **kwargs):
+    def get(self, request, user_id=None, format=None, *args, **kwargs):
+        if user_id is None:
+            return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(klient=request.user.id)
+        queryset = Orders.objects.filter(klient=user_id)
         if search_status:
             queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
         if search_kitchen:

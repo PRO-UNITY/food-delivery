@@ -7,7 +7,9 @@ from authentification.views import (
     RequestPasswordRestEmail,
     SetNewPasswordView,
     SendEmailCode,
-    UserProfile
+    UserProfile,
+    GenerateToken,
+    CustomTokenObtainPairView,
 
 )
 
@@ -20,5 +22,7 @@ urlpatterns = [
     path('auth/password/confirm', SetNewPasswordView.as_view()),
     path('auth/verification/email', SendEmailCode.as_view()),
     path('auth/users', UserProfile.as_view()),
+    path('generate_token', GenerateToken.as_view()),
+    path('api/', CustomTokenObtainPairView.as_view())
 
 ]

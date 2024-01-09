@@ -26,10 +26,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "drf_yasg",
     "corsheaders",
+    "django_filters",
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "authentification",
+    "deliveryman",
+    "managers",
 ]
 
 MIDDLEWARE = [
@@ -161,7 +164,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5174",
     "http://localhost:5173",
-    "http://127.0.0.1:8002",
+    "http://127.0.0.1:8000",
 ] 
 
 # swagger
@@ -175,8 +178,8 @@ SWAGGER_SETTINGS = {
             "in": "header",
         }
     },
-    "TITLE": "Food delivery",
-    "DESCRIPTION": "Food Delivery back-end",
+    "TITLE": "auth-delivery",
+    "DESCRIPTION": "auth-delivery back-end",
     "VERSION": "0.1.0",
     "USE_SESSION_AUTH": False,
 }

@@ -16,6 +16,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from utils.renderers import UserRenderers
 from authentification.models import CustomUser
+from rest_framework.authtoken.models import Token
 from utils.utils import Util
 from django.utils.encoding import (
     smart_str,
@@ -31,12 +32,26 @@ from authentification.serializers import (
     LogoutSerializer,
     ResetPasswordSerializer,
     PasswordResetCompleteSerializer,
+    CustomTokenObtainPairSerializer,
 )
 
 
 def get_token_for_user(user):
     refresh = RefreshToken.for_user(user)
     return {"refresh": str(refresh), "access": str(refresh.access_token)}
+
+from rest_framework_simplejwt.views import TokenObtainPairView
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
+class GenerateToken(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+    def get(self, request):
+        user = self.request.user
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+        return Response({'access_token': access_token})
 
 
 class UserSignUp(APIView):

@@ -3,6 +3,7 @@ from authen.models import CustomUser
 from kitchen.models import Restaurants
 
 
+
 class OrderStatus(models.Model):
     name = models.CharField(max_length=250)
 
@@ -14,26 +15,9 @@ class OrderStatus(models.Model):
 
 
 class Orders(models.Model):
-    klient = models.ForeignKey(
-        CustomUser,
-        on_delete=models.CASCADE,
-        related_name='klient_id',
-        null=True,
-        blank=True
-        )
-    delivery = models.ForeignKey(
-        CustomUser,
-        on_delete=models.CASCADE,
-        related_name='delivery_id',
-        null=True,
-        blank=True
-    )
-    kitchen = models.ManyToManyField(
-        Restaurants,
-        null=True,
-        blank=True,
-        related_name='kitchen'
-    )
+    klient = models.IntegerField(null=True, blank=True)
+    delivery = models.IntegerField(null=True, blank=True)
+    kitchen = models.ManyToManyField(Restaurants, null=True, blank=True, related_name='kitchen')
     status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE)
     foods = models.JSONField(null=True, blank=True)
     total_price = models.IntegerField(null=True, blank=True)
