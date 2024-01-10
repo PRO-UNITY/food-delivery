@@ -1,5 +1,6 @@
 import requests
 from functools import wraps
+from django.conf import settings
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -19,6 +20,16 @@ def check_user_permission(func):
         if user_group != "users":
             return Response({"error": "You are not allowed to use this URL"}, status=status.HTTP_401_UNAUTHORIZED)
         return func(self, request, user_id=user_id, *args, **kwargs)
+    return wrapper
+
+def check_usert_permission(func):
+    @wraps(func)
+    def wrapper(self, request, *args, **kwargs):
+        token = request.headers.get('Authorization', None)
+        user_data, _ = fetch_user_data(token) if token else (None, None)    
+        user_id = user_data.get('id') if user_data else None
+        user_group = user_data.get('role') if user_data else None    
+        return func(self, request, user_id=user_id, user_group=user_group, *args, **kwargs)
     return wrapper
 
 def check_kitchen_permission(func):
@@ -68,7 +79,7 @@ def check_admin_permission(func):
     return wrapper
 
 def fetch_user_data(token):
-    url = "http://127.0.0.1:8001/auth/users"
+    url = f"{settings.BASE_URL}"
     headers = {'Authorization': f'Bearer {token}'}
     
     try:

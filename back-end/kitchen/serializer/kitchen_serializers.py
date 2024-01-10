@@ -14,13 +14,12 @@ class FoodsSerializer(serializers.ModelSerializer):
 
 
 class KitchensSerializer(serializers.ModelSerializer):
-    employes = UserInformationSerializer(many=True, read_only=True)
     logo = serializers.ImageField(max_length=None, use_url=True)
     foods = FoodsSerializer(many=True, read_only=True)
 
     class Meta:
         model = Restaurants
-        fields = ["id", "name", "description", "logo", "user", "is_active", "employes", "open_time", "close_time", "latitude", "longitude", "foods", "create_at", "updated_at",]
+        fields = ["id", "name", "description", "logo", "user", "is_active",  "open_time", "close_time", "latitude", "longitude", "foods", "create_at", "updated_at",]
 
 
 class KitchenSerializers(serializers.ModelSerializer):
@@ -29,7 +28,7 @@ class KitchenSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Restaurants
-        fields = ["id", "name", "description", "logo", "employes", "user", "is_active", "open_time", "close_time", "latitude", "longitude", "create_at", "updated_at",]
+        fields = ["id", "name", "description", "logo", "user", "is_active", "open_time", "close_time", "latitude", "longitude", "create_at", "updated_at",]
 
     def create(self, validated_data):
         create_foods = Restaurants.objects.create(**validated_data)
@@ -49,9 +48,9 @@ class KitchenSerializers(serializers.ModelSerializer):
             instance.logo = self.context.get("logo")
         else:
             instance.logo = validated_data.get("logo", instance.logo)
-        deliveries_data = validated_data.pop('employes')
-        instance.employes.clear()
-        for delivery_data in deliveries_data:
-            instance.employes.add(delivery_data)
+        # deliveries_data = validated_data.pop('employes')
+        # instance.employes.clear()
+        # for delivery_data in deliveries_data:
+        #     instance.employes.add(delivery_data)
         instance.save()
         return instance

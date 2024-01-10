@@ -15,6 +15,7 @@ class FoodsSerializer(serializers.ModelSerializer):
 
     def get_favorite(self, obj):
         user = self.context.get("user")
+        # print(user)
         user_favorities = Favorite.objects.filter(user=user)
         if user_favorities.filter(food__id=obj.id).exists():
             return True

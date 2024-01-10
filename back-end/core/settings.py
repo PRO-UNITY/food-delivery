@@ -245,3 +245,5 @@ SOCIAL_AUTH_FACEBOOK_SECRET = os.environ["SOCIAL_AUTH_FACEBOOK_SECRET"]
 SOCIAL_AUTH_FACEBOOK_APP_NAME = (os.environ["SOCIAL_AUTH_FACEBOOK_APP_NAME"],)
 
 # FORCE_SCRIPT_NAME = "/food-delivery"
+# BASE_URL = "https://api.prounity.uz/auth-delivery/auth/users"
+BASE_URL = "http://127.0.0.1:8001/auth/users"
