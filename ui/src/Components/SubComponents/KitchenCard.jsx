@@ -1,21 +1,20 @@
 import { Link } from "react-router-dom";
+import IconFood from '../../assets/images/iconfood.png'
 
 const KitchenCard = (props) => {
   const { id, name, logo } = props;
   return (
     <Link
       to={`/kitchen/${id}`}
-      className="text-dark"
-      style={{ textDecoration: "none" }}
+      className="text-dark border-none"
     >
       <div className="category-item bg-white">
         <img
-          style={{ width: "35px", height: "35px", borderRadius: "10px" }}
           src={`${
-            logo ? logo : "https://www.freeiconspng.com/uploads/food-icon-7.png"
+            logo ? logo : IconFood
           }`}
         />
-        <p className="name-category p-0 m-0  grey">{name}</p>
+        <p className="name-category grey">{name}</p>
       </div>
     </Link>
   );

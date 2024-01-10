@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { deleteData, postDataWithToken } from "../../Services/Services";
 import StarRating from "./StarsRating";
+import IconFood from "../../assets/images/iconfood.png";
 
 const FoodCard = (props) => {
   const {
@@ -55,26 +56,14 @@ const FoodCard = (props) => {
         className="w-100 d-flex justify-content-center"
       >
         <img
-          className="mb-2"
-          style={{
-            width: "100px",
-            height: "100px",
-            objectFit: "contain",
-            borderRadius: "20px",
-          }}
-          src={`${
-            food_img
-              ? food_img
-              : "https://www.freeiconspng.com/uploads/food-icon-7.png"
-          }`}
+          className="mb-2 food-img"
+          src={`${food_img ? food_img : IconFood}`}
         />
       </Link>
       <StarRating numStars={5} />
       <div className="d-flex justify-content-between w-100 align-items-center">
         <div>
-          <p style={{ fontWeight: 500 }} className="p-0 m-0">
-            {name}
-          </p>
+          <p>{name}</p>
           <p style={{ fontWeight: 800 }}>
             <span className="text-orange">$</span>
             {price}

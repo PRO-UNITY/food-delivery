@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import StarRating from "./StarsRating";
+import IconFood from '../../assets/images/iconfood.png'
 
 const KitchenFood = (props) => {
   const { id, food_img, price, name, setIsactive } = props;
@@ -15,36 +16,26 @@ const KitchenFood = (props) => {
     >
       <div className="w-100 d-flex justify-content-center">
         <img
-          className="mb-2"
-          style={{
-            width: "100px",
-            height: "100px",
-            objectFit: "contain",
-            borderRadius: "20px",
-          }}
+          className="mb-2 food-img"
           src={`${
             food_img
               ? food_img
-              : "https://www.freeiconspng.com/uploads/food-icon-7.png"
+              : IconFood
           }`}
         />
       </div>
       <StarRating numStars={5} />
       <div className="d-flex justify-content-between w-100 align-items-center">
         <div>
-          <p style={{ fontWeight: 500 }} className="p-0 m-0">
+          <p className="kitchen-food-name">
             {name}
           </p>
-          <p style={{ fontWeight: 800 }}>
+          <p className="kitchen-food-price">
             <span className="text-orange">$</span>
             {price}
           </p>
         </div>
-        <Link
-          style={{ textDecoration: "none" }}
-          to={`${id}`}
-          className={`btn-add bg-green`}
-        >
+        <Link to={`${id}`} className={`btn-add bg-green border-none`}>
           <i className="fa-solid fa-eye"></i>
         </Link>
       </div>

@@ -41,12 +41,7 @@ const Profile = ({ showProfile, counter }) => {
           <div className="d-flex gap-2 align-items-center">
             <Link to={"/settings"} className="btn-none ">
               <img
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  objectFit: "cover",
-                  borderRadius: "50%",
-                }}
+                className="user-img"
                 src={`${user?.avatar ? user?.avatar : User}`}
                 alt=""
               />
@@ -58,21 +53,19 @@ const Profile = ({ showProfile, counter }) => {
         )}
       </div>
 
-      {/* <p className="text-secondary">Lorem ipsum dolor, sit amet dolor consectetur adipisicing elit.</p> */}
       {token ? (
         <>
           <h6 className="text-secondary">Your Address</h6>
           <div className="d-flex justify-content-between align-items-center mb-2">
-            <p style={{ fontWeight: "700" }} className="p-0 m-0">
-              <i className="fa-solid fa-location-dot text-orange"></i> Elm Street, 23
+            <p className="address">
+              <i className="fa-solid fa-location-dot text-orange"></i> Elm
+              Street, 23
             </p>
           </div>
           <hr />
           {cardData?.length > 0 ? (
             <>
-              <h5 style={{ fontWeight: 700 }} className="mb-3">
-                Order Menu
-              </h5>
+              <h5 className="mb-3">Order Menu</h5>
               <div className="orders">
                 {card?.map((item, index) => (
                   <div key={index}>
@@ -84,15 +77,10 @@ const Profile = ({ showProfile, counter }) => {
                           alt=""
                         />
                         <div className="d-flex align-items-center">
-                          <p style={{ fontWeight: "bold" }} className="m-0 p-0">
-                            {item?.name}
-                          </p>
+                          <p className="name-order">{item?.name}</p>
                         </div>
                       </div>
-                      <p
-                        style={{ fontWeight: "bold" }}
-                        className="mx-2 m-0 p-0"
-                      >
+                      <p className="mx-2 name-order">
                         +
                         <span className="text-orange">
                           {item?.totalPrice ? item?.totalPrice : item?.price}
@@ -103,18 +91,7 @@ const Profile = ({ showProfile, counter }) => {
                 ))}
               </div>
               <hr />
-              <div className="d-flex justify-content-between align-items-center">
-                <p style={{ fontSize: "10px" }}>service</p>
-                <p style={{ fontWeight: "bold" }} className="mx-2">
-                  +<span className="orange">$</span>1
-                </p>
-              </div>
-              <div className="d-flex justify-content-between align-items-center">
-                <p>Total</p>
-                <p style={{ fontWeight: "bold" }} className="mx-2">
-                  <span className="text-orange">$</span>
-                </p>
-              </div>
+
               <Link to={"/food-order"}>
                 <button className="btn-checkout">Checkout</button>
               </Link>

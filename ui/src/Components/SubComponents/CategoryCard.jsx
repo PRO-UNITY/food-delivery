@@ -7,16 +7,12 @@ const CategoryCard = (props) => {
 
   return (
     <Link
-      to={`${currentUrl ==="/categories"? "":`/kitchen/category/${id}`}`}
-      className="text-dark"
-      style={{ textDecoration: "none" }}
+      to={`${currentUrl === "/categories" ? "" : `/kitchen/category/${id}`}`}
+      className="text-dark border-none"
     >
       <div className="category-item bg-white">
-        <i
-          style={{ fontSize: "25px" }}
-          className="fa-solid fa-bowl-food text-orange"
-        ></i>
-        <p className="name-category p-0 m-0 grey">{name}</p>
+        <i className="fa-solid fa-bowl-food text-orange"></i>
+        <p className="name-category">{name}</p>
       </div>
     </Link>
   );

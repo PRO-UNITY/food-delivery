@@ -10,11 +10,8 @@ export const KitchenCategoryCard = (props) => {
       style={{ textDecoration: "none" }}
     >
       <div className="category-item bg-white">
-        <i
-          style={{ fontSize: "25px" }}
-          className="fa-solid fa-bowl-food text-orange"
-        ></i>
-        <p className="name-category p-0 m-0 grey">
+        <i className="fa-solid fa-bowl-food text-orange"></i>
+        <p className="name-category grey">
           {categories?.name} x{categories?.food_count}
         </p>
       </div>

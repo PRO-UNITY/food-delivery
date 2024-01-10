@@ -26,24 +26,12 @@ const CardUser = (props) => {
   };
 
   return (
-    <div
-      className="food-item bg-white  text-dark"
-      style={{ textDecoration: "none" }}
-    >
+    <div className="food-item bg-white  text-dark border-none">
       <Link
         to={`/delivery-detail/${id}`}
         className="w-100 d-flex justify-content-center"
       >
-        <img
-          className="mb-2"
-          style={{
-            width: "100px",
-            height: "100px",
-            objectFit: "contain",
-            borderRadius: "20px",
-          }}
-          src={Supplier}
-        />
+        <img className="mb-2 food-img" src={Supplier} />
       </Link>
       <div className="w-100">
         <p className="text-center">{username}</p>
@@ -58,11 +46,7 @@ const CardUser = (props) => {
         )}
       </div>
       <div className="d-flex justify-content-between w-100 align-items-center">
-        <Link
-          style={{ textDecoration: "none" }}
-          to={`${id}`}
-          className={`btn btn-success`}
-        >
+        <Link to={`${id}`} className={`btn btn-success border-none`}>
           <i className="fa-solid fa-eye"></i> &nbsp; more
         </Link>
         <button onClick={() => deleteDelivery(id)} className="btn btn-danger">
