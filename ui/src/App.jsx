@@ -1,13 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getRoleUser } from "./Services/Services";
-import { ActiveNavContext } from "./Context/ActiveNav";
 import KitchenRoutes from "./Routes/KitchenRoutes";
 import AuthRoutes from "./Routes/AuthRoutes";
 import UserRoutes from "./Routes/UserRoutes";
 import AdminRoutes from "./Routes/AdminRoutes";
-import Pagenotfound from "./Pagenotfound";
+import { ActiveNavContext } from "./Context/ActiveNav";
 
 function App() {
   const [role, setRole] = useState("");
@@ -16,7 +15,6 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const currentUrl = location.pathname;
-  const roleuser = localStorage.getItem("role");
 
   useEffect(() => {
     if (currentUrl === "/") {
