@@ -1,11 +1,10 @@
 import "../../Demo.css";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import DemoLayout from "../../../Layout/Demoproject";
 import { AddWithFormData, getUserData } from "../../../Services/Services";
+import FoodAction from "../../../Components/SubComponents/FoodAction";
 
 const FoodAdd = () => {
-  const [search, setSearch] = useState("");
   const nameRef = useRef();
   const descriptionRef = useRef();
   const imgRef = useRef();
@@ -44,79 +43,27 @@ const FoodAdd = () => {
   };
 
   return (
-
-        <div className="card w-100">
-          <div className="card-header  text-light">
-            <h3>Add Food</h3>
-          </div>
-          <div className="card-body">
-            <form onSubmit={handleSubmit}>
-              <input
-                ref={nameRef}
-                type="text"
-                placeholder="name"
-                className="form-control mb-2"
-              />
-              <input
-                ref={descriptionRef}
-                type="text"
-                placeholder="description"
-                className="form-control mb-2"
-              />
-              <input ref={imgRef} type="file" className="form-control mb-2" />
-              <input
-                ref={priceRef}
-                type="text"
-                placeholder="price"
-                className="form-control mb-2"
-              />
-              <select
-                onChange={(e) => setSelectkitchen(e.target.value)}
-                value={selectkitchen}
-                ref={kitchenref}
-                name=""
-                id=""
-                className="form-control mb-2"
-              >
-                <option hidden>select restaurant</option>
-                {kitchen.map((item) => (
-                  <option
-                    key={item.id}
-                    value={item.id}
-                    className="form-control"
-                  >
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-              <select
-                onChange={(e) => setSelectcategory(e.target.value)}
-                value={selectcategory}
-                ref={categoryref}
-                name=""
-                id=""
-                className="form-control mb-2"
-              >
-                <option hidden value="">
-                  category name
-                </option>
-                {category.map((item) => (
-                  <option
-                    key={item.id}
-                    value={item.id}
-                    className="form-control"
-                  >
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-              <button type="submit" className="btn-orange">
-                create
-              </button>
-            </form>
-          </div>
-        </div>
-
+    <div className="card w-100">
+      <div className="card-header  text-light">
+        <h3>Add Food</h3>
+      </div>
+      <FoodAction
+        data={{}}
+        nameRef={nameRef}
+        descriptionRef={descriptionRef}
+        imgRef={imgRef}
+        priceRef={priceRef}
+        categoryref={categoryref}
+        kitchenref={kitchenref}
+        category={category}
+        kitchen={kitchen}
+        selectcategory={selectcategory}
+        selectkitchen={selectkitchen}
+        setSelectcategory={setSelectcategory}
+        setSelectkitchen={setSelectkitchen}
+        handleSubmit={handleSubmit}
+      />
+    </div>
   );
 };
 

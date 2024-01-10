@@ -39,7 +39,7 @@ const FoodHome = () => {
               <div className="d-flex justify-content-between align-items-center">
                 <h3>All Foods</h3>
                 <Link to={"add"} className="text-orange">
-                  Add Restaurant
+                  Add Food
                 </Link>
               </div>
               <div className="foods">

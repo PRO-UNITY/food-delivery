@@ -7,7 +7,6 @@ import axios from "axios";
 const UpdateSettings = () => {
   const [search, setSearch] = useState("");
   const [user, setUser] = useState({});
-  const usernameRef = useRef(null);
   const firstnameRef = useRef(null);
   const lastnameRef = useRef(null);
   const emailRef = useRef(null);

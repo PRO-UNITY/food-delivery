@@ -13,10 +13,7 @@ const KitchenFood = (props) => {
       className="food-item bg-white  text-dark"
       style={{ textDecoration: "none" }}
     >
-      <Link
-        to={`/food-detail/${id}`}
-        className="w-100 d-flex justify-content-center"
-      >
+      <div className="w-100 d-flex justify-content-center">
         <img
           className="mb-2"
           style={{
@@ -31,7 +28,7 @@ const KitchenFood = (props) => {
               : "https://www.freeiconspng.com/uploads/food-icon-7.png"
           }`}
         />
-      </Link>
+      </div>
       <StarRating numStars={5} />
       <div className="d-flex justify-content-between w-100 align-items-center">
         <div>

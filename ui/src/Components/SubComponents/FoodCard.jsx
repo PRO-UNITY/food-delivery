@@ -49,10 +49,7 @@ const FoodCard = (props) => {
   }, []);
 
   return (
-    <div
-      className="food-item bg-white  text-dark"
-      style={{ textDecoration: "none" }}
-    >
+    <div className="food-item bg-white  text-dark">
       <Link
         to={`/food-detail/${id}`}
         className="w-100 d-flex justify-content-center"

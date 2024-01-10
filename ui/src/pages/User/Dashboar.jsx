@@ -56,7 +56,7 @@ const Dashboard = () => {
     });
   }, [token, counter]);
 
-  
+
   return (
     <DemoLayout setSearch={setSearch} counter={counter}>
       {loading ? (
@@ -84,10 +84,10 @@ const Dashboard = () => {
           ) : (
             <>
               <div className="vaucher d-flex flex-column justify-content-center align-items-start p-4 mb-4">
-                <p className="text-white big-text-vaucher">
+                <p className="big-text-vaucher">
                   Det Discount Vaucher <br /> Up To 20%
                 </p>
-                <p className="text-white mini-text-vaucher">
+                <p className="mini-text-vaucher">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.{" "}
                   <br /> Neque reiciendis sit doloremque aliquam{" "}
                 </p>
@@ -96,7 +96,7 @@ const Dashboard = () => {
                 <h3>Category</h3>
                 <Link
                   to={"/allcategories"}
-                  className="text-orange text-center mb-1 btn-none text-link"
+                  className="text-link"
                 >
                   View All <i className="fa-solid fa-angle-right"></i>
                 </Link>
@@ -110,7 +110,7 @@ const Dashboard = () => {
                 <h3>Restaurants</h3>
                 <Link
                   to={"/allkitchens"}
-                  className="text-orange text-center mb-1 btn-none text-link"
+                  className="text-link"
                 >
                   View All <i className="fa-solid fa-angle-right"></i>
                 </Link>
@@ -124,7 +124,7 @@ const Dashboard = () => {
                 <h3>Popular Foods</h3>
                 <Link
                   to={"/allfoods"}
-                  className="text-orange text-center mb-1 btn-none text-link"
+                  className="text-link"
                 >
                   View All <i className="fa-solid fa-angle-right"></i>
                 </Link>

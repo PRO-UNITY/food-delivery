@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import DemoLayout from "../../../Layout/Demoproject";
 import { getUserData } from "../../../Services/Services";
 
 const KitchenFoodDetails = () => {
-  const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {

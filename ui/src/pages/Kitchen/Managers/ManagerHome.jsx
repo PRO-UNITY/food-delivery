@@ -38,7 +38,7 @@ const KitchenManagerHome = () => {
               <div className="d-flex justify-content-between align-items-center">
                 <h3>All Suppliers</h3>
                 <Link to={"add"} className="text-orange">
-                  Add Supplier
+                  Add Manager
                 </Link>
               </div>
               <div className="foods">
