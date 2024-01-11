@@ -50,6 +50,7 @@ const Dashboard = () => {
   useEffect(() => {
     const func = token ? getUserData : getDataWithToken;
     func(`/foods/`).then((res) => {
+      console.log(res);
       const partFood = res.data.results.slice(0, 3);
       setFood(partFood);
       setLoading(false);

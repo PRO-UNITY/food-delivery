@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import StarRating from "./StarsRating";
 import IconFood from '../../assets/images/iconfood.png'
+import { deleteData } from "../../Services/Services";
 
 const KitchenFood = (props) => {
-  const { id, food_img, price, name, setIsactive } = props;
+  const { id, food_img, price, name, setIsactive, isactive } = props;
 
   const deleteFood = (id) => {
-    deleteData(`/foods/${id}`).then(() => setIsactive((p) => !p));
+    deleteData(`/foods/${id}`).then(() => setIsactive(!isactive));
   };
 
   return (

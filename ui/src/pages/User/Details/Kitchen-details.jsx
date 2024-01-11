@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import DemoLayout from "../../Layout/Demoproject";
+import DemoLayout from "../../../Layout/Demoproject";
 import {
   getDataWithToken,
   getUserData,
-} from "../../Services/Services";
-import KitchenCategoryCard from "../../Components/SubComponents/KitchenCategoryDetail";
-import PaginationCard from "../../Components/SubComponents/Pagination";
-import FoodCard from "../../Components/SubComponents/FoodCard";
-import Loader from "../../Components/SubComponents/Loader";
+} from "../../../Services/Services";
+import KitchenCategoryCard from "../../../Components/SubComponents/KitchenCategoryDetail";
+import PaginationCard from "../../../Components/SubComponents/Pagination";
+import FoodCard from "../../../Components/SubComponents/FoodCard";
+import Loader from "../../../Components/SubComponents/Loader";
 
 const KitchenDetails = () => {
   const [foods, setFoods] = useState([]);

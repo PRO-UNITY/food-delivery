@@ -48,6 +48,7 @@ const FoodHome = () => {
                     {...item}
                     key={index}
                     setIsactive={setIsactive}
+                    isactive={isactive}
                   />
                 ))}
               </div>

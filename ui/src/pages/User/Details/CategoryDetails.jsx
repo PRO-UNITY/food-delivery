@@ -1,35 +1,31 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import DemoLayout from "../../Layout/Demoproject";
-import { getDataWithToken, getUserData } from "../../Services/Services";
-import FoodCard from "../../Components/SubComponents/FoodCard";
-import Loader from "../../Components/SubComponents/Loader";
-import PaginationCard from "../../Components/SubComponents/Pagination";
+import DemoLayout from "../../../Layout/Demoproject";
+import { getDataWithToken } from "../../../Services/Services";
+import FoodCard from "../../../Components/SubComponents/FoodCard";
+import PaginationCard from "../../../Components/SubComponents/Pagination";
+import Loader from "../../../Components/SubComponents/Loader";
 
-const KitchenCategoryDetail = () => {
+const CategoryDetails = () => {
   const [foods, setFoods] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [counter, setCounter] = useState(0);
   const [search, setSearch] = useState("");
-  const { category_id } = useParams();
-  const { kitchen_id } = useParams();
-  const token = localStorage.getItem("token");
+  const { id } = useParams();
+  const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    const func = token ? getUserData : getDataWithToken;
-    func(
-      `/kitchen/category/${category_id}/food/${kitchen_id}?page=${currentPage}`
-    ).then((res) => {
-      setFoods(res.data.results);
-      console.log(res.data.results);
-      const residual = res.data.count % 10;
-      const pages = (res.data.count - residual) / 10;
-      setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
-      setLoading(false);
-    });
-  }, [currentPage, counter, token]);
+    getDataWithToken(`/foods/category/${id}?page=${currentPage}`).then(
+      (res) => {
+        setFoods(res.data.results);
+        const residual = res.data.count % 10;
+        const pages = (res.data.count - residual) / 10;
+        setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
+        setLoading(false);
+      }
+    );
+  }, [id, currentPage]);
 
   return (
     <DemoLayout setSearch={setSearch} counter={counter}>
@@ -37,7 +33,6 @@ const KitchenCategoryDetail = () => {
         <Loader />
       ) : (
         <div className="body-main w-100 p-5">
-          <h3>Foods by Category</h3>
           <div className="foods">
             {foods.map((item, index) => (
               <FoodCard
@@ -61,4 +56,4 @@ const KitchenCategoryDetail = () => {
   );
 };
 
-export default KitchenCategoryDetail;
+export default CategoryDetails;

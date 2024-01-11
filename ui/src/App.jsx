@@ -6,7 +6,7 @@ import KitchenRoutes from "./Routes/KitchenRoutes";
 import AuthRoutes from "./Routes/AuthRoutes";
 import UserRoutes from "./Routes/UserRoutes";
 import AdminRoutes from "./Routes/AdminRoutes";
-import { ActiveNavContext } from "./Context/ActiveNav";
+import { ActiveNavContext } from "./context/ActiveNav";
 
 function App() {
   const [role, setRole] = useState("");

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import DemoLayout from "../../Layout/Demoproject";
-import { getDataWithToken } from "../../Services/Services";
+import DemoLayout from "../../../Layout/Demoproject";
+import { getDataWithToken } from "../../../Services/Services";
 
 const FoodDetail = () => {
   const [search, setSearch] = useState("");

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import DemoLayout from "../../Layout/Demoproject";
-import { getUserData } from "../../Services/Services";
+import { getUserData } from "../../../Services/Services";
 
 const HistoryDetailOrder = () => {
   const [search, setSearch] = useState("");
