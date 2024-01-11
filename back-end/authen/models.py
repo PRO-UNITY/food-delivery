@@ -1,5 +1,4 @@
 from django.db import models
-from cloudinary.models import CloudinaryField
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser
 
@@ -13,6 +12,3 @@ class CustomUser(AbstractUser):
     active_profile = models.BooleanField(default=False)
     latitude = models.CharField(max_length=250, null=True, blank=True)
     longitude = models.CharField(max_length=250, null=True, blank=True)
-
-    class Meta:
-        db_table = "user_table"

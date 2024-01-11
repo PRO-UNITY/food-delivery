@@ -78,3 +78,16 @@ class UserDelivery(APIView):
         queryset = get_object_or_404(CustomUser, id=pk)
         queryset.delete()
         return Response({"message": "Success"}, status=status.HTTP_200_OK)
+
+
+
+class DeliveryActive(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    @check_kitchen_permission
+    def get(self, request, format=None, *args, **kwargs):
+        user = request.user
+        instance = CustomUser.objects.filter(groups__name__in=["delivery"], user_id=user.id, active_profile=True)
+        serializer = UserInformationSerializer(instance, many=True, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)

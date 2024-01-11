@@ -84,9 +84,21 @@ def fetch_user_data(token):
     
     try:
         response = requests.get(url, headers=headers)
-        response.raise_for_status()  # Raise an HTTPError for bad responses
+        response.raise_for_status()
         user_data = response.json()
-        print(user_data)
+        return user_data, None
+    except requests.RequestException as e:
+        error_message = f"Error fetching user data: {str(e)}"
+        return None, Response({"error": error_message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+def fetch_delivery_data(token):
+    url = "http://127.0.0.1:8001/deliveryman/"
+    headers = {'Authorization': f'Bearer {token}'}
+    
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        user_data = response.json()
         return user_data, None
     except requests.RequestException as e:
         error_message = f"Error fetching user data: {str(e)}"

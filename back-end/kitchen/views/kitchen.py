@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db.models import Q
 import requests
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -14,10 +15,13 @@ from utils.permission_auth import check_kitchen_permission, check_kitchentwo_per
 from authen.serializers.authen_serializers import UserInformationSerializer
 from authen.models import CustomUser
 from authen.renderers import UserRenderers
-from kitchen.models import Restaurants
+from kitchen.models import Restaurants, EmployeRestaurants
 from kitchen.serializer.kitchen_serializers import (
     KitchensSerializer,
     KitchenSerializers,
+    EmployeRestaurants,
+    KitchensEmployeSerializer,
+    KitchensEmployeAddSerializer,
 )
 
 
@@ -141,65 +145,43 @@ class KitchenView(APIView):
         return Response({"message": "Delete success"}, status=status.HTTP_200_OK)
 
 
-class KitchenAddDeliverymanView(APIView):
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
-    @check_kitchen_permission
-    def get(self, request, pk, user_id=None):
-        if user_id is None:
-            return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        objects_get = Restaurants.objects.filter(id=pk)
-        queryset = CustomUser.objects.filter(user_id=request.user.id, groups__name__in=["delivery"], active_profile=True, delivery__isnull=True,)
-        active_deliverman = KitchensSerializer(objects_get, many=True, context={"request": request})
-        no_active_deliveryman = UserInformationSerializer(queryset, many=True, context={"request": request})
-        return Response({"active_employe": active_deliverman.data, "no_active_employe": no_active_deliveryman.data,}, status=status.HTTP_200_OK,)
-
-    @check_kitchen_permission
-    @swagger_auto_schema(request_body=KitchenSerializers)
-    def put(self, request, pk, user_id=None):
-        if user_id is None:
-            return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        expected_fields = set(["employes"])
-        received_fields = set(request.data.keys())
-        unexpected_fields = received_fields - expected_fields
-        if unexpected_fields:
-            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-            return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
-        serializers = KitchenSerializers(instance=Restaurants.objects.filter(id=pk)[0], context={"user_get": user_id}, data=request.data, partial=True,)
-        if serializers.is_valid(raise_exception=True):
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_200_OK)
-        return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST,)
-
-
 class KitchenAddManagerView(APIView):
-    render_classes = [UserRenderers]
-    permission = [IsAuthenticated]
-
+    
     @check_kitchen_permission
     def get(self, request, pk, user_id=None):
         if user_id is None:
             return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        objects_get = Restaurants.objects.filter(id=pk)
-        queryset = CustomUser.objects.filter(user_id=user_id, groups__name__in=["manager"], active_profile=True, delivery__isnull=True,)
-        active_deliverman = KitchensSerializer(objects_get, many=True, context={"request": request})
-        no_active_deliveryman = UserInformationSerializer(queryset, many=True, context={"request": request})
-        return Response({"active_employe": active_deliverman.data, "no_active_employe": no_active_deliveryman.data,}, status=status.HTTP_200_OK,)
+        token = request.headers.get('Authorization', None)
+        url = f"{settings.BASE_URL_MANAGER}"
+        headers = {'Authorization': f'Bearer {token}'}
+        response = requests.request("GET", url, headers=headers)
+        response.raise_for_status()
+        delivery_data = response.json()
+        user_ids = [user['id'] for user in delivery_data]
+        obj = EmployeRestaurants.objects.filter(restaurant=pk, employe__in=user_ids)
+        data_list = list(obj.values())
+        active_employee_ids = [item['employe'] for item in data_list if 'employe' in item]
+        no_active_employees = [user for user in delivery_data if user['id'] not in active_employee_ids]
+        serializers = KitchensEmployeSerializer(obj, many=True)
+        return Response({'no_active': no_active_employees, 'active': serializers.data}, status=status.HTTP_200_OK)
 
     @check_kitchen_permission
-    @swagger_auto_schema(request_body=KitchenSerializers)
-    def put(self, request, pk, user_id=None):
+    @swagger_auto_schema(request_body=KitchensEmployeAddSerializer)
+    def post(self, request, pk, user_id=None):
         if user_id is None:
             return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        expected_fields = set(["employes"])
-        received_fields = set(request.data.keys())
-        unexpected_fields = received_fields - expected_fields
-        if unexpected_fields:
-            error_message = f"Unexpected fields in request data: {', '.join(unexpected_fields)}"
-            return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
-        serializers = KitchenSerializers(instance=Restaurants.objects.filter(id=pk)[0], context={"user_get": user_id}, data=request.data, partial=True,)
+        instance=Restaurants.objects.filter(id=pk)[0]
+        serializers = KitchensEmployeAddSerializer(data=request.data, context={"restaurant": instance.id})
         if serializers.is_valid(raise_exception=True):
             serializers.save()
-            return Response(serializers.data, status=status.HTTP_200_OK)
-        return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST,)
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    @check_kitchen_permission
+    @swagger_auto_schema(request_body=KitchensEmployeAddSerializer)
+    def delete(self, request, pk, user_id=None):
+        if user_id is None:
+            return Response({"error": "Invalid user data"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        object_get = EmployeRestaurants.objects.filter(id=pk)
+        object_get.delete()
+        return Response({'message': 'delete success'}, status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,4 @@
 from django.db import models
-from authen.models import CustomUser
-from django.contrib.postgres.fields import ArrayField
 
 
 class Restaurants(models.Model):
@@ -20,5 +18,6 @@ class Restaurants(models.Model):
         return self.name
 
 class EmployeRestaurants(models.Model):
-    restaurant = models.ForeignKey(Restaurants, on_delete=models.CASCADE)
-    employe = models.IntegerField()
+    restaurant = models.ForeignKey(Restaurants, on_delete=models.CASCADE, related_name='restaurant', null=True, blank=True)
+    employe = models.IntegerField(null=True, blank=True)
+

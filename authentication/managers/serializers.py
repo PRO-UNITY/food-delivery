@@ -13,7 +13,7 @@ class UserInformationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ["id", "username", "first_name", "last_name", "avatar", "email", "role", "active_profile", "phone", "latitude", "longitude"]
+        fields = ["id", "username", "first_name", "last_name", "avatar", "email", "role", "active_profile", "phone", "latitude", "longitude", "user_id"]
 
     def get_role(self, obj):
         get_name = [roless.name for roless in obj.groups.all()]

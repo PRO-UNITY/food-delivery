@@ -89,3 +89,15 @@ class ManagerView(APIView):
         queryset = CustomUser.objects.get(id=pk)
         queryset.delete()
         return Response({"message": "success"}, status=status.HTTP_200_OK)
+
+
+class ManagerActive(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    @check_kitchen_permission
+    def get(self, request, format=None, *args, **kwargs):
+        user = request.user
+        instance = CustomUser.objects.filter(groups__name__in=["manager"], user_id=user.id, active_profile=True)
+        serializer = UserInformationSerializer(instance, many=True, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
