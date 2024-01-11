@@ -16,6 +16,7 @@ const KitchenDetails = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState('')
   const [card, setCard] = useState([]);
   const [data, setData] = useState({});
   const { id } = useParams();
