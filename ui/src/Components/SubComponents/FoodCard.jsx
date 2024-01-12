@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { deleteData, postDataWithToken } from "../../Services/Services";
+import { deleteData, postData } from "../../Services/Services";
 import StarRating from "./StarsRating";
 import IconFood from "../../assets/images/iconfood.png";
 
@@ -27,7 +27,7 @@ const FoodCard = (props) => {
       food: item.id,
       is_favorite: true,
     };
-    postDataWithToken(data, `/foods/favourites`);
+    postData(data, `/foods/favourites`);
     setCounter((counter) => counter + 1);
   };
 

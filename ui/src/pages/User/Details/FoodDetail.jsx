@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import DemoLayout from "../../../Layout/Demoproject";
-import { getDataWithToken } from "../../../Services/Services";
+import { getData } from "../../../Services/Services";
 
 const FoodDetail = () => {
   const [search, setSearch] = useState("");
@@ -10,7 +10,7 @@ const FoodDetail = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    getDataWithToken(`/foods/${id}`).then((res) => {
+    getData(`/foods/${id}`).then((res) => {
       setData(res);
     });
   }, []);

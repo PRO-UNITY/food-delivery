@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import DemoLayout from "../../Layout/Demoproject";
-import { postDataWithToken } from "../../Services/Services";
+import { postData } from "../../Services/Services";
 import Success from "../../assets/images/success.png";
 
 const calculateTotalPrice = (item, count) => {
@@ -92,7 +92,7 @@ const FoodOrder = () => {
       })),
       kitchen: card[0].kitchen_id,
     };
-    postDataWithToken(data, `/orders`)
+    postData(data, `/orders`)
       .then(() => {
         setActive(true);
         setTimeout(() => {

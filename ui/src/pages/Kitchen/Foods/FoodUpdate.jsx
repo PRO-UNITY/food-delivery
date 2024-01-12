@@ -1,6 +1,6 @@
 import "../../Demo.css";
 import { useState, useEffect, useRef } from "react";
-import { EditWithFormData, getUserData } from "../../../Services/Services";
+import { EditWithFormData, getData } from "../../../Services/Services";
 import { useNavigate, useParams } from "react-router-dom";
 import FoodAction from "../../../Components/SubComponents/FoodAction";
 
@@ -20,19 +20,19 @@ const FoodUpdate = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    getUserData(`/foods/${id}`).then((res) => {
+    getData(`/foods/${id}`).then((res) => {
       setData(res);
     });
   }, []);
 
   useEffect(() => {
-    getUserData("/kitchen/category").then((res) => {
+    getData("/kitchen/category").then((res) => {
       setCategory(res);
     });
   }, []);
 
   useEffect(() => {
-    getUserData("/kitchen/").then((res) => {
+    getData("/kitchen/").then((res) => {
       setKitchen(res);
     });
   }, []);

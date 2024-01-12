@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useOutlet } from "react-router-dom";
 import DemoLayout from "../../../Layout/Demoproject";
-import { getUserData } from "../../../Services/Services";
+import { getData } from "../../../Services/Services";
 import PaginationCard from "../../../Components/SubComponents/Pagination";
 import Loader from "../../../Components/SubComponents/Loader";
 import KitchenFood from "../../../Components/SubComponents/KitchenFood";
@@ -17,7 +17,7 @@ const FoodHome = () => {
   const outlet = useOutlet();
 
   useEffect(() => {
-    getUserData(`/foods/`).then((res) => {
+    getData(`/foods/`).then((res) => {
       setFoods(res.data.results);
       const residual = res.data.count % 10;
       const pages = (res.data.count - residual) / 10;

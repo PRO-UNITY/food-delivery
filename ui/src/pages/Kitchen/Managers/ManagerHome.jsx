@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Outlet, useOutlet } from "react-router-dom";
 import DemoLayout from "../../../Layout/Demoproject";
-import { deleteData, getUserData, putData } from "../../../Services/Services";
+import { getData } from "../../../Services/Services";
 import PaginationCard from "../../../Components/SubComponents/Pagination";
 import Loader from "../../../Components/SubComponents/Loader";
 import CardUser from "../../../Components/SubComponents/CardUser";
@@ -16,7 +16,7 @@ const KitchenManagerHome = () => {
   const outlet = useOutlet();
 
   useEffect(() => {
-    getUserData(`/managers?/page=${currentPage}`).then((res) => {
+    getData(`/managers?/page=${currentPage}`).then((res) => {
       setDeliveries(res.results);
       const residual = res.count % 10;
       const pages = (res.count - residual) / 10;

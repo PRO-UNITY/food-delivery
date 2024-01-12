@@ -1,7 +1,7 @@
 import "../../pages/Demo.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getUserData } from "../../Services/Services";
+import { getData } from "../../Services/Services";
 import User from "../../assets/images/user.png";
 
 const Profile = ({ showProfile, counter }) => {
@@ -12,7 +12,7 @@ const Profile = ({ showProfile, counter }) => {
   const cardData = JSON.parse(localStorage.getItem("card"));
 
   useEffect(() => {
-    getUserData("/user").then((res) => {
+    getData("/user").then((res) => {
       setUser(res);
     });
   }, []);

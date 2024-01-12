@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DemoLayout from "../../Layout/Demoproject";
-import { getDataWithToken, getUserData } from "../../Services/Services";
+import { getData } from "../../Services/Services";
 import PaginationCard from "../../Components/SubComponents/Pagination";
 import FoodCard from "../../Components/SubComponents/FoodCard";
 import Loader from "../../Components/SubComponents/Loader";
@@ -18,7 +18,7 @@ const AllFoods = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    getDataWithToken(`/foods/`).then((res) => {
+    getData(`/foods/`).then((res) => {
       const partFood = res.data.results;
       const residual = res.data.count % 10;
       const pages = (res.data.count - residual) / 10;
@@ -29,17 +29,15 @@ const AllFoods = () => {
   }, [currentPage]);
 
   useEffect(() => {
-    const func = token ? getUserData : getDataWithToken;
-    func(`/foods/`).then((res) => {
+    getData(`/foods/`).then((res) => {
       const partFood = res.data.results;
       setFood(partFood);
-      console.log(res.data.results);
       setLoading(false);
     });
   }, [token, counter]);
 
   useEffect(() => {
-    getDataWithToken(`/foods/?name=${search}`).then((res) => {
+    getData(`/foods/?name=${search}`).then((res) => {
       setSearchFood(res.data.results);
     });
   }, [search]);

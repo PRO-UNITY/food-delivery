@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getUserData } from "../../../Services/Services";
+import { getData } from "../../../Services/Services";
 
 const HistoryDetailOrder = () => {
   const [search, setSearch] = useState("");
@@ -9,9 +9,8 @@ const HistoryDetailOrder = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    getUserData(`/order/${id}/foods`).then((res) => {
+    getData(`/order/${id}/foods`).then((res) => {
       setOrders(res.foods);
-      console.log(res);
     });
   }, []);
 

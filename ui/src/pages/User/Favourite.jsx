@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import DemoLayout from "../../Layout/Demoproject";
-import { getUserData } from "../../Services/Services";
+import { getData } from "../../Services/Services";
 import PaginationCard from "../../Components/SubComponents/Pagination";
 import FoodCard from "../../Components/SubComponents/FoodCard";
 
@@ -14,7 +14,7 @@ const Dashboard = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    getUserData(`/foods/favourites`).then((res) => {
+    getData(`/foods/favourites`).then((res) => {
       setFood(res.data.results);
       const residual = res.data.count % 10;
       const pages = (res.data.count - residual) / 10;

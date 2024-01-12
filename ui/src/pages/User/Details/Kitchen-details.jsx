@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import DemoLayout from "../../../Layout/Demoproject";
-import {
-  getDataWithToken,
-  getUserData,
-} from "../../../Services/Services";
+import { getData } from "../../../Services/Services";
 import KitchenCategoryCard from "../../../Components/SubComponents/KitchenCategoryDetail";
 import PaginationCard from "../../../Components/SubComponents/Pagination";
 import FoodCard from "../../../Components/SubComponents/FoodCard";
@@ -16,7 +13,7 @@ const KitchenDetails = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("");
   const [card, setCard] = useState([]);
   const [data, setData] = useState({});
   const { id } = useParams();
@@ -26,8 +23,7 @@ const KitchenDetails = () => {
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    const func = token ? getUserData : getDataWithToken;
-    func(`/kitchen/${id}/foods?page=${currentPage}`).then((res) => {
+    getData(`/kitchen/${id}/foods?page=${currentPage}`).then((res) => {
       setFoods(res.data.results);
       const residual = res.data.count % 10;
       const pages = (res.data.count - residual) / 10;
@@ -37,28 +33,25 @@ const KitchenDetails = () => {
   }, [id, currentPage, counter]);
 
   useEffect(() => {
-    console.log("res");
-    getDataWithToken(`/kitchen/${id}/categories`).then((res) => {
+    getData(`/kitchen/${id}/categories`).then((res) => {
       setCategory(res);
-      console.log(res);
     });
   }, []);
 
   useEffect(() => {
-    getDataWithToken(`/kitchen/${id}`).then((res) => {
+    getData(`/kitchen/${id}`).then((res) => {
       setData(res);
     });
   }, []);
 
   useEffect(() => {
-    getDataWithToken(`/kitchen/${id}`).then((res) => {
+    getData(`/kitchen/${id}`).then((res) => {
       setData(res);
     });
   }, []);
 
   useEffect(() => {
-    const func = token ? getUserData : getDataWithToken;
-    func(
+    getData(
       `/kitchen/category/${category_id}/food/${kitchen_id}?page=${currentPage}`
     ).then((res) => {
       setFoods(res.data.results);

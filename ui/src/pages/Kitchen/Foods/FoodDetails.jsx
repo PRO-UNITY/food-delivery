@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getUserData } from "../../../Services/Services";
+import { getData } from "../../../Services/Services";
 
 const KitchenFoodDetails = () => {
   const [data, setData] = useState([]);
   const { id } = useParams();
 
   useEffect(() => {
-    getUserData(`/foods/${id}`).then((res) => {
+    getData(`/foods/${id}`).then((res) => {
       setData(res);
       setLoading(false);
     });

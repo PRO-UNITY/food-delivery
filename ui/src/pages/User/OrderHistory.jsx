@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Outlet, useOutlet } from "react-router-dom";
 import DemoLayout from "../../Layout/Demoproject";
-import { getUserData } from "../../Services/Services";
+import { getData } from "../../Services/Services";
 import PaginationCard from "../../Components/SubComponents/Pagination";
 import Loader from "../../Components/SubComponents/Loader";
 import TableHistory from "../../Components/SubComponents/TableHistory";
@@ -16,9 +16,8 @@ const OrderHistory = () => {
   const outlet = useOutlet();
 
   useEffect(() => {
-    getUserData(`/orders?page=${currentPage}`).then((res) => {
+    getData(`/orders?page=${currentPage}`).then((res) => {
       setOrders(res.data.results);
-      console.log(res);
       const residual = res.data.count % 10;
       const pages = (res.data.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);

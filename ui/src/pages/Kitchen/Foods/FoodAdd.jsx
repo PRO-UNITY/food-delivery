@@ -1,7 +1,7 @@
 import "../../Demo.css";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { AddWithFormData, getUserData } from "../../../Services/Services";
+import { AddWithFormData, getData } from "../../../Services/Services";
 import FoodAction from "../../../Components/SubComponents/FoodAction";
 
 const FoodAdd = () => {
@@ -18,13 +18,13 @@ const FoodAdd = () => {
   const [selectkitchen, setSelectkitchen] = useState(0);
 
   useEffect(() => {
-    getUserData("/kitchen/category").then((res) => {
+    getData("/kitchen/category").then((res) => {
       setCategory(res);
     });
   }, []);
 
   useEffect(() => {
-    getUserData("/kitchen/").then((res) => {
+    getData("/kitchen/").then((res) => {
       setKitchen(res);
     });
   }, []);

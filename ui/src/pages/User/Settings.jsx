@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Outlet, useOutlet } from "react-router-dom";
 import DemoLayout from "../../Layout/Demoproject";
-import { getUserData } from "../../Services/Services";
+import { getData } from "../../Services/Services";
 import ListProfile from "../../Components/SubComponents/ListProfile";
 
 const Settings = () => {
@@ -11,7 +11,7 @@ const Settings = () => {
   const outlet = useOutlet();
 
   useEffect(() => {
-    getUserData("/user").then((res) => setUser(res));
+    getData("/user").then((res) => setUser(res));
   }, []);
 
   return (

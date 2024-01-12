@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Outlet, useOutlet } from "react-router-dom";
 import DemoLayout from "../../../Layout/Demoproject";
-import { deleteData, getUserData } from "../../../Services/Services";
+import { deleteData, getData } from "../../../Services/Services";
 import Loader from "../../../Components/SubComponents/Loader";
 
 const RestaurantHome = () => {
@@ -12,7 +12,7 @@ const RestaurantHome = () => {
   const outlet = useOutlet()
 
   useEffect(() => {
-    getUserData(`/kitchen/`).then((res) => {
+    getData(`/kitchen/`).then((res) => {
       setRetaurant(res);
       setLoading(false);
     });

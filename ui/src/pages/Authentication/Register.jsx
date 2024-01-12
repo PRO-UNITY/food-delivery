@@ -29,7 +29,6 @@ const Register = () => {
     };
     const res = await postData(user, "/auth/signup");
     if (res && res.token) {
-      console.log(res);
       setAlertMessage({
         text: `Registration successfully`,
         type: "success",

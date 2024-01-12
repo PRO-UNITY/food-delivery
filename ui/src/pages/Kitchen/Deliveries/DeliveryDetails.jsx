@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import DemoLayout from "../../../Layout/Demoproject";
-import { getUserData } from "../../../Services/Services";
+import { getData } from "../../../Services/Services";
 import Supplier from "../../../assets/images/supplier.png";
 import ListProfile from "../../../Components/SubComponents/ListProfile";
 
@@ -12,9 +11,8 @@ const KitchenDeliveryDetails = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    getUserData(`/deliveryman/${id}`).then((res) => {
+    getData(`/deliveryman/${id}`).then((res) => {
       setData(res);
-      console.log(res);
       setLoading(false);
     });
   }, []);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import DemoLayout from "../../Layout/Demoproject";
-import { getDataWithToken, getUserData } from "../../Services/Services";
+import { getData, getKitchen } from "../../Services/Services";
 import FoodCard from "../../Components/SubComponents/FoodCard";
 import KitchenCard from "../../Components/SubComponents/KitchenCard";
 import CategoryCard from "../../Components/SubComponents/CategoryCard";
@@ -23,14 +23,14 @@ const Dashboard = () => {
   const [isactive, setIsActive] = useState(false);
 
   useEffect(() => {
-    getDataWithToken(`/kitchen/category`).then((res) => {
+    getData(`/kitchen/category`).then((res) => {
       setCategory(res);
       setLoading(false);
     });
   }, [isactive]);
 
   useEffect(() => {
-    getDataWithToken(`/kitchen/`).then((res) => {
+    getKitchen(`/kitchen/`).then((res) => {
       const partKitchen = res.data.results.slice(0, 7);
       setKitchen(partKitchen);
       setLoading(false);
@@ -38,8 +38,7 @@ const Dashboard = () => {
   }, [isactive]);
 
   useEffect(() => {
-    const func = token ? getUserData : getDataWithToken;
-    func(`/foods/?name=${search}`).then((res) => {
+    getData(`/foods/?name=${search}`).then((res) => {
       setSearchFoods(res.data.results);
       const residual = res.data.count % 10;
       const pages = (res.data.count - residual) / 10;
@@ -48,9 +47,7 @@ const Dashboard = () => {
   }, [search, counter, token]);
 
   useEffect(() => {
-    const func = token ? getUserData : getDataWithToken;
-    func(`/foods/`).then((res) => {
-      console.log(res);
+    getData(`/foods/`).then((res) => {
       const partFood = res.data.results.slice(0, 3);
       setFood(partFood);
       setLoading(false);

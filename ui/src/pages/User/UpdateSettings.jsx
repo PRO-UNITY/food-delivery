@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DemoLayout from "../../Layout/Demoproject";
-import { getUserData } from "../../Services/Services";
+import { getData } from "../../Services/Services";
 import axios from "axios";
 
 const UpdateSettings = () => {
-  const [search, setSearch] = useState("");
   const [user, setUser] = useState({});
   const firstnameRef = useRef(null);
   const lastnameRef = useRef(null);
@@ -17,7 +15,7 @@ const UpdateSettings = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getUserData("/user").then((res) => setUser(res));
+    getData("/user").then((res) => setUser(res));
   }, []);
 
   const handleSubmit = async (e) => {

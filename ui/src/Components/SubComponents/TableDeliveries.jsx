@@ -1,5 +1,5 @@
 import { useLocation, useParams } from "react-router-dom";
-import { EditWithFormData, getUserData } from "../../Services/Services";
+import { EditWithFormData, getData } from "../../Services/Services";
 import { useEffect } from "react";
 
 const TableDeliveries = (props) => {
@@ -20,10 +20,9 @@ const TableDeliveries = (props) => {
   const currentUrl = location.pathname;
   const urlManager = `/restaurant/${id}/add-manager`;
   const urlDelivery = `/restaurant/${id}/add-supplier`;
-  console.log(urlManager);
 
   useEffect(() => {
-    getUserData(
+    getData(
       `${
         currentUrl === urlManager
           ? `/kitchen/manager/add/${id}`
@@ -35,7 +34,7 @@ const TableDeliveries = (props) => {
   }, [status]);
 
   useEffect(() => {
-    getUserData(
+    getData(
       `${
         currentUrl === urlManager
           ? `/kitchen/manager/add/${id}`

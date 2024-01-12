@@ -1,14 +1,14 @@
 import "../../pages/Demo.css";
 import { useEffect, useState } from "react";
-import { NavLink, Link, Outlet } from "react-router-dom";
-import { getDataWithToken, BASE_URL } from "../../Services/Services";
+import { NavLink, Link } from "react-router-dom";
+import { getData, BASE_URL } from "../../Services/Services";
 
 const DemoSidebar = ({ showSidebar }) => {
   const [user, setUser] = useState(null);
   const role = localStorage.getItem("role");
 
   useEffect(() => {
-    getDataWithToken("/user").then((res) => setUser(res));
+    getData("/user").then((res) => setUser(res));
   }, []);
 
   const checkActive = (match, location) => {

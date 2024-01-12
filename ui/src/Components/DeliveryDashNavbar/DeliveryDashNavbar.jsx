@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { Link } from "react-router-dom";
-import { getUserData } from "../../Services/Services";
+import { getData } from "../../Services/Services";
 
 const DeliveryDashNavbar = () => {
   const [show, setShow] = useState(false);
@@ -14,7 +14,7 @@ const DeliveryDashNavbar = () => {
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    getUserData("/user").then((res) => {
+    getData("/user").then((res) => {
       setUser(res);
     });
   }, []);

@@ -2,7 +2,7 @@
 import { useRef } from "react";
 import DeliveryAdminLayout from "../../../Layout/DeliveryAdminLayout";
 import { useEffect, useState } from "react";
-import { getUserData } from "../../../Services/Services";
+import { getData } from "../../../Services/Services";
 import axios from "axios";
 
 const EditProfile = () => {
@@ -25,7 +25,7 @@ const EditProfile = () => {
   const emailRef = useRef();
 
   useEffect(() => {
-    getUserData("/user").then((res) => {
+    getData("/user").then((res) => {
       setUser(res);
       console.log(res);
     });

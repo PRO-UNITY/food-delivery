@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DemoLayout from "../../Layout/Demoproject";
-import { getDataWithToken } from "../../Services/Services";
+import { getData } from "../../Services/Services";
 import CategoryCard from "../../Components/SubComponents/CategoryCard";
 import Loader from "../../Components/SubComponents/Loader";
 
@@ -10,7 +10,7 @@ const AllCategories = () => {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    getDataWithToken(`/kitchen/category`).then((res) => {
+    getData(`/kitchen/category`).then((res) => {
       setCategory(res);
       setLoading(false);
     });

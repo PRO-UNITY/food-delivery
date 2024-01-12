@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import DemoLayout from "../../../Layout/Demoproject";
-import { getUserData } from "../../../Services/Services";
+import { getData } from "../../../Services/Services";
 
 const RestaurantDetails = () => {
-  const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
-    getUserData(`/kitchen/${id}`).then((res) => {
+    getData(`/kitchen/${id}`).then((res) => {
       setData(res);
       setLoading(false);
     });

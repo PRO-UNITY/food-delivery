@@ -1,7 +1,7 @@
 import "../../Demo.css";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { EditWithFormData, getUserData } from "../../../Services/Services";
+import { EditWithFormData, getData } from "../../../Services/Services";
 import RestaurantAction from "../../../Components/SubComponents/RestaurantAction";
 
 const RestaurantUpdate = () => {
@@ -34,7 +34,7 @@ const RestaurantUpdate = () => {
   };
 
   useEffect(() => {
-    getUserData(`/kitchen/${id}`).then((res) => {
+    getData(`/kitchen/${id}`).then((res) => {
       setData(res);
       setLoading(false);
     });
