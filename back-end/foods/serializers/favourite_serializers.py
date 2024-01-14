@@ -39,7 +39,7 @@ class CategoriesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FoodsCategories
-        fields = "__all__"
+        fields = ['id', 'name', 'food_count']
 
     def get_food_count(self, obj):
         return obj.foods.count()

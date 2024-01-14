@@ -28,14 +28,20 @@ class KitchenCategoryView(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
 
-class FoodCategoriesView(APIView):
+class FoodCategoriesView(APIView, Pagination):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+    serializer_class = CategoriesSerializer
 
     def get(self, request):
-        objects_list = FoodsCategories.objects.all()
-        serializers = CategoriesSerializer(objects_list, many=True, context={"request": request})
-        return Response(serializers.data, status=status.HTTP_200_OK)
+        queryset = FoodsCategories.objects.all()
+        page = super().paginate_queryset(queryset)
+        if page is not None:
+            serializer = super().get_paginated_response(self.serializer_class(page, many=True, context={"user": request.user.id, "request": request},).data)
+        else:
+            serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @check_admin_permission
     @swagger_auto_schema(request_body=FoodCategorySerializer)
@@ -79,7 +85,7 @@ class FoodCategoryView(APIView, Pagination):
             serializer = super().get_paginated_response(self.serializer_class(page, many=True, context={"user": request.user, "request": request}).data)
         else:
             serializer = self.serializer_class(queryset, many=True)
-        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @check_admin_permission
     @swagger_auto_schema(request_body=FoodCategorySerializer)

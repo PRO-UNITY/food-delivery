@@ -66,8 +66,6 @@ class KitchensView(APIView, Pagination):
                 queryset = Restaurants.objects.filter(user=request.user)
                 serializer = KitchensSerializer(queryset, many=True, context={"request": request})
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                return Response({"error": "It is not possible to add information to such a user"}, status=status.HTTP_400_BAD_REQUEST,)
         else:
             queryset = Restaurants.objects.all()
             queryset = filter_restaurants(queryset, request.query_params)
@@ -76,7 +74,7 @@ class KitchensView(APIView, Pagination):
                 serializer = super().get_paginated_response(self.serializer_class(page, many=True, context={"request": request}).data)
             else:
                 serializer = self.serializer_class(queryset, many=True)
-            return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     @check_kitchen_permission
     @swagger_auto_schema(request_body=KitchenSerializers)
