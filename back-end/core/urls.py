@@ -34,6 +34,7 @@ urlpatterns = [
    path('foods/', include('foods.urls')),
    path('', include('managers.urls')),
    path('', include('order.urls')),
+   path('user/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
    path('deliveryman/', include('deliveryman.urls')),
 ]
 
