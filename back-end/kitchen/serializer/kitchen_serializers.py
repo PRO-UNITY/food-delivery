@@ -39,12 +39,9 @@ class KitchenSerializers(serializers.ModelSerializer):
         fields = ["id", "name", "description", "logo", "employes", "user", "is_active", "open_time", "close_time", "latitude", "longitude", "create_at", "updated_at",]
 
     def create(self, validated_data):
-        employes_data = validated_data.pop('employes', [])  # Extract employes data
+        employes_data = validated_data.pop('employes', [])
         create_foods = Restaurants.objects.create(**validated_data)
-
-        # Set the many-to-many relationship using set()
         create_foods.employes.set(employes_data)
-
         create_foods.user = self.context.get("user")
         create_foods.save()
         return create_foods
@@ -57,13 +54,15 @@ class KitchenSerializers(serializers.ModelSerializer):
         instance.close_time = validated_data.get("close_time", instance.close_time)
         instance.latitude = validated_data.get("latitude", instance.latitude)
         instance.longitude = validated_data.get("longitude", instance.longitude)
-        if instance.logo == None:
+        
+        if instance.logo is None:
             instance.logo = self.context.get("logo")
         else:
             instance.logo = validated_data.get("logo", instance.logo)
-        deliveries_data = validated_data.pop('employes')
-        instance.employes.clear()
-        for delivery_data in deliveries_data:
-            instance.employes.add(delivery_data)
+
+        # Use set() to update many-to-many relationship
+        employes_data = validated_data.pop('employes', [])
+        instance.employes.set(employes_data)
+
         instance.save()
         return instance
