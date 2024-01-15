@@ -16,10 +16,8 @@ class FoodsSerializer(serializers.ModelSerializer):
 
     def get_favorite(self, obj):
         user = self.context.get("user")
-        if user.is_authenticated:
-            user_favorites = Favorite.objects.filter(user=user, food=obj)
-            return user_favorites.exists()
-        return False
+        user_favorites = Favorite.objects.filter(user=user, food=obj)
+        return user_favorites.exists()
 
 
 class AllCategoriesFoodsSerializer(serializers.ModelSerializer):
@@ -67,6 +65,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
 
 class FavoritesFoodSerializer(serializers.ModelSerializer):
+    food = FoodsSerializer(read_only=True)
     class Meta:
         model = Favorite
         fields = ["id", "food", "user", "is_favorite"]
