@@ -24,14 +24,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     getData(`/kitchen/category`).then((res) => {
-      setCategory(res);
+      setCategory(res.results);
       setLoading(false);
     });
   }, [isactive]);
 
   useEffect(() => {
     getKitchen(`/kitchen/`).then((res) => {
-      const partKitchen = res.data.results.slice(0, 7);
+      const partKitchen = res.results;
       setKitchen(partKitchen);
       setLoading(false);
     });
