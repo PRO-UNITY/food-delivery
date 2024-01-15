@@ -16,7 +16,7 @@ const CategoryDetails = () => {
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    getKitchen(`/foods/category/${id}?page=${currentPage}`).then((res) => {
+    getData(`/foods/category/${id}?page=${currentPage}`).then((res) => {
       setFoods(res.results);
       const residual = res.count % 10;
       const pages = (res.count - residual) / 10;
