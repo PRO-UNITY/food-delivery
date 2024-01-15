@@ -18,60 +18,95 @@ from foods.serializers.foods_serializers import (
 
 
 class FoodsView(APIView, Pagination):
-    render_classes = [UserRenderers]
-    permission_classes = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
     serializer_class = FoodsSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["name", "categories", "kitchen", "price", "description"]
 
-    def get_queryset(self):
+    def get(self, request, *args, **kwargs):
         queryset = Foods.objects.all()
         user = self.request.user
-        groups = user.groups.all()
-        if groups and str(groups[0]) == "kitchen":
-            queryset = queryset.filter(kitchen__user=user)
-        return queryset
 
-    def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        search_name = request.query_params.get("name", None)
-        search_category = request.query_params.get("category", None)
-        search_restaurant = request.query_params.get("restaurant", None)
-        search_description = request.query_params.get("description", None)
-        price_range = request.query_params.get("price", None)
-        sort_by = request.query_params.get("sort", None)
+        if user.is_authenticated:
+            groups = user.groups.all()
 
-        if search_name:
-            queryset = queryset.filter(Q(name__icontains=search_name))
+            if groups and str(groups[0]) == "kitchen":
+                queryset = queryset.filter(kitchen__user=user)
+            search_name = request.query_params.get("name", None)
+            search_category = request.query_params.get("category", None)
+            search_restaurant = request.query_params.get("restaurant", None)
+            search_description = request.query_params.get("description", None)
+            price_range = request.query_params.get("price", None)
+            sort_by = request.query_params.get("sort", None)
 
-        if search_category:
-            queryset = queryset.filter(Q(categories__id__icontains=search_category) | Q(categories__name__icontains=search_category))
+            if search_name:
+                queryset = queryset.filter(Q(name__icontains=search_name))
 
-        if search_restaurant:
-            queryset = queryset.filter(Q(kitchen__id__icontains=search_restaurant) | Q(kitchen__name__icontains=search_restaurant))
+            if search_category:
+                queryset = queryset.filter(Q(categories__id__icontains=search_category) | Q(categories__name__icontains=search_category))
 
-        if search_description:
-            queryset = queryset.filter(Q(description__icontains=search_description))
+            if search_restaurant:
+                queryset = queryset.filter(Q(kitchen__id__icontains=search_restaurant) | Q(kitchen__name__icontains=search_restaurant))
 
-        if price_range:
-            try:
-                start_price, end_price = map(int, price_range.split(","))
-                queryset = queryset.filter(Q(price__range=(start_price, end_price)))
-            except ValueError:
-                return Response({"error": "Value error, ranger"}, status=status.HTTP_400_BAD_REQUEST)
+            if search_description:
+                queryset = queryset.filter(Q(description__icontains=search_description))
 
-        if sort_by == "price_asc":
-            queryset = queryset.order_by("price")
-        elif sort_by == "price_desc":
-            queryset = queryset.order_by("-price")
+            if price_range:
+                try:
+                    start_price, end_price = map(int, price_range.split(","))
+                    queryset = queryset.filter(Q(price__range=(start_price, end_price)))
+                except ValueError:
+                    return Response({"error": "Value error, ranger"}, status=status.HTTP_400_BAD_REQUEST)
 
-        page = super().paginate_queryset(queryset)
-        if page is not None:
-            serializer = super().get_paginated_response(self.serializer_class(page, many=True, context={"user": request.user.id, "request": request}).data)
+            if sort_by == "price_asc":
+                queryset = queryset.order_by("price")
+            elif sort_by == "price_desc":
+                queryset = queryset.order_by("-price")
+
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_paginated_response(self.serializer_class(page, many=True, context={"user": request.user.id, "request": request}).data)
+            else:
+                serializer = self.serializer_class(queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            serializer = self.serializer_class(queryset, many=True)
-        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+            search_name = request.query_params.get("name", None)
+            search_category = request.query_params.get("category", None)
+            search_restaurant = request.query_params.get("restaurant", None)
+            search_description = request.query_params.get("description", None)
+            price_range = request.query_params.get("price", None)
+            sort_by = request.query_params.get("sort", None)
+
+            if search_name:
+                queryset = queryset.filter(Q(name__icontains=search_name))
+
+            if search_category:
+                queryset = queryset.filter(Q(categories__id__icontains=search_category) | Q(categories__name__icontains=search_category))
+
+            if search_restaurant:
+                queryset = queryset.filter(Q(kitchen__id__icontains=search_restaurant) | Q(kitchen__name__icontains=search_restaurant))
+
+            if search_description:
+                queryset = queryset.filter(Q(description__icontains=search_description))
+
+            if price_range:
+                try:
+                    start_price, end_price = map(int, price_range.split(","))
+                    queryset = queryset.filter(Q(price__range=(start_price, end_price)))
+                except ValueError:
+                    return Response({"error": "Value error, ranger"}, status=status.HTTP_400_BAD_REQUEST)
+
+            if sort_by == "price_asc":
+                queryset = queryset.order_by("price")
+            elif sort_by == "price_desc":
+                queryset = queryset.order_by("-price")
+
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_paginated_response(self.serializer_class(page, many=True, context={"request": request}).data)
+            else:
+                serializer = self.serializer_class(queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     @check_kitchen_permission
     @swagger_auto_schema(request_body=FoodSerializer)
