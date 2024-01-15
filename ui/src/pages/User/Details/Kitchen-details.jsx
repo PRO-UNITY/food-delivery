@@ -24,9 +24,9 @@ const KitchenDetails = () => {
 
   useEffect(() => {
     getData(`/kitchen/${id}/foods?page=${currentPage}`).then((res) => {
-      setFoods(res.data.results);
-      const residual = res.data.count % 10;
-      const pages = (res.data.count - residual) / 10;
+      setFoods(res.results);
+      const residual = res.count % 10;
+      const pages = (res.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
       setLoading(false);
     });

@@ -13,7 +13,7 @@ const AllCategories = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    getData(`/kitchen/category`).then((res) => {
+    getData(`/kitchen/category?page=${currentPage}`).then((res) => {
       setCategory(res.results);
       const residual = res.count % 10;
       const pages = (res.count - residual) / 10;

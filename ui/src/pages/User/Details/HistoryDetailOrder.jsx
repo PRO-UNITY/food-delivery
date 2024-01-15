@@ -3,9 +3,7 @@ import { useParams } from "react-router-dom";
 import { getData } from "../../../Services/Services";
 
 const HistoryDetailOrder = () => {
-  const [search, setSearch] = useState("");
   const [orders, setOrders] = useState([]);
-  const [data, setData] = useState([]);
   const { id } = useParams();
 
   useEffect(() => {
