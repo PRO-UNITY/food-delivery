@@ -16,6 +16,7 @@ class FoodsSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializers(serializers.ModelSerializer):
+    status = StatusSerializers(read_only=True)
 
     class Meta:
         model = Orders

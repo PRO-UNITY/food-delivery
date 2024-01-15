@@ -45,7 +45,7 @@ class SendViews(APIView, Pagination):
             serializer = super().get_paginated_response(self.serializer_class(page, many=True).data)
         else:
             serializer = self.serializer_class(queryset, many=True)
-        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     @check_user_permission
     @swagger_auto_schema(request_body=SendOrderSerializers)
     def post(self, request):
@@ -101,7 +101,7 @@ class OrderHistoryKitchenView(APIView, Pagination):
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.all().order_by('-id')
+        queryset = Orders.objects.filter(kitchen__user=request.user).order_by('-id')
         if search_delivery:
             queryset = queryset.filter(Q(delivery__id__icontains=search_delivery) | Q(delivery__username__icontains=search_delivery))
         if search_status:
