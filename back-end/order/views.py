@@ -244,3 +244,28 @@ class OrderActiveDeliveryView(APIView, Pagination):
         else:
             serializer = self.serializer_class(queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class OrderAcceptDeliveryView(APIView, Pagination):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request, pk, format=None, *args, **kwargs):
+        queryset = get_object_or_404(Orders, id=pk)
+        serializer = OrderSerializers(queryset, context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @check_delivery_permission
+    @swagger_auto_schema(request_body=SendOrderSerializers)
+    def put(self, request, pk):
+        expected_fields = set(["klient", "delivery", "status", "foods", "kitchen", "is_delivery", "is_active", "address", "total_price", "create_at", "updated_at",])
+        received_fields = set(request.data.keys())
+        unexpected_fields = received_fields - expected_fields
+        if unexpected_fields:
+            error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
+            return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
+        serializers = SendOrderSerializers(instance=Orders.objects.filter(id=pk)[0], data=request.data, partial=True,)
+        if serializers.is_valid(raise_exception=True):
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_200_OK)
+        return Response({"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST)
