@@ -29,7 +29,7 @@ class FoodCategories(APIView, Pagination):
             serializer = super().get_paginated_response(self.serializer_class(page, many=True, context={"user": request.user, "request": request}).data)
         else:
             serializer = self.serializer_class(instance, many=True)
-        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class FavouritesView(APIView, Pagination):
