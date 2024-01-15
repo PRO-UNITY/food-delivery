@@ -31,7 +31,7 @@ class SendViews(APIView, Pagination):
         search_restaurant = request.query_params.get("restaurant", None)
         search_status = request.query_params.get("status", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(klient=request.user).order_by('-id')
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, is_delivery=False, is_active=False).order_by('-id')
         if search_restaurant:
             queryset = queryset.filter(Q(kitchen__id__icontains=search_restaurant))
         if search_status:
@@ -166,7 +166,7 @@ class OrderHistoryDeliveryView(APIView, Pagination):
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id).order_by('-id')
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, is_active=True).order_by('-id')
         if search_status:
             queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
         if search_kitchen:
@@ -181,7 +181,7 @@ class OrderHistoryDeliveryView(APIView, Pagination):
             return super().get_paginated_response(serializer.data)
         else:
             serializer = self.serializer_class(queryset, many=True)
-            return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class OrderDeliveryView(APIView, Pagination):
@@ -197,7 +197,7 @@ class OrderDeliveryView(APIView, Pagination):
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, status=1).order_by('-id')
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, status=1, is_delivery=True, is_active=False).order_by('-id')
         if search_status:
             queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
         if search_kitchen:
@@ -212,4 +212,4 @@ class OrderDeliveryView(APIView, Pagination):
             return super().get_paginated_response(serializer.data)
         else:
             serializer = self.serializer_class(queryset, many=True)
-            return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
