@@ -2,28 +2,51 @@ import axios from "axios";
 
 export const BASE_URL = "https://api.prounity.uz/food-delivery";
 
-export const customFetch = async (url, options) => {
-  const token = localStorage.getItem("token");
+export const customFetch = async (url, options = {}) => {
+  const token = localStorage.getItem('token');
   if (token) {
     options.headers = {
       ...options.headers,
       Authorization: `Bearer ${token}`,
     };
   }
-  const response = await fetch(url, options);
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.error("Error Data:", errorData);
-    throw new Error(
-      JSON.stringify({ error: errorData, status: response.status })
-    );
+  try {
+    const response = await fetch(url, options);
+
+    console.log(`Making request to ${url} with method ${options.method}`);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error(
+        `Error making request to ${url} with method ${options.method}`,
+        errorData
+      );
+      console.error('Error stack:', new Error().stack);
+      throw new Error(
+        JSON.stringify({ error: errorData, status: response.status })
+      );
+    }
+
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return response.json();
+    }
+
+    return response;
+  } catch (error) {
+    if (
+      error instanceof TypeError &&
+      error.message.includes('Failed to fetch')
+    ) {
+      console.error('Network error:', error);
+    } else {
+      console.error('Error:', error);
+    }
+
+    throw error;
   }
-  const contentType = response.headers.get("content-type");
-  if (contentType && contentType.includes("application/json")) {
-    return response.json();
-  }
-  return response;
 };
+
 
 // const getHeader = () => {
 //   return {
@@ -80,7 +103,9 @@ export const getKitchen = async (url) => {
 };
 
 export const getData = async (url) => {
-  const response = await customFetch(BASE_URL + url, {})
+  const response = await customFetch(BASE_URL + url,{
+    method: "GET",
+  })
   return response;
 };
 

@@ -28,6 +28,7 @@ const AllKitchens = () => {
       {loading ? (
         <Loader />
       ) : (
+        
         <div className="body-main w-100 p-5">
           <h3>All Restaurants</h3>
           <div className="foods">

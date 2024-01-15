@@ -32,8 +32,8 @@ const Dashboard = () => {
   useEffect(() => {
     getKitchen(`/kitchen/`).then((res) => {
       const partKitchen = res.results;
-      setKitchen(partKitchen);
       console.log(res.results);
+      setKitchen(partKitchen);
       setLoading(false);
     });
   }, [isactive]);
