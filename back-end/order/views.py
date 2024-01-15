@@ -213,3 +213,34 @@ class OrderDeliveryView(APIView, Pagination):
         else:
             serializer = self.serializer_class(queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class OrderActiveDeliveryView(APIView, Pagination):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+    serializer_class = OrderSerializers
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["status", "kitchen"]
+
+    @check_delivery_permission
+    def get(self, request, format=None, *args, **kwargs):
+        search_status = request.query_params.get("status", None)
+        search_kitchen = request.query_params.get("kitchen", None)
+        sort_by = request.query_params.get("sort", None)
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, status=1, is_delivery=False, is_active=False).order_by('-id')
+        if search_status:
+            queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
+        if search_kitchen:
+            queryset = queryset.filter(Q(kitchen__id__icontains=search_kitchen) | Q(kitchen__name__icontains=search_kitchen))
+        if sort_by == "asc":
+            queryset = queryset.order_by("id")
+        elif sort_by == "desc":
+            queryset = queryset.order_by("-id")
+        page = super().paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.serializer_class(page, many=True)
+            return super().get_paginated_response(serializer.data)
+        else:
+            serializer = self.serializer_class(queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)

@@ -6,6 +6,7 @@ from order.views import (
     OrderHistoryuserView,
     OrderHistoryDeliveryView,
     OrderDeliveryView,
+    OrderActiveDeliveryView,
 )
 
 urlpatterns = [
@@ -15,4 +16,5 @@ urlpatterns = [
     path('order/history/user', OrderHistoryuserView.as_view()),
     path('order/history/delivery', OrderHistoryDeliveryView.as_view()),
     path('order/delivery', OrderDeliveryView.as_view()),
+    path('order/delivery/active', OrderActiveDeliveryView.as_view()),
 ]
