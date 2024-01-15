@@ -32,7 +32,6 @@ const Dashboard = () => {
   useEffect(() => {
     getKitchen(`/kitchen/`).then((res) => {
       const partKitchen = res.results;
-      console.log(res.results);
       setKitchen(partKitchen);
       setLoading(false);
     });
@@ -40,9 +39,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     getData(`/foods/?name=${search}`).then((res) => {
-      setSearchFoods(res.data.results);
-      const residual = res.data.count % 10;
-      const pages = (res.data.count - residual) / 10;
+      setSearchFoods(res.results);
+      console.log(res);
+      const residual = res.count % 10;
+      const pages = (res.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
     });
   }, [search, counter, token]);
