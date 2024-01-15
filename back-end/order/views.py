@@ -161,7 +161,7 @@ class OrderHistoryDeliveryView(APIView, Pagination):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["status", "kitchen"]
 
-    @check_manager_permission
+    @check_delivery_permission
     def get(self, request, format=None, *args, **kwargs):
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
