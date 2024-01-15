@@ -26,15 +26,7 @@ const AllFoods = () => {
       setFood(partFood);
       setLoading(false);
     });
-  }, [currentPage]);
-
-  useEffect(() => {
-    getData(`/foods/`).then((res) => {
-      const partFood = res.data.results;
-      setFood(partFood);
-      setLoading(false);
-    });
-  }, [token, counter]);
+  }, [token, counter, currentPage]);
 
   useEffect(() => {
     getData(`/foods/?name=${search}`).then((res) => {

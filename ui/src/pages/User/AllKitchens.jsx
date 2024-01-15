@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import DemoLayout from "../../Layout/Demoproject";
-import { getData } from "../../Services/Services";
+import { getKitchen } from "../../Services/Services";
 import PaginationCard from "../../Components/SubComponents/Pagination";
 import KitchenCard from "../../Components/SubComponents/KitchenCard";
 import Loader from "../../Components/SubComponents/Loader";
@@ -13,7 +13,7 @@ const AllKitchens = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    getData(`/kitchen/`).then((res) => {
+    getKitchen(`/kitchen/`).then((res) => {
       const partKitchen = res.data.results;
       const residual = res.data.count % 10;
       const pages = (res.data.count - residual) / 10;

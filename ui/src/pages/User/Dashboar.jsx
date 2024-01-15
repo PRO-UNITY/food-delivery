@@ -48,12 +48,14 @@ const Dashboard = () => {
 
   useEffect(() => {
     getData(`/foods/`).then((res) => {
-      const partFood = res.data.results.slice(0, 3);
+      const partFood = res.data.results;
+      const residual = res.data.count % 10;
+      const pages = (res.data.count - residual) / 10;
+      setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
       setFood(partFood);
       setLoading(false);
     });
   }, [token, counter]);
-
 
   return (
     <DemoLayout setSearch={setSearch} counter={counter}>
@@ -92,10 +94,7 @@ const Dashboard = () => {
               </div>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Category</h3>
-                <Link
-                  to={"/allcategories"}
-                  className="text-link"
-                >
+                <Link to={"/allcategories"} className="text-link">
                   View All <i className="fa-solid fa-angle-right"></i>
                 </Link>
               </div>
@@ -106,10 +105,7 @@ const Dashboard = () => {
               </div>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Restaurants</h3>
-                <Link
-                  to={"/allkitchens"}
-                  className="text-link"
-                >
+                <Link to={"/allkitchens"} className="text-link">
                   View All <i className="fa-solid fa-angle-right"></i>
                 </Link>
               </div>
@@ -120,10 +116,7 @@ const Dashboard = () => {
               </div>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Popular Foods</h3>
-                <Link
-                  to={"/allfoods"}
-                  className="text-link"
-                >
+                <Link to={"/allfoods"} className="text-link">
                   View All <i className="fa-solid fa-angle-right"></i>
                 </Link>
               </div>
@@ -136,6 +129,13 @@ const Dashboard = () => {
                     counter={counter}
                   />
                 ))}
+              </div>
+              <div className="w-100 d-flex justify-content-center">
+                <PaginationCard
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                  totalPages={totalPages}
+                />
               </div>
             </>
           )}
