@@ -18,5 +18,5 @@ urlpatterns = [
     path('order/history/delivery', OrderHistoryDeliveryView.as_view()),
     path('order/delivery', OrderDeliveryView.as_view()),
     path('order/delivery/active', OrderActiveDeliveryView.as_view()),
-    path('order/delivery/accept', OrderAcceptDeliveryView.as_view()),
+    path('order/<int:pk>/delivery/accept', OrderAcceptDeliveryView.as_view()),
 ]
