@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import DemoLayout from "../../../Layout/Demoproject";
-import { getData } from "../../../Services/Services";
+import { getData, getKitchen } from "../../../Services/Services";
 import FoodCard from "../../../Components/SubComponents/FoodCard";
 import PaginationCard from "../../../Components/SubComponents/Pagination";
 import Loader from "../../../Components/SubComponents/Loader";
@@ -16,10 +16,10 @@ const CategoryDetails = () => {
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    getData(`/foods/category/${id}?page=${currentPage}`).then((res) => {
-      setFoods(res.data.results);
-      const residual = res.data.count % 10;
-      const pages = (res.data.count - residual) / 10;
+    getKitchen(`/foods/category/${id}?page=${currentPage}`).then((res) => {
+      setFoods(res.results);
+      const residual = res.count % 10;
+      const pages = (res.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
       setLoading(false);
     });
