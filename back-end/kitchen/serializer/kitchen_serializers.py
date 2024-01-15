@@ -24,8 +24,8 @@ class KitchensSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "description", "logo", "food_count", "user", "is_active", "employes", "open_time", "close_time", "latitude", "longitude", "foods", "create_at", "updated_at",]
 
     def get_food_count(self, obj):
-        if hasattr(obj, 'food'):  # Use the related name 'food' instead of 'foods'
-            food_count = obj.food.count()  # Access the related foods and get their count
+        if hasattr(obj, 'food'):
+            food_count = obj.food.count()
             print(f"Food count for {obj.name}: {food_count}")
             return food_count
         return 0
@@ -39,7 +39,12 @@ class KitchenSerializers(serializers.ModelSerializer):
         fields = ["id", "name", "description", "logo", "employes", "user", "is_active", "open_time", "close_time", "latitude", "longitude", "create_at", "updated_at",]
 
     def create(self, validated_data):
+        employes_data = validated_data.pop('employes', [])  # Extract employes data
         create_foods = Restaurants.objects.create(**validated_data)
+
+        # Set the many-to-many relationship using set()
+        create_foods.employes.set(employes_data)
+
         create_foods.user = self.context.get("user")
         create_foods.save()
         return create_foods
