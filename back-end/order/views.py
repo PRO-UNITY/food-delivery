@@ -31,7 +31,7 @@ class SendViews(APIView, Pagination):
         search_restaurant = request.query_params.get("restaurant", None)
         search_status = request.query_params.get("status", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(klient=request.user)
+        queryset = Orders.objects.filter(klient=request.user).order_by('-id')
         if search_restaurant:
             queryset = queryset.filter(Q(kitchen__id__icontains=search_restaurant))
         if search_status:
@@ -101,7 +101,7 @@ class OrderHistoryKitchenView(APIView, Pagination):
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.all()
+        queryset = Orders.objects.all().order_by('-id')
         if search_delivery:
             queryset = queryset.filter(Q(delivery__id__icontains=search_delivery) | Q(delivery__username__icontains=search_delivery))
         if search_status:
@@ -134,7 +134,7 @@ class OrderHistoryuserView(APIView, Pagination):
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(klient=request.user.id)
+        queryset = Orders.objects.filter(klient=request.user.id).order_by('-id')
         if search_status:
             queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
         if search_kitchen:
