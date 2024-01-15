@@ -17,11 +17,18 @@ class KitchensSerializer(serializers.ModelSerializer):
     employes = UserInformationSerializer(many=True, read_only=True)
     logo = serializers.ImageField(max_length=None, use_url=True)
     foods = FoodsSerializer(many=True, read_only=True)
+    food_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Restaurants
-        fields = ["id", "name", "description", "logo", "user", "is_active", "employes", "open_time", "close_time", "latitude", "longitude", "foods", "create_at", "updated_at",]
+        fields = ["id", "name", "description", "logo", "food_count", "user", "is_active", "employes", "open_time", "close_time", "latitude", "longitude", "foods", "create_at", "updated_at",]
 
+    def get_food_count(self, obj):
+        if hasattr(obj, 'food'):  # Use the related name 'food' instead of 'foods'
+            food_count = obj.food.count()  # Access the related foods and get their count
+            print(f"Food count for {obj.name}: {food_count}")
+            return food_count
+        return 0
 
 class KitchenSerializers(serializers.ModelSerializer):
     logo = serializers.ImageField(max_length=None, allow_empty_file=False, allow_null=False, use_url=False, required=False)
