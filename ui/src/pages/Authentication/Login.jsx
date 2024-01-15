@@ -51,6 +51,9 @@ const Login = () => {
                 <Link to={"/register"} className="my-2 " type="button">
                   Register
                 </Link>
+                <Link to={"/forget-password"} className="my-2 " type="button">
+                  forget password
+                </Link>
               </div>
               <button className="btn btn-warning float-end my-2">Login</button>
             </div>

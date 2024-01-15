@@ -13,7 +13,7 @@ const AllKitchens = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    getKitchen(`/kitchen/`).then((res) => {
+    getKitchen(`/kitchen/?page=${currentPage}`).then((res) => {
       const partKitchen = res.results;
       const residual = res.count % 10;
       const pages = (res.count - residual) / 10;
@@ -28,7 +28,7 @@ const AllKitchens = () => {
       {loading ? (
         <Loader />
       ) : (
-        
+
         <div className="body-main w-100 p-5">
           <h3>All Restaurants</h3>
           <div className="foods">

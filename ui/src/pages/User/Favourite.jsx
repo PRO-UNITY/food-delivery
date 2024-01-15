@@ -14,10 +14,10 @@ const Dashboard = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    getData(`/foods/favourites`).then((res) => {
-      setFood(res.data.results);
-      const residual = res.data.count % 10;
-      const pages = (res.data.count - residual) / 10;
+    getData(`/foods/favourites?page=${currentPage}`).then((res) => {
+      setFood(res.results);
+      const residual = res.count % 10;
+      const pages = (res.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
     });
   }, [counter, currentPage]);

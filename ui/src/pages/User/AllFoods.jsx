@@ -18,10 +18,10 @@ const AllFoods = () => {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    getData(`/foods/`).then((res) => {
-      const partFood = res.data.results;
-      const residual = res.data.count % 10;
-      const pages = (res.data.count - residual) / 10;
+    getData(`/foods/?page=${currentPage}`).then((res) => {
+      const partFood = res.results;
+      const residual = res.count % 10;
+      const pages = (res.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
       setFood(partFood);
       setLoading(false);
@@ -30,7 +30,7 @@ const AllFoods = () => {
 
   useEffect(() => {
     getData(`/foods/?name=${search}`).then((res) => {
-      setSearchFood(res.data.results);
+      setSearchFood(res.results);
     });
   }, [search]);
 

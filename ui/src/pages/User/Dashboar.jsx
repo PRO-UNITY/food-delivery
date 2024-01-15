@@ -40,7 +40,6 @@ const Dashboard = () => {
   useEffect(() => {
     getData(`/foods/?name=${search}`).then((res) => {
       setSearchFoods(res.results);
-      console.log(res);
       const residual = res.count % 10;
       const pages = (res.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
@@ -48,7 +47,7 @@ const Dashboard = () => {
   }, [search, counter, token]);
 
   useEffect(() => {
-    getData(`/foods/`).then((res) => {
+    getData(`/foods/?page=${currentPage}`).then((res) => {
       const partFood = res.results;
       const residual = res.count % 10;
       const pages = (res.count - residual) / 10;
@@ -56,7 +55,7 @@ const Dashboard = () => {
       setFood(partFood);
       setLoading(false);
     });
-  }, [token, counter]);
+  }, [token, counter, currentPage]);
 
   return (
     <DemoLayout setSearch={setSearch} counter={counter}>

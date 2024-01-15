@@ -1,9 +1,11 @@
 import "../../pages/Demo.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const DemoNavbar = ({ setshowSidebar, setshowProfile, setSearch }) => {
   const [inputVal, setInputVal] = useState("");
-  setSearch(inputVal);
+  useEffect(()=>{
+    setSearch(inputVal);
+  },[inputVal])
 
   return (
     <div className="hrms-doc-navbar demo-navbar d-flex flex-column flex-md-row gap-3 align-items-center bg-light  justify-content-between px-md-5 py-3">

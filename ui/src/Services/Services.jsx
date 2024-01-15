@@ -13,8 +13,6 @@ export const customFetch = async (url, options = {}) => {
   try {
     const response = await fetch(url, options);
 
-    console.log(`Making request to ${url} with method ${options.method}`);
-
     if (!response.ok) {
       const errorData = await response.json();
       console.error(
@@ -104,7 +102,7 @@ export const getKitchen = async (url) => {
 
 export const getData = async (url) => {
   const response = await customFetch(BASE_URL + url,{
-    method: "GET",
+
   })
   return response;
 };

@@ -13,6 +13,7 @@ export { default as UpdateSettings } from "./User/UpdateSettings";
 export { default as HistoryDetailOrder } from "./User/Details/HistoryDetailOrder";
 export { default as Register } from "./Authentication/Register";
 export { default as Login } from "./Authentication/Login";
+export { default as ForgetPassword } from "./Authentication/ForgetPassword";
 export { default as CategoryDetails } from "./User/Details/CategoryDetails";
 export { default as KitchenDetails } from "./User/Details/Kitchen-details";
 export { default as DeliveryHome } from "./Admin/Delivery-home/Delivery-home";

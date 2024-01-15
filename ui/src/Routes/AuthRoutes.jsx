@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { Login, Register } from "../pages";
+import { ForgetPassword, Login, Register } from "../pages";
 import Pagenotfound from "../Pagenotfound";
 
 const AuthRoutes = () => {
@@ -8,6 +8,7 @@ const AuthRoutes = () => {
     <Routes>
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forget-password" element={<ForgetPassword />} />
       {/* <Route path="*" element={<Pagenotfound/>} /> */}
     </Routes>
   );
