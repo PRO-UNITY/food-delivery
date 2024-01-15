@@ -20,7 +20,7 @@ const AllCategories = () => {
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
       setLoading(false);
     });
-  }, []);
+  }, [currentPage]);
 
   return (
     <DemoLayout setSearch={setSearch}>

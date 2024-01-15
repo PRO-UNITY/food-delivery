@@ -530,7 +530,7 @@ h3 {
   align-items: center;
   justify-content: space-between;
   margin-top: 30px;
-  padding: 30px;
+  padding: 30px;  
 }
 
 .container-avatar {
@@ -558,6 +558,14 @@ h3 {
 
 .address {
   font-weight: 700;
+}
+
+.count-item{
+  color: white;
+  padding: 0;
+  margin: 0;
+  font-size: 30px !important;
+  font-weight: 600;
 }
 
 .user-img {

@@ -7,6 +7,7 @@ import KitchenCard from "../../Components/SubComponents/KitchenCard";
 import CategoryCard from "../../Components/SubComponents/CategoryCard";
 import PaginationCard from "../../Components/SubComponents/Pagination";
 import Loader from "../../Components/SubComponents/Loader";
+import MoreButton from "../../Components/SubComponents/MoreButton";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -15,7 +16,6 @@ const Dashboard = () => {
   const [food, setFood] = useState([]);
   const [search, setSearch] = useState("");
   const [searchFoods, setSearchFoods] = useState([]);
-  const [card, setCard] = useState([]);
   const [counter, setCounter] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -33,6 +33,7 @@ const Dashboard = () => {
     getKitchen(`/kitchen/`).then((res) => {
       const partKitchen = res.results;
       setKitchen(partKitchen);
+      console.log(res.results);
       setLoading(false);
     });
   }, [isactive]);
@@ -102,6 +103,7 @@ const Dashboard = () => {
                 {category.map((item, index) => (
                   <CategoryCard key={index} {...item} />
                 ))}
+                <MoreButton count={category.length} item={"category"} />
               </div>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Restaurants</h3>
@@ -113,6 +115,7 @@ const Dashboard = () => {
                 {kitchen.map((item, index) => (
                   <KitchenCard key={index} {...item} />
                 ))}
+                <MoreButton count={category.length} item={"kitchen"} />
               </div>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h3>Popular Foods</h3>

@@ -14,14 +14,14 @@ const AllKitchens = () => {
 
   useEffect(() => {
     getKitchen(`/kitchen/`).then((res) => {
-      const partKitchen = res.data.results;
-      const residual = res.data.count % 10;
-      const pages = (res.data.count - residual) / 10;
+      const partKitchen = res.results;
+      const residual = res.count % 10;
+      const pages = (res.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
       setKitchen(partKitchen);
       setLoading(false);
     });
-  }, []);
+  }, [currentPage]);
 
   return (
     <DemoLayout setSearch={setSearch}>
