@@ -223,7 +223,7 @@ class RequestPasswordRestEmail(generics.GenericAPIView):
             print(user)
             uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
             token = PasswordResetTokenGenerator().make_token(user)
-            absurl = f"http://localhost:3000/reset-password/{uidb64}/{token}"
+            absurl = f"http://localhost:5173/reset-password/{uidb64}/{token}"
             email_body = f"Hi \n Use link below to reset password \n link: {absurl}"
             data = {
                 "email_body": email_body,

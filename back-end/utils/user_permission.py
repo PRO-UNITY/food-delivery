@@ -53,3 +53,16 @@ def check_admin_permission(func):
             return Response({"error": "You are not allowed to use this URL"}, status=status.HTTP_401_UNAUTHORIZED)
         return func(self, request, *args, **kwargs)
     return wrapper
+
+
+def check_delivery_permission(func):
+    @wraps(func)
+    def wrapper(self, request, *args, **kwargs):
+        user = request.user
+        if not user.is_authenticated:
+            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
+        groups = user.groups.all()
+        if not groups or groups[0].name != "delivery":
+            return Response({"error": "You are not allowed to use this URL"}, status=status.HTTP_401_UNAUTHORIZED)
+        return func(self, request, *args, **kwargs)
+    return wrapper

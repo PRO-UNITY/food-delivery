@@ -16,6 +16,7 @@ class FoodsSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializers(serializers.ModelSerializer):
+    status = StatusSerializers(read_only=True)
 
     class Meta:
         model = Orders
@@ -34,8 +35,11 @@ class SendOrderSerializers(serializers.ModelSerializer):
         fields = ["id", "klient", "delivery", "status", "foods", "kitchen", "is_delivery", "is_active", "address", "total_price", "create_at", "updated_at",]
 
     def create(self, validated_data):
+        employes_data = validated_data.pop('kitchen', [])
         send_order = Orders.objects.create(**validated_data)
         send_order.klient = self.context.get("klient")
+        send_order.kitchen.set(employes_data)
+        
         send_order.save()
         return send_order
 

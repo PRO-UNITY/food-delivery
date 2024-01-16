@@ -24,13 +24,23 @@ class FoodCategories(APIView, Pagination):
     serializer_class = FoodsSerializer
 
     def get(self, request, pk, format=None, *args, **kwargs):
-        instance = Foods.objects.filter(categories=pk)
-        page = super().paginate_queryset(instance)
-        if page is not None:
-            serializer = super().get_paginated_response(self.serializer_class(page, many=True, context={"user": request.user, "request": request}).data)
+        user = request.user
+        if not user.is_authenticated:
+            instance = Foods.objects.filter(categories=pk)
+            page = super().paginate_queryset(instance)
+            if page is not None:
+                serializer = super().get_paginated_response(self.serializer_class(page, many=True, context={"request": request}).data)
+            else:
+                serializer = self.serializer_class(instance, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            serializer = self.serializer_class(instance, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            instance = Foods.objects.filter(categories=pk)
+            page = super().paginate_queryset(instance)
+            if page is not None:
+                serializer = super().get_paginated_response(self.serializer_class(page, many=True, context={"user": request.user.id ,"request": request}).data)
+            else:
+                serializer = self.serializer_class(instance, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class FavouritesView(APIView, Pagination):

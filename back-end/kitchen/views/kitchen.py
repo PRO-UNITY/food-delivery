@@ -104,7 +104,7 @@ class KitchenView(APIView):
     @check_kitchen_permission
     @swagger_auto_schema(request_body=KitchenSerializers)
     def put(self, request, pk):
-        expected_fields = set(["name", "logo", "description", "user_id", "is_active", "open_time", "close_time", "latitude", "longitude",])
+        expected_fields = set(["name", "logo", "description", "user_id", "employes", "is_active", "open_time", "close_time", "latitude", "longitude",])
         received_fields = set(request.data.keys())
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:

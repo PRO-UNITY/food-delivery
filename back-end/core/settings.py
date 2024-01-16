@@ -170,7 +170,7 @@ access_token_lifetime_days = int(os.environ["ACCESS_TOKEN_LIFETIME_DAYS"])
 refresh_token_lifetime_days = int(os.environ["REFRESH_TOKEN_LIFETIME_DAYS"])
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=access_token_lifetime_days),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=access_token_lifetime_days),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=refresh_token_lifetime_days),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
@@ -252,4 +252,4 @@ SOCIAL_AUTH_FACEBOOK_KEY = os.environ["SOCIAL_AUTH_FACEBOOK_KEY"]
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ["SOCIAL_AUTH_FACEBOOK_SECRET"]
 SOCIAL_AUTH_FACEBOOK_APP_NAME = (os.environ["SOCIAL_AUTH_FACEBOOK_APP_NAME"],)
 
-FORCE_SCRIPT_NAME = "/food-delivery"    
+FORCE_SCRIPT_NAME = "/food-delivery"     
