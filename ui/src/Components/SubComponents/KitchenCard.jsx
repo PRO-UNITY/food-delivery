@@ -7,7 +7,10 @@ const KitchenCard = (props) => {
     <Link to={`/kitchen/${id}`} className="text-dark border-none">
       <div className="category-item bg-white">
         <img src={`${logo ? logo : IconFood}`} />
-        <p className="name-category grey">{name} <span className="text-orange">{food_count}</span></p>
+        <p className="name-category grey">
+          {`${name.length > 8 ? `${name.slice(0, 6) + "..."}` : name}`}{" "}
+          <span className="text-orange">{food_count}</span>
+        </p>
       </div>
     </Link>
   );

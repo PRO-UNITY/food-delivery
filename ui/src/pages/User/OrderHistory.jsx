@@ -16,10 +16,11 @@ const OrderHistory = () => {
   const outlet = useOutlet();
 
   useEffect(() => {
-    getData(`/orders?page=${currentPage}`).then((res) => {
-      setOrders(res.data.results);
-      const residual = res.data.count % 10;
-      const pages = (res.data.count - residual) / 10;
+    getData(`/order/history/user?page=${currentPage}`).then((res) => {
+      setOrders(res.results);
+      console.log(res.results);
+      const residual = res.count % 10;
+      const pages = (res.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
       setLoading(false);
     });

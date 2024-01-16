@@ -41,13 +41,17 @@ const CategoryDetails = () => {
               />
             ))}
           </div>
-          <div className="w-100 d-flex justify-content-center">
-            <PaginationCard
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={totalPages}
-            />
-          </div>
+          {foods.length > 0 ? (
+            <div className="w-100 d-flex justify-content-center">
+              <PaginationCard
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
+            </div>
+          ) : (
+            <h6>No any foods in this category </h6>
+          )}
         </div>
       )}
     </DemoLayout>

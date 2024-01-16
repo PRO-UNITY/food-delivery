@@ -19,7 +19,7 @@ const TableDeliveries = (props) => {
   const location = useLocation();
   const currentUrl = location.pathname;
   const urlManager = `/restaurant/${id}/add-manager`;
-  const urlDelivery = `/restaurant/${id}/add-supplier`;
+  // const urlDelivery = `/restaurant/${id}/add-supplier`;
 
   useEffect(() => {
     getData(

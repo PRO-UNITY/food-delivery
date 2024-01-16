@@ -19,7 +19,7 @@ const FoodAdd = () => {
 
   useEffect(() => {
     getData("/kitchen/category").then((res) => {
-      setCategory(res);
+      setCategory(res.results);
     });
   }, []);
 

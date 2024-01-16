@@ -3,7 +3,7 @@ import axios from "axios";
 export const BASE_URL = "https://api.prounity.uz/food-delivery";
 
 export const customFetch = async (url, options = {}) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (token) {
     options.headers = {
       ...options.headers,
@@ -15,18 +15,23 @@ export const customFetch = async (url, options = {}) => {
 
     if (!response.ok) {
       const errorData = await response.json();
+
+      if (token && response.status === 401) {
+        refreshToken();
+      }
+
       console.error(
         `Error making request to ${url} with method ${options.method}`,
         errorData
       );
-      console.error('Error stack:', new Error().stack);
+      console.error("Error stack:", new Error().stack);
       throw new Error(
         JSON.stringify({ error: errorData, status: response.status })
       );
     }
 
-    const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
       return response.json();
     }
 
@@ -34,17 +39,16 @@ export const customFetch = async (url, options = {}) => {
   } catch (error) {
     if (
       error instanceof TypeError &&
-      error.message.includes('Failed to fetch')
+      error.message.includes("Failed to fetch")
     ) {
-      console.error('Network error:', error);
+      console.error("Network error:", error);
     } else {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
 
     throw error;
   }
 };
-
 
 // const getHeader = () => {
 //   return {
@@ -58,6 +62,25 @@ export const customFetch = async (url, options = {}) => {
 //     Authorization: `Bearer ${token}`,
 //   };
 // };
+
+export const refreshToken = async () => {
+  const refreshTok = localStorage.getItem("refresh");
+  const refreshToken = {
+    refresh: refreshTok,
+  };
+  const options = {
+    method: "POST",
+    body: JSON.stringify(refreshToken),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await customFetch(
+    BASE_URL + "/user/token/refresh/",
+    options
+  );
+  localStorage.setItem("token", response.access);
+};
 
 export const postData = async (item, url) => {
   const options = {
@@ -101,9 +124,7 @@ export const getKitchen = async (url) => {
 };
 
 export const getData = async (url) => {
-  const response = await customFetch(BASE_URL + url,{
-
-  })
+  const response = await customFetch(BASE_URL + url, {});
   return response;
 };
 
@@ -135,7 +156,6 @@ export const deleteData = async (url) => {
 export const AddWithFormData = async (url, item) => {
   const options = {
     method: "POST",
-    "Content-Type": "multipart/formData",
     body: item,
   };
   const response = await customFetch(BASE_URL + url, options);
@@ -153,19 +173,15 @@ export const EditWithFormData = async (url, item) => {
 };
 
 export const newPasswordComplete = async (password) => {
-  // const response = await fetch(BASE_URL + `/auth/set_new_password`, {
-  //   method: "PATCH",
-  //   body: JSON.stringify(password),
-  //   headers: getHeader(),
-  // });
-  // const data = await response.json();
-  // return data;
   const options = {
     method: "PATCH",
     body: JSON.stringify(password),
+    headers: {
+      "Content-Type": "application/json",
+    },
   };
   const response = await customFetch(
-    BASE_URL + `/auth/set_new_password`,
+    BASE_URL + `/auth/password/confirm`,
     options
   );
   return response.data;

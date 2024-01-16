@@ -14,6 +14,7 @@ const FoodCard = (props) => {
     setCounter,
     setIsActive,
     counter,
+    setShow
   } = props;
   const token = localStorage.getItem("token");
   const location = useLocation();
@@ -49,6 +50,8 @@ const FoodCard = (props) => {
     setCard(savedCard);
   }, []);
 
+  const handleShow = () =>setShow(true)
+
   return (
     <div className="food-item bg-white  text-dark">
       <Link
@@ -63,13 +66,13 @@ const FoodCard = (props) => {
       <StarRating numStars={5} />
       <div className="d-flex justify-content-between w-100 align-items-center">
         <div>
-          <p>{name}</p>
+          <p>{`${name.length > 10?`${name.slice(0,8)+"..."}`:name}`}</p>
           <p style={{ fontWeight: 800 }}>
             <span className="text-orange">$</span>
             {price}
           </p>
         </div>
-        {localStorage.getItem("role") !== "undefined" ? (
+        {localStorage.getItem("role") ? (
           <button
             disabled={card.some((cartItem) => cartItem.id === id)}
             onClick={() => addToCard(props)}
@@ -99,7 +102,7 @@ const FoodCard = (props) => {
           <>
             {currentUrl === "/favourite" ? (
               <button
-                onClick={() => removeItemFavoutite(props)}
+                onClick={handleShow}
                 className="btn-favourite red"
               >
                 <i className="fa-solid fa-trash"></i>

@@ -17,14 +17,15 @@ const FoodHome = () => {
   const outlet = useOutlet();
 
   useEffect(() => {
-    getData(`/foods/`).then((res) => {
-      setFoods(res.data.results);
-      const residual = res.data.count % 10;
-      const pages = (res.data.count - residual) / 10;
+    getData(`/foods/?page=${currentPage}`).then((res) => {
+      setFoods(res.results);
+      console.log(res);
+      const residual = res.count % 10;
+      const pages = (res.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
       setLoading(false);
     });
-  }, [isactive]);
+  }, [isactive, currentPage]);
 
   return (
     <DemoLayout setSearch={setSearch}>

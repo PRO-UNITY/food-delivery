@@ -150,6 +150,11 @@ h3 {
   padding: 4px 8px;
 }
 
+.card-payment{
+  width: 50%;
+  border-radius: 5px;
+}
+
 .btn-orange {
   color: white;
   background-color: #f8b602;
@@ -530,7 +535,7 @@ h3 {
   align-items: center;
   justify-content: space-between;
   margin-top: 30px;
-  padding: 30px;  
+  padding: 30px;
 }
 
 .container-avatar {

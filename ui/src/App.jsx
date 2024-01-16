@@ -7,6 +7,7 @@ import AuthRoutes from "./Routes/AuthRoutes";
 import UserRoutes from "./Routes/UserRoutes";
 import AdminRoutes from "./Routes/AdminRoutes";
 import { ActiveNavContext } from "./Context/ActiveNav";
+import DeliveryRoutes from "./Routes/DeliveryRoutes";
 
 function App() {
   const [role, setRole] = useState("");
@@ -36,6 +37,7 @@ function App() {
         <KitchenRoutes />
         <UserRoutes />
         <AdminRoutes />
+        <DeliveryRoutes/>
       </ActiveNavContext.Provider>
     </>
   );

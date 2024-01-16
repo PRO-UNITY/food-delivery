@@ -19,7 +19,7 @@ const Profile = ({ showProfile, counter }) => {
 
   const logOut = () => {
     localStorage.clear();
-    navigate("/dashboard");
+    navigate("/login");
     window.location.reload();
   };
 

@@ -15,6 +15,8 @@ const Login = () => {
     };
     await postData(user, "/auth/sigin").then((res) => {
       localStorage.setItem("token", res.token.access);
+      localStorage.setItem("refresh", res.token.refresh);
+
       if (localStorage.getItem("token") !== "undefined") {
         navigate("/dashboard");
         window.location.reload();

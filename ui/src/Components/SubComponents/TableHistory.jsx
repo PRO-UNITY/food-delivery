@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 const TableHistory = (props) => {
-  const { id, foods, total_price, index } = props;
+  const { id, foods, total_price, index, status } = props;
   return (
     <div className="py-3 w-100">
       <table className="table w-100">
@@ -11,6 +11,7 @@ const TableHistory = (props) => {
             <th>Name</th>
             <th>Count</th>
             <th>Price</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -22,7 +23,7 @@ const TableHistory = (props) => {
             </th>
             <th>
               {foods.map((i, index) => (
-                <p key={index}>{i.name}</p>
+                <p key={index}>{i.name.length>10?`${i.name.slice(0,6)}...`:i.name}</p>
               ))}
             </th>
             <th>
@@ -34,6 +35,9 @@ const TableHistory = (props) => {
               {foods.map((i, index) => (
                 <p key={index}>{i.price}</p>
               ))}
+            </th>
+            <th className="text-danger">
+                <p key={index}>{status.name}</p>
             </th>
           </tr>
         </tbody>

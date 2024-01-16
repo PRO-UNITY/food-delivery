@@ -16,12 +16,16 @@ const FoodOrder = () => {
   const [counts, setCounts] = useState(card?.map((item) => item.count));
   const [count, setCount] = useState(0);
   const navigate = useNavigate();
+  const [kitchenIds, setKitchenIds] = useState([])
   const [totalPrices, setTotalPrices] = useState(
     card?.map((item, index) => calculateTotalPrice(item, counts[index]))
   );
 
   useEffect(() => {
     localStorage.setItem("card", JSON.stringify(card));
+    const ids = [...kitchenIds]
+    ids.push(card?.map((item)=>item.kitchen))
+    setKitchenIds(ids)
   }, [card]);
 
   const handleIncrement = (index) => {
@@ -83,14 +87,14 @@ const FoodOrder = () => {
   const order = () => {
     const data = {
       status: 1,
-      address: "buxoro",
+      address: "samarqand",
       total_price: totalPrices?.reduce((acc, price) => acc + price, 0),
       foods: card.map((item, index) => ({
         ...item,
         count: counts[index],
         totalPrice: totalPrices[index],
       })),
-      kitchen: card[0].kitchen_id,
+      kitchen: kitchenIds[0],
     };
     postData(data, `/orders`)
       .then(() => {
@@ -155,16 +159,27 @@ const FoodOrder = () => {
                   {totalPrices?.reduce((acc, price) => acc + price, 0)}
                 </h4>
                 {card?.length > 0 ? (
-                  <button onClick={order} className="btn btn-warning float-end">
-                    Order
-                  </button>
+                  <div className="d-flex gap-1 justify-content-end">
+                    <Link
+                      to={'/payment'}
+                      className="btn btn-warning float-end"
+                    >
+                      pay in cart
+                    </Link>
+                    <button
+                      onClick={order}
+                      className="btn btn-warning float-end"
+                    >
+                      pay in cash
+                    </button>
+                  </div>
                 ) : (
                   ""
                 )}
               </div>
             ) : (
               <h6 className="">
-                No any orders yet, {" "}
+                No any orders yet,{" "}
                 <Link className="text-orange" to={"/dashboard"}>
                   ordering
                 </Link>

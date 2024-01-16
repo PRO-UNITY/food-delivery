@@ -39,7 +39,7 @@ const DemoSidebar = ({ showSidebar }) => {
                     <i className="fa-solid fa-utensils mx-3"></i>Restaurants
                   </p>
                 </NavLink>
-              ) : (
+              ) : role === "users" ? (
                 <NavLink
                   to={"/dashboard"}
                   className="nav-link text-start px-2"
@@ -47,6 +47,16 @@ const DemoSidebar = ({ showSidebar }) => {
                 >
                   <p className="text-start py-3 ">
                     <i className="fa-solid fa-utensils mx-3"></i>Dashboard
+                  </p>
+                </NavLink>
+              ) : (
+                <NavLink
+                  to={"/dashboard"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/dashboard")}
+                >
+                  <p className="text-start py-3 ">
+                    <i className="fa-solid fa-utensils mx-3"></i>New orders
                   </p>
                 </NavLink>
               )}
@@ -63,7 +73,7 @@ const DemoSidebar = ({ showSidebar }) => {
                     <i className="fa-solid fa-list mx-3"></i>Categories
                   </p>
                 </NavLink>
-              ) : (
+              ) : role === "users" ? (
                 <NavLink
                   to={"/food-order"}
                   className="nav-link text-start px-2"
@@ -80,6 +90,16 @@ const DemoSidebar = ({ showSidebar }) => {
                     ""
                   )}
                 </NavLink>
+              ) : (
+                <NavLink
+                  to={"/order-history"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/order-history")}
+                >
+                  <p className="text-start py-3">
+                    <i className="fa-solid fa-list mx-3"></i>Order History
+                  </p>
+                </NavLink>
               )}
             </li>
             <li className="nav-item">
@@ -93,7 +113,7 @@ const DemoSidebar = ({ showSidebar }) => {
                     <i className="fa-solid fa-bowl-rice mx-3"></i>Foods
                   </p>
                 </NavLink>
-              ) : (
+              ) : role === "users" ? (
                 <NavLink
                   to={"/favourite"}
                   className="nav-link text-start px-2"
@@ -103,6 +123,8 @@ const DemoSidebar = ({ showSidebar }) => {
                     <i className="fa-solid fa-heart mx-3"></i>Favourite
                   </p>
                 </NavLink>
+              ) : (
+                ""
               )}
             </li>
             <li className="nav-item">
@@ -116,7 +138,7 @@ const DemoSidebar = ({ showSidebar }) => {
                     <i className="fa-solid fa-truck mx-3"></i>Deliveries
                   </p>
                 </NavLink>
-              ) : (
+              ) : role === "users" ? (
                 <NavLink
                   to={"/history"}
                   className="nav-link text-start px-2"
@@ -127,6 +149,8 @@ const DemoSidebar = ({ showSidebar }) => {
                     History
                   </p>
                 </NavLink>
+              ) : (
+                ""
               )}
             </li>
             {role === "kitchen" ? (
@@ -161,15 +185,29 @@ const DemoSidebar = ({ showSidebar }) => {
               ""
             )}
             <li className="nav-item">
-              <NavLink
-                to={"/settings"}
-                className="nav-link text-start px-2"
-                isActive={() => checkActive("/settings")}
-              >
-                <p className="text-start py-3">
-                  <i className="fa-regular fa-address-card mx-3"></i> Settings
-                </p>
-              </NavLink>
+              {role === "kitchen" ? (
+                <NavLink
+                  to={"/settings"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/settings")}
+                >
+                  <p className="text-start py-3">
+                    <i className="fa-regular fa-address-card mx-3"></i> Settings
+                  </p>
+                </NavLink>
+              ) : role === "users" ? (
+                <NavLink
+                  to={"/settings"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/settings")}
+                >
+                  <p className="text-start py-3">
+                    <i className="fa-regular fa-address-card mx-3"></i> Settings
+                  </p>
+                </NavLink>
+              ) : (
+                ""
+              )}
             </li>
             {user?.avatar ? (
               <button className="btn-none sidebar-btns">
@@ -199,13 +237,17 @@ const DemoSidebar = ({ showSidebar }) => {
               </div>
             )}
           </ul>
-          <div className="px-3 pt-3">
-            <div className="bg-orange w-100 sidebar-vaucher d-flex flex-column justify-content-center align-items-start px-3">
-              <p className="p-0 m-0 mb-2">
-                Upgrade your <br /> Account to Get Free <br /> Vaucher
-              </p>
+          {role === "users" ? (
+            <div className="px-3 pt-3">
+              <div className="bg-orange w-100 sidebar-vaucher d-flex flex-column justify-content-center align-items-start px-3">
+                <p className="p-0 m-0 mb-2">
+                  Upgrade your <br /> Account to Get Free <br /> Vaucher
+                </p>
+              </div>
             </div>
-          </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </>

@@ -4,6 +4,7 @@ import DemoLayout from "../../Layout/Demoproject";
 import { getData } from "../../Services/Services";
 import PaginationCard from "../../Components/SubComponents/Pagination";
 import FoodCard from "../../Components/SubComponents/FoodCard";
+import CustomModal from "../../Components/SubComponents/Modal";
 
 const Dashboard = () => {
   const [card, setCard] = useState([]);
@@ -12,6 +13,7 @@ const Dashboard = () => {
   const [counter, setCounter] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     getData(`/foods/favourites?page=${currentPage}`).then((res) => {
@@ -38,6 +40,7 @@ const Dashboard = () => {
                     {...item.food}
                     setCounter={setCounter}
                     counter={counter}
+                    setShow={setShow}
                   />
                 ))}
                 <div className="w-100 d-flex justify-content-center">
@@ -65,6 +68,7 @@ const Dashboard = () => {
             </Link>
           </h6>
         )}
+        <CustomModal setShow={setShow} show={show}/>
       </div>
     </DemoLayout>
   );

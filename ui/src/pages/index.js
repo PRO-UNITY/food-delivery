@@ -4,6 +4,9 @@ export { default as AllFoods } from "./User/AllFoods";
 export { default as AllCategories } from "./User/AllCategories";
 export { default as AllKitchens } from "./User/AllKitchens";
 export { default as FoodOrder } from "./User/FoodOrder";
+export { default as Payment } from "./User/Payment";
+export { default as NewOrder } from "./Delivery/NewOrders";
+export { default as OrderHistoryDeliver } from "./Delivery/OrderHistory";
 export { default as Favourite } from "./User/Favourite";
 export { default as KitchenCategoryDetail } from "./User/Details/KitchenCategoryDetail";
 export { default as FoodDetail } from "./User/Details/FoodDetail";
@@ -14,6 +17,7 @@ export { default as HistoryDetailOrder } from "./User/Details/HistoryDetailOrder
 export { default as Register } from "./Authentication/Register";
 export { default as Login } from "./Authentication/Login";
 export { default as ForgetPassword } from "./Authentication/ForgetPassword";
+export { default as ResetPassword } from "./Authentication/ResetPassword";
 export { default as CategoryDetails } from "./User/Details/CategoryDetails";
 export { default as KitchenDetails } from "./User/Details/Kitchen-details";
 export { default as DeliveryHome } from "./Admin/Delivery-home/Delivery-home";
