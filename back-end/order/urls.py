@@ -1,6 +1,6 @@
 from django.urls import path
 from order.views import (
-    OrderStatus,
+    OrderStatusAll,
     SendViews,
     OrderView,
     OrderHistoryKitchenView,
@@ -20,7 +20,7 @@ from order.order_manager import (
 )
 
 urlpatterns = [
-    path('order/status', OrderStatus.as_view()),
+    path('order/status', OrderStatusAll.as_view()),
     path('order/noti', OrderNotification.as_view()),
     path('orders', SendViews.as_view()),
     path('order/<int:pk>/foods', OrderView.as_view()),

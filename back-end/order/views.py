@@ -22,7 +22,7 @@ from order.serializers import (
 )
 
 
-class OrderStatus(APIView):
+class OrderStatusAll(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
