@@ -26,7 +26,6 @@ class OrderStatus(APIView):
     render_classes = [UserRenderers]
     permission = [IsAuthenticated]
 
-    @check_user_permission
     def get(self, request, format=None, *args, **kwargs):
         instanse = OrderStatus.objects.all()
         serializer = StatusSerializers(instanse, many=True)
@@ -176,12 +175,11 @@ class OrderNotification(APIView, Pagination):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["status", "kitchen"]
 
-    @check_user_permission
     def get(self, request, format=None, *args, **kwargs):
         search_restaurant = request.query_params.get("restaurant", None)
         search_status = request.query_params.get("status", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, status__status_changed=True).order_by('-id')
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, status=True).order_by('-id')
         if search_restaurant:
             queryset = queryset.filter(Q(kitchen__id__icontains=search_restaurant))
         if search_status:
