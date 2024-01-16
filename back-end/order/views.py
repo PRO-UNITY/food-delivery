@@ -132,7 +132,7 @@ class OrderHistoryKitchenView(APIView, Pagination):
             return super().get_paginated_response(serializer.data)
         else:
             serializer = self.serializer_class(queryset, many=True)
-            return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class OrderHistoryuserView(APIView, Pagination):
@@ -163,7 +163,7 @@ class OrderHistoryuserView(APIView, Pagination):
             return super().get_paginated_response(serializer.data)
         else:
             serializer = self.serializer_class(queryset, many=True)
-            return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 
@@ -179,7 +179,7 @@ class OrderNotification(APIView, Pagination):
         search_restaurant = request.query_params.get("restaurant", None)
         search_status = request.query_params.get("status", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, status=True).order_by('-id')
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, is_active=True).order_by('-id')
         if search_restaurant:
             queryset = queryset.filter(Q(kitchen__id__icontains=search_restaurant))
         if search_status:
