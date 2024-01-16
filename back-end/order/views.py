@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from authen.renderers import UserRenderers
-from order.models import Orders
+from order.models import Orders, OrderStatus
 from utils.pagination import Pagination
 from utils.pagination import StandardResultsSetPagination
 from utils.user_permission import (
@@ -18,7 +18,19 @@ from utils.user_permission import (
 from order.serializers import (
     OrderSerializers,
     SendOrderSerializers,
+    StatusSerializers
 )
+
+
+class OrderStatus(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    @check_user_permission
+    def get(self, request, format=None, *args, **kwargs):
+        instanse = OrderStatus.objects.all()
+        serializer = StatusSerializers(instanse, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class SendViews(APIView, Pagination):
@@ -153,3 +165,34 @@ class OrderHistoryuserView(APIView, Pagination):
         else:
             serializer = self.serializer_class(queryset, many=True)
             return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+
+
+
+class OrderNotification(APIView, Pagination):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+    serializer_class = OrderSerializers
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["status", "kitchen"]
+
+    @check_user_permission
+    def get(self, request, format=None, *args, **kwargs):
+        search_restaurant = request.query_params.get("restaurant", None)
+        search_status = request.query_params.get("status", None)
+        sort_by = request.query_params.get("sort", None)
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, status__status_changed=True).order_by('-id')
+        if search_restaurant:
+            queryset = queryset.filter(Q(kitchen__id__icontains=search_restaurant))
+        if search_status:
+            queryset = queryset.filter(Q(status__id__icontains=search_status))
+        if sort_by == "price_asc":
+            queryset = queryset.order_by("id")
+        elif sort_by == "price_desc":
+            queryset = queryset.order_by("-id")
+        page = super().paginate_queryset(queryset)
+        if page is not None:
+            serializer = super().get_paginated_response(self.serializer_class(page, many=True).data)
+        else:
+            serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

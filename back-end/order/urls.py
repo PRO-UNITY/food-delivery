@@ -1,9 +1,11 @@
 from django.urls import path
 from order.views import (
+    OrderStatus,
     SendViews,
     OrderView,
     OrderHistoryKitchenView,
     OrderHistoryuserView,
+    OrderNotification,
 )
 from order.order_delivery  import (
     OrderHistoryDeliveryView,
@@ -18,6 +20,8 @@ from order.order_manager import (
 )
 
 urlpatterns = [
+    path('order/status', OrderStatus.as_view()),
+    path('order/noti', OrderNotification.as_view()),
     path('orders', SendViews.as_view()),
     path('order/<int:pk>/foods', OrderView.as_view()),
     path('order/kitchen/history', OrderHistoryKitchenView.as_view()),
