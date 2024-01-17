@@ -59,6 +59,16 @@ const DemoSidebar = ({ showSidebar }) => {
                     <i className="fa-solid fa-utensils mx-3"></i>New orders
                   </p>
                 </NavLink>
+              ) : role === "manager" ? (
+                <NavLink
+                  to={"/dashboard"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/dashboard")}
+                >
+                  <p className="text-start py-3 ">
+                    <i className="fa-solid fa-utensils mx-3"></i>New orders
+                  </p>
+                </NavLink>
               ) : (
                 <NavLink
                   to={"/dashboard"}
@@ -110,6 +120,16 @@ const DemoSidebar = ({ showSidebar }) => {
                     <i className="fa-solid fa-list mx-3"></i>Order History
                   </p>
                 </NavLink>
+              ) : role === "manager" ? (
+                <NavLink
+                  to={"/progress"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/progress")}
+                >
+                  <p className="text-start py-3">
+                    <i className="fa-solid fa-list mx-3"></i>Progress
+                  </p>
+                </NavLink>
               ) : (
                 <NavLink
                   to={"/food-order"}
@@ -129,6 +149,7 @@ const DemoSidebar = ({ showSidebar }) => {
                 </NavLink>
               )}
             </li>
+
             <li className="nav-item">
               {role === "kitchen" ? (
                 <NavLink
@@ -150,6 +171,18 @@ const DemoSidebar = ({ showSidebar }) => {
                     <i className="fa-solid fa-heart mx-3"></i>Favourite
                   </p>
                 </NavLink>
+              ) : role === "delivery" ? (
+                ""
+              ) : role === "manager" ? (
+                <NavLink
+                  to={"/history-manager"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/history-manager")}
+                >
+                  <p className="text-start py-3">
+                    <i className="fa-solid fa-heart mx-3"></i>History
+                  </p>
+                </NavLink>
               ) : (
                 <NavLink
                   to={"/favourite"}
@@ -162,6 +195,7 @@ const DemoSidebar = ({ showSidebar }) => {
                 </NavLink>
               )}
             </li>
+
             <li className="nav-item">
               {role === "kitchen" ? (
                 <NavLink
@@ -184,6 +218,10 @@ const DemoSidebar = ({ showSidebar }) => {
                     History
                   </p>
                 </NavLink>
+              ) : role === "delivery" ? (
+                ""
+              ) : role === "manager" ? (
+                ""
               ) : (
                 <NavLink
                   to={"/history"}
@@ -197,6 +235,7 @@ const DemoSidebar = ({ showSidebar }) => {
                 </NavLink>
               )}
             </li>
+            
             {role === "kitchen" ? (
               <li className="nav-item">
                 <NavLink

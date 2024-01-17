@@ -13,6 +13,7 @@ import {
   KitchenCategoryDetail,
   KitchenDashboard,
   KitchenDetails,
+  ManagerOrders,
   NewOrder,
   Payment,
   Settings,
@@ -25,7 +26,19 @@ const UserRoutes = () => {
     <Routes>
       <Route
         path="/dashboard"
-        element={roleuser === "kitchen" ? <KitchenDashboard /> : roleuser ==="delivery"? <NewOrder /> : roleuser === "users"? <Dashboard/> : <Dashboard/>}
+        element={
+          roleuser === "kitchen" ? (
+            <KitchenDashboard />
+          ) : roleuser === "delivery" ? (
+            <NewOrder />
+          ) : roleuser === "users" ? (
+            <Dashboard />
+          ) : roleuser === "manager" ? (
+            <ManagerOrders />
+          ) : (
+            <Dashboard />
+          )
+        }
       />
       <Route path="/allfoods" element={<AllFoods />} />
       <Route path="/allcategories" element={<AllCategories />} />
