@@ -10,6 +10,7 @@ from order.views import (
 from order.order_delivery  import (
     OrderHistoryDeliveryView,
     OrderDeliveryView,
+    OrderNewDeliveryView,
     OrderActiveDeliveryView,
     OrderAcceptDeliveryView,
 )
@@ -28,7 +29,8 @@ urlpatterns = [
     path('order/history/user', OrderHistoryuserView.as_view()),
     path('order/history/delivery', OrderHistoryDeliveryView.as_view()),
     path('order/delivery', OrderDeliveryView.as_view()),
-    path('order/delivery/active', OrderActiveDeliveryView.as_view()),
+    path('order/delivery/new', OrderNewDeliveryView.as_view()),
+    path('order/deliver/active', OrderActiveDeliveryView.as_view()),
     path('order/<int:pk>/delivery/accept', OrderAcceptDeliveryView.as_view()),
     path('order/manager/history', OrderHistoryManagerView.as_view()),
     path('order/manager/active', OrderActiveManagerView.as_view()),

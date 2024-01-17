@@ -31,7 +31,38 @@ class OrderHistoryDeliveryView(APIView, Pagination):
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, is_delivery=True).order_by('-id')
+        queryset = Orders.objects.filter(kitchen__employes=request.user.id, is_active=True, is_delivery=True).order_by('-id')
+        if search_status:
+            queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
+        if search_kitchen:
+            queryset = queryset.filter(Q(kitchen__id__icontains=search_kitchen) | Q(kitchen__name__icontains=search_kitchen))
+        if sort_by == "asc":
+            queryset = queryset.order_by("id")
+        elif sort_by == "desc":
+            queryset = queryset.order_by("-id")
+        page = super().paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.serializer_class(page, many=True, context={'user': request.user.id})
+            return super().get_paginated_response(serializer.data)
+        else:
+            serializer = self.serializer_class(queryset, many=True, context={'user': request.user.id})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class OrderDeliveryView(APIView, Pagination):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+    pagination_class = StandardResultsSetPagination
+    serializer_class = OrderSerializers
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["status", "kitchen"]
+
+    @check_delivery_permission
+    def get(self, request, format=None, *args, **kwargs):
+        search_status = request.query_params.get("status", None)
+        search_kitchen = request.query_params.get("kitchen", None)
+        sort_by = request.query_params.get("sort", None)
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, is_delivery=True, is_active=False).order_by('-id')
         if search_status:
             queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
         if search_kitchen:
@@ -49,22 +80,20 @@ class OrderHistoryDeliveryView(APIView, Pagination):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class OrderDeliveryView(APIView, Pagination):
+class OrderNewDeliveryView(APIView, Pagination):
     render_classes = [UserRenderers]
     perrmisson_class = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
     serializer_class = OrderSerializers
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["status", "kitchen"]
+    filterset_fields = ["kitchen"]
 
     @check_delivery_permission
     def get(self, request, format=None, *args, **kwargs):
-        search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, status=1, is_delivery=True, is_active=False).order_by('-id')
-        if search_status:
-            queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, is_delivery=False).order_by('-id')
+        print(queryset)
         if search_kitchen:
             queryset = queryset.filter(Q(kitchen__id__icontains=search_kitchen) | Q(kitchen__name__icontains=search_kitchen))
         if sort_by == "asc":
@@ -86,16 +115,14 @@ class OrderActiveDeliveryView(APIView, Pagination):
     pagination_class = StandardResultsSetPagination
     serializer_class = OrderSerializers
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["status", "kitchen"]
+    filterset_fields = ["kitchen"]
 
     @check_delivery_permission
     def get(self, request, format=None, *args, **kwargs):
-        search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, status=1, is_delivery=False, is_active=False).order_by('-id')
-        if search_status:
-            queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, is_delivery=True, is_active=False).order_by('-id')
+        print(queryset)
         if search_kitchen:
             queryset = queryset.filter(Q(kitchen__id__icontains=search_kitchen) | Q(kitchen__name__icontains=search_kitchen))
         if sort_by == "asc":
@@ -123,7 +150,7 @@ class OrderAcceptDeliveryView(APIView, Pagination):
     @check_delivery_permission
     @swagger_auto_schema(request_body=SendOrderSerializers)
     def put(self, request, pk):
-        expected_fields = set(["klient", "delivery", "status", "foods", "kitchen", "is_delivery", "is_active", "address", "total_price", "create_at", "updated_at",])
+        expected_fields = set(["id", "klient", "kitchen", "food", "price", "is_active", "is_delivery", "is_order", "delivery", "status", "address", "location", "create_at", "updated_at",])
         received_fields = set(request.data.keys())
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:
