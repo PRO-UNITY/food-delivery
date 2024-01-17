@@ -49,7 +49,7 @@ const DemoSidebar = ({ showSidebar }) => {
                     <i className="fa-solid fa-utensils mx-3"></i>Dashboard
                   </p>
                 </NavLink>
-              ) : (
+              ) : role === "delivery" ? (
                 <NavLink
                   to={"/dashboard"}
                   className="nav-link text-start px-2"
@@ -57,6 +57,16 @@ const DemoSidebar = ({ showSidebar }) => {
                 >
                   <p className="text-start py-3 ">
                     <i className="fa-solid fa-utensils mx-3"></i>New orders
+                  </p>
+                </NavLink>
+              ) : (
+                <NavLink
+                  to={"/dashboard"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/dashboard")}
+                >
+                  <p className="text-start py-3 ">
+                    <i className="fa-solid fa-utensils mx-3"></i>Dashboard
                   </p>
                 </NavLink>
               )}
@@ -90,7 +100,7 @@ const DemoSidebar = ({ showSidebar }) => {
                     ""
                   )}
                 </NavLink>
-              ) : (
+              ) : role === "delivery" ? (
                 <NavLink
                   to={"/order-history"}
                   className="nav-link text-start px-2"
@@ -99,6 +109,23 @@ const DemoSidebar = ({ showSidebar }) => {
                   <p className="text-start py-3">
                     <i className="fa-solid fa-list mx-3"></i>Order History
                   </p>
+                </NavLink>
+              ) : (
+                <NavLink
+                  to={"/food-order"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/food-order")}
+                >
+                  <p className="text-start py-3">
+                    <i className="fa-solid fa-truck mx-3"></i>Food Order
+                  </p>
+                  {JSON.parse(localStorage.getItem("card"))?.length > 0 ? (
+                    <div className="notification">
+                      {JSON.parse(localStorage.getItem("card"))?.length}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </NavLink>
               )}
             </li>
@@ -124,7 +151,15 @@ const DemoSidebar = ({ showSidebar }) => {
                   </p>
                 </NavLink>
               ) : (
-                ""
+                <NavLink
+                  to={"/favourite"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/favourite")}
+                >
+                  <p className="text-start py-3">
+                    <i className="fa-solid fa-heart mx-3"></i>Favourite
+                  </p>
+                </NavLink>
               )}
             </li>
             <li className="nav-item">
@@ -150,7 +185,16 @@ const DemoSidebar = ({ showSidebar }) => {
                   </p>
                 </NavLink>
               ) : (
-                ""
+                <NavLink
+                  to={"/history"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/history")}
+                >
+                  <p className="text-start py-3">
+                    <i className="fa-solid fa-clock-rotate-left mx-3"></i>Order
+                    History
+                  </p>
+                </NavLink>
               )}
             </li>
             {role === "kitchen" ? (
@@ -206,7 +250,15 @@ const DemoSidebar = ({ showSidebar }) => {
                   </p>
                 </NavLink>
               ) : (
-                ""
+                <NavLink
+                  to={"/settings"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/settings")}
+                >
+                  <p className="text-start py-3">
+                    <i className="fa-regular fa-address-card mx-3"></i> Settings
+                  </p>
+                </NavLink>
               )}
             </li>
             {user?.avatar ? (
