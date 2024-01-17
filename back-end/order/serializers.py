@@ -67,10 +67,9 @@ class SendOrderSerializers(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.status = validated_data.get("status", instance.status)
-        instance.foods = validated_data.get("foods", instance.foods)
         instance.address = validated_data.get("address", instance.address)
-        instance.total_price = validated_data.get("total_price", instance.total_price)
         instance.is_delivery = validated_data.get("is_delivery", instance.is_delivery)
+        instance.delivery = validated_data.get("delivery", instance.delivery)
         instance.is_active = validated_data.get("is_active", instance.is_active)
         instance.save()
         return instance
