@@ -5,19 +5,26 @@ import {
   AllKitchens,
   CategoryDetails,
   Dashboard,
+  Deliveryman,
   Favourite,
   FoodDetail,
   FoodOrder,
+  Foods,
   HistoryDetailOrder,
   HistoryKitchen,
+  Home,
+  Kitchen,
   KitchenCategoryDetail,
   KitchenDashboard,
   KitchenDetails,
+  Manager,
   ManagerOrders,
   NewOrder,
+  Orders,
   Payment,
   Settings,
   UpdateSettings,
+  Users,
 } from "../pages";
 
 const UserRoutes = () => {
@@ -57,6 +64,13 @@ const UserRoutes = () => {
         element={<KitchenCategoryDetail />}
       />
       {/* <Route path="*" element={<Pagenotfound/>} /> */}
+      <Route path={"/doc"} element={<Home />} />
+      <Route path="/doc/kitchen" element={<Kitchen />} />
+      <Route path="/doc/foods" element={<Foods />} />
+      <Route path="/doc/deliveryman" element={<Deliveryman />} />
+      <Route path="/doc/manager" element={<Manager />} />
+      <Route path="/doc/orders" element={<Orders />} />
+      <Route path="/doc/users" element={<Users />} />
     </Routes>
   );
 };

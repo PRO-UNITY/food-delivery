@@ -7,6 +7,7 @@ import AuthRoutes from "./Routes/AuthRoutes";
 import UserRoutes from "./Routes/UserRoutes";
 import AdminRoutes from "./Routes/AdminRoutes";
 import { ActiveNavContext } from "./Context/ActiveNav";
+import { AsideScrollActiveProvider } from "./Context/AsideScrollActive";
 import DeliveryRoutes from "./Routes/DeliveryRoutes";
 import ManagerRoutes from "./Routes/ManagerRoutes";
 
@@ -15,6 +16,7 @@ function App() {
   const [activeNav, setactiveNav] = useState(1);
   const [activeHrmsDash, setActiveHrmsDash] = useState(1);
   const navigate = useNavigate();
+  const [activeHrmsdoc, setActiveHrmsdoc] = useState(null);
   const location = useLocation();
   const currentUrl = location.pathname;
 
@@ -31,16 +33,25 @@ function App() {
 
   return (
     <>
-      <ActiveNavContext.Provider
-        value={{ activeNav, setactiveNav, activeHrmsDash, setActiveHrmsDash }}
-      >
-        <AuthRoutes />
-        <KitchenRoutes />
-        <UserRoutes />
-        <AdminRoutes />
-        <DeliveryRoutes />
-        <ManagerRoutes />
-      </ActiveNavContext.Provider>
+      <AsideScrollActiveProvider>
+        <ActiveNavContext.Provider
+          value={{
+            activeNav,
+            setactiveNav,
+            activeHrmsDash,
+            setActiveHrmsDash,
+            activeHrmsdoc,
+            setActiveHrmsdoc,
+          }}
+        >
+          <AuthRoutes />
+          <KitchenRoutes />
+          <UserRoutes />
+          <AdminRoutes />
+          <DeliveryRoutes />
+          <ManagerRoutes />
+        </ActiveNavContext.Provider>
+      </AsideScrollActiveProvider>
     </>
   );
 }

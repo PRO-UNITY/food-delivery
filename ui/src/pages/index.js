@@ -53,3 +53,12 @@ export { default as KitchenDeliveryDetails } from "./Kitchen/Deliveries/Delivery
 export { default as KitchenManagerHome } from "./Kitchen/Managers/ManagerHome";
 export { default as ManagerAdd } from "./Kitchen/Managers/ManagerAdd";
 export { default as KitchenManagerDetails } from "./Kitchen/Managers/ManagerDetails";
+
+// Documentation
+export { default as Deliveryman} from './docomentation/API/Deliveryman'
+export { default as Foods} from './docomentation/API/Foods'
+export { default as Kitchen} from './docomentation/API/Kitchen'
+export { default as Manager} from './docomentation/API/Manager'
+export { default as Orders} from './docomentation/API/Orders'
+export { default as Users} from './docomentation/API/Users'
+export { default as Home} from './docomentation/Home'
