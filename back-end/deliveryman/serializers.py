@@ -41,7 +41,7 @@ class DeliverySignUpSerializer(serializers.ModelSerializer):
         )
         user.user_id = self.context.get("user_id")
         user.set_password(validated_data["password"])
-        filtr_gr = Group.objects.filter(id=4)
+        filtr_gr = Group.objects.filter(id=5)
         for i in filtr_gr:
             user.groups.add(i.id)
             user.save()
