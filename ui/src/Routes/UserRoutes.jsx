@@ -25,7 +25,7 @@ const UserRoutes = () => {
     <Routes>
       <Route
         path="/dashboard"
-        element={roleuser === "kitchen" ? <KitchenDashboard /> : roleuser ==="delivery"? <NewOrder /> : roleuser === "users"? <Dashboard/> :""}
+        element={roleuser === "kitchen" ? <KitchenDashboard /> : roleuser ==="delivery"? <NewOrder /> : roleuser === "users"? <Dashboard/> : <Dashboard/>}
       />
       <Route path="/allfoods" element={<AllFoods />} />
       <Route path="/allcategories" element={<AllCategories />} />
