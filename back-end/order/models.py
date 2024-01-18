@@ -1,6 +1,7 @@
 from django.db import models
 from authen.models import CustomUser
 from kitchen.models import Restaurants
+from foods.models import Foods
 
 
 class OrderStatus(models.Model):
@@ -15,18 +16,20 @@ class OrderStatus(models.Model):
 
 class Orders(models.Model):
     klient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='klient_id', null=True, blank=True)
-    delivery = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='delivery_id', null=True, blank=True)
-    kitchen = models.ManyToManyField(Restaurants, null=True, blank=True, related_name='kitchen')
-    status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE)
-    foods = models.JSONField(null=True, blank=True)
-    total_price = models.IntegerField(null=True, blank=True)
-    is_delivery = models.BooleanField(default=False)
+    food = models.ManyToManyField(Foods, null=True, blank=True, related_name='food')
+    kitchen = models.ForeignKey(Restaurants, on_delete=models.CASCADE, null=True, blank=True)
+    price = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=False)
-    address = models.CharField(max_length=250)
-    latitude = models.CharField(max_length=250, null=True)
-    longitude = models.CharField(max_length=250, blank=True)
+    is_delivery = models.BooleanField(default=False)
+    is_order = models.BooleanField(default=False)
+    delivery = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='delivery_id', null=True, blank=True)
+    status = models.ForeignKey(OrderStatus, on_delete=models.CASCADE, null=True, blank=True)
+    address = models.CharField(max_length=250, null=True, blank=True)
+    location = models.JSONField(null=True, blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "order_table"
+
+

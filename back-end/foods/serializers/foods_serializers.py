@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from kitchen.serializer.kitchen_serializers import KitchensSerializer
 from foods.models import (
     Foods,
     Favorite,
@@ -8,6 +9,7 @@ from foods.models import (
 class FoodsSerializer(serializers.ModelSerializer):
     food_img = serializers.ImageField(max_length=None, use_url=True)
     favorite = serializers.SerializerMethodField()
+    kitchen = KitchensSerializer(read_only=True)
 
     class Meta:
         model = Foods

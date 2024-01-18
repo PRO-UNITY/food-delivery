@@ -5,6 +5,7 @@ from authen.models import CustomUser
 
 class FoodsCategories(models.Model):
     name = models.CharField(max_length=250)
+    img = models.ImageField(upload_to="category", null=True, blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
