@@ -15,6 +15,7 @@ export { default as KitchenCategoryDetail } from "./User/Details/KitchenCategory
 export { default as FoodDetail } from "./User/Details/FoodDetail";
 export { default as orderHistory } from "./User/OrderHistory";
 export { default as Settings } from "./User/Settings";
+export { default as Changepassword } from "./User/ChangePassword";
 export { default as UpdateSettings } from "./User/UpdateSettings";
 export { default as HistoryDetailOrder } from "./User/Details/HistoryDetailOrder";
 export { default as Register } from "./Authentication/Register";

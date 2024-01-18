@@ -29,13 +29,11 @@ const Settings = () => {
                 </div>
                 <div className="w-100 mt-5">
                   <ListProfile {...user} />
-                  <div className="w-100 d-flex justify-content-center">
-                    <Link
-                      to={"update"}
-                      className="btn-sign-in bg-orange mx-auto"
-                    >
+                  <div className="w-100 d-flex justify-content-between align-items-center">
+                    <Link to={"update"} className="btn-sign-in bg-orange">
                       update profile
                     </Link>
+                    <Link to={"/change-password"} className="text-orange">change password</Link>
                   </div>
                 </div>
               </div>

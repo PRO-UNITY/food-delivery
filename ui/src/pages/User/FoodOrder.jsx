@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import DemoLayout from "../../Layout/Demoproject";
 import { postData } from "../../Services/Services";
 import Success from "../../assets/images/success.png";
+import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 
 const calculateTotalPrice = (item, count) => {
   return item.price * count;
@@ -16,16 +17,17 @@ const FoodOrder = () => {
   const [counts, setCounts] = useState(card?.map((item) => item.count));
   const [count, setCount] = useState(0);
   const navigate = useNavigate();
-  const [kitchenIds, setKitchenIds] = useState([])
+  const [kitchenIds, setKitchenIds] = useState([]);
+  const [clickCoordinates, setClickCoordinates] = useState([]);
   const [totalPrices, setTotalPrices] = useState(
     card?.map((item, index) => calculateTotalPrice(item, counts[index]))
   );
 
   useEffect(() => {
     localStorage.setItem("card", JSON.stringify(card));
-    const ids = [...kitchenIds]
-    ids.push(card?.map((item)=>item.kitchen))
-    setKitchenIds(ids)
+    const ids = [...kitchenIds];
+    ids.push(card?.map((item) => item.kitchen.id));
+    setKitchenIds(ids);
   }, [card]);
 
   const handleIncrement = (index) => {
@@ -82,6 +84,12 @@ const FoodOrder = () => {
     const newTotalPrices = [...totalPrices];
     newTotalPrices[index] = calculateTotalPrice(card[index], count);
     setTotalPrices(newTotalPrices);
+  };
+
+  const handleMapClick = (e) => {
+    const coordinates = e.get("coords");
+    setClickCoordinates(coordinates);
+    console.log(coordinates);
   };
 
   const order = () => {
@@ -158,12 +166,23 @@ const FoodOrder = () => {
                   Total Price:{" "}
                   {totalPrices?.reduce((acc, price) => acc + price, 0)}
                 </h4>
+                <div className="w-100 d-flex justify-content-between py-2">
+                  <YMaps>
+                    <Map
+                      defaultState={{
+                        center: [55.751574, 37.573856],
+                        zoom: 5,
+                      }}
+                      onClick={handleMapClick}
+                      style={{ width: '100%', height: '400px' }}
+                    >
+                      <Placemark geometry={[55.684758, 37.738521]} />
+                    </Map>
+                  </YMaps>
+                </div>
                 {card?.length > 0 ? (
                   <div className="d-flex gap-1 justify-content-end">
-                    <Link
-                      to={'/payment'}
-                      className="btn btn-warning float-end"
-                    >
+                    <Link to={"/payment"} className="btn btn-warning float-end">
                       pay in cart
                     </Link>
                     <button

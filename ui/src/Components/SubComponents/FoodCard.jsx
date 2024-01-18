@@ -14,7 +14,8 @@ const FoodCard = (props) => {
     setCounter,
     setIsActive,
     counter,
-    setShow
+    setShow,
+    kitchen
   } = props;
   const token = localStorage.getItem("token");
   const location = useLocation();
@@ -22,6 +23,8 @@ const FoodCard = (props) => {
   const [card, setCard] = useState(
     JSON.parse(localStorage.getItem("card")) || []
   );
+
+  console.log(props);
 
   const addToFavourite = (item) => {
     const data = {
@@ -53,7 +56,7 @@ const FoodCard = (props) => {
   const handleShow = () =>setShow(true)
 
   return (
-    <div className="food-item bg-white  text-dark">
+    <div className="food-item bg-white shadow text-dark">
       <Link
         to={`/food-detail/${id}`}
         className="w-100 d-flex justify-content-center"
@@ -66,7 +69,8 @@ const FoodCard = (props) => {
       <StarRating numStars={5} />
       <div className="d-flex justify-content-between w-100 align-items-center">
         <div>
-          <p>{`${name.length > 10?`${name.slice(0,8)+"..."}`:name}`}</p>
+          <p className="m-0">{`${name.length > 10?`${name.slice(0,8)+"..."}`:name}`}</p>
+          <span style={{fontSize:"14px"}} className="text-secondary">{kitchen.name}</span>
           <p style={{ fontWeight: 800 }}>
             <span className="text-orange">$</span>
             {price}
