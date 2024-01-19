@@ -1,7 +1,8 @@
-from django.db import models
-from cloudinary.models import CloudinaryField
-from django.core.validators import RegexValidator
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator
+from django.db import models
+from django.utils import timezone
 
 
 class CustomUser(AbstractUser):
@@ -16,3 +17,8 @@ class CustomUser(AbstractUser):
 
     class Meta:
         db_table = "user_table"
+
+
+class SmsHistory(models.Model):
+    code = models.IntegerField(null=True, blank=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True, related_name="smscode",)

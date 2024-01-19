@@ -47,7 +47,6 @@ class SendOrderSerializers(serializers.ModelSerializer):
         fields = ["id", "klient", "is_active", "is_delivery", "delivery", "status", "address", "location", "create_at", "updated_at"]
 
 class SendOrderSerializers(serializers.ModelSerializer):
-    order = serializers.JSONField()
 
     class Meta:
         model = Orders

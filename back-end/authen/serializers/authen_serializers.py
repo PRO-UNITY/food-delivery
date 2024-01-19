@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.models import Group
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
@@ -11,6 +12,14 @@ from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import AuthenticationFailed
+
+
+class IncorrectCredentialsError(serializers.ValidationError):
+    pass
+
+
+class UnverifiedAccountError(serializers.ValidationError):
+    pass
 
 
 class UserGroupSerizliers(serializers.ModelSerializer):
@@ -76,17 +85,13 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "avatar",
-            "phone",
-            "latitude",
-            "longitude",
+            "phone"
         ]
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get("first_name", instance.first_name)
         instance.last_name = validated_data.get("last_name", instance.last_name)
         instance.phone = validated_data.get("phone", instance.phone)
-        instance.latitude = validated_data.get("latitude", instance.latitude)
-        instance.longitude = validated_data.get("longitude", instance.longitude)
         instance.email = validated_data.get("email", instance.email)
         if instance.avatar == None:
             instance.avatar = self.context.get("avatar")
@@ -110,13 +115,10 @@ class UserSigInSerializer(serializers.ModelSerializer):
             allowed_keys = set(self.fields.keys())
             input_keys = set(data.keys())
             extra_keys = input_keys - allowed_keys
-
             if extra_keys:
-                raise serializers.ValidationError(
-                    f"Additional keys are not allowed: {', '.join(extra_keys)}"
-                )
-
+                raise serializers.ValidationError(f"Additional keys are not allowed: {', '.join(extra_keys)}")
         return data
+
 
 
 class UserInformationSerializer(serializers.ModelSerializer):
@@ -134,8 +136,6 @@ class UserInformationSerializer(serializers.ModelSerializer):
             "email",
             "role",
             "phone",
-            "latitude",
-            "longitude",
             "active_profile",
         ]
 

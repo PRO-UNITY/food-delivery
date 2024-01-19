@@ -18,6 +18,7 @@ class Orders(models.Model):
     klient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='klient_id', null=True, blank=True)
     kitchen = models.ForeignKey(Restaurants, on_delete=models.CASCADE, null=True, blank=True)
     food = models.JSONField(null=True, blank=True)
+    order = models.JSONField(null=True, blank=True) 
     is_active = models.BooleanField(default=False)
     is_delivery = models.BooleanField(default=False)
     delivery = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='delivery_id', null=True, blank=True)

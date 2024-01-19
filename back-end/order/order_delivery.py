@@ -143,7 +143,7 @@ class OrderAcceptDeliveryView(APIView, Pagination):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request, pk, format=None, *args, **kwargs):
-        queryset = get_object_or_404(Orders, id=pk)
+        queryset = get_object_or_404(Orders, kitchen__employes=request.user.id, id=pk)
         serializer = OrderSerializers(queryset, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 

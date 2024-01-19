@@ -2,7 +2,9 @@
 import random
 from drf_spectacular.utils import extend_schema
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
@@ -17,7 +19,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from authen.renderers import UserRenderers
-from authen.models import CustomUser
+from authen.models import CustomUser, SmsHistory
+from utils.generate_sms import generate_sms_code
 from authen.utils import Util
 from django.utils.encoding import (
     smart_str,
@@ -57,12 +60,141 @@ class UserSignUp(APIView):
         if unexpected_fields:
             error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
             return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
-        serializer = UserSignUpSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            instanse = serializer.save()
-            tokens = get_token_for_user(instanse)
-            return Response({"token": tokens}, status=status.HTTP_201_CREATED)
+            user_instance = self.create_user(serializer)
+            sms_code = generate_sms_code()
+            self.send_verification_email(user_instance, sms_code)
+            self.save_sms_code(user_instance, sms_code)
+            token = self.generate_user_token(user_instance)
+
+            response_data = {
+                # Vaxtinchalikga kodni yuborib tursin kn udalit qilamiz
+                "sms_code": sms_code,
+                "msg": "Verification code sent to your email, check it",
+                "token": token,
+            }
+
+            return Response(response_data, status=status.HTTP_201_CREATED)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get_serializer(self, *args, **kwargs):
+        return UserSignUpSerializer(*args, **kwargs)
+
+    def create_user(self, serializer):
+        return serializer.save()
+
+    def send_verification_email(self, user_instance, sms_code):
+        email_body = f"Hi {user_instance.username},\nThis is your verification code to register your account: {sms_code}\nThanks..."
+        email_data = {
+            "email_body": email_body,
+            "to_email": user_instance.email,
+            "email_subject": "Verify your email",
+        }
+        Util.send(email_data)
+
+    def save_sms_code(self, user_instance, sms_code):
+        SmsHistory.objects.create(code=sms_code, user=user_instance)
+
+    def generate_user_token(self, user_instance):
+        return get_token_for_user(user_instance)
+
+    def bad_request_response(self, message):
+        return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class VerificationSmsCodeView(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+
+    def put(self, request):
+        if not request.user.is_authenticated:
+            return self.unauthorized_response("Token is invalid")
+
+        if "code" not in request.data:
+            return self.bad_request_response("Code key is missing in the request data")
+
+        sms_code = request.data["code"]
+        user = request.user
+
+        try:
+            check_code = self.get_latest_sms_code(user)
+
+            if check_code and check_code.code == int(sms_code):
+                self.activate_user(check_code.user)
+                token = get_token_for_user(check_code.user)
+                return Response({"token": token})
+
+            return self.bad_request_response("The verification code was entered incorrectly")
+
+        except ObjectDoesNotExist:
+            return self.bad_request_response("Object does not exist")
+
+    def get_latest_sms_code(self, user):
+        return SmsHistory.objects.select_related("user").filter(Q(user=user)).last()
+
+    def activate_user(self, user):
+        user.is_staff = True
+        user.save()
+
+    def unauthorized_response(self, message):
+        return Response({"error": message}, status=status.HTTP_401_UNAUTHORIZED)
+
+    def bad_request_response(self, message):
+        return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ResendCodeByEmailView(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def post(self, request):
+        if not request.user.is_authenticated:
+            return self.unauthorized_response("Token is invalid")
+
+        if request.user.is_staff:
+            return self.error_response("You already verified...")
+
+        sms_code = generate_sms_code()
+        self.send_verification_email(request.user, sms_code)
+        self.save_sms_code(request.user, sms_code)
+        token = self.generate_user_token(request.user)
+
+        return self.success_response(sms_code, token)
+
+    def send_verification_email(self, user, sms_code):
+        email_body = f"Hi {user.email} \nThis is your verification code to register your account: {sms_code} \nThanks..."
+        email_data = {
+            "email_body": email_body,
+            "to_email": user.email,
+            "email_subject": "Verify your email",
+        }
+        Util.send(email_data)
+
+    def save_sms_code(self, user, sms_code):
+        SmsHistory.objects.create(code=sms_code, user=user)
+
+    def generate_user_token(self, user):
+        return get_token_for_user(user)
+
+    def success_response(self, sms_code, token):
+        return Response(
+            {
+                # Vaxtinchalikga kodni yuborib tursin kn udalit qilamiz
+                "sms_code": sms_code,
+                "msg": "Verification code is sent to your email, check it",
+                "token": token,
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+    def unauthorized_response(self, message):
+        return Response({"error": message}, status=status.HTTP_401_UNAUTHORIZED)
+
+    def error_response(self, message):
+        return Response({"error": message}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserSignIn(APIView):

@@ -32,7 +32,7 @@ class ManagerSignUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ["id", "username", "first_name", "last_name", "password", "confirm_password", "email", "active_profile", "phone", "latitude", "longitude"]
+        fields = ["id", "username", "first_name", "last_name", "password", "confirm_password", "email", "active_profile", "phone"]
         extra_kwargs = {"first_name": {"required": True}, "last_name": {"required": True}}
 
     def create(self, validated_data):
@@ -44,8 +44,6 @@ class ManagerSignUpSerializer(serializers.ModelSerializer):
             last_name=validated_data["last_name"],
             phone=validated_data["phone"],
             email=validated_data["email"],
-            latitude=validated_data["latitude"],
-            longitude=validated_data["longitude"],
         )
         user.user_id = self.context.get("user_id")
         user.set_password(validated_data["password"])
@@ -59,8 +57,6 @@ class ManagerSignUpSerializer(serializers.ModelSerializer):
         instance.first_name = validated_data.get("first_name", instance.first_name)
         instance.last_name = validated_data.get("last_name", instance.last_name)
         instance.phone = validated_data.get("phone", instance.phone)
-        instance.latitude = validated_data.get("latitude", instance.latitude)
-        instance.longitude = validated_data.get("longitude", instance.longitude)
         instance.email = validated_data.get("email", instance.email)
         instance.active_profile = validated_data.get("active_profile", instance.active_profile)
         instance.save()
