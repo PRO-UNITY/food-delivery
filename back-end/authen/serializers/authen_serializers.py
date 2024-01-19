@@ -21,10 +21,8 @@ class UserGroupSerizliers(serializers.ModelSerializer):
 
 class UserSignUpSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(max_length=50, validators=[
-            MinLengthValidator(limit_value=5, message="First name must be at least 5 characters."),
             MaxLengthValidator(limit_value=50, message="First name cannot exceed 50 characters.")],)
     last_name = serializers.CharField(max_length=50, validators=[
-            MinLengthValidator(limit_value=5, message="Last name must be at least 5 characters."),
             MaxLengthValidator(limit_value=50, message="Last name cannot exceed 50 characters."),])
     username = serializers.CharField(max_length=255, min_length=5, required=True, validators=[UniqueValidator(queryset=CustomUser.objects.all())])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
@@ -64,10 +62,8 @@ class UserSignUpSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(max_length=None, use_url=True)
     first_name = serializers.CharField(max_length=50, validators=[
-            MinLengthValidator(limit_value=5, message="First name must be at least 5 characters."),
             MaxLengthValidator(limit_value=50, message="First name cannot exceed 50 characters."),],)
     last_name = serializers.CharField(max_length=50, validators=[
-            MinLengthValidator(limit_value=5, message="Last name must be at least 5 characters."),
             MaxLengthValidator(limit_value=50, message="Last name cannot exceed 50 characters."),],)
     avatar = serializers.ImageField(max_length=None, allow_empty_file=False, allow_null=False, use_url=False, required=False,)
     email = serializers.EmailField(validators=[UniqueValidator(queryset=CustomUser.objects.all())])

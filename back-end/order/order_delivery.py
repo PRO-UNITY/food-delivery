@@ -31,7 +31,7 @@ class OrderHistoryDeliveryView(APIView, Pagination):
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes=request.user.id, is_active=True, is_delivery=True).order_by('-id')
+        queryset = Orders.objects.filter(kitchen__employes=request.user.id, delivery=request.user.id, is_active=True, is_delivery=True).order_by('-id')
         if search_status:
             queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
         if search_kitchen:
@@ -62,7 +62,7 @@ class OrderDeliveryView(APIView, Pagination):
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, is_delivery=True, is_active=False).order_by('-id')
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, delivery=request.user.id, is_delivery=True, is_active=False).order_by('-id')
         if search_status:
             queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
         if search_kitchen:
@@ -121,7 +121,7 @@ class OrderActiveDeliveryView(APIView, Pagination):
     def get(self, request, format=None, *args, **kwargs):
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, is_delivery=True, is_active=False).order_by('-id')
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, delivery=request.user.id, is_delivery=True, is_active=False).order_by('-id')
         print(queryset)
         if search_kitchen:
             queryset = queryset.filter(Q(kitchen__id__icontains=search_kitchen) | Q(kitchen__name__icontains=search_kitchen))

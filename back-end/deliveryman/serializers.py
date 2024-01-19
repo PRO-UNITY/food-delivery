@@ -10,12 +10,10 @@ class DeliverySignUpSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(
         max_length=50,
         validators=[
-            MinLengthValidator(limit_value=5, message="First name must be at least 5 characters."),
             MaxLengthValidator(limit_value=50, message="First name cannot exceed 50 characters.")])
     last_name = serializers.CharField(
         max_length=50,
         validators=[
-            MinLengthValidator(limit_value=5, message="Last name must be at least 5 characters."),
             MaxLengthValidator(limit_value=50, message="Last name cannot exceed 50 characters.")])
     username = serializers.CharField(max_length=255, min_length=5, required=True, validators=[UniqueValidator(queryset=CustomUser.objects.all())])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])

@@ -63,7 +63,7 @@ class SendViews(APIView, Pagination):
     @check_user_permission
     @swagger_auto_schema(request_body=SendOrderSerializers)
     def post(self, request):
-        expected_fields = set(["id", "klient", "kitchen", "food", "price", "is_active", "total_price", "is_delivery", "is_order", "delivery", "status", "address", "location", "create_at", "updated_at",])
+        expected_fields = set(["id", "klient","order","fd", "kitchen", "food", "price", "is_active", "total_price", "is_delivery", "is_order", "delivery", "status", "address", "location", "create_at", "updated_at",])
         received_fields = set(request.data.keys())
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:
