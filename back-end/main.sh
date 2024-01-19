@@ -19,3 +19,5 @@ psql -U $DB_USER -h localhost -d $DB_NAME < /var/www/base.sql
 
 # Unset the PGPASSWORD environment variable 
 unset PGPASSWORD
+sdsds
+sdsdsdsd
