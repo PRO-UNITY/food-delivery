@@ -62,18 +62,20 @@ class SendOrderSerializers(serializers.ModelSerializer):
             kitchen_id = item.get('kitchen')['id']
             food_name = item.get('name')
             food_price = item.get('totalPrice')
+            food_img = item.get('food_img')
+            food_description = item.get('description')
             food_count = item.get('count', {}).get('count', 1)
             if kitchen_id not in kitchen_dict:
                 kitchen_dict[kitchen_id] = {'kitchen': kitchen_id, 'food': []}
 
-            kitchen_dict[kitchen_id]['food'].append({'name': food_name, 'count': food_count, "price": food_price})
+            kitchen_dict[kitchen_id]['food'].append({'name': food_name, 'description': food_description ,'food_img':food_img ,'count': food_count, "price": food_price})
         orders = []
         for kitchen_id, kitchen_data in kitchen_dict.items():
             restoran = Restaurants.objects.get(id=kitchen_id)
             order = Orders.objects.create(food=kitchen_data['food'], kitchen=restoran, klient=klient, status=status)
             orders.append(order)
 
-        return orders
+        return validated_data
 
     def update(self, instance, validated_data):
         instance.status = validated_data.get("status", instance.status)
