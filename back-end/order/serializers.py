@@ -30,46 +30,57 @@ class FoodsSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializers(serializers.ModelSerializer):
-    food = FoodsSerializer(many=True, read_only=True)
     delivery = UserInformationSerializer(read_only=True)
+    klient = UserInformationSerializer(read_only=True)
+    status = StatusSerializers(read_only=True)
 
     class Meta:
         model = Orders
-        fields = ["id", "klient", "kitchen", "food", "price", "is_active", "is_delivery", "is_order", "delivery", "status", "address", "location", "create_at", "updated_at",]
+        fields = ["id", "klient", "food", "is_active", "is_delivery", "delivery", "status", "address", "location", "create_at", "updated_at"]
 
 
 class SendOrderSerializers(serializers.ModelSerializer):
-    kitchen = serializers.ListField(child=serializers.IntegerField())
+
 
     class Meta:
         model = Orders
-        fields = ["id", "klient", "kitchen", "food", "price", "is_active", "is_delivery", "is_order", "delivery", "status", "address", "location", "create_at", "updated_at",]
+        fields = ["id", "klient", "is_active", "is_delivery", "delivery", "status", "address", "location", "create_at", "updated_at"]
+
+class SendOrderSerializers(serializers.ModelSerializer):
+
+    class Meta:
+        model = Orders
+        fields = ["id", "klient", "order","food", "is_active", "is_delivery", "delivery", "status", "address", "location", "create_at", "updated_at"]
 
     def create(self, validated_data):
-        food_data = validated_data.pop('food', [])
-        kitchen_ids = validated_data.pop('kitchen', [])
-        klient = self.context.get("klient")
-        orders = []
-        for kitchen_id in kitchen_ids:
-            order_data = validated_data.copy()
-            kitchen_instance = get_object_or_404(Restaurants, id=kitchen_id)
-            order_data["kitchen"] = kitchen_instance
-            order = Orders.objects.create(**order_data)
-            order.klient = klient
-            kitchen_food_items = [food.id for food in food_data if food.kitchen_id == kitchen_id]
-            order.food.add(*kitchen_food_items)
-            total_price = Foods.objects.filter(id__in=kitchen_food_items).aggregate(total_price=Sum('price'))['total_price']
-            order.price = total_price
-            order.save()
-            orders.append(order)
-        return orders
+        order_items = validated_data.get('order')
+        status = validated_data.get('status')
+        klient = self.context.get('klient')
+        kitchen_dict = {}
+        for item in order_items:
+            kitchen_id = item.get('kitchen')['id']
+            food_name = item.get('name')
+            food_price = item.get('totalPrice')
+            food_img = item.get('food_img')
+            food_description = item.get('description')
+            food_count = item.get('count', {}).get('count', 1)
+            if kitchen_id not in kitchen_dict:
+                kitchen_dict[kitchen_id] = {'kitchen': kitchen_id, 'food': []}
 
+            kitchen_dict[kitchen_id]['food'].append({'name': food_name, 'description': food_description ,'food_img':food_img ,'count': food_count, "price": food_price})
+        orders = []
+        for kitchen_id, kitchen_data in kitchen_dict.items():
+            restoran = Restaurants.objects.get(id=kitchen_id)
+            order = Orders.objects.create(food=kitchen_data['food'], kitchen=restoran, klient=klient, status=status)
+            orders.append(order)
+
+        return validated_data
 
     def update(self, instance, validated_data):
         instance.status = validated_data.get("status", instance.status)
         instance.address = validated_data.get("address", instance.address)
         instance.is_delivery = validated_data.get("is_delivery", instance.is_delivery)
-        instance.delivery = validated_data.get("delivery", instance.delivery)
+        instance.delivery = self.context.get('user')
         instance.is_active = validated_data.get("is_active", instance.is_active)
         instance.save()
         return instance

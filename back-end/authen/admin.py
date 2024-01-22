@@ -1,15 +1,26 @@
-""" Django Libraries """
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from authen.models import CustomUser
+from authen.models import CustomUser, SmsHistory
 from import_export.admin import ImportExportModelAdmin
 
 
-class NewMyUser(ImportExportModelAdmin, UserAdmin):
+class CustomUserAdmin(ImportExportModelAdmin, UserAdmin):
     model = CustomUser
-    list_display = ["username", "first_name", "last_name", "id"]
-    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ("email_code", "avatar", "user_id", "phone", "latitude", "longitude", "active_profile",),}),)
-    add_fieldsets = UserAdmin.add_fieldsets + ((None, {"fields": ("email_code", "avatar", "user_id", "phone", "phone", "latitude", "longitude", "active_profile",),}),)
+    list_display = ['email', 'username', 'is_active', 'is_staff']
+    search_fields = ['email', 'username']
+    fieldsets = (
+        (None, {'fields': ('first_name', 'last_name', 'email', 'username', 'password')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser',
+                                    'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+        ('Personal Information', {'fields': ('phone', 'user_id', 'avatar', 'active_profile',)}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'username', 'password1', 'password2'),
+        }),
+    )
 
-
-admin.site.register(CustomUser, NewMyUser)
+admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(SmsHistory)

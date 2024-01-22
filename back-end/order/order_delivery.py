@@ -31,7 +31,7 @@ class OrderHistoryDeliveryView(APIView, Pagination):
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes=request.user.id, is_active=True, is_delivery=True).order_by('-id')
+        queryset = Orders.objects.filter(kitchen__employes=request.user.id, delivery__id=request.user.id, is_active=True, is_delivery=True).order_by('-id')
         if search_status:
             queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
         if search_kitchen:
@@ -62,7 +62,7 @@ class OrderDeliveryView(APIView, Pagination):
         search_status = request.query_params.get("status", None)
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, is_delivery=True, is_active=False).order_by('-id')
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, delivery=request.user.id, is_delivery=True, is_active=False).order_by('-id')
         if search_status:
             queryset = queryset.filter(Q(status__id__icontains=search_status) | Q(status__name__icontains=search_status))
         if search_kitchen:
@@ -121,8 +121,7 @@ class OrderActiveDeliveryView(APIView, Pagination):
     def get(self, request, format=None, *args, **kwargs):
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
-        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, is_delivery=True, is_active=False).order_by('-id')
-        print(queryset)
+        queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, delivery=request.user.id, is_delivery=True, is_active=False).order_by('-id')
         if search_kitchen:
             queryset = queryset.filter(Q(kitchen__id__icontains=search_kitchen) | Q(kitchen__name__icontains=search_kitchen))
         if sort_by == "asc":
@@ -143,7 +142,7 @@ class OrderAcceptDeliveryView(APIView, Pagination):
     perrmisson_class = [IsAuthenticated]
 
     def get(self, request, pk, format=None, *args, **kwargs):
-        queryset = get_object_or_404(Orders, id=pk)
+        queryset = get_object_or_404(Orders, kitchen__employes=request.user.id, id=pk)
         serializer = OrderSerializers(queryset, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -156,7 +155,7 @@ class OrderAcceptDeliveryView(APIView, Pagination):
         if unexpected_fields:
             error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
             return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
-        serializers = SendOrderSerializers(instance=Orders.objects.filter(id=pk)[0], data=request.data, partial=True,)
+        serializers = SendOrderSerializers(instance=Orders.objects.filter(id=pk)[0], data=request.data, context={'user':request.user}, partial=True,)
         if serializers.is_valid(raise_exception=True):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_200_OK)

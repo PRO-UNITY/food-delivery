@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.models import Group
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
@@ -13,6 +14,14 @@ from django.contrib.auth import get_user_model
 from rest_framework.exceptions import AuthenticationFailed
 
 
+class IncorrectCredentialsError(serializers.ValidationError):
+    pass
+
+
+class UnverifiedAccountError(serializers.ValidationError):
+    pass
+
+
 class UserGroupSerizliers(serializers.ModelSerializer):
     class Meta:
         model = Group
@@ -21,10 +30,8 @@ class UserGroupSerizliers(serializers.ModelSerializer):
 
 class UserSignUpSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(max_length=50, validators=[
-            MinLengthValidator(limit_value=5, message="First name must be at least 5 characters."),
             MaxLengthValidator(limit_value=50, message="First name cannot exceed 50 characters.")],)
     last_name = serializers.CharField(max_length=50, validators=[
-            MinLengthValidator(limit_value=5, message="Last name must be at least 5 characters."),
             MaxLengthValidator(limit_value=50, message="Last name cannot exceed 50 characters."),])
     username = serializers.CharField(max_length=255, min_length=5, required=True, validators=[UniqueValidator(queryset=CustomUser.objects.all())])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
@@ -64,10 +71,8 @@ class UserSignUpSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(max_length=None, use_url=True)
     first_name = serializers.CharField(max_length=50, validators=[
-            MinLengthValidator(limit_value=5, message="First name must be at least 5 characters."),
             MaxLengthValidator(limit_value=50, message="First name cannot exceed 50 characters."),],)
     last_name = serializers.CharField(max_length=50, validators=[
-            MinLengthValidator(limit_value=5, message="Last name must be at least 5 characters."),
             MaxLengthValidator(limit_value=50, message="Last name cannot exceed 50 characters."),],)
     avatar = serializers.ImageField(max_length=None, allow_empty_file=False, allow_null=False, use_url=False, required=False,)
     email = serializers.EmailField(validators=[UniqueValidator(queryset=CustomUser.objects.all())])
@@ -80,17 +85,13 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "avatar",
-            "phone",
-            "latitude",
-            "longitude",
+            "phone"
         ]
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get("first_name", instance.first_name)
         instance.last_name = validated_data.get("last_name", instance.last_name)
         instance.phone = validated_data.get("phone", instance.phone)
-        instance.latitude = validated_data.get("latitude", instance.latitude)
-        instance.longitude = validated_data.get("longitude", instance.longitude)
         instance.email = validated_data.get("email", instance.email)
         if instance.avatar == None:
             instance.avatar = self.context.get("avatar")
@@ -101,26 +102,23 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
 
 class UserSigInSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(max_length=50, min_length=2)
+    email = serializers.CharField(max_length=50, min_length=2)
     password = serializers.CharField(max_length=50, min_length=1)
 
     class Meta:
-        model = CustomUser
-        fields = ["username", "password"]
-        read_only_fields = ("username",)
+        model = get_user_model()
+        fields = ["email", "password"]
+        read_only_fields = ("email",)
 
     def validate(self, data):
         if self.context.get("request") and self.context["request"].method == "POST":
             allowed_keys = set(self.fields.keys())
             input_keys = set(data.keys())
             extra_keys = input_keys - allowed_keys
-
             if extra_keys:
-                raise serializers.ValidationError(
-                    f"Additional keys are not allowed: {', '.join(extra_keys)}"
-                )
-
+                raise serializers.ValidationError(f"Additional keys are not allowed: {', '.join(extra_keys)}")
         return data
+
 
 
 class UserInformationSerializer(serializers.ModelSerializer):
@@ -138,8 +136,6 @@ class UserInformationSerializer(serializers.ModelSerializer):
             "email",
             "role",
             "phone",
-            "latitude",
-            "longitude",
             "active_profile",
         ]
 
