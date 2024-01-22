@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "managers",
     "order",
     "deliveryman",
+    "chat",
 
     "django.contrib.sites",
     "dj_rest_auth",
@@ -67,7 +68,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
-    "core.middleware.JsonErrorResponseMiddleware",
+    # "core.middleware.JsonErrorResponseMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -136,8 +137,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_URL = "/food-delivery/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 MEDIA_URL = "/food-delivery/media/"
-# MEDIA_ROOT = os.path.join(BASE_DIR, "/home/ibrokhim/Desktop/projects1/media")
-MEDIA_ROOT = os.path.join(BASE_DIR, "/home/media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "/home/ibrokhim/Desktop/projects1/media")
+# MEDIA_ROOT = os.path.join(BASE_DIR, "/home/media")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
@@ -242,4 +243,4 @@ SOCIAL_AUTH_FACEBOOK_KEY = os.environ["SOCIAL_AUTH_FACEBOOK_KEY"]
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ["SOCIAL_AUTH_FACEBOOK_SECRET"]
 SOCIAL_AUTH_FACEBOOK_APP_NAME = (os.environ["SOCIAL_AUTH_FACEBOOK_APP_NAME"],)
 
-FORCE_SCRIPT_NAME = "/food-delivery"     
+# FORCE_SCRIPT_NAME = "/food-delivery"     
