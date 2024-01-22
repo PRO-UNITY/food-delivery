@@ -155,7 +155,7 @@ class OrderAcceptDeliveryView(APIView, Pagination):
         if unexpected_fields:
             error_message = (f"Unexpected fields in request data: {', '.join(unexpected_fields)}")
             return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
-        serializers = SendOrderSerializers(instance=Orders.objects.filter(id=pk)[0], data=request.data, partial=True,)
+        serializers = SendOrderSerializers(instance=Orders.objects.filter(id=pk)[0], data=request.data, context={'user':request.user}, partial=True,)
         if serializers.is_valid(raise_exception=True):
             serializers.save()
             return Response(serializers.data, status=status.HTTP_200_OK)

@@ -80,7 +80,7 @@ class SendOrderSerializers(serializers.ModelSerializer):
         instance.status = validated_data.get("status", instance.status)
         instance.address = validated_data.get("address", instance.address)
         instance.is_delivery = validated_data.get("is_delivery", instance.is_delivery)
-        instance.delivery = validated_data.get("delivery", instance.delivery)
+        instance.delivery = self.context.get('user')
         instance.is_active = validated_data.get("is_active", instance.is_active)
         instance.save()
         return instance
