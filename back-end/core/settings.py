@@ -1,8 +1,5 @@
 from pathlib import Path
 from datetime import timedelta
-import cloudinary
-import cloudinary.api
-import cloudinary.uploader
 from dotenv import load_dotenv
 import os
 
@@ -143,13 +140,6 @@ MEDIA_URL = "/food-delivery/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "/home/media")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-cloudinary.config(
-    CLOUD_NAME="ddom6zmhz",
-    API_KEY="118745292796737",
-    API_SECRET="AVRxcx04CtgLIHNiPGRTb6jykd0",
-)
-
-# DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -218,7 +208,6 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "0.1.0",
 }
 AUTH_USER_MODEL = "authen.CustomUser"
-AUTH_GROUP_MODEL = "authen.UserRole"
 
 # Email Backend Configuration
 EMAIL_BACKEND = (
@@ -237,6 +226,7 @@ SOCIALACCOUNT_PROVIDERS = {"facebook": {"APP": {"client_id": os.environ["SOCIAL_
 AUTHENTICATION_BACKENDS = [
     "social_core.backends.facebook.FacebookOAuth2",
     "allauth.account.auth_backends.AuthenticationBackend",
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 REST_USE_JWT = True

@@ -206,7 +206,7 @@ class UserSignIn(APIView):
         responses={201: "Created - Item created successfully",},
         tags=["auth"],)
     def post(self, request):
-        expected_fields = set(["username", "password"])
+        expected_fields = set(["email", "password"])
         received_fields = set(request.data.keys())
         unexpected_fields = received_fields - expected_fields
         if unexpected_fields:
@@ -214,9 +214,9 @@ class UserSignIn(APIView):
             return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
         serializer = UserSigInSerializer(data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
-            username = request.data["username"]
+            email = request.data["email"]
             password = request.data["password"]
-            user = authenticate(username=username, password=password)
+            user = authenticate(email=email, password=password)
             if user is not None:
                 tokens = get_token_for_user(user)
                 return Response({"token": tokens}, status=status.HTTP_200_OK)
@@ -281,46 +281,6 @@ def change_password(request):
                 return Response({"message": "Password changed successfully."}, status=status.HTTP_200_OK)
             return Response({"error": "Incorrect old password."}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class SendEmailCode(APIView):
-    render_classes = [UserRenderers]
-    perrmisson_class = [IsAuthenticated]
-
-    def get(self, request):
-        if request.user.is_authenticated:
-            data = request.user
-            verification_code = str(random.randint(100000, 999999))
-            send_mail(
-                "Verification Code",
-                f"Your verification code is: {verification_code}",
-                "istamovibrohim8@gmail.com",
-                [data.email],
-                fail_silently=False,
-            )
-
-            code_save = CustomUser.objects.filter(id=request.user.id)[0]
-            code_save.email_code = verification_code
-            code_save.save()
-            return Response({"message": "Send code email"})
-        else:
-            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
-
-    def post(self, request):
-        if request.user.is_authenticated:
-            email_code = request.data["email_code"]
-            if email_code == "":
-                context = {"Enter the email code !"}
-                return Response(context, status=status.HTTP_401_UNAUTHORIZED)
-            user_get = CustomUser.objects.filter(id=request.user.id)[0]
-            if email_code == user_get.email_code:
-                context = {"Welcome to the system !"}
-                return Response(context, status=status.HTTP_200_OK)
-            else:
-                return Response({"error": "The email code is incorrect !"})
-        else:
-            return Response({"error": "The user is not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
-
 
 class UserLogout(APIView):
     serializer_class = LogoutSerializer

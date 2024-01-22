@@ -122,7 +122,6 @@ class OrderActiveDeliveryView(APIView, Pagination):
         search_kitchen = request.query_params.get("kitchen", None)
         sort_by = request.query_params.get("sort", None)
         queryset = Orders.objects.filter(kitchen__employes__id=request.user.id, delivery=request.user.id, is_delivery=True, is_active=False).order_by('-id')
-        print(queryset)
         if search_kitchen:
             queryset = queryset.filter(Q(kitchen__id__icontains=search_kitchen) | Q(kitchen__name__icontains=search_kitchen))
         if sort_by == "asc":

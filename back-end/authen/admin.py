@@ -13,7 +13,7 @@ class CustomUserAdmin(ImportExportModelAdmin, UserAdmin):
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser',
                                     'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
-        ('Personal Information', {'fields': ('phone', "active_profile", 'user_id', 'avatar',)}),
+        ('Personal Information', {'fields': ('phone', 'user_id', 'avatar', 'active_profile',)}),
     )
     add_fieldsets = (
         (None, {
@@ -21,7 +21,6 @@ class CustomUserAdmin(ImportExportModelAdmin, UserAdmin):
             'fields': ('email', 'username', 'password1', 'password2'),
         }),
     )
-
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(SmsHistory)
