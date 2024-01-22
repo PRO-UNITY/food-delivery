@@ -67,7 +67,7 @@ const KitchenDetails = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="body-main w-100 p-5">
+        <div className="body-main w-100 py-5 px-2">
           <h3>About {data?.name}</h3>
 
           <div className="order-history">

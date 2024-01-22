@@ -34,7 +34,7 @@ const KitchenCategoryDetail = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="body-main w-100 p-5">
+        <div className="body-main w-100 py-5 px-2">
           <h3>Foods by Category</h3>
           <div className="foods">
             {foods.map((item, index) => (

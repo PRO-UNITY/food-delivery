@@ -16,7 +16,7 @@ const Settings = () => {
 
   return (
     <DemoLayout setSearch={setSearch}>
-      <div className=" body-main w-100 p-5">
+      <div className=" body-main w-100 py-5 px-2">
         {outlet ? (
           <Outlet />
         ) : (

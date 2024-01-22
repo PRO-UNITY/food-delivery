@@ -27,7 +27,7 @@ const CategoryHome = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="body-main w-100 p-5">
+        <div className="body-main w-100 py-5 px-2">
           <div className="d-flex justify-content-between align-items-center">
             <h3>All Categories</h3>
           </div>

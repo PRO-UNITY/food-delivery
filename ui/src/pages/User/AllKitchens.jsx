@@ -29,7 +29,7 @@ const AllKitchens = () => {
         <Loader />
       ) : (
 
-        <div className="body-main w-100 p-5">
+        <div className="body-main w-100 py-5 px-2">
           <h3>All Restaurants</h3>
           <div className="foods">
             {kitchen.map((item, index) => (

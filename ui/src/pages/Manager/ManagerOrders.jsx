@@ -23,7 +23,6 @@ const ManagerOrders = () => {
 
   const handleStatusChange = (orderId, selectedStatusId) => {
     setOrderStatus((prev) => ({ ...prev, [orderId]: selectedStatusId }));
-    sendStatus();
   };
 
   const sendStatus = (id) => {
@@ -37,9 +36,14 @@ const ManagerOrders = () => {
     );
   };
 
+//   useEffect(()=>{
+//     getData(`/order/${1}/manager/accept`).then((res)=>console.log(res))
+// },[])
+
+
   return (
     <DemoLayout setSearch={setSearch}>
-      <div className=" body-main w-100 p-5 d-flex flex-column justify-content-start align-items-start">
+      <div className=" body-main w-100 py-5 px-2 d-flex flex-column justify-content-start align-items-start">
         {orders?.map((item, index) => (
           <table key={item.id} className="table table-light mb-3 shadow">
             <thead>
@@ -57,24 +61,24 @@ const ManagerOrders = () => {
               <tr className="align-middle">
                 <td>{index + 1}</td>
                 <td>
-                  {item.foods.map((i) => (
+                  {item.food.map((i) => (
                     <p className="name-order-history">{i.name}</p>
                   ))}
                 </td>
                 <td>
-                  {item.foods.map((i) => (
+                  {item.food.map((i) => (
                     <p className="count-order-history">{i.count}</p>
                   ))}
                 </td>
                 <td>
                   <div className="d-flex flex-column">
-                    {item.foods.map((i) => (
+                    {item.food.map((i) => (
                       <img style={{ width: "50px" }} src={i.food_img} alt="" />
                     ))}
                   </div>
                 </td>
                 <td>
-                  {item.foods.map((i) => (
+                  {item.food.map((i) => (
                     <p className="count-order-history">{i.price}</p>
                   ))}
                 </td>

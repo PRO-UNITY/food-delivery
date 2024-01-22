@@ -20,7 +20,7 @@ const DemoSidebar = ({ showSidebar }) => {
   return (
     <>
       <div
-        className={`hrms-doc-sidebar py-4
+        className={`delivery-sidebar py-4
          bg-white  ${showSidebar && "show"} `}
       >
         <div className="w-100 text-center mb-5">
@@ -58,6 +58,7 @@ const DemoSidebar = ({ showSidebar }) => {
                   <p className="text-start py-3 ">
                     <i className="fa-solid fa-utensils mx-3"></i>New orders
                   </p>
+                  {/* <div className="notification">1</div> */}
                 </NavLink>
               ) : role === "manager" ? (
                 <NavLink
@@ -121,15 +122,7 @@ const DemoSidebar = ({ showSidebar }) => {
                   </p>
                 </NavLink>
               ) : role === "manager" ? (
-                <NavLink
-                  to={"/progress"}
-                  className="nav-link text-start px-2"
-                  isActive={() => checkActive("/progress")}
-                >
-                  <p className="text-start py-3">
-                    <i className="fa-solid fa-list mx-3"></i>Progress
-                  </p>
-                </NavLink>
+                ""
               ) : (
                 <NavLink
                   to={"/food-order"}
@@ -172,7 +165,16 @@ const DemoSidebar = ({ showSidebar }) => {
                   </p>
                 </NavLink>
               ) : role === "delivery" ? (
-                ""
+                <NavLink
+                  to={"/active-order"}
+                  className="nav-link text-start px-2"
+                  isActive={() => checkActive("/active-order")}
+                >
+                  <p className="text-start py-3">
+                    <i className="fa-solid fa-clock-rotate-left mx-3"></i>Active
+                    orders
+                  </p>
+                </NavLink>
               ) : role === "manager" ? (
                 <NavLink
                   to={"/history-manager"}
@@ -235,7 +237,7 @@ const DemoSidebar = ({ showSidebar }) => {
                 </NavLink>
               )}
             </li>
-            
+
             {role === "kitchen" ? (
               <li className="nav-item">
                 <NavLink
@@ -300,33 +302,6 @@ const DemoSidebar = ({ showSidebar }) => {
                 </NavLink>
               )}
             </li>
-            {user?.avatar ? (
-              <button className="btn-none sidebar-btns">
-                <img
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    objectFit: "cover",
-                    borderRadius: "20%",
-                  }}
-                  src={`${
-                    user?.avatar
-                      ? BASE_URL + user.avatar
-                      : "https://plus.unsplash.com/premium_photo-1683121366070-5ceb7e007a97?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D"
-                  }`}
-                  alt=""
-                />
-              </button>
-            ) : (
-              <div className="sidebar-btns">
-                <Link to={"/register"} className="btn btn-outline-warning">
-                  Sign-up
-                </Link>
-                <Link to={"/login"} className="btn btn-warning">
-                  Sign-in
-                </Link>
-              </div>
-            )}
           </ul>
           {role === "users" ? (
             <div className="px-3 pt-3">

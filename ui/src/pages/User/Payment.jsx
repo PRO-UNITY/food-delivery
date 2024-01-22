@@ -19,7 +19,7 @@ const Payment = () => {
   };
   return (
     <DemoLayout setSearch={setSearch}>
-      <div className=" body-main w-100 p-5 d-flex justify-content-center align-items-start">
+      <div className=" body-main w-100 py-5 px-2d-flex justify-content-center align-items-start">
         {active ? (
           <div className="d-flex justify-content-center align-items-center w-100">
             <img className="succesOrder" src={Success} alt="" />

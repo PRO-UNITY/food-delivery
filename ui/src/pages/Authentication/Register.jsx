@@ -27,31 +27,24 @@ const Register = () => {
       password: password,
       confirm_password: password2,
     };
-    const res = await postData(user, "/auth/signup");
-    if (res && res.token) {
-      setAlertMessage({
-        text: `Registration successfully`,
-        type: "success",
-      });
-      setTimeout(() => {
-        setAlertMessage("");
-        navigate("/login");
-      }, 2000);
-    } else {
-      if (res && typeof res === "object" && Object.keys(res).length > 0) {
-        const errorMessage = Object.keys(res)
-          .map((field) =>
-            Array.isArray(res[field])
-              ? res[field].map((error) => `${field}: ${error}`).join(", ")
-              : `${field}: ${res[field]}`
-          )
-          .join(", ");
 
+    try {
+      const res = await postData(user, "/auth/signup");
+      if (res && res.token) {
         setAlertMessage({
-          text: `Error during registration: ${errorMessage}`,
-          type: "danger",
+          text: `Registration successfully`,
+          type: "success",
         });
+        setTimeout(() => {
+          setAlertMessage("");
+          navigate("/login");
+        }, 2000);
       }
+    } catch (error) {
+      setAlertMessage({
+        text: `Error during registration: ${error}`,
+        type: "danger",
+      });
     }
   };
 

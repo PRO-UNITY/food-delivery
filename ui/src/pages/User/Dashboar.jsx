@@ -62,7 +62,7 @@ const Dashboard = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="w-100 body-main  px-5 py-1">
+        <div className="w-100 body-main  py-5 px-2">
           {search != "" ? (
             <div className="foods">
               {searchFoods?.map((item, index) => (

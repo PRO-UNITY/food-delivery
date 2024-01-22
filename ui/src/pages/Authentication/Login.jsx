@@ -1,31 +1,58 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postData } from "../../Services/Services";
 
 const Login = () => {
-  const usernameRef = useRef();
+  const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
+  const [alertMessage, setAlertMessage] = useState({
+    text: "",
+    type: "",
+  });
 
   const handleSignInUser = async (e) => {
     e.preventDefault();
     const user = {
-      username: usernameRef.current?.value,
+      email: emailRef.current?.value,
       password: passwordRef.current?.value,
     };
-    await postData(user, "/auth/sigin").then((res) => {
-      localStorage.setItem("token", res.token.access);
-      localStorage.setItem("refresh", res.token.refresh);
-
-      if (localStorage.getItem("token") !== "undefined") {
-        navigate("/dashboard");
-        window.location.reload();
-      }
-    });
+    await postData(user, "/auth/sigin")
+      .then((res) => {
+        localStorage.setItem("token", res.token.access);
+        localStorage.setItem("refresh", res.token.refresh);
+        if (res && res.token) {
+          setAlertMessage({
+            text: `Registration successfully`,
+            type: "success",
+          });
+          setTimeout(() => {
+            setAlertMessage("");
+            if (localStorage.getItem("token") !== "undefined") {
+              navigate("/dashboard");
+              window.location.reload();
+            }
+          }, 2000);
+        }
+      })
+      .catch((err) =>
+        setAlertMessage({
+          text: `Error during registration: ${err}`,
+          type: "danger",
+        })
+      );
   };
 
   return (
-    <div className="container w-100 d-flex justify-content-center align-items-center py-5">
+    <div className="container w-100 d-flex flex-column justify-content-center align-items-center py-5">
+      {alertMessage && (
+        <div
+          className={`alert alert-${alertMessage.type} w-50 m-auto my-3`}
+          role="alert"
+        >
+          {alertMessage.text}
+        </div>
+      )}
       <div className="card shadow">
         <div className="card-header bg-warning">
           <h3>Login</h3>
@@ -33,9 +60,9 @@ const Login = () => {
 
         <div className="card-body">
           <form onSubmit={handleSignInUser}>
-            <label>Username</label>
+            <label>Email</label>
             <input
-              ref={usernameRef}
+              ref={emailRef}
               type="text"
               placeholder="andrey1"
               className="mb-2 form-control"

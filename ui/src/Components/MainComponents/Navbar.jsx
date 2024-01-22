@@ -23,7 +23,7 @@ const DemoNavbar = ({ setshowSidebar, setshowProfile, setSearch }) => {
         />
       </div>
       <i
-        className="fa-solid fa-cart-shopping position-absolute top-0 end-0 m-3 my-4 "
+        className="fa-solid fa-user position-absolute top-0 end-0 m-3 my-4 "
         onClick={() => setshowProfile((prev) => !prev)}
       ></i>
     </div>

@@ -63,7 +63,7 @@ h3 {
   height: 100vh;
 }
 
-.hrms-doc-sidebar {
+.delivery-sidebar {
   width: 25%;
   height: 100vh;
 }
@@ -240,7 +240,7 @@ h3 {
   color: #5b5b5b;
 }
 
-.hrms-doc-sidebar .side-head {
+.delivery-sidebar .side-head {
   border-bottom: 1px solid rgb(180, 180, 180);
 }
 .hrms-doc-navbar .fa-bars {
@@ -629,14 +629,14 @@ h3 {
   .hrms-doc-navbar .fa-cart-shopping {
     display: block;
   }
-  .hrms-doc-sidebar {
+  .delivery-sidebar {
     width: 40%;
     height: 100vh;
   }
   .hrms-doc-asaide {
     display: none;
   }
-  .hrms-doc-sidebar {
+  .delivery-sidebar {
     position: absolute;
     transition: 0.5s;
     height: 100vh;
@@ -661,7 +661,7 @@ h3 {
     width: 100% !important;
   }
 
-  .hrms-doc-sidebar.show {
+  .delivery-sidebar.show {
     left: 0;
   }
   .profile.show {
@@ -679,7 +679,7 @@ h3 {
     gap: 10px;
     flex-direction: column;
   }
-  .hrms-doc-sidebar {
+  .delivery-sidebar {
     position: absolute;
     transition: 0.5s;
     height: 90vh;
@@ -729,7 +729,7 @@ h3 {
     max-width: 100% !important;
   }
 
-  .hrms-doc-sidebar {
+  .delivery-sidebar {
     position: absolute;
     transition: 0.5s;
     height: 100vh;

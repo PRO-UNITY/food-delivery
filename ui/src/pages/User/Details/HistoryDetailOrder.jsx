@@ -8,7 +8,7 @@ const HistoryDetailOrder = () => {
 
   useEffect(() => {
     getData(`/order/${id}/foods`).then((res) => {
-      setOrders(res.foods);
+      setOrders(res.food);
     });
   }, []);
 
@@ -27,7 +27,8 @@ const HistoryDetailOrder = () => {
               <li className="list-group-item">
                 Description : {item.description}
               </li>
-              <li className="list-group-item">Price : {item.price}</li>
+              <li className="list-group-item">Price : {item.price/item.count}</li>
+              <li className="list-group-item">Total price : {item.price}</li>
             </ul>
           </div>
         </div>

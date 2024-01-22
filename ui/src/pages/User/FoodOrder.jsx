@@ -97,12 +97,13 @@ const FoodOrder = () => {
       status: 1,
       address: "samarqand",
       total_price: totalPrices?.reduce((acc, price) => acc + price, 0),
-      foods: card.map((item, index) => ({
+
+      order: card.map((item, index) => ({
         ...item,
-        count: counts[index],
+        count: {count : counts[index]},
         totalPrice: totalPrices[index],
       })),
-      kitchen: kitchenIds[0],
+      // kitchen: kitchenIds[0],
     };
     postData(data, `/orders`)
       .then(() => {
@@ -115,14 +116,15 @@ const FoodOrder = () => {
       .then(() => localStorage.removeItem("card"));
   };
 
+
   return (
     <DemoLayout count={count} setSearch={setSearch}>
-      <div className=" body-main w-100 p-5">
+      <div className=" body-main w-100 py-5 px-2">
         <h3 className="text-start mb-3">Food Order</h3>
         {localStorage.getItem("token") ? (
           <>
             {card.length > 0 ? (
-              <div className="p-3 rounded-2 w-100">
+              <div className="py-3 rounded-2 w-100">
                 <table className="table mb-3 border">
                   <thead>
                     <tr>
@@ -174,7 +176,7 @@ const FoodOrder = () => {
                         zoom: 5,
                       }}
                       onClick={handleMapClick}
-                      style={{ width: '100%', height: '400px' }}
+                      style={{ width: "100%", height: "400px" }}
                     >
                       <Placemark geometry={[55.684758, 37.738521]} />
                     </Map>

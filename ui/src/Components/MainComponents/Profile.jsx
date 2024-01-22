@@ -9,6 +9,7 @@ const Profile = ({ showProfile, counter }) => {
   const [card, setCard] = useState([]);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
   const cardData = JSON.parse(localStorage.getItem("card"));
 
   useEffect(() => {
@@ -30,8 +31,8 @@ const Profile = ({ showProfile, counter }) => {
 
   return (
     <div className={`bg-white pt-4 px-4 profile  ${showProfile && "show"}`}>
-      <div className="d-flex justify-content-end align-items-center mb-4">
-        {!token ? (
+      <div className="d-flex justify-content-start align-items-center mb-4">
+        {role==="undefined" || !role ? (
           <div className="d-flex gap-1">
             <Link to={"/login"} className="btn-sign-in bg-orange">
               Sign-in

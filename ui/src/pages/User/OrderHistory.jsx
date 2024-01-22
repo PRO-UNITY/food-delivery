@@ -18,7 +18,6 @@ const OrderHistory = () => {
   useEffect(() => {
     getData(`/order/history/user?page=${currentPage}`).then((res) => {
       setOrders(res.results);
-      console.log(res.results);
       const residual = res.count % 10;
       const pages = (res.count - residual) / 10;
       setTotalPages(pages % 2 == 0 && pages === 1 ? pages : pages + 1);
@@ -28,7 +27,7 @@ const OrderHistory = () => {
 
   return (
     <DemoLayout setSearch={setSearch}>
-      <div className=" body-main w-100  p-5">
+      <div className=" body-main w-100 py-5 px-2">
         {outlet ? (
           <Outlet />
         ) : (

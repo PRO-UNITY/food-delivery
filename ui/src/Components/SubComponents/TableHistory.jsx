@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 const TableHistory = (props) => {
-  const { id, foods, total_price, index, status } = props;
+  const { id, food, total_price, index, status } = props;
   return (
     <div className="py-3 w-100">
       <table className="table w-100">
@@ -17,22 +17,22 @@ const TableHistory = (props) => {
         <tbody>
           <tr className="align-middle">
             <th>
-              {foods.map((i, index) => (
+              {food.map((i, index) => (
                 <p key={index}>{index + 1}</p>
               ))}
             </th>
             <th>
-              {foods.map((i, index) => (
+              {food.map((i, index) => (
                 <p key={index}>{i.name.length>10?`${i.name.slice(0,6)}...`:i.name}</p>
               ))}
             </th>
             <th>
-              {foods.map((i, index) => (
+              {food.map((i, index) => (
                 <p key={index}>{i.count}</p>
               ))}
             </th>
             <th>
-              {foods.map((i, index) => (
+              {food.map((i, index) => (
                 <p key={index}>{i.price}</p>
               ))}
             </th>

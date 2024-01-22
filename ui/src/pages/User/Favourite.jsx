@@ -26,7 +26,7 @@ const Dashboard = () => {
 
   return (
     <DemoLayout setSearch={setSearch} counter={counter}>
-      <div className="w-100 body-main  p-5">
+      <div className="w-100 body-main py-5 px-2">
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h3>Favourite Foods</h3>
         </div>
