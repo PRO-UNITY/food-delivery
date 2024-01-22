@@ -73,7 +73,8 @@ class SendOrderSerializers(serializers.ModelSerializer):
             restoran = Restaurants.objects.get(id=kitchen_id)
             order = Orders.objects.create(food=kitchen_data['food'], kitchen=restoran, klient=klient, status=status)
             orders.append(order)
-
+            for i in Restaurants.objects.filter(id=kitchen_id):
+                print(i.latitude)
         return validated_data
 
     def update(self, instance, validated_data):

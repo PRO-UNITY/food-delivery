@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from authen.serializers.authen_serializers import UserInformationSerializer
-from chat.models import Room, Message
+from chat.models import Room, Message, NotificationChat
 
 
 class MessageSerializer(serializers.ModelSerializer):
@@ -13,11 +13,21 @@ class MessageSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         sender = self.context.get('request')
         conversation = self.context.get('conversation')
-
         create_message = Message.objects.create(**validated_data)
         create_message.sender = sender.user
         create_message.conversation_id = conversation
         create_message.save()
+        if sender:
+            if conversation.initiator == sender.user:
+                notification_sent = NotificationChat.objects.create(
+                    message = conversation,
+                    user=create_message.conversation_id.receiver,
+                )
+            elif conversation.receiver == sender.user:
+                notification_sent = NotificationChat.objects.create(
+                    message = conversation,
+                    user=create_message.conversation_id.initiator,
+                )
         return create_message
 
 
@@ -58,3 +68,11 @@ class ConversationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = ['id', 'initiator', 'receiver', 'message_set']
+
+
+class NotificationsSerializers(serializers.ModelSerializer):
+    message = ConversationListSerializer(read_only=True)
+
+    class Meta:
+        model = NotificationChat
+        fields = ['id', 'user', 'message', 'is_active', 'create_at']

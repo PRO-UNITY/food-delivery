@@ -28,3 +28,9 @@ class Message(models.Model):
             verbose_name = "Message"
             verbose_name_plural = "Message"
 
+
+class NotificationChat(models.Model):
+     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+     message = models.ForeignKey(Room, on_delete=models.CASCADE)
+     is_active = models.BooleanField(default=False)
+     create_at = models.DateTimeField(auto_now_add=True)
