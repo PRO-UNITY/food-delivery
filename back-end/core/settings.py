@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "managers",
     "order",
     "deliveryman",
+    "chat",
 
     "django.contrib.sites",
     "dj_rest_auth",
@@ -67,7 +68,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
-    "core.middleware.JsonErrorResponseMiddleware",
+    # "core.middleware.JsonErrorResponseMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
