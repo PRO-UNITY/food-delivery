@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from authen.models import CustomUser
 from kitchen.models import Restaurants
 from foods.models import Foods
@@ -30,5 +31,10 @@ class Orders(models.Model):
 
     class Meta:
         db_table = "order_table"
-    
 
+
+class OrderNotification(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE, null=True, blank=True)
+    is_Active  = models.BooleanField(default=False)
+    create_at = models.DateTimeField(auto_now_add=True)

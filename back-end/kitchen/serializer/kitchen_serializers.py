@@ -26,7 +26,7 @@ class KitchensSerializer(serializers.ModelSerializer):
     def get_food_count(self, obj):
         if hasattr(obj, 'food'):
             food_count = obj.food.count()
-            print(f"Food count for {obj.name}: {food_count}")
+            # print(f"Food count for {obj.name}: {food_count}")
             return food_count
         return 0
 

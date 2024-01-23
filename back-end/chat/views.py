@@ -10,8 +10,18 @@ from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from authen.renderers import UserRenderers
 from authen.models import CustomUser
-from chat.models import Room, Message
-from chat.serializers import MessageListSerializer, ConversationSerializer, MessageSerializer, ConversationListSerializer
+from chat.models import (
+    Room,
+    Message,
+    NotificationChat
+)
+from chat.serializers import (
+    MessageListSerializer,
+    ConversationSerializer,
+    MessageSerializer,
+    ConversationListSerializer,
+    NotificationsSerializers,
+)
 from utils.pagination import *
 
 
@@ -90,3 +100,30 @@ class DeleteChatSMSView(APIView):
             return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
         queryset = get_object_or_404(Message, id=pk).delete()
         return Response({'msg': "Message Deleted successfully"}, status=status.HTTP_200_OK)
+
+
+class NewMessages(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
+        instance = NotificationChat.objects.filter(user=request.user.id, is_active=False)
+        serializers = NotificationsSerializers(instance, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+
+class NewMessagesDeteile(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    def get(self, request, pk):
+        if not request.user.is_authenticated:
+            return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
+        instance = get_object_or_404(NotificationChat ,id=pk)
+        notifcation = NotificationChat.objects.filter(id=pk)[0]
+        notifcation.is_active=True
+        notifcation.save()
+        serializers = NotificationsSerializers(instance)
+        return Response(serializers.data, status=status.HTTP_200_OK)
